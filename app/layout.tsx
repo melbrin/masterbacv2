@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Simulateur BAC 2026 — Teste ton niveau | MasterBac",
   description:
-    "Simulateur BAC gratuit, sans inscription. 155 questions de maths calibrées par difficulté. Découvre ta note estimée et tes lacunes chapitre par chapitre.",
+    "Simulateur BAC gratuit, sans inscription. Questions calibrées par difficulté. Découvre ta note estimée et tes lacunes chapitre par chapitre.",
   keywords: "BAC 2026, simulateur, maths, révisions, quiz, note BAC",
   openGraph: {
     title: "Quel est ton niveau BAC ? — MasterBac",

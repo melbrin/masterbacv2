@@ -91,8 +91,8 @@ export default function TexteATrou({
           }`}
         >
           {isCorrect
-            ? "✓ Bonne reponse !"
-            : `✗ La reponse etait : ${question.answer}`}
+            ? "✓ Bonne réponse !"
+            : `✗ La réponse était : ${question.answer}`}
         </div>
       )}
     </div>

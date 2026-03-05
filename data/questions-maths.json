@@ -1,22 +1,77 @@
 {
   "meta": {
-    "version": "1.0",
+    "version": "2.0",
     "subject": "maths",
-    "source": "Masterfiches BAC 2025 — masterbac.com",
-    "totalQuestions": 155,
+    "source": "Masterfiches BAC 2026 — masterbac.com",
+    "totalQuestions": 165,
     "chapters": 5,
-    "difficulties": ["basique", "classique", "expert"],
-    "questionTypes": ["qcm", "vrai_faux", "trou", "association", "graphique", "ordre"],
+    "difficulties": [
+      "basique",
+      "classique",
+      "expert"
+    ],
+    "questionTypes": [
+      "qcm",
+      "vrai_faux",
+      "trou",
+      "association",
+      "ordre"
+    ],
     "scoring": {
-      "basique": { "points": 1, "timeBonusSec": 30, "bonusMultiplier": 0.5 },
-      "classique": { "points": 2, "timeBonusSec": 60, "bonusMultiplier": 0.5 },
-      "expert": { "points": 3, "timeBonusSec": 120, "bonusMultiplier": 0.5 }
+      "basique": {
+        "points": 1,
+        "timeBonusSec": 30,
+        "bonusMultiplier": 0.5
+      },
+      "classique": {
+        "points": 2,
+        "timeBonusSec": 60,
+        "bonusMultiplier": 0.5
+      },
+      "expert": {
+        "points": 3,
+        "timeBonusSec": 120,
+        "bonusMultiplier": 0.5
+      }
     },
     "modes": {
-      "diagnostic": { "questions": 40, "timeMinutes": 30, "distribution": { "basique": 16, "classique": 14, "expert": 10 } },
-      "chapitre": { "questions": 15, "timeMinutes": 12, "distribution": { "basique": 6, "classique": 5, "expert": 4 } },
-      "express": { "questions": 10, "timeMinutes": 5, "distribution": { "basique": 4, "classique": 4, "expert": 2 } },
-      "bac_blanc": { "questions": 40, "timeMinutes": 30, "noFeedback": true, "distribution": { "basique": 16, "classique": 14, "expert": 10 } }
+      "diagnostic": {
+        "questions": 40,
+        "timeMinutes": 30,
+        "distribution": {
+          "basique": 16,
+          "classique": 14,
+          "expert": 10
+        }
+      },
+      "chapitre": {
+        "questions": 15,
+        "timeMinutes": 12,
+        "distribution": {
+          "basique": 6,
+          "classique": 5,
+          "expert": 4
+        }
+      },
+      "express": {
+        "questions": 10,
+        "timeMinutes": 5,
+        "distribution": {
+          "basique": 4,
+          "classique": 4,
+          "expert": 2
+        }
+      },
+      "bac_blanc": {
+        "questions": 40,
+        "timeMinutes": 30,
+        "noFeedback": true,
+        "distribution": {
+          "basique": 16,
+          "classique": 14,
+          "expert": 10
+        }
+      }
     }
   },
   "chapters": {
@@ -24,175 +79,2561 @@
       "id": "suites",
       "name": "Suites numériques",
       "fiche": "Masterfiche Maths — Fiche Exo 1 : Suites numériques",
-      "ficheUrl": "https://masterbac.com",
-      "detail": "Suite arithmétique, géométrique, arithmético-géométrique, récurrence, convergence — 30+ exercices progressifs",
-      "subSkills": ["arithmétique", "géométrique", "arithmético-géométrique", "suite_auxiliaire", "récurrence", "limites", "sommes", "python"],
+      "ficheUrl": "https://www.masterbac.com/products/les-masterfiches-exercices-de-lelite-2026-packs",
+      "detail": "Suite arithmétique, géométrique, arithmético-géométrique, suite auxiliaire, récurrence, convergence, sommes, Python — 97 pages · 20 ans d'annales (2004-2025) · 3 niveaux progressifs",
+      "subSkills": [
+        "arithmétique",
+        "géométrique",
+        "arithmético-géométrique",
+        "suite_auxiliaire",
+        "récurrence",
+        "limites",
+        "sommes",
+        "python"
+      ],
       "questions": [
-        {"id":"S-B01","type":"qcm","d":"basique","skill":"arithmétique","q":"La suite (uₙ) est définie par u₀ = 5 et uₙ₊₁ = uₙ + 3. Quelle est sa nature ?","o":["Arithmétique de raison 3","Géométrique de raison 3","Arithmétique de raison 5","Ni l'un ni l'autre"],"c":0,"ref":"Fiche 1 - Basique Exo 1"},
-        {"id":"S-B02","type":"qcm","d":"basique","skill":"géométrique","q":"La suite (uₙ) vérifie uₙ₊₁ = 0.5 × uₙ avec u₀ = 8. Que vaut u₃ ?","o":["4","2","1","0.5"],"c":2,"ref":"Fiche 1 - Basique Exo 3"},
-        {"id":"S-B03","type":"vrai_faux","d":"basique","skill":"arithmétique","q":"Affirmation : Si uₙ₊₁ − uₙ = 5 pour tout n, alors (uₙ) est une suite géométrique de raison 5.","answer":false,"explanation":"C'est une suite arithmétique de raison 5, pas géométrique. Pour une suite géométrique, c'est le rapport uₙ₊₁/uₙ qui est constant.","ref":"Fiche 1 - Basique Exo 1"},
-        {"id":"S-B04","type":"trou","d":"basique","skill":"arithmétique","q":"Pour une suite arithmétique de premier terme u₀ et de raison r, le terme général est uₙ = u₀ + ___ × r.","answer":"n","acceptedAnswers":["n","N"],"ref":"Fiche 1 - Basique Exo 1"},
-        {"id":"S-B05","type":"qcm","d":"basique","skill":"limites","q":"lim(n→+∞) de 5/n² = ?","o":["5","0","+∞","1"],"c":1,"ref":"Fiche 1 - Basique Exo 5"},
-        {"id":"S-B06","type":"qcm","d":"basique","skill":"sommes","q":"Combien y a-t-il de termes dans la liste : 3, 7, 11, 15, …, 99 ?","o":["24","25","26","23"],"c":1,"ref":"Fiche 1 - Basique Exo 2 (BAC Asie 2023)"},
-        {"id":"S-B07","type":"vrai_faux","d":"basique","skill":"géométrique","q":"Affirmation : Une suite géométrique de raison q = −2 est toujours divergente.","answer":true,"explanation":"Si |q| > 1, la suite géométrique diverge, que q soit positif ou négatif.","ref":"Fiche 1 - Basique Exo 5"},
-        {"id":"S-B08","type":"trou","d":"basique","skill":"géométrique","q":"Pour une suite géométrique de premier terme u₀ et de raison q, le terme général est uₙ = u₀ × ___","answer":"qⁿ","acceptedAnswers":["q^n","qⁿ","q**n","q puissance n"],"ref":"Fiche 1 - Basique"},
-        {"id":"S-B09","type":"association","d":"basique","skill":"arithmétique","q":"Associez chaque suite à sa nature.","pairs":[{"left":"uₙ₊₁ = uₙ + 4","right":"Arithmétique r=4"},{"left":"uₙ₊₁ = 3uₙ","right":"Géométrique q=3"},{"left":"uₙ = 2n² + 1","right":"Ni arith. ni géom."},{"left":"uₙ₊₁ = uₙ/2","right":"Géométrique q=0.5"}],"ref":"Fiche 1 - Basique Exo 1"},
-        {"id":"S-B10","type":"qcm","d":"basique","skill":"limites","q":"La suite uₙ = (−1)ⁿ admet-elle une limite ?","o":["Oui, 0","Oui, 1","Non, elle n'a pas de limite","Oui, −1"],"c":2,"ref":"Fiche 1 - Basique Exo 5"},
-
-        {"id":"S-C01","type":"qcm","d":"classique","skill":"arithmético-géométrique","q":"On considère la suite définie par uₙ₊₁ = 0.5uₙ + 3 avec u₀ = 2. On pose vₙ = uₙ − 6. La suite (vₙ) est :","o":["Arithmétique de raison 0.5","Géométrique de raison 0.5","Géométrique de raison 3","Constante"],"c":1,"ref":"Fiche 1 - Classique Exo 3 (BAC Métropole 2023)"},
-        {"id":"S-C02","type":"qcm","d":"classique","skill":"sommes","q":"Sₙ = u₀ + u₁ + … + uₙ pour une suite géométrique de raison q ≠ 1. La formule est :","o":["u₀ × (1 − qⁿ⁺¹)/(1 − q)","u₀ × (1 − qⁿ)/(1 − q)","n × u₀ × q","u₀ × qⁿ/(q − 1)"],"c":0,"ref":"Fiche 1 - Basique Exo 10"},
-        {"id":"S-C03","type":"vrai_faux","d":"classique","skill":"limites","q":"Affirmation : Si une suite est croissante et majorée, alors elle converge.","answer":true,"explanation":"C'est le théorème de convergence monotone : toute suite croissante et majorée converge.","ref":"Fiche 1 - Classique Exo 12 (BAC Nouvelle-Calédonie 2022)"},
-        {"id":"S-C04","type":"qcm","d":"classique","skill":"suite_auxiliaire","q":"(uₙ) définie par uₙ₊₁ = 2uₙ − 1, u₀ = 3. On pose vₙ = uₙ − 1. Que vaut v₀ ?","o":["2","3","1","4"],"c":0,"ref":"Fiche 1 - Classique Exo 4 (BAC Réunion 2023)"},
-        {"id":"S-C05","type":"trou","d":"classique","skill":"limites","q":"lim(n→+∞) de (3n + 1)/(n + 2) = ___","answer":"3","acceptedAnswers":["3","3.0"],"ref":"Fiche 1 - Classique Exo 8"},
-        {"id":"S-C06","type":"ordre","d":"classique","skill":"suite_auxiliaire","q":"Remettez dans l'ordre les étapes pour étudier une suite arithmético-géométrique uₙ₊₁ = auₙ + b :","items":["Trouver le point fixe ℓ tel que ℓ = aℓ + b","Poser vₙ = uₙ − ℓ","Montrer que (vₙ) est géométrique de raison a","Exprimer vₙ puis en déduire uₙ","Calculer la limite de (uₙ)"],"ref":"Fiche 1 - Classique Exo 3"},
-        {"id":"S-C07","type":"qcm","d":"classique","skill":"géométrique","q":"Suite géométrique : u₀ = 100, q = 0.9. Après combien de termes uₙ < 50 pour la première fois ?","o":["n = 7","n = 6","n = 8","n = 5"],"c":0,"ref":"Fiche 1 - Classique Exo 1 (BAC Polynésie 2023)"},
-        {"id":"S-C08","type":"vrai_faux","d":"classique","skill":"limites","q":"Affirmation : Si lim uₙ = 0 et lim vₙ = +∞, alors lim(uₙ × vₙ) = 0.","answer":false,"explanation":"C'est une forme indéterminée 0 × ∞. Le résultat dépend des suites.","ref":"Fiche 1 - Classique Exo 8"},
-        {"id":"S-C09","type":"qcm","d":"classique","skill":"arithmétique","q":"La somme des 100 premiers termes d'une suite arithmétique de premier terme 1 et de raison 2 est :","o":["10 000","10 100","9 900","10 200"],"c":0,"ref":"Fiche 1 - Basique Exo 10"},
-        {"id":"S-C10","type":"association","d":"classique","skill":"limites","q":"Associez chaque suite à sa limite quand n → +∞.","pairs":[{"left":"uₙ = n/(n+1)","right":"1"},{"left":"uₙ = (0.5)ⁿ","right":"0"},{"left":"uₙ = n²","right":"+∞"},{"left":"uₙ = (−1)ⁿ/n","right":"0"}],"ref":"Fiche 1 - Classique Exo 8-9"},
-
-        {"id":"S-E01","type":"qcm","d":"expert","skill":"récurrence","q":"On veut montrer par récurrence que pour tout n ≥ 0, uₙ ≤ 5. L'étape d'hérédité consiste à montrer que :","o":["Si uₖ ≤ 5 alors uₖ₊₁ ≤ 5","u₀ ≤ 5","uₙ ≤ 5 pour n = 0, 1, 2","lim uₙ ≤ 5"],"c":0,"ref":"Fiche 1 - Hors d'oeuvre Exo 6 (BAC Centres étrangers 2023)"},
-        {"id":"S-E02","type":"qcm","d":"expert","skill":"suite_auxiliaire","q":"u₀ = 1, uₙ₊₁ = √(2 + uₙ). On admet que (uₙ) converge vers ℓ > 0. En résolvant ℓ = √(2 + ℓ), on trouve :","o":["ℓ = 2","ℓ = √3","ℓ = 1 + √3","ℓ = (1+√5)/2"],"c":0,"ref":"Fiche 1 - Hors d'oeuvre Exo 1"},
-        {"id":"S-E03","type":"ordre","d":"expert","skill":"récurrence","q":"Remettez dans l'ordre les étapes d'une démonstration par récurrence :","items":["Énoncer la propriété P(n) à démontrer","Initialisation : vérifier P(n₀)","Hérédité : supposer P(k) vraie pour un k ≥ n₀","Montrer que P(k) ⟹ P(k+1)","Conclure que P(n) est vraie pour tout n ≥ n₀"],"ref":"Fiche 1 - Hors d'oeuvre Exo 6"},
-        {"id":"S-E04","type":"vrai_faux","d":"expert","skill":"limites","q":"Affirmation : Si (uₙ) est croissante, alors elle diverge vers +∞.","answer":false,"explanation":"Faux : une suite croissante et majorée converge (théorème de convergence monotone). Ex : uₙ = 1 − 1/n est croissante et converge vers 1.","ref":"Fiche 1 - Classique Exo 12"},
-        {"id":"S-E05","type":"qcm","d":"expert","skill":"python","q":"La fonction Python suivante calcule un terme de suite :\ndef terme(n):\n    u = 2\n    for i in range(n):\n        u = 3*u - 4\n    return u\nQue renvoie terme(2) ?","o":["2","8","−2","4"],"c":0,"ref":"Fiche 1 - Hors d'oeuvre Exo 4 (BAC 2024)"},
-        {"id":"S-E06","type":"trou","d":"expert","skill":"arithmético-géométrique","q":"Le point fixe de la suite uₙ₊₁ = 0.8uₙ + 6 est ℓ = ___","answer":"30","acceptedAnswers":["30","30.0"],"ref":"Fiche 1 - Classique Exo 3"},
-        {"id":"S-E07","type":"qcm","d":"expert","skill":"limites","q":"Soit uₙ = (2ⁿ + 3ⁿ)/3ⁿ. La limite de (uₙ) est :","o":["1","2","+∞","0"],"c":0,"ref":"Fiche 1 - Classique Exo 8"}
-      ]
-    },
-    "fonctions": {
-      "id": "fonctions",
-      "name": "Fonctions",
-      "fiche": "Masterfiche Maths — Fiche Exo 3 : Fonctions",
-      "ficheUrl": "https://masterbac.com",
-      "detail": "Limites, dérivées, convexité, tangentes, études complètes de fonctions — 25+ exercices progressifs",
-      "subSkills": ["limites", "dérivées", "variations", "tangentes", "convexité", "domaine", "trigonométrie", "lecture_graphique"],
-      "questions": [
-        {"id":"F-B01","type":"qcm","d":"basique","skill":"dérivées","q":"Dérivée de f(x) = 3x⁴ − 2x + 7 ?","o":["12x³ − 2","12x³ − 2x","3x³ − 2","12x⁴ − 2"],"c":0,"ref":"Fiche 3 - Basique Exo 2"},
-        {"id":"F-B02","type":"trou","d":"basique","skill":"dérivées","q":"La dérivée de eˣ est ___","answer":"eˣ","acceptedAnswers":["e^x","eˣ","exp(x)","e**x"],"ref":"Fiche 3 - Basique Exo 2"},
-        {"id":"F-B03","type":"qcm","d":"basique","skill":"limites","q":"lim(x→+∞) de eˣ = ?","o":["0","1","+∞","e"],"c":2,"ref":"Fiche 3 - Basique Exo 1"},
-        {"id":"F-B04","type":"association","d":"basique","skill":"dérivées","q":"Associez chaque fonction à sa dérivée.","pairs":[{"left":"f(x) = x³","right":"f'(x) = 3x²"},{"left":"f(x) = ln(x)","right":"f'(x) = 1/x"},{"left":"f(x) = eˣ","right":"f'(x) = eˣ"},{"left":"f(x) = √x","right":"f'(x) = 1/(2√x)"}],"ref":"Fiche 3 - Basique Exo 2"},
-        {"id":"F-B05","type":"vrai_faux","d":"basique","skill":"variations","q":"Affirmation : Si f'(x) > 0 sur un intervalle I, alors f est décroissante sur I.","answer":false,"explanation":"C'est le contraire : si f'(x) > 0 sur I, alors f est croissante sur I.","ref":"Fiche 3 - Basique Exo 3"},
-        {"id":"F-B06","type":"qcm","d":"basique","skill":"domaine","q":"Le domaine de définition de f(x) = ln(x − 2) est :","o":["ℝ","x > 2, soit ]2 ; +∞[","x ≥ 2","x > 0"],"c":1,"ref":"Fiche 3 - Basique Exo 4"},
-        {"id":"F-B07","type":"trou","d":"basique","skill":"limites","q":"lim(x→0⁺) de ln(x) = ___","answer":"−∞","acceptedAnswers":["-∞","-inf","moins l'infini","-infini"],"ref":"Fiche 3 - Basique Exo 1"},
-        {"id":"F-B08","type":"qcm","d":"basique","skill":"dérivées","q":"Dérivée de f(x) = 5x² − 3x + 1 ?","o":["10x − 3","5x − 3","10x² − 3","10x + 3"],"c":0,"ref":"Fiche 3 - Basique Exo 2"},
-        {"id":"F-B09","type":"qcm","d":"basique","skill":"limites","q":"lim(x→+∞) de 1/(x²) = ?","o":["1","0","+∞","−∞"],"c":1,"ref":"Fiche 3 - Basique Exo 1"},
-        {"id":"F-B10","type":"vrai_faux","d":"basique","skill":"domaine","q":"Affirmation : La fonction f(x) = √(x) est définie sur ℝ tout entier.","answer":false,"explanation":"√(x) n'est définie que pour x ≥ 0, soit sur [0 ; +∞[.","ref":"Fiche 3 - Basique Exo 4"},
-
-        {"id":"F-C01","type":"qcm","d":"classique","skill":"dérivées","q":"f(x) = xeˣ. Que vaut f'(x) ?","o":["eˣ","(1 + x)eˣ","xeˣ + 1","x²eˣ"],"c":1,"ref":"Fiche 3 - Classique"},
-        {"id":"F-C02","type":"qcm","d":"classique","skill":"tangentes","q":"L'équation de la tangente à f(x) = x² en x = 3 est :","o":["y = 6x − 9","y = 3x − 9","y = 6x + 9","y = 9x − 6"],"c":0,"ref":"Fiche 3 - Classique Exo 4"},
-        {"id":"F-C03","type":"trou","d":"classique","skill":"tangentes","q":"La tangente à f en a a pour équation y = f'(a)(x − a) + ___","answer":"f(a)","acceptedAnswers":["f(a)","f( a )"],"ref":"Fiche 3 - Classique Exo 4"},
-        {"id":"F-C04","type":"qcm","d":"classique","skill":"limites","q":"lim(x→+∞) de (x² − 3x)/(2x² + 1) = ?","o":["1/2","0","+∞","−3/2"],"c":0,"ref":"Fiche 3 - Classique Exo 1"},
-        {"id":"F-C05","type":"graphique","d":"classique","skill":"lecture_graphique","q":"On observe la courbe d'une fonction f. Elle passe par (0, 2), admet un maximum en x = 1, et une asymptote horizontale y = 0 en +∞. Quelle est la limite de f en +∞ ?","graphDesc":"Courbe partant de (0,2), montant vers (1, 3), puis décroissant vers y=0","o":["0","2","3","+∞"],"c":0,"ref":"Fiche 3 - Classique Exo 4-5"},
-        {"id":"F-C06","type":"qcm","d":"classique","skill":"variations","q":"Si f'(x) change de signe en passant de + à −, alors x est :","o":["Un minimum local","Un maximum local","Un point d'inflexion","Sans particularité"],"c":1,"ref":"Fiche 3 - Classique Exo 3"},
-        {"id":"F-C07","type":"ordre","d":"classique","skill":"variations","q":"Remettez dans l'ordre les étapes d'une étude de fonction :","items":["Déterminer le domaine de définition","Calculer les limites aux bornes","Calculer la dérivée f'(x)","Étudier le signe de f'(x)","Dresser le tableau de variations"],"ref":"Fiche 3 - Classique Exo 2-3"},
-        {"id":"F-C08","type":"vrai_faux","d":"classique","skill":"convexité","q":"Affirmation : Si f''(x) > 0 sur I, alors f est convexe sur I.","answer":true,"explanation":"Par définition, f est convexe sur I si et seulement si f'' ≥ 0 sur I.","ref":"Fiche 3 - Classique Exo 7"},
-        {"id":"F-C09","type":"qcm","d":"classique","skill":"limites","q":"f(x) = ln(1 + e⁻ˣ). lim(x→+∞) f(x) = ?","o":["0","1","ln(2)","+∞"],"c":0,"ref":"Fiche 3 - Basique Exo 1 (BAC)"},
-        {"id":"F-C10","type":"trou","d":"classique","skill":"dérivées","q":"La dérivée de f(x) = ln(2x + 1) est f'(x) = ___/(2x + 1)","answer":"2","acceptedAnswers":["2","2.0"],"ref":"Fiche 3 - Classique"},
-
-        {"id":"F-E01","type":"qcm","d":"expert","skill":"limites","q":"f(x) = 5xe⁻ˣ. L'axe des abscisses est asymptote à la courbe :","o":["En +∞ et en −∞","En +∞ seulement","En −∞ seulement","Ce n'est pas une asymptote"],"c":1,"ref":"Fiche 3 - Hors d'oeuvre (BAC Métropole 2024)"},
-        {"id":"F-E02","type":"qcm","d":"expert","skill":"limites","q":"lim(x→0) de (eˣ − 1)/x = ?","o":["0","1","e","+∞"],"c":1,"ref":"Fiche 3 - Hors d'oeuvre"},
-        {"id":"F-E03","type":"graphique","d":"expert","skill":"convexité","q":"La courbe de f admet un point d'inflexion en x = 2. Que peut-on dire de f''(2) ?","graphDesc":"Courbe avec changement de concavité en x=2","o":["f''(2) > 0","f''(2) = 0","f''(2) < 0","On ne peut pas savoir"],"c":1,"ref":"Fiche 3 - Classique Exo 7"},
-        {"id":"F-E04","type":"qcm","d":"expert","skill":"variations","q":"f(x) = x − ln(x) sur ]0;+∞[. f admet un minimum en :","o":["x = 1","x = e","x = 0","x = 1/e"],"c":0,"ref":"Fiche 3 - Hors d'oeuvre Exo 2"},
-        {"id":"F-E05","type":"vrai_faux","d":"expert","skill":"limites","q":"Affirmation : lim(x→+∞) de ln(x)/x = +∞ (les croissances comparées).","answer":false,"explanation":"C'est le contraire : lim(x→+∞) ln(x)/x = 0. L'exponentielle et les puissances l'emportent sur le logarithme.","ref":"Fiche 3 - Hors d'oeuvre"},
-        {"id":"F-E06","type":"ordre","d":"expert","skill":"variations","q":"Pour étudier la position relative de deux courbes Cf et Cg, on étudie le signe de :","items":["Poser h(x) = f(x) − g(x)","Calculer h'(x)","Étudier les variations de h","Déterminer le signe de h(x)","Conclure : si h(x) > 0, Cf est au-dessus de Cg"],"ref":"Fiche 3 - Hors d'oeuvre Exo 3"},
-        {"id":"F-E07","type":"trou","d":"expert","skill":"limites","q":"Par croissances comparées : lim(x→+∞) de xⁿ × e⁻ˣ = ___ (pour tout n entier)","answer":"0","acceptedAnswers":["0","0.0"],"ref":"Fiche 3 - Hors d'oeuvre"}
+        {
+          "id": "S-B01",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "arithmétique",
+          "q": "On considère la suite (uₙ) définie par u₀ = 5 et uₙ₊₁ = (3/4)uₙ + (1/3)n + 2. On pose vₙ = uₙ − n. La suite (vₙ) est-elle arithmétique, géométrique ou ni l'un ni l'autre ?",
+          "o": [
+            "Arithmétique",
+            "Géométrique",
+            "Constante",
+            "Ni arithmétique ni géométrique"
+          ],
+          "c": 3,
+          "ref": "Fiche 1 - Basique Exo 1 (BAC Réunion 2023)"
+        },
+        {
+          "id": "S-B02",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "arithmétique",
+          "q": "Une liste L est constituée de termes consécutifs d'une suite arithmétique de premier terme 11 et de raison 4, le dernier terme étant 2047. Combien de termes contient cette liste ?",
+          "o": [
+            "509",
+            "510",
+            "511",
+            "512"
+          ],
+          "c": 1,
+          "ref": "Fiche 1 - Basique Exo 2 (BAC Asie 2023)"
+        },
+        {
+          "id": "S-B03",
+          "type": "vrai_faux",
+          "d": "basique",
+          "skill": "géométrique",
+          "q": "Soit (uₙ) définie par uₙ₊₁ = 3uₙ − 2n + 1 avec u₀ = 12. La suite (vₙ) = uₙ − n est géométrique de raison 3.",
+          "answer": true,
+          "explanation": "On calcule vₙ₊₁ = uₙ₊₁ − (n+1) = 3uₙ − 2n + 1 − n − 1 = 3(uₙ − n) = 3vₙ. La suite (vₙ) est bien géométrique de raison 3 et de premier terme v₀ = 12.",
+          "ref": "Fiche 1 - Basique Exo 3 (BAC Nouvelle-Calédonie 2023)"
+        },
+        {
+          "id": "S-B04",
+          "type": "trou",
+          "d": "basique",
+          "skill": "récurrence",
+          "q": "Pour démontrer par récurrence que uₙ = 2 × 0,8ⁿ − 10 avec uₙ₊₁ = 0,8uₙ − 2 et u₀ = −8, on vérifie d'abord l'___",
+          "answer": "initialisation",
+          "acceptedAnswers": [
+            "initialisation",
+            "Initialisation",
+            "initialisation au rang 0",
+            "initialisation (n=0)"
+          ],
+          "ref": "Fiche 1 - Basique Exo 4 (BAC Polynésie 2023)"
+        },
+        {
+          "id": "S-B05",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "limites",
+          "q": "Quelle est la limite de la suite uₙ = (1/2)ⁿ quand n tend vers +∞ ?",
+          "o": [
+            "0",
+            "1",
+            "+∞",
+            "−∞"
+          ],
+          "c": 0,
+          "ref": "Fiche 1 - Basique Exo 5"
+        },
+        {
+          "id": "S-B06",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "limites",
+          "q": "La suite (vₙ) définie par vₙ = (2 + 3ⁿ)/(4 + 6ⁿ) converge vers :",
+          "o": [
+            "+∞",
+            "1/2",
+            "0",
+            "1"
+          ],
+          "c": 2,
+          "ref": "Fiche 1 - Basique Exo 6 (BAC Centres étrangers 2023)"
+        },
+        {
+          "id": "S-B07",
+          "type": "association",
+          "d": "basique",
+          "skill": "limites",
+          "q": "Associez chaque suite à sa limite quand n → +∞.",
+          "pairs": [
+            {
+              "left": "uₙ = 3ⁿ + 2",
+              "right": "+∞"
+            },
+            {
+              "left": "uₙ = 0,2ⁿ − 2",
+              "right": "−2"
+            },
+            {
+              "left": "uₙ = n³/3ⁿ",
+              "right": "0"
+            },
+            {
+              "left": "uₙ = 1 − 3ⁿ",
+              "right": "−∞"
+            }
+          ],
+          "ref": "Fiche 1 - Basique Exo 5"
+        },
+        {
+          "id": "S-B08",
+          "type": "vrai_faux",
+          "d": "basique",
+          "skill": "limites",
+          "q": "La suite uₙ = 2ⁿ/n² tend vers 0 quand n → +∞.",
+          "answer": false,
+          "explanation": "Le terme exponentiel 2ⁿ croît plus vite que le terme polynomial n². La suite tend vers +∞ par croissance comparée.",
+          "ref": "Fiche 1 - Basique Exo 5"
+        },
+        {
+          "id": "S-B09",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "limites",
+          "q": "Quelle est la limite de uₙ = 0,99ⁿ − 3ⁿ ?",
+          "o": [
+            "0",
+            "+∞",
+            "−∞",
+            "1"
+          ],
+          "c": 2,
+          "ref": "Fiche 1 - Basique Exo 5"
+        },
+        {
+          "id": "S-B10",
+          "type": "trou",
+          "d": "basique",
+          "skill": "récurrence",
+          "q": "La suite (uₙ) définie par uₙ₊₁ = 0,4uₙ − 0,6 avec u₀ = 2 converge vers ___.",
+          "answer": "−1",
+          "acceptedAnswers": [
+            "-1",
+            "−1"
+          ],
+          "ref": "Fiche 1 - Basique Exo 7 (BAC Polynésie 2023)"
+        },
+        {
+          "id": "S-B11",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "limites",
+          "q": "Une suite (uₙ) est majorée par 2 et converge vers une limite ℓ. On peut affirmer que :",
+          "o": [
+            "ℓ ≤ 2",
+            "ℓ ≥ 2",
+            "ℓ = 2",
+            "La suite est décroissante"
+          ],
+          "c": 0,
+          "ref": "Fiche 1 - Basique Exo 8 (divers BAC 2023)"
+        },
+        {
+          "id": "S-C01",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "arithmético-géométrique",
+          "q": "On considère la suite uₙ₊₁ = 0,5uₙ + 3 avec u₀ = 2. On pose vₙ = uₙ − 6. La suite (vₙ) est :",
+          "o": [
+            "Arithmétique de raison 0,5",
+            "Géométrique de raison 0,5",
+            "Géométrique de raison 3",
+            "Constante"
+          ],
+          "c": 1,
+          "ref": "Fiche 1 - Classique Exo 3 (BAC Métropole 2023)"
+        },
+        {
+          "id": "S-C02",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "arithmétique",
+          "q": "La suite (uₙ) est définie par uₙ = ln(3ⁿ × 5). En posant vₙ = uₙ − ln(5), la suite (vₙ) est arithmétique de raison :",
+          "o": [
+            "ln(3)",
+            "3",
+            "ln(5)",
+            "1"
+          ],
+          "c": 0,
+          "ref": "Fiche 1 - Classique Exo 1 (BAC Polynésie 2023)"
+        },
+        {
+          "id": "S-C03",
+          "type": "vrai_faux",
+          "d": "classique",
+          "skill": "limites",
+          "q": "Si une suite est croissante et majorée, alors elle converge.",
+          "answer": true,
+          "explanation": "C'est le théorème de convergence monotone : toute suite croissante et majorée converge vers une limite finie.",
+          "ref": "Fiche 1 - Classique Exo 12 (BAC Nouvelle-Calédonie 2022)"
+        },
+        {
+          "id": "S-C04",
+          "type": "ordre",
+          "d": "classique",
+          "skill": "suite_auxiliaire",
+          "q": "Remettez dans l'ordre les étapes pour étudier une suite arithmético-géométrique uₙ₊₁ = auₙ + b :",
+          "items": [
+            "Trouver le point fixe ℓ tel que ℓ = aℓ + b",
+            "Poser vₙ = uₙ − ℓ",
+            "Montrer que (vₙ) est géométrique de raison a",
+            "Exprimer vₙ puis en déduire uₙ",
+            "Calculer la limite de (uₙ)"
+          ],
+          "ref": "Fiche 1 - Classique Exo 3 (BAC Métropole 2023)"
+        },
+        {
+          "id": "S-C05",
+          "type": "trou",
+          "d": "classique",
+          "skill": "limites",
+          "q": "La suite uₙ = (3ⁿ)/(6ⁿ) = (1/2)ⁿ converge vers ___.",
+          "answer": "0",
+          "acceptedAnswers": [
+            "0",
+            "zéro"
+          ],
+          "ref": "Fiche 1 - Classique Exo 8 (divers BAC 2023)"
+        },
+        {
+          "id": "S-C06",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "suite_auxiliaire",
+          "q": "Soit (uₙ) définie par uₙ₊₁ = 2uₙ − 1 avec u₀ = 3. On pose vₙ = uₙ − 1. Quelle est la raison de la suite (vₙ) ?",
+          "o": [
+            "2",
+            "1",
+            "−1",
+            "3"
+          ],
+          "c": 0,
+          "ref": "Fiche 1 - Classique Exo 4 (BAC Réunion 2023)"
+        },
+        {
+          "id": "S-C07",
+          "type": "vrai_faux",
+          "d": "classique",
+          "skill": "limites",
+          "q": "Si lim uₙ = 0 et lim vₙ = +∞, alors lim(uₙ × vₙ) = 0.",
+          "answer": false,
+          "explanation": "C'est une forme indéterminée 0 × ∞. Le résultat dépend de la vitesse de convergence de chaque suite. Par exemple uₙ = 1/n et vₙ = n² donne uₙvₙ → +∞.",
+          "ref": "Fiche 1 - Classique Exo 8 (divers BAC 2023)"
+        },
+        {
+          "id": "S-C08",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "géométrique",
+          "q": "Suite géométrique : u₀ = 100, q = 0,9. On cherche le plus petit n tel que uₙ < 50. On résout 100 × 0,9ⁿ < 50, soit 0,9ⁿ < 0,5. Quelle est la valeur de n ?",
+          "o": [
+            "n = 7",
+            "n = 6",
+            "n = 8",
+            "n = 5"
+          ],
+          "c": 0,
+          "ref": "Fiche 1 - Classique Exo 1 (BAC Polynésie 2023)"
+        },
+        {
+          "id": "S-C09",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "arithmético-géométrique",
+          "q": "Soit (uₙ) définie par uₙ₊₁ = 0,8uₙ − 2 avec u₀ = −8. L'expression explicite de uₙ est :",
+          "o": [
+            "2 × 0,8ⁿ − 10",
+            "−8 × 0,8ⁿ − 2",
+            "(−8 − 10) × 0,8ⁿ",
+            "0,8ⁿ − 10"
+          ],
+          "c": 0,
+          "ref": "Fiche 1 - Classique Exo 4 (BAC Polynésie 2023)"
+        },
+        {
+          "id": "S-C10",
+          "type": "trou",
+          "d": "classique",
+          "skill": "sommes",
+          "q": "La somme des termes d'une suite géométrique de premier terme v₀ et de raison q ≠ 1 est : Sₙ = v₀ × (1 − q^(n+1)) / (1 − ___).",
+          "answer": "q",
+          "acceptedAnswers": [
+            "q"
+          ],
+          "ref": "Fiche 1 - Basique Exo 10"
+        },
+        {
+          "id": "S-C11",
+          "type": "association",
+          "d": "classique",
+          "skill": "limites",
+          "q": "Associez chaque suite à son comportement asymptotique.",
+          "pairs": [
+            {
+              "left": "uₙ = 0,7 × 1,8ⁿ − 1",
+              "right": "Diverge vers +∞"
+            },
+            {
+              "left": "uₙ = ln(n)(0,4ⁿ − 2)",
+              "right": "Diverge vers −∞"
+            },
+            {
+              "left": "uₙ = 5n/(n³ + 1)",
+              "right": "Converge vers 0"
+            },
+            {
+              "left": "uₙ = 3/n + 5",
+              "right": "Converge vers 5"
+            }
+          ],
+          "ref": "Fiche 1 - Basique Exo 5"
+        },
+        {
+          "id": "S-C12",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "suite_auxiliaire",
+          "q": "Soit uₙ₊₁ = 3uₙ − 2n + 1 avec u₀ = 12 et vₙ = uₙ − n. On a v₀ = 12 et vₙ est géométrique de raison 3. L'expression de vₙ est :",
+          "o": [
+            "12 × 3ⁿ",
+            "12 × 3ⁿ + n",
+            "3ⁿ + 12",
+            "12ⁿ × 3"
+          ],
+          "c": 0,
+          "ref": "Fiche 1 - Basique Exo 3 (BAC Nouvelle-Calédonie 2023)"
+        },
+        {
+          "id": "S-E01",
+          "type": "ordre",
+          "d": "expert",
+          "skill": "récurrence",
+          "q": "Remettez dans l'ordre les étapes d'une démonstration par récurrence que −1 ≤ uₙ ≤ 2 pour la suite uₙ₊₁ = 0,4uₙ − 0,6 :",
+          "items": [
+            "Vérifier l'initialisation : u₀ = 2 et −1 ≤ 2 ≤ 2",
+            "Supposer −1 ≤ uₙ ≤ 2 (hypothèse de récurrence)",
+            "Multiplier l'encadrement par 0,4 : −0,4 ≤ 0,4uₙ ≤ 0,8",
+            "Soustraire 0,6 : −1 ≤ 0,4uₙ − 0,6 ≤ 0,2",
+            "Conclure que −1 ≤ uₙ₊₁ ≤ 2 est vérifié"
+          ],
+          "ref": "Fiche 1 - Basique Exo 7 (BAC Polynésie 2023)"
+        },
+        {
+          "id": "S-E02",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "python",
+          "q": "On considère le programme Python :\ndef seuil(L):\n    u = 2\n    n = 0\n    while u > L:\n        u = 0.4*u - 0.6\n        n = n + 1\n    return n\nQue renvoie seuil(-0.5) ?",
+          "o": [
+            "2",
+            "3",
+            "4",
+            "1"
+          ],
+          "c": 1,
+          "ref": "Fiche 1 - Hors D'oeuvre Exo 4 (BAC Centres étrangers 2024)"
+        },
+        {
+          "id": "S-E03",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "limites",
+          "q": "Soit uₙ = 6 × (1/4)ⁿ + 2n − 5 et Sₙ = Σ(k=0 à n) uₖ. La partie géométrique de Sₙ vaut :",
+          "o": [
+            "8(1 − (1/4)^(n+1))",
+            "6 × (1 − (1/4)^(n+1))/(3/4)",
+            "6/(1 − 1/4)",
+            "24(1 − (1/4)ⁿ)/3"
+          ],
+          "c": 1,
+          "ref": "Fiche 1 - Basique Exo 10"
+        },
+        {
+          "id": "S-E04",
+          "type": "vrai_faux",
+          "d": "expert",
+          "skill": "récurrence",
+          "q": "La suite (vₙ) définie par vₙ = (−1)ⁿ est un exemple de suite bornée qui ne converge pas.",
+          "answer": true,
+          "explanation": "Elle oscille entre 1 et −1 donc elle est bornée (|vₙ| ≤ 1) mais n'admet pas de limite car elle ne se stabilise jamais.",
+          "ref": "Fiche 1 - Basique Exo 8 (divers BAC 2023)"
+        },
+        {
+          "id": "S-E05",
+          "type": "trou",
+          "d": "expert",
+          "skill": "arithmético-géométrique",
+          "q": "Pour la suite uₙ₊₁ = 0,8uₙ − 2 avec u₀ = −8, le point fixe ℓ vérifie ℓ = 0,8ℓ − 2, soit ℓ = ___.",
+          "answer": "−10",
+          "acceptedAnswers": [
+            "-10",
+            "−10"
+          ],
+          "ref": "Fiche 1 - Classique Exo 4 (BAC Polynésie 2023)"
+        },
+        {
+          "id": "S-E06",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "suite_auxiliaire",
+          "q": "Soit f(x) = ln(x + 1) et la suite définie par uₙ₊₁ = f(uₙ) avec u₀ = 1. Pour montrer que (uₙ) est décroissante, on étudie f(x) − x sur [0 ; 1]. Le signe de ln(x + 1) − x sur ]0 ; 1] est :",
+          "o": [
+            "Strictement négatif",
+            "Strictement positif",
+            "Nul",
+            "Change de signe"
+          ],
+          "c": 0,
+          "ref": "Fiche 1 - Hors D'oeuvre Exo 1 (BAC Réunion 2023)"
+        },
+        {
+          "id": "S-E07",
+          "type": "ordre",
+          "d": "expert",
+          "skill": "récurrence",
+          "q": "Remettez dans l'ordre les étapes pour calculer la limite d'une suite (uₙ) définie par récurrence uₙ₊₁ = f(uₙ) avec convergence :",
+          "items": [
+            "Montrer que la suite est monotone (croissante ou décroissante)",
+            "Montrer que la suite est bornée",
+            "Conclure que la suite converge par le théorème de convergence monotone",
+            "Poser ℓ = f(ℓ) et résoudre pour trouver la limite",
+            "Vérifier que la limite trouvée est compatible avec les bornes"
+          ],
+          "ref": "Fiche 1 - Hors D'oeuvre Exo 5"
+        },
+        {
+          "id": "S-E08",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "python",
+          "q": "Quel code Python calcule la somme S = u₀ + u₁ + … + uₙ pour uₖ = 6 × (1/4)ᵏ + 2k − 5 ?\n",
+          "o": [
+            "S = sum(6*(0.25)**k + 2*k - 5 for k in range(n+1))",
+            "S = sum(6*(0.25)**k + 2*k - 5 for k in range(n))",
+            "S = 6*(1-0.25**(n+1))/0.75 + n*(n+1) - 5*n",
+            "S = sum(6*(0.25)**k for k in range(n+1)) + n**2 - 5*n"
+          ],
+          "c": 0,
+          "ref": "Fiche 1 - Hors D'oeuvre Exo 4 (BAC Centres étrangers 2024)"
+        },
+        {
+          "id": "S-E09",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "limites",
+          "q": "Soit la suite uₙ définie par uₙ₊₁ = √(2uₙ + 3) avec u₀ = 0. Si la suite converge vers ℓ, alors ℓ vérifie ℓ² − 2ℓ − 3 = 0. Les solutions sont :",
+          "o": [
+            "ℓ = 3 ou ℓ = −1",
+            "ℓ = 3 uniquement (car uₙ ≥ 0)",
+            "ℓ = 1 ou ℓ = −3",
+            "ℓ = −1 uniquement"
+          ],
+          "c": 1,
+          "ref": "Fiche 1 - Hors D'oeuvre Exo 5"
+        },
+        {
+          "id": "S-E10",
+          "type": "association",
+          "d": "expert",
+          "skill": "limites",
+          "q": "Associez chaque méthode à la situation où elle s'applique.",
+          "pairs": [
+            {
+              "left": "Croissance comparée",
+              "right": "Limite de n³/3ⁿ (expo vs polynôme)"
+            },
+            {
+              "left": "Point fixe",
+              "right": "Limite d'une suite récurrente uₙ₊₁ = f(uₙ)"
+            },
+            {
+              "left": "Théorème de convergence monotone",
+              "right": "Suite décroissante et minorée"
+            },
+            {
+              "left": "Suite auxiliaire",
+              "right": "Suite arithmético-géométrique"
+            }
+          ],
+          "ref": "Fiche 1 - Hors D'oeuvre (synthèse)"
+        }
       ]
     },
     "geometrie": {
       "id": "geometrie",
       "name": "Géométrie dans l'espace",
       "fiche": "Masterfiche Maths — Fiche Exo 2 : Géométrie dans l'espace",
-      "ficheUrl": "https://masterbac.com",
-      "detail": "Vecteurs, plans, droites, produit scalaire, projeté orthogonal, sphères — 25+ exercices progressifs",
-      "subSkills": ["vecteurs", "produit_scalaire", "plans", "droites", "orthogonalité", "distances", "sphères", "lecture_graphique"],
+      "ficheUrl": "https://www.masterbac.com/products/les-masterfiches-exercices-de-lelite-2026-packs",
+      "detail": "Vecteurs, produit scalaire, plans et droites dans l'espace, orthogonalité, distances, sphères — 64 pages · 20 ans d'annales (2004-2025) · 3 niveaux progressifs",
+      "subSkills": [
+        "vecteurs",
+        "produit_scalaire",
+        "plans",
+        "droites",
+        "orthogonalité",
+        "distances",
+        "sphères",
+        "lecture_graphique"
+      ],
       "questions": [
-        {"id":"G-B01","type":"qcm","d":"basique","skill":"vecteurs","q":"A(1;2;3) et B(4;6;3). Les coordonnées du vecteur AB sont :","o":["(3 ; 4 ; 0)","(5 ; 8 ; 6)","(−3 ; −4 ; 0)","(3 ; 4 ; 6)"],"c":0,"ref":"Fiche 2 - Basique Exo 1"},
-        {"id":"G-B02","type":"trou","d":"basique","skill":"vecteurs","q":"Le milieu du segment [A(2;4;6) ; B(8;2;0)] a pour coordonnées (___; 3; 3).","answer":"5","acceptedAnswers":["5","5.0"],"ref":"Fiche 2 - Basique"},
-        {"id":"G-B03","type":"qcm","d":"basique","skill":"vecteurs","q":"La norme du vecteur u(3 ; 4 ; 0) vaut :","o":["7","5","25","√7"],"c":1,"ref":"Fiche 2 - Basique Exo 3"},
-        {"id":"G-B04","type":"association","d":"basique","skill":"lecture_graphique","q":"Dans un cube ABCDEFGH d'arête 1, associez chaque distance à sa valeur.","pairs":[{"left":"AB","right":"1"},{"left":"Diagonale d'une face AC","right":"√2"},{"left":"Grande diagonale AG","right":"√3"},{"left":"AE (arête verticale)","right":"1"}],"ref":"Fiche 2 - Basique Exo 2"},
-        {"id":"G-B05","type":"vrai_faux","d":"basique","skill":"vecteurs","q":"Affirmation : Si AB = DC (en tant que vecteurs), alors ABCD est un parallélogramme.","answer":true,"explanation":"C'est la définition vectorielle du parallélogramme.","ref":"Fiche 2 - Basique"},
-        {"id":"G-B06","type":"qcm","d":"basique","skill":"droites","q":"Une représentation paramétrique d'une droite passant par A(1;0;2) et de vecteur directeur u(2;1;−1) est :","o":["x=1+2t, y=t, z=2−t","x=2t, y=t, z=−t","x=1+t, y=2t, z=2+t","x=2+t, y=1+t, z=−1+2t"],"c":0,"ref":"Fiche 2 - Basique Exo 1"},
-        {"id":"G-B07","type":"qcm","d":"basique","skill":"produit_scalaire","q":"u(1;2;3) · v(4;−1;2) = ?","o":["8","10","4","12"],"c":0,"ref":"Fiche 2 - Basique Exo 3"},
-
-        {"id":"G-C01","type":"qcm","d":"classique","skill":"plans","q":"Un vecteur normal au plan d'équation 2x − 3y + z = 7 est :","o":["(2 ; −3 ; 1)","(2 ; 3 ; 1)","(7 ; 0 ; 0)","(1 ; −1 ; 1)"],"c":0,"ref":"Fiche 2 - Classique Exo 1"},
-        {"id":"G-C02","type":"qcm","d":"classique","skill":"orthogonalité","q":"Deux vecteurs sont orthogonaux si et seulement si leur produit scalaire vaut :","o":["1","0","−1","Leur norme"],"c":1,"ref":"Fiche 2 - Classique Exo 3"},
-        {"id":"G-C03","type":"trou","d":"classique","skill":"plans","q":"L'équation cartésienne d'un plan de vecteur normal n(a;b;c) passant par A(x₀;y₀;z₀) est : a(x−x₀) + b(y−y₀) + c(z−z₀) = ___","answer":"0","acceptedAnswers":["0","0.0"],"ref":"Fiche 2 - Classique Exo 1"},
-        {"id":"G-C04","type":"vrai_faux","d":"classique","skill":"plans","q":"Affirmation : Deux plans sont parallèles si et seulement si leurs vecteurs normaux sont colinéaires.","answer":true,"explanation":"Deux plans sont parallèles ssi leurs normales sont colinéaires (proportionnelles).","ref":"Fiche 2 - Classique"},
-        {"id":"G-C05","type":"qcm","d":"classique","skill":"plans","q":"Les plans P₁ : 2x − y + z = 3 et P₂ : 4x − 2y + 2z = 1 sont :","o":["Sécants","Parallèles non confondus","Confondus","Perpendiculaires"],"c":1,"ref":"Fiche 2 - Classique"},
-        {"id":"G-C06","type":"ordre","d":"classique","skill":"distances","q":"Pour calculer la distance d'un point M à un plan P, on :","items":["Détermine l'équation cartésienne du plan ax+by+cz+d=0","Repère les coordonnées du point M(x₀,y₀,z₀)","Applique la formule |ax₀+by₀+cz₀+d| / √(a²+b²+c²)"],"ref":"Fiche 2 - Classique Exo 1"},
-        {"id":"G-C07","type":"qcm","d":"classique","skill":"produit_scalaire","q":"Cube ABCDEFGH d'arête 1. Le produit scalaire AB · AG vaut :","o":["0","1","√3","3"],"c":1,"ref":"Fiche 2 - Basique Exo 3 / Classique Exo 4"},
-
-        {"id":"G-E01","type":"qcm","d":"expert","skill":"distances","q":"Distance du point M(1;0;0) au plan x + y + z = 3 :","o":["2√3/3","√3","2","3/√3"],"c":0,"ref":"Fiche 2 - Hors d'oeuvre Exo 5"},
-        {"id":"G-E02","type":"qcm","d":"expert","skill":"orthogonalité","q":"Une droite de vecteur directeur d est parallèle à un plan de normale n si et seulement si :","o":["d · n = 0","d · n = 1","d = n","‖d‖ = ‖n‖"],"c":0,"ref":"Fiche 2 - Hors d'oeuvre"},
-        {"id":"G-E03","type":"qcm","d":"expert","skill":"sphères","q":"L'équation (x−1)² + (y+2)² + (z−3)² = 16 représente une sphère de centre et rayon :","o":["Centre (1;−2;3), rayon 4","Centre (1;2;3), rayon 16","Centre (−1;2;−3), rayon 4","Centre (1;−2;3), rayon 16"],"c":0,"ref":"Fiche 2 - Hors d'oeuvre Exo 1"},
-        {"id":"G-E04","type":"vrai_faux","d":"expert","skill":"droites","q":"Affirmation : Deux droites non coplanaires dans l'espace sont toujours sécantes.","answer":false,"explanation":"Deux droites non coplanaires sont dites « gauches » : elles ne sont ni parallèles ni sécantes.","ref":"Fiche 2 - Basique Exo 5"},
-        {"id":"G-E05","type":"trou","d":"expert","skill":"plans","q":"Le plan (FHI) dans un cube ABCDEFGH a pour équation −2x − 2y + z + 1 = 0. Un vecteur normal à ce plan est (___ ; −2 ; 1).","answer":"−2","acceptedAnswers":["-2","-2.0"],"ref":"Fiche 2 - Hors d'oeuvre (BAC Métropole 2024)"},
-        {"id":"G-E06","type":"qcm","d":"expert","skill":"orthogonalité","q":"Le projeté orthogonal H du point A sur un plan P est le point de P tel que :","o":["AH est normal au plan P","AH est tangent au plan P","H est le milieu de A et P","AH est minimal et perpendiculaire à P"],"c":3,"ref":"Fiche 2 - Classique Exo 2 / Hors d'oeuvre"}
+        {
+          "id": "G-B01",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "droites",
+          "q": "Soit A(6; −6; 6) et B(−6; 0; 6). Le vecteur AB a pour coordonnées :",
+          "o": [
+            "(−12; 6; 0)",
+            "(12; −6; 0)",
+            "(0; 6; 12)",
+            "(−12; −6; 0)"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Basique Exo 1 (BAC Polynésie Septembre 2023)"
+        },
+        {
+          "id": "G-B02",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "droites",
+          "q": "La droite (d') a pour représentation paramétrique : x = −6 − 8t, y = 4t, z = 6 + 5t. Un vecteur directeur de (d') est :",
+          "o": [
+            "(−6; 0; 6)",
+            "(−8; 4; 5)",
+            "(8; −4; −5)",
+            "(8; 4; 5)"
+          ],
+          "c": 1,
+          "ref": "Fiche 2 - Basique Exo 1 (BAC Polynésie Septembre 2023)"
+        },
+        {
+          "id": "G-B03",
+          "type": "vrai_faux",
+          "d": "basique",
+          "skill": "lecture_graphique",
+          "q": "Dans un cube ABCDEFGH d'arête 1, si K est le milieu de [HG], alors KG = 0,5.",
+          "answer": true,
+          "explanation": "K est le milieu du segment [HG] d'un cube d'arête 1, donc KG = HG/2 = 1/2 = 0,5.",
+          "ref": "Fiche 2 - Basique Exo 2 (BAC Nouvelle-Calédonie 2023)"
+        },
+        {
+          "id": "G-B04",
+          "type": "trou",
+          "d": "basique",
+          "skill": "produit_scalaire",
+          "q": "Dans un cube ABCDEFGH d'arête 1 avec le repère (A; AB, AD, AE), le point M(1; 1; 3/4) et N(0; 1/2; 1). Le vecteur MN a pour coordonnées (___; −1/2; 1/4).",
+          "answer": "−1",
+          "acceptedAnswers": [
+            "-1",
+            "−1"
+          ],
+          "ref": "Fiche 2 - Basique Exo 3 (BAC Asie Mars 2023)"
+        },
+        {
+          "id": "G-B05",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "plans",
+          "q": "Le plan d'équation x = 1 a pour vecteur normal :",
+          "o": [
+            "(1; 0; 0)",
+            "(0; 1; 1)",
+            "(0; 1; 0)",
+            "(1; 0; 1)"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Basique Exo 1 (BAC Polynésie Septembre 2023)"
+        },
+        {
+          "id": "G-B06",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "droites",
+          "q": "Soit la droite d de représentation paramétrique x = 2k−3, y = k, z = 5. Un vecteur directeur de d est :",
+          "o": [
+            "(2; 1; 0)",
+            "(−3; 0; 5)",
+            "(2; 1; 5)",
+            "(1; 1; 1)"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Basique Exo 5 (BAC Polynésie Mars 2023)"
+        },
+        {
+          "id": "G-B07",
+          "type": "association",
+          "d": "basique",
+          "skill": "lecture_graphique",
+          "q": "Dans un cube ABCDEFGH d'arête 2 avec repère (A; (1/2)AB, (1/2)AD, (1/2)AE), associez chaque point à ses coordonnées.",
+          "pairs": [
+            {
+              "left": "B",
+              "right": "(2; 0; 0)"
+            },
+            {
+              "left": "G",
+              "right": "(2; 2; 2)"
+            },
+            {
+              "left": "H",
+              "right": "(0; 2; 2)"
+            },
+            {
+              "left": "F",
+              "right": "(2; 0; 2)"
+            }
+          ],
+          "ref": "Fiche 2 - Basique Exo 6 (BAC Centres étrangers 2023)"
+        },
+        {
+          "id": "G-B08",
+          "type": "vrai_faux",
+          "d": "basique",
+          "skill": "vecteurs",
+          "q": "Deux vecteurs sont colinéaires si et seulement si l'un est un multiple de l'autre.",
+          "answer": true,
+          "explanation": "Deux vecteurs u et v sont colinéaires s'il existe un réel k tel que v = ku (ou u = 0). C'est la définition de la colinéarité.",
+          "ref": "Fiche 2 - Basique Exo 5"
+        },
+        {
+          "id": "G-B09",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "droites",
+          "q": "On veut vérifier si le point M₁(50; −28; −29) appartient à la droite d' : x = −6 − 8t, y = 4t, z = 6 + 5t. Avec y = 4t = −28 on trouve t = −7. Alors x = −6 − 8(−7) = 50 et z = 6 + 5(−7) = −29. Le point :",
+          "o": [
+            "appartient à d'",
+            "n'appartient pas à d'",
+            "appartient au plan (xOy)",
+            "est l'origine de d'"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Basique Exo 1 (BAC Polynésie Septembre 2023)"
+        },
+        {
+          "id": "G-B10",
+          "type": "trou",
+          "d": "basique",
+          "skill": "lecture_graphique",
+          "q": "Dans un prisme avec le repère (A; (1/4)AB, (1/4)AD, (1/8)AE), si I est le milieu de [EF] et E a pour coordonnées (0; 0; 8), F(4; 0; 4), alors I a pour coordonnées (___; 0; 6).",
+          "answer": "2",
+          "acceptedAnswers": [
+            "2"
+          ],
+          "ref": "Fiche 2 - Basique Exo 4 (BAC Centres étrangers 2023)"
+        },
+        {
+          "id": "G-B12",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "droites",
+          "q": "Deux droites de l'espace dont les vecteurs directeurs ne sont pas colinéaires sont :",
+          "o": [
+            "Toujours sécantes",
+            "Sécantes ou non coplanaires",
+            "Toujours parallèles",
+            "Toujours perpendiculaires"
+          ],
+          "c": 1,
+          "ref": "Fiche 2 - Basique Exo 5 (BAC Polynésie 2023)"
+        },
+        {
+          "id": "G-C01",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "plans",
+          "q": "Le plan P passe par A(1; 0; 2) et a pour vecteur normal n(2; −1; 3). Son équation cartésienne est :",
+          "o": [
+            "2x − y + 3z − 8 = 0",
+            "2x − y + 3z = 0",
+            "2x − y + 3z + 8 = 0",
+            "x − y + 3z − 8 = 0"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Classique Exo 1"
+        },
+        {
+          "id": "G-C02",
+          "type": "ordre",
+          "d": "classique",
+          "skill": "orthogonalité",
+          "q": "Remettez dans l'ordre les étapes pour calculer la distance d'un point M à un plan P :",
+          "items": [
+            "Déterminer l'équation cartésienne ax + by + cz + d = 0 du plan P",
+            "Identifier les coordonnées (x₀, y₀, z₀) du point M",
+            "Appliquer la formule d(M, P) = |ax₀ + by₀ + cz₀ + d| / √(a² + b² + c²)",
+            "Calculer le numérateur |ax₀ + by₀ + cz₀ + d|",
+            "Calculer le dénominateur √(a² + b² + c²) et conclure"
+          ],
+          "ref": "Fiche 2 - Classique Exo 1"
+        },
+        {
+          "id": "G-C03",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "produit_scalaire",
+          "q": "Dans un cube d'arête 1 avec repère (A; AB, AD, AE), si M(1; 1; 3/4), N(0; 1/2; 1), P(1; 0; −5/4), le produit scalaire MN · MP vaut :",
+          "o": [
+            "0",
+            "1",
+            "−1",
+            "1/2"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Classique Exo 3 (BAC Asie Mars 2023)"
+        },
+        {
+          "id": "G-C04",
+          "type": "vrai_faux",
+          "d": "classique",
+          "skill": "produit_scalaire",
+          "q": "Si le produit scalaire MN · MP = 0, alors le triangle MNP est rectangle en M.",
+          "answer": true,
+          "explanation": "Un produit scalaire nul entre deux vecteurs signifie qu'ils sont orthogonaux. Donc l'angle en M est droit et le triangle est rectangle en M.",
+          "ref": "Fiche 2 - Classique Exo 3 (BAC Asie Mars 2023)"
+        },
+        {
+          "id": "G-C05",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "plans",
+          "q": "On donne trois points A(1; 0; 0), B(0; 2; 0), C(0; 0; 3). Le vecteur normal au plan (ABC) est proportionnel à :",
+          "o": [
+            "(6; 3; 2)",
+            "(1; 2; 3)",
+            "(3; 2; 6)",
+            "(2; 1; 3)"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Classique Exo 3"
+        },
+        {
+          "id": "G-C06",
+          "type": "trou",
+          "d": "classique",
+          "skill": "vecteurs",
+          "q": "Trois points A, B, C sont coplanaires avec un point D si et seulement si le vecteur AD s'écrit comme ___ linéaire de AB et AC.",
+          "answer": "combinaison",
+          "acceptedAnswers": [
+            "combinaison",
+            "combinaison linéaire",
+            "une combinaison linéaire"
+          ],
+          "ref": "Fiche 2 - Classique Exo 6"
+        },
+        {
+          "id": "G-C07",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "distances",
+          "q": "Dans un cube ABCDEFGH d'arête a, le volume du tétraèdre ABCE vaut :",
+          "o": [
+            "a³/6",
+            "a³/3",
+            "a³/4",
+            "a³/2"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Classique Exo 4"
+        },
+        {
+          "id": "G-C08",
+          "type": "association",
+          "d": "classique",
+          "skill": "orthogonalité",
+          "q": "Associez chaque configuration à la position relative des droites d₁ et d₂.",
+          "pairs": [
+            {
+              "left": "Vecteurs directeurs colinéaires et un point commun",
+              "right": "Confondues"
+            },
+            {
+              "left": "Vecteurs directeurs colinéaires sans point commun",
+              "right": "Strictement parallèles"
+            },
+            {
+              "left": "Vecteurs directeurs non colinéaires avec point commun",
+              "right": "Sécantes"
+            },
+            {
+              "left": "Vecteurs directeurs non colinéaires sans point commun",
+              "right": "Non coplanaires"
+            }
+          ],
+          "ref": "Fiche 2 - Basique Exo 5 (BAC Polynésie 2023)"
+        },
+        {
+          "id": "G-C09",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "orthogonalité",
+          "q": "Le projeté orthogonal H d'un point M sur un plan P est le point de P tel que :",
+          "o": [
+            "MH est orthogonal au plan P",
+            "MH est parallèle au plan P",
+            "MH est dans le plan P",
+            "H est le milieu de M et son symétrique"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Classique Exo 2"
+        },
+        {
+          "id": "G-C10",
+          "type": "vrai_faux",
+          "d": "classique",
+          "skill": "plans",
+          "q": "Si deux plans ont des vecteurs normaux colinéaires, alors les plans sont parallèles ou confondus.",
+          "answer": true,
+          "explanation": "Des vecteurs normaux colinéaires signifient que les plans ont la même direction, ils sont donc parallèles. S'ils partagent un point commun, ils sont confondus.",
+          "ref": "Fiche 2 - Classique Exo 1"
+        },
+        {
+          "id": "G-C11",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "droites",
+          "q": "La droite d₁ passe par H(2; 3; 0) avec vecteur directeur u(1; −1; 1) et d₂ : x = 2k−3, y = k, z = 5. Les droites sont :",
+          "o": [
+            "Non coplanaires",
+            "Parallèles",
+            "Sécantes",
+            "Confondues"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Basique Exo 5 (BAC Polynésie 2023)"
+        },
+        {
+          "id": "G-C12",
+          "type": "trou",
+          "d": "classique",
+          "skill": "distances",
+          "q": "L'aire d'un triangle de sommets A, B, C dans l'espace vaut (1/2) × ||AB|| × ||AC|| × sin(___).",
+          "answer": "BAC",
+          "acceptedAnswers": [
+            "BAC",
+            "α",
+            "l'angle BAC",
+            "angle BAC",
+            "A"
+          ],
+          "ref": "Fiche 2 - Classique Exo 4"
+        },
+        {
+          "id": "G-E01",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "sphères",
+          "q": "La sphère S de centre Ω(1; 2; −1) et de rayon 3 a pour équation :",
+          "o": [
+            "(x−1)² + (y−2)² + (z+1)² = 9",
+            "(x+1)² + (y−2)² + (z−1)² = 9",
+            "x² + y² + z² − 2x − 4y + 2z − 3 = 0",
+            "(x−1)² + (y−2)² + (z+1)² = 3"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Hors D'oeuvre Exo 1"
+        },
+        {
+          "id": "G-E02",
+          "type": "ordre",
+          "d": "expert",
+          "skill": "sphères",
+          "q": "Pour déterminer l'intersection d'une sphère S et d'une droite d, on :",
+          "items": [
+            "Paramétrer la droite d : M(t) = A + t × u",
+            "Substituer les coordonnées de M(t) dans l'équation de la sphère",
+            "Développer et obtenir une équation du second degré en t",
+            "Calculer le discriminant Δ",
+            "Conclure : Δ > 0 → 2 points, Δ = 0 → tangente, Δ < 0 → pas d'intersection"
+          ],
+          "ref": "Fiche 2 - Hors D'oeuvre Exo 1"
+        },
+        {
+          "id": "G-E03",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "distances",
+          "q": "La distance d'un point M(x₀; y₀; z₀) au plan P : ax + by + cz + d = 0 est :",
+          "o": [
+            "|ax₀ + by₀ + cz₀ + d| / √(a² + b² + c²)",
+            "(ax₀ + by₀ + cz₀ + d) / (a² + b² + c²)",
+            "√((ax₀)² + (by₀)² + (cz₀)²)",
+            "(ax₀ + by₀ + cz₀ + d)²"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Hors D'oeuvre Exo 2"
+        },
+        {
+          "id": "G-E04",
+          "type": "vrai_faux",
+          "d": "expert",
+          "skill": "sphères",
+          "q": "L'intersection d'une sphère et d'un plan qui passe à une distance inférieure au rayon du centre est un cercle.",
+          "answer": true,
+          "explanation": "Si la distance du centre de la sphère au plan est strictement inférieure au rayon, l'intersection est un cercle dont le rayon se calcule par le théorème de Pythagore.",
+          "ref": "Fiche 2 - Hors D'oeuvre Exo 3"
+        },
+        {
+          "id": "G-E05",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "distances",
+          "q": "Soit A(1; 0; 0), B(0; 1; 0), C(0; 0; 1), D(0; 0; 0). Le volume du tétraèdre ABCD vaut :",
+          "o": [
+            "1/6",
+            "1/3",
+            "1/2",
+            "1"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Hors D'oeuvre Exo 6"
+        },
+        {
+          "id": "G-E06",
+          "type": "trou",
+          "d": "expert",
+          "skill": "orthogonalité",
+          "q": "Pour trouver le projeté orthogonal H d'un point M sur une droite d de vecteur directeur u passant par A, on utilise la condition : MH · u = ___.",
+          "answer": "0",
+          "acceptedAnswers": [
+            "0",
+            "zéro"
+          ],
+          "ref": "Fiche 2 - Hors D'oeuvre Exo 7"
+        },
+        {
+          "id": "G-E07",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "distances",
+          "q": "Pour minimiser la distance d'un point M à une droite d, on cherche le projeté orthogonal H de M sur d. Si d passe par A(1; 0; 2) avec vecteur directeur u(1; 1; 0) et M(3; 1; 5), la distance MH vaut :",
+          "o": [
+            "√(9/2 + 9)",
+            "√(1/2 + 9)",
+            "√(27/2)",
+            "√10"
+          ],
+          "c": 2,
+          "ref": "Fiche 2 - Hors D'oeuvre Exo 7"
+        },
+        {
+          "id": "G-E08",
+          "type": "association",
+          "d": "expert",
+          "skill": "sphères",
+          "q": "Associez chaque valeur du discriminant Δ à la nature de l'intersection sphère-droite.",
+          "pairs": [
+            {
+              "left": "Δ > 0",
+              "right": "Deux points d'intersection"
+            },
+            {
+              "left": "Δ = 0",
+              "right": "Un point (droite tangente)"
+            },
+            {
+              "left": "Δ < 0",
+              "right": "Aucune intersection"
+            }
+          ],
+          "ref": "Fiche 2 - Hors D'oeuvre Exo 1"
+        },
+        {
+          "id": "G-E09",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "plans",
+          "q": "L'intersection de deux plans non parallèles est :",
+          "o": [
+            "Une droite",
+            "Un point",
+            "Un plan",
+            "Un cercle"
+          ],
+          "c": 0,
+          "ref": "Fiche 2 - Hors D'oeuvre Exo 4"
+        },
+        {
+          "id": "G-E10",
+          "type": "ordre",
+          "d": "expert",
+          "skill": "distances",
+          "q": "Pour calculer le volume d'une pyramide de sommet S et de base triangulaire ABC :",
+          "items": [
+            "Calculer les vecteurs AB et AC",
+            "Déterminer l'aire de la base : Aire = (1/2)||AB ∧ AC||",
+            "Trouver l'équation du plan (ABC)",
+            "Calculer la hauteur h = distance de S au plan (ABC)",
+            "Volume = (1/3) × Aire × h"
+          ],
+          "ref": "Fiche 2 - Hors D'oeuvre Exo 8"
+        }
+      ]
+    },
+    "fonctions": {
+      "id": "fonctions",
+      "name": "Les Fonctions",
+      "fiche": "Masterfiche Maths — Fiche Exo 3 : Les Fonctions",
+      "ficheUrl": "https://www.masterbac.com/products/les-masterfiches-exercices-de-lelite-2026-packs",
+      "detail": "Limites, dérivées, variations, tangentes, convexité, domaines de définition, trigonométrie — 96 pages · 20 ans d'annales (2004-2025) · 3 niveaux progressifs",
+      "subSkills": [
+        "limites",
+        "dérivées",
+        "variations",
+        "tangentes",
+        "convexité",
+        "domaine",
+        "trigonométrie",
+        "lecture_graphique"
+      ],
+      "questions": [
+        {
+          "id": "F-B01",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "limites",
+          "q": "Soit f(x) = ln(1 + e⁻ˣ). La limite de f(x) quand x → +∞ est :",
+          "o": [
+            "0",
+            "1",
+            "+∞",
+            "ln(2)"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 1 (divers BAC)"
+        },
+        {
+          "id": "F-B02",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "limites",
+          "q": "Soit h(x) = 1/(1 + e⁻³ˣ). La limite de h(x) quand x → +∞ est :",
+          "o": [
+            "1",
+            "0",
+            "+∞",
+            "1/2"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 1 (divers BAC)"
+        },
+        {
+          "id": "F-B03",
+          "type": "trou",
+          "d": "basique",
+          "skill": "dérivées",
+          "q": "La dérivée de f(x) = x² ln(x) est f'(x) = 2x ln(x) + ___.",
+          "answer": "x",
+          "acceptedAnswers": [
+            "x",
+            "x²/x"
+          ],
+          "ref": "Fiche 3 - Basique Exo 2 (divers BAC)"
+        },
+        {
+          "id": "F-B04",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "dérivées",
+          "q": "La dérivée de g(x) = (x − 1)eˣ est :",
+          "o": [
+            "xeˣ",
+            "eˣ",
+            "(x − 1)eˣ + eˣ",
+            "(x + 1)eˣ"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 2 (divers BAC)"
+        },
+        {
+          "id": "F-B05",
+          "type": "vrai_faux",
+          "d": "basique",
+          "skill": "limites",
+          "q": "La limite de p(x) = ln(e²ˣ − eˣ + 1) quand x → −∞ est 0.",
+          "answer": true,
+          "explanation": "Quand x → −∞, e²ˣ et eˣ tendent vers 0, donc p(x) ≈ ln(1) = 0.",
+          "ref": "Fiche 3 - Basique Exo 1 (divers BAC)"
+        },
+        {
+          "id": "F-B06",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "domaine",
+          "q": "La fonction g(x) = ln((x − 1)/(2x + 4)) est définie sur :",
+          "o": [
+            "ℝ",
+            "ℝ \\ {−2}",
+            "]−∞; −2[ ∪ ]1; +∞[",
+            "]−2; 1["
+          ],
+          "c": 2,
+          "ref": "Fiche 3 - Basique Exo 4"
+        },
+        {
+          "id": "F-B07",
+          "type": "association",
+          "d": "basique",
+          "skill": "dérivées",
+          "q": "Associez chaque fonction à sa dérivée.",
+          "pairs": [
+            {
+              "left": "f(x) = ln(x) − x",
+              "right": "f'(x) = 1/x − 1"
+            },
+            {
+              "left": "g(x) = xe⁻ˣ",
+              "right": "g'(x) = (1 − x)e⁻ˣ"
+            },
+            {
+              "left": "h(x) = (2 − ln x)ln x",
+              "right": "h'(x) = (2 − 2ln x)/x"
+            },
+            {
+              "left": "k(x) = 3/(1 + e⁻ᵏˣ)",
+              "right": "k'(x) = 3ke⁻ᵏˣ/(1 + e⁻ᵏˣ)²"
+            }
+          ],
+          "ref": "Fiche 3 - Basique Exo 2 (divers BAC)"
+        },
+        {
+          "id": "F-B08",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "trigonométrie",
+          "q": "La valeur exacte de cos(π/3) est :",
+          "o": [
+            "1/2",
+            "√3/2",
+            "√2/2",
+            "0"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 5"
+        },
+        {
+          "id": "F-B09",
+          "type": "trou",
+          "d": "basique",
+          "skill": "dérivées",
+          "q": "La dérivée de ln(u) est ___ / u.",
+          "answer": "u'",
+          "acceptedAnswers": [
+            "u'",
+            "u′",
+            "la dérivée de u"
+          ],
+          "ref": "Fiche 3 - Basique Exo 2"
+        },
+        {
+          "id": "F-B10",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "limites",
+          "q": "Soit r(x) = (x + 1/2)e⁻ˣ + x. La limite de r(x) quand x → +∞ est :",
+          "o": [
+            "+∞",
+            "0",
+            "1",
+            "−∞"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 1 (divers BAC)"
+        },
+        {
+          "id": "F-B11",
+          "type": "vrai_faux",
+          "d": "basique",
+          "skill": "limites",
+          "q": "La limite de s(x) = (2 − ln x) ln x quand x → +∞ est +∞.",
+          "answer": false,
+          "explanation": "Quand x → +∞, ln x → +∞ et (2 − ln x) → −∞, donc le produit tend vers −∞ (produit d'un terme positif tendant vers +∞ par un terme négatif tendant vers −∞).",
+          "ref": "Fiche 3 - Basique Exo 1 (divers BAC)"
+        },
+        {
+          "id": "F-B12",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "dérivées",
+          "q": "La dérivée de i(x) = ln(1 + e⁻ˣ) est :",
+          "o": [
+            "−e⁻ˣ/(1 + e⁻ˣ)",
+            "e⁻ˣ/(1 + e⁻ˣ)",
+            "1/(1 + e⁻ˣ)",
+            "−1/(1 + eˣ)"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 2 (divers BAC)"
+        },
+        {
+          "id": "F-C01",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "variations",
+          "q": "Soit f(x) = ln(1 + e⁻ˣ) + x/4. On montre que f'(x) = (eˣ − 3)/(4(eˣ + 1)). La fonction f est décroissante sur :",
+          "o": [
+            "]−∞; ln 3[",
+            "]ln 3; +∞[",
+            "ℝ tout entier",
+            "]0; +∞["
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 3"
+        },
+        {
+          "id": "F-C02",
+          "type": "ordre",
+          "d": "classique",
+          "skill": "variations",
+          "q": "Remettez dans l'ordre les étapes pour dresser le tableau de variations de f(x) = xe⁻ˣ :",
+          "items": [
+            "Calculer f'(x) = (1 − x)e⁻ˣ",
+            "Étudier le signe de f'(x) : e⁻ˣ > 0 toujours, donc signe de (1 − x)",
+            "f'(x) > 0 si x < 1, f'(x) = 0 si x = 1, f'(x) < 0 si x > 1",
+            "Calculer f(1) = e⁻¹ (maximum)",
+            "Dresser le tableau : croissante sur ]−∞; 1], décroissante sur [1; +∞["
+          ],
+          "ref": "Fiche 3 - Basique Exo 2 (divers BAC)"
+        },
+        {
+          "id": "F-C03",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "convexité",
+          "q": "Une fonction f est convexe sur un intervalle I si et seulement si :",
+          "o": [
+            "f'' ≥ 0 sur I",
+            "f'' ≤ 0 sur I",
+            "f' ≥ 0 sur I",
+            "f' ≤ 0 sur I"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Classique Exo 4"
+        },
+        {
+          "id": "F-C04",
+          "type": "vrai_faux",
+          "d": "classique",
+          "skill": "tangentes",
+          "q": "L'équation de la tangente à la courbe de f au point d'abscisse a est : y = f(a) + f'(a)(x − a).",
+          "answer": true,
+          "explanation": "C'est la formule classique de la tangente. La tangente passe par le point (a, f(a)) avec la pente f'(a).",
+          "ref": "Fiche 3 - Classique Exo 4"
+        },
+        {
+          "id": "F-C05",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "limites",
+          "q": "Pour calculer la limite de (e²ˣ − 3eˣ + 2)/(eˣ − 1) en +∞, on factorise par eˣ. La limite vaut :",
+          "o": [
+            "+∞",
+            "1",
+            "0",
+            "2"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Classique Exo 1"
+        },
+        {
+          "id": "F-C06",
+          "type": "trou",
+          "d": "classique",
+          "skill": "convexité",
+          "q": "Un point d'inflexion est un point où la fonction change de ___.",
+          "answer": "convexité",
+          "acceptedAnswers": [
+            "convexité",
+            "concavité",
+            "convexité (ou concavité)"
+          ],
+          "ref": "Fiche 3 - Classique Exo 7"
+        },
+        {
+          "id": "F-C07",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "variations",
+          "q": "Soit f(x) = ln(1 + e⁻ˣ) + x/4. On sait que f est strictement croissante sur [2; 5] et f(2) ≈ 0,63 < 1, f(5) ≈ 1,26 > 1. Par le TVI, l'équation f(x) = 1 admet :",
+          "o": [
+            "Exactement une solution dans [2; 5]",
+            "Aucune solution",
+            "Deux solutions",
+            "Une infinité de solutions"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 3"
+        },
+        {
+          "id": "F-C08",
+          "type": "association",
+          "d": "classique",
+          "skill": "dérivées",
+          "q": "Associez chaque forme de dérivation à sa formule.",
+          "pairs": [
+            {
+              "left": "(uv)'",
+              "right": "u'v + uv'"
+            },
+            {
+              "left": "(u/v)'",
+              "right": "(u'v − uv')/v²"
+            },
+            {
+              "left": "(eᵘ)'",
+              "right": "u'eᵘ"
+            },
+            {
+              "left": "(ln u)'",
+              "right": "u'/u"
+            }
+          ],
+          "ref": "Fiche 3 - Basique Exo 2"
+        },
+        {
+          "id": "F-C09",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "dérivées",
+          "q": "La dérivée de m(x) = 5x² + 2x − 2x² ln(x) est :",
+          "o": [
+            "8x − 4x ln(x) + 2",
+            "10x + 2 − 4x ln(x)",
+            "8x + 2 − 2x ln(x)",
+            "10x − 4x ln(x) + 2"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 2 (divers BAC)"
+        },
+        {
+          "id": "F-C10",
+          "type": "vrai_faux",
+          "d": "classique",
+          "skill": "limites",
+          "q": "La croissance comparée affirme que lim(x→+∞) ln(x)/x = 0.",
+          "answer": true,
+          "explanation": "La fonction exponentielle (et donc x) croît plus vite que le logarithme. On a bien lim ln(x)/x = 0 en +∞.",
+          "ref": "Fiche 3 - Basique Exo 1"
+        },
+        {
+          "id": "F-C11",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "dérivées",
+          "q": "La dérivée de r(x) = ln(x)/(1 + x²) est :",
+          "o": [
+            "(1/x(1+x²) + x − 2x ln(x))/(1+x²)²",
+            "((1+x²)/x − 2x ln(x))/(1+x²)²",
+            "(1/x − 2x ln(x))/(1 + x²)²",
+            "ln(x)/(2x)"
+          ],
+          "c": 1,
+          "ref": "Fiche 3 - Basique Exo 2 (divers BAC)"
+        },
+        {
+          "id": "F-C13",
+          "type": "trou",
+          "d": "classique",
+          "skill": "domaine",
+          "q": "Pour que ln(u(x)) soit définie, il faut que u(x) soit strictement ___ à 0.",
+          "answer": "supérieur",
+          "acceptedAnswers": [
+            "supérieur",
+            "supérieure",
+            "positif",
+            "positive",
+            "strictement positif",
+            "> 0"
+          ],
+          "ref": "Fiche 3 - Basique Exo 4"
+        },
+        {
+          "id": "F-E01",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "convexité",
+          "q": "Soit f(x) = x²eˣ. On a f''(x) = (x² + 4x + 2)eˣ. La fonction f est concave sur l'intervalle :",
+          "o": [
+            "[−2 − √2; −2 + √2]",
+            "[−2 + √2; +∞[",
+            "]−∞; −2 − √2]",
+            "ℝ tout entier"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Classique Exo 7"
+        },
+        {
+          "id": "F-E02",
+          "type": "ordre",
+          "d": "expert",
+          "skill": "variations",
+          "q": "Pour étudier la position relative de deux courbes Cf et Cg, on :",
+          "items": [
+            "Poser h(x) = f(x) − g(x)",
+            "Étudier le signe de h(x) sur le domaine",
+            "Résoudre h(x) = 0 pour trouver les points d'intersection",
+            "Dresser le tableau de signe de h",
+            "Conclure : Cf au-dessus de Cg quand h > 0"
+          ],
+          "ref": "Fiche 3 - Hors D'oeuvre Exo 3"
+        },
+        {
+          "id": "F-E03",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "variations",
+          "q": "Pour la fonction f définie par f(x) = ln(1 + e⁻ˣ) + x/4, le minimum de f est atteint en x = ln(3) et vaut :",
+          "o": [
+            "ln(4/3) + ln(3)/4",
+            "ln(3) + 1/4",
+            "ln(4)/4",
+            "1"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 3"
+        },
+        {
+          "id": "F-E04",
+          "type": "vrai_faux",
+          "d": "expert",
+          "skill": "convexité",
+          "q": "Si f''(a) = 0 et f'' change de signe en a, alors le point (a, f(a)) est un point d'inflexion de la courbe.",
+          "answer": true,
+          "explanation": "Un point d'inflexion correspond à un changement de convexité. Il faut que f''(a) = 0 ET que f'' change de signe en a (condition nécessaire et suffisante).",
+          "ref": "Fiche 3 - Classique Exo 7"
+        },
+        {
+          "id": "F-E05",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "limites",
+          "q": "Soit q(x) = 5x² + 2x − 2x² ln(x). En factorisant par x², la limite quand x → +∞ est :",
+          "o": [
+            "−∞",
+            "+∞",
+            "0",
+            "5"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 1 (divers BAC)"
+        },
+        {
+          "id": "F-E06",
+          "type": "trou",
+          "d": "expert",
+          "skill": "variations",
+          "q": "Par le théorème des valeurs intermédiaires, si f est continue et strictement monotone sur [a; b] et si f(a) < k < f(b), alors l'équation f(x) = k admet une ___ solution dans ]a; b[.",
+          "answer": "unique",
+          "acceptedAnswers": [
+            "unique",
+            "seule",
+            "exactement une"
+          ],
+          "ref": "Fiche 3 - Basique Exo 3"
+        },
+        {
+          "id": "F-E07",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "dérivées",
+          "q": "Soit f(x) = ln(x)/(1 + x²). Pour trouver le signe de f'(x), on étudie le numérateur N(x) = (1 + x²)/x − 2x ln(x). En x = 1, N(1) vaut :",
+          "o": [
+            "2",
+            "0",
+            "1",
+            "−1"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Basique Exo 2 (divers BAC)"
+        },
+        {
+          "id": "F-E08",
+          "type": "association",
+          "d": "expert",
+          "skill": "trigonométrie",
+          "q": "Associez chaque valeur remarquable.",
+          "pairs": [
+            {
+              "left": "cos(π/6)",
+              "right": "√3/2"
+            },
+            {
+              "left": "sin(π/4)",
+              "right": "√2/2"
+            },
+            {
+              "left": "cos(π/3)",
+              "right": "1/2"
+            },
+            {
+              "left": "sin(π/6)",
+              "right": "1/2"
+            }
+          ],
+          "ref": "Fiche 3 - Basique Exo 5"
+        },
+        {
+          "id": "F-E09",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "variations",
+          "q": "Un algorithme de dichotomie sur [a; b] pour résoudre f(x) = 0 divise l'intervalle par 2 à chaque étape. Après 10 itérations, la précision est de :",
+          "o": [
+            "(b−a)/1024",
+            "(b−a)/512",
+            "(b−a)/100",
+            "(b−a)/2"
+          ],
+          "c": 0,
+          "ref": "Fiche 3 - Hors D'oeuvre Exo 4"
+        }
       ]
     },
     "integrales": {
       "id": "integrales",
-      "name": "Intégration & Éq. diff.",
-      "fiche": "Masterfiche Maths — Fiche Exo 4 : Primitives, Calcul intégral, Éq. diff.",
-      "ficheUrl": "https://masterbac.com",
-      "detail": "Primitives, calcul intégral, intégration par parties, équations différentielles — 20+ exercices progressifs",
-      "subSkills": ["primitives", "intégrales", "aires", "eq_diff", "ipp", "suites_intégrales"],
+      "name": "Primitives, Intégrales et Équations différentielles",
+      "fiche": "Masterfiche Maths — Fiche Exo 4 : Primitives - Calcul intégral - Équations différentielles",
+      "ficheUrl": "https://www.masterbac.com/products/les-masterfiches-exercices-de-lelite-2026-packs",
+      "detail": "Primitives, intégrales, aires, équations différentielles, intégration par parties, suites définies par intégrales — 89 pages · 20 ans d'annales (2004-2025) · 3 niveaux progressifs",
+      "subSkills": [
+        "primitives",
+        "intégrales",
+        "aires",
+        "eq_diff",
+        "ipp",
+        "suites_intégrales"
+      ],
       "questions": [
-        {"id":"I-B01","type":"qcm","d":"basique","skill":"primitives","q":"Une primitive de f(x) = 3x² est :","o":["x³","6x","x³ + C","9x"],"c":0,"ref":"Fiche 4 - Basique Exo 2"},
-        {"id":"I-B02","type":"association","d":"basique","skill":"primitives","q":"Associez chaque fonction à une de ses primitives.","pairs":[{"left":"f(x) = 2x","right":"F(x) = x²"},{"left":"f(x) = eˣ","right":"F(x) = eˣ"},{"left":"f(x) = 1/x","right":"F(x) = ln(x)"},{"left":"f(x) = cos(x)","right":"F(x) = sin(x)"}],"ref":"Fiche 4 - Basique Exo 2-3"},
-        {"id":"I-B03","type":"trou","d":"basique","skill":"intégrales","q":"∫₀¹ 2x dx = ___","answer":"1","acceptedAnswers":["1","1.0"],"ref":"Fiche 4 - Basique Exo 5"},
-        {"id":"I-B04","type":"qcm","d":"basique","skill":"eq_diff","q":"Les solutions de y' = −2y sont de la forme :","o":["y = Ce⁻²ˣ","y = Ce²ˣ","y = −2x + C","y = Ce⁻ˣ"],"c":0,"ref":"Fiche 4 - Basique Exo 1 (BAC Polynésie 2021)"},
-        {"id":"I-B05","type":"vrai_faux","d":"basique","skill":"intégrales","q":"Affirmation : Si f(x) ≥ 0 sur [a;b], alors ∫ₐᵇ f(x)dx ≥ 0.","answer":true,"explanation":"L'intégrale d'une fonction positive est positive (propriété de positivité).","ref":"Fiche 4 - Basique Exo 5"},
-        {"id":"I-B06","type":"qcm","d":"basique","skill":"intégrales","q":"Si F est une primitive de f, alors ∫ₐᵇ f(x)dx = ?","o":["F(b) − F(a)","F(a) − F(b)","F(a) + F(b)","f(b) − f(a)"],"c":0,"ref":"Fiche 4 - Basique Exo 5"},
-        {"id":"I-B07","type":"qcm","d":"basique","skill":"primitives","q":"Parmi ces fonctions, laquelle est une primitive de f(x) = 4x³ + 2x ?","o":["x⁴ + x²","12x² + 2","4x⁴ + x²","x⁴ + x² + 5"],"c":0,"ref":"Fiche 4 - Basique Exo 2"},
-
-        {"id":"I-C01","type":"qcm","d":"classique","skill":"intégrales","q":"∫₁ᵉ (1/x) dx = ?","o":["1","e − 1","0","ln(e) − ln(1) = 1"],"c":0,"ref":"Fiche 4 - Classique"},
-        {"id":"I-C02","type":"qcm","d":"classique","skill":"eq_diff","q":"y' = 3y + 6, y(0) = 1. La solution particulière est :","o":["y = 3e³ˣ − 2","y = e³ˣ − 2","y = 3e³ˣ + 6","y = e⁶ˣ + 1"],"c":0,"ref":"Fiche 4 - Basique Exo 4 (BAC Asie 2021)"},
-        {"id":"I-C03","type":"trou","d":"classique","skill":"intégrales","q":"∫₀¹ eˣ dx = e − ___","answer":"1","acceptedAnswers":["1","1.0"],"ref":"Fiche 4 - Classique"},
-        {"id":"I-C04","type":"ordre","d":"classique","skill":"eq_diff","q":"Pour résoudre y' = ay + b (a ≠ 0), on :","items":["Résout l'équation homogène y' = ay → y₀ = Ceᵃˣ","Trouve une solution particulière constante yₚ = −b/a","Écrit la solution générale y = Ceᵃˣ − b/a","Utilise la condition initiale pour trouver C"],"ref":"Fiche 4 - Basique Exo 4 / Classique Exo 1"},
-        {"id":"I-C05","type":"vrai_faux","d":"classique","skill":"intégrales","q":"Affirmation : ∫ₐᵇ [f(x) + g(x)]dx = ∫ₐᵇ f(x)dx + ∫ₐᵇ g(x)dx (linéarité).","answer":true,"explanation":"L'intégrale est linéaire : on peut séparer les sommes et sortir les constantes.","ref":"Fiche 4 - Basique Exo 5"},
-        {"id":"I-C06","type":"qcm","d":"classique","skill":"primitives","q":"Une primitive de f(x) = x·ln(x) − x est (en dérivant pour vérifier) :","o":["(x²/2)·ln(x) − 3x²/4","x·ln(x)","(x²/2)·ln(x) − x²/4","ln(x)/x"],"c":2,"ref":"Fiche 4 - Classique Exo 3"},
-        {"id":"I-C07","type":"qcm","d":"classique","skill":"aires","q":"L'aire sous la courbe de f(x) = x² entre x = 0 et x = 1 vaut :","o":["1/3","1/2","1","2/3"],"c":0,"ref":"Fiche 4 - Classique Exo 4"},
-
-        {"id":"I-E01","type":"qcm","d":"expert","skill":"ipp","q":"Pour calculer ∫₀¹ x·eˣ dx par intégration par parties, on pose u = x et v' = eˣ. On obtient :","o":["1","e − 1","2e − 1","e"],"c":0,"ref":"Fiche 4 - Classique Exo 4-5 (BAC Réunion 2010)"},
-        {"id":"I-E02","type":"qcm","d":"expert","skill":"primitives","q":"Une primitive de 2x·e^(x²) est :","o":["e^(x²)","x²·e^(x²)","2e^(x²)","e^(2x)"],"c":0,"ref":"Fiche 4 - Hors d'oeuvre Exo 1"},
-        {"id":"I-E03","type":"qcm","d":"expert","skill":"suites_intégrales","q":"On pose Iₙ = ∫₀¹ xⁿ·eˣ dx. On a établi que Iₙ₊₁ = e − (n+1)Iₙ. Que vaut I₀ ?","o":["e − 1","1","e","0"],"c":0,"ref":"Fiche 4 - Hors d'oeuvre Exo 3-4"},
-        {"id":"I-E04","type":"vrai_faux","d":"expert","skill":"eq_diff","q":"Affirmation : g(x) = xe⁻ˣ est une solution particulière de y' = −y + e⁻ˣ.","answer":true,"explanation":"On vérifie : g'(x) = e⁻ˣ − xe⁻ˣ = −xe⁻ˣ + e⁻ˣ = −g(x) + e⁻ˣ. ✓","ref":"Fiche 4 - Basique Exo 1 (BAC Polynésie 2021)"},
-        {"id":"I-E05","type":"qcm","d":"expert","skill":"intégrales","q":"∫₀π sin(x) dx = ?","o":["0","2","π","−2"],"c":1,"ref":"Fiche 4 - Hors d'oeuvre"},
-        {"id":"I-E06","type":"trou","d":"expert","skill":"aires","q":"L'aire entre les courbes de f et g sur [a;b] est ∫ₐᵇ |f(x) − ___(x)| dx","answer":"g","acceptedAnswers":["g","g(x)"],"ref":"Fiche 4 - Classique Exo 4"}
+        {
+          "id": "I-B01",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "eq_diff",
+          "q": "Les solutions de l'équation différentielle y' = −y sont les fonctions :",
+          "o": [
+            "y(x) = Ke⁻ˣ, K ∈ ℝ",
+            "y(x) = Keˣ, K ∈ ℝ",
+            "y(x) = K/x, K ∈ ℝ",
+            "y(x) = −x + K, K ∈ ℝ"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Basique Exo 1 (BAC Polynésie Juin 2021)"
+        },
+        {
+          "id": "I-B02",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "eq_diff",
+          "q": "L'équation différentielle y' = −y + e⁻ˣ admet comme solution particulière g(x) = xe⁻ˣ. La solution générale est :",
+          "o": [
+            "y(x) = (x + K)e⁻ˣ",
+            "y(x) = Ke⁻ˣ + x",
+            "y(x) = xe⁻ˣ + K",
+            "y(x) = (K − x)eˣ"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Basique Exo 1 (BAC Polynésie Juin 2021)"
+        },
+        {
+          "id": "I-B03",
+          "type": "trou",
+          "d": "basique",
+          "skill": "eq_diff",
+          "q": "Si f est solution de y' = −y + e⁻ˣ avec f(0) = 2, alors f(x) = (x + ___)e⁻ˣ.",
+          "answer": "2",
+          "acceptedAnswers": [
+            "2"
+          ],
+          "ref": "Fiche 4 - Basique Exo 1 (BAC Polynésie Juin 2021)"
+        },
+        {
+          "id": "I-B04",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "primitives",
+          "q": "Une primitive de f(x) = 4xe^(x²+3) est :",
+          "o": [
+            "2e^(x²+3)",
+            "4e^(x²+3)",
+            "x²e^(x²+3)",
+            "4xe^(x³)"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Basique Exo 2 (BAC Polynésie Mai 2022)"
+        },
+        {
+          "id": "I-B05",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "primitives",
+          "q": "Une primitive de g(x) = ln(x) est :",
+          "o": [
+            "x ln(x) − x",
+            "x ln(x)",
+            "ln(x) + 1",
+            "x(ln(x) + 1)"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Basique Exo 2 (BAC Polynésie Mai 2022)"
+        },
+        {
+          "id": "I-B06",
+          "type": "vrai_faux",
+          "d": "basique",
+          "skill": "primitives",
+          "q": "Une primitive de −sin²(x) + cos²(x) est cos(x)sin(x).",
+          "answer": true,
+          "explanation": "En dérivant cos(x)sin(x) par la formule du produit : (cos x sin x)' = −sin²x + cos²x, ce qui correspond bien à la fonction donnée.",
+          "ref": "Fiche 4 - Basique Exo 2 (BAC Polynésie Mai 2022)"
+        },
+        {
+          "id": "I-B07",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "eq_diff",
+          "q": "Pour l'équation y' = −0,4y + 0,4, une solution particulière constante est y = :",
+          "o": [
+            "1",
+            "0",
+            "0,4",
+            "−0,4"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Basique Exo 4 (BAC Asie Juin 2021)"
+        },
+        {
+          "id": "I-B08",
+          "type": "trou",
+          "d": "basique",
+          "skill": "eq_diff",
+          "q": "La solution générale de y' = −0,4y + 0,4 est y(t) = 1 + Ce^(___t).",
+          "answer": "−0,4",
+          "acceptedAnswers": [
+            "-0,4",
+            "-0.4",
+            "−0,4",
+            "−0.4"
+          ],
+          "ref": "Fiche 4 - Basique Exo 4 (BAC Asie Juin 2021)"
+        },
+        {
+          "id": "I-B09",
+          "type": "association",
+          "d": "basique",
+          "skill": "intégrales",
+          "q": "Associez chaque propriété de l'intégrale à son énoncé.",
+          "pairs": [
+            {
+              "left": "Linéarité",
+              "right": "∫(f+g) = ∫f + ∫g"
+            },
+            {
+              "left": "Positivité",
+              "right": "Si f ≥ 0 alors ∫f ≥ 0"
+            },
+            {
+              "left": "Relation de Chasles",
+              "right": "∫ₐᵇ f + ∫ᵇᶜ f = ∫ₐᶜ f"
+            },
+            {
+              "left": "Ordre",
+              "right": "Si f ≤ g alors ∫f ≤ ∫g"
+            }
+          ],
+          "ref": "Fiche 4 - Basique Exo 5"
+        },
+        {
+          "id": "I-B10",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "eq_diff",
+          "q": "Si g est solution de y' = −0,4y + 0,4 avec g(0) = 10, alors C vaut :",
+          "o": [
+            "9",
+            "10",
+            "1",
+            "−9"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Basique Exo 4 (BAC Asie Juin 2021)"
+        },
+        {
+          "id": "I-B11",
+          "type": "vrai_faux",
+          "d": "basique",
+          "skill": "intégrales",
+          "q": "Si f(t) ≤ g(t) pour tout t ∈ [a; b], alors ∫ₐᵇ f(t)dt ≤ ∫ₐᵇ g(t)dt.",
+          "answer": true,
+          "explanation": "C'est la propriété d'ordre de l'intégrale. On le démontre en posant h = g − f ≥ 0, d'où ∫h ≥ 0, soit ∫g − ∫f ≥ 0.",
+          "ref": "Fiche 4 - Basique Exo 5"
+        },
+        {
+          "id": "I-C01",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "eq_diff",
+          "q": "Soit (E) : y' = y + 2xeˣ et u(x) = x²eˣ solution particulière. Les solutions générales de (E) sont :",
+          "o": [
+            "f(x) = (K + x²)eˣ, K ∈ ℝ",
+            "f(x) = Keˣ + x²",
+            "f(x) = (x² + 2x)eˣ",
+            "f(x) = Ke⁻ˣ + x²eˣ"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Classique Exo 1 (BAC Métropole Juin 2021)"
+        },
+        {
+          "id": "I-C02",
+          "type": "ordre",
+          "d": "classique",
+          "skill": "eq_diff",
+          "q": "Pour résoudre y' = y + 2xeˣ avec u(x) = x²eˣ solution particulière :",
+          "items": [
+            "Résoudre l'équation homogène y' = y : solutions yh = Keˣ",
+            "Vérifier que u(x) = x²eˣ est bien solution de (E)",
+            "La solution générale est f(x) = yh + u = Keˣ + x²eˣ",
+            "Factoriser : f(x) = (K + x²)eˣ",
+            "Utiliser la condition initiale pour déterminer K"
+          ],
+          "ref": "Fiche 4 - Classique Exo 1 (BAC Métropole Juin 2021)"
+        },
+        {
+          "id": "I-C03",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "primitives",
+          "q": "Une primitive de f(x) = x³e^(−x²) est :",
+          "o": [
+            "−(1/2)(x² + 1)e^(−x²)",
+            "−(1/4)x⁴e^(−x²)",
+            "(x² + 1)e^(−x²)",
+            "−x²e^(−x²)"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Basique Exo 3 (BAC Centres étrangers Mai 2022)"
+        },
+        {
+          "id": "I-C04",
+          "type": "vrai_faux",
+          "d": "classique",
+          "skill": "ipp",
+          "q": "La formule d'intégration par parties est : ∫ₐᵇ u'v = [uv]ₐᵇ − ∫ₐᵇ uv'.",
+          "answer": true,
+          "explanation": "C'est la formule d'IPP qui découle de la dérivée d'un produit : (uv)' = u'v + uv', d'où ∫u'v = uv − ∫uv'.",
+          "ref": "Fiche 4 - Classique Exo 4"
+        },
+        {
+          "id": "I-C05",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "ipp",
+          "q": "Pour calculer ∫₀¹ xe⁻ˣ dx par IPP, on pose u' = e⁻ˣ et v = x. On obtient :",
+          "o": [
+            "1 − 2/e",
+            "−1/e",
+            "1 − 1/e",
+            "2/e − 1"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Classique Exo 5"
+        },
+        {
+          "id": "I-C06",
+          "type": "trou",
+          "d": "classique",
+          "skill": "aires",
+          "q": "L'aire entre la courbe de f et l'axe des abscisses sur [a; b] quand f ≥ 0 est : A = ∫ₐᵇ ___ dx.",
+          "answer": "f(x)",
+          "acceptedAnswers": [
+            "f(x)",
+            "f(t)dt",
+            "f"
+          ],
+          "ref": "Fiche 4 - Classique Exo 4"
+        },
+        {
+          "id": "I-C07",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "eq_diff",
+          "q": "Pour l'équation u(x) = x²eˣ, on a u'(x) = eˣ(x² + 2x). Le signe de u'(x) dépend de :",
+          "o": [
+            "x² + 2x = x(x + 2)",
+            "eˣ",
+            "x² seulement",
+            "2x seulement"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Classique Exo 1 (BAC Métropole Juin 2021)"
+        },
+        {
+          "id": "I-C08",
+          "type": "association",
+          "d": "classique",
+          "skill": "primitives",
+          "q": "Associez chaque fonction à une de ses primitives.",
+          "pairs": [
+            {
+              "left": "f(x) = eˣ",
+              "right": "F(x) = eˣ"
+            },
+            {
+              "left": "f(x) = 1/x",
+              "right": "F(x) = ln|x|"
+            },
+            {
+              "left": "f(x) = cos(x)",
+              "right": "F(x) = sin(x)"
+            },
+            {
+              "left": "f(x) = xⁿ (n ≠ −1)",
+              "right": "F(x) = x^(n+1)/(n+1)"
+            }
+          ],
+          "ref": "Fiche 4 - Basique Exo 2"
+        },
+        {
+          "id": "I-C09",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "eq_diff",
+          "q": "La fonction u(x) = x²eˣ est croissante sur :",
+          "o": [
+            "]−∞; −2[ ∪ ]0; +∞[",
+            "]−2; 0[",
+            "ℝ tout entier",
+            "]0; +∞[ uniquement"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Classique Exo 1 (BAC Métropole Juin 2021)"
+        },
+        {
+          "id": "I-C10",
+          "type": "vrai_faux",
+          "d": "classique",
+          "skill": "intégrales",
+          "q": "∫ₐᵃ f(t) dt = 0 pour toute fonction f continue en a.",
+          "answer": true,
+          "explanation": "L'intégrale d'une fonction sur un intervalle de longueur nulle [a; a] est toujours 0.",
+          "ref": "Fiche 4 - Basique Exo 5"
+        },
+        {
+          "id": "I-C11",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "eq_diff",
+          "q": "Une équation différentielle de la forme y' = ay + b avec a ≠ 0 a pour solution générale :",
+          "o": [
+            "y(t) = −b/a + Ceᵃᵗ",
+            "y(t) = Ceᵃᵗ",
+            "y(t) = −b/a",
+            "y(t) = bt + Ceᵃᵗ"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Basique Exo 4 (BAC Asie 2021)"
+        },
+        {
+          "id": "I-C12",
+          "type": "trou",
+          "d": "classique",
+          "skill": "ipp",
+          "q": "Pour calculer ∫ ln(x) dx par IPP, on pose u = ln(x) et v' = 1. On obtient x ln(x) − ___.",
+          "answer": "x",
+          "acceptedAnswers": [
+            "x",
+            "x + C"
+          ],
+          "ref": "Fiche 4 - Classique Exo 5"
+        },
+        {
+          "id": "I-E01",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "suites_intégrales",
+          "q": "Soit Iₙ = ∫₀¹ xⁿe⁻ˣ dx. Par IPP, on obtient la relation Iₙ = :",
+          "o": [
+            "−1/e + nIₙ₋₁",
+            "1 − nIₙ₋₁",
+            "nIₙ₋₁ − 1/e",
+            "1/e + nIₙ₋₁"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Hors D'oeuvre Exo 3"
+        },
+        {
+          "id": "I-E02",
+          "type": "ordre",
+          "d": "expert",
+          "skill": "ipp",
+          "q": "Pour calculer ∫₀¹ x²eˣ dx par double IPP :",
+          "items": [
+            "1re IPP : u = x², v' = eˣ → ∫x²eˣ = x²eˣ − 2∫xeˣ",
+            "2e IPP : u = x, v' = eˣ → ∫xeˣ = xeˣ − ∫eˣ = xeˣ − eˣ",
+            "Substituer : ∫₀¹ x²eˣ = [x²eˣ]₀¹ − 2[xeˣ − eˣ]₀¹",
+            "Calculer : e − 2(e − e) + 2(0 − (−1)) = e − 0 + 2",
+            "Résultat : e − 2"
+          ],
+          "ref": "Fiche 4 - Classique Exo 5"
+        },
+        {
+          "id": "I-E03",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "primitives",
+          "q": "Une primitive de f(x) = (2x + 1)/(x² + x + 1) est :",
+          "o": [
+            "ln(x² + x + 1)",
+            "ln|2x + 1|",
+            "(x² + x + 1)ln(x)",
+            "2ln(x² + x + 1)"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Hors D'oeuvre Exo 1"
+        },
+        {
+          "id": "I-E04",
+          "type": "vrai_faux",
+          "d": "expert",
+          "skill": "suites_intégrales",
+          "q": "Si (Iₙ) est définie par Iₙ = ∫₀¹ xⁿ f(x) dx avec f continue et positive sur [0; 1], alors (Iₙ) est décroissante.",
+          "answer": true,
+          "explanation": "Sur [0; 1], on a xⁿ⁺¹ ≤ xⁿ pour tout x ∈ [0; 1], donc xⁿ⁺¹f(x) ≤ xⁿf(x) et par intégration Iₙ₊₁ ≤ Iₙ.",
+          "ref": "Fiche 4 - Hors D'oeuvre Exo 3"
+        },
+        {
+          "id": "I-E05",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "eq_diff",
+          "q": "L'équation différentielle y' = y + 2xeˣ avec y(0) = 3 a pour solution :",
+          "o": [
+            "f(x) = (3 + x²)eˣ",
+            "f(x) = 3eˣ + x²",
+            "f(x) = (3 − x²)eˣ",
+            "f(x) = x²eˣ + 3"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Classique Exo 1 (BAC Métropole 2021)"
+        },
+        {
+          "id": "I-E06",
+          "type": "trou",
+          "d": "expert",
+          "skill": "ipp",
+          "q": "∫₀¹ xe⁻ˣ dx = [−xe⁻ˣ]₀¹ + ∫₀¹ e⁻ˣ dx = −e⁻¹ + [−e⁻ˣ]₀¹ = −1/e + (−1/e + 1) = 1 − ___/e.",
+          "answer": "2",
+          "acceptedAnswers": [
+            "2"
+          ],
+          "ref": "Fiche 4 - Classique Exo 5"
+        },
+        {
+          "id": "I-E07",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "eq_diff",
+          "q": "Pour l'équation différentielle modélisant un taux de chlore : y' = −0,05y + 0,1, la concentration d'équilibre (solution constante) est :",
+          "o": [
+            "2",
+            "0,1",
+            "0,05",
+            "5"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Classique Exo 7 (BAC Métropole 2024)"
+        },
+        {
+          "id": "I-E08",
+          "type": "association",
+          "d": "expert",
+          "skill": "primitives",
+          "q": "Associez chaque technique d'intégration à son usage.",
+          "pairs": [
+            {
+              "left": "IPP",
+              "right": "∫ x ln(x) dx"
+            },
+            {
+              "left": "Primitive de u'/u",
+              "right": "∫ (2x)/(x²+1) dx"
+            },
+            {
+              "left": "Changement de variable",
+              "right": "∫ sin²(x)cos(x) dx"
+            },
+            {
+              "left": "Décomposition",
+              "right": "∫ 1/(x(x+1)) dx"
+            }
+          ],
+          "ref": "Fiche 4 - Hors D'oeuvre (synthèse)"
+        },
+        {
+          "id": "I-E09",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "suites_intégrales",
+          "q": "Soit Iₙ = ∫₀^(π/2) sinⁿ(x) dx. On sait que 0 ≤ sin(x) ≤ 1 sur [0; π/2]. La suite (Iₙ) :",
+          "o": [
+            "Est décroissante et converge vers 0",
+            "Est croissante",
+            "Diverge vers +∞",
+            "Est constante"
+          ],
+          "c": 0,
+          "ref": "Fiche 4 - Hors D'oeuvre Exo 6 (BAC Centres étrangers 2024)"
+        },
+        {
+          "id": "I-E10",
+          "type": "ordre",
+          "d": "expert",
+          "skill": "eq_diff",
+          "q": "Pour résoudre une équation différentielle y' = ay + b avec condition initiale y(0) = y₀ :",
+          "items": [
+            "Trouver la solution particulière constante : yp = −b/a",
+            "Résoudre l'équation homogène y' = ay : yh = Ceᵃᵗ",
+            "Solution générale : y(t) = −b/a + Ceᵃᵗ",
+            "Appliquer y(0) = y₀ : y₀ = −b/a + C, donc C = y₀ + b/a",
+            "Solution finale : y(t) = −b/a + (y₀ + b/a)eᵃᵗ"
+          ],
+          "ref": "Fiche 4 - Basique Exo 4 (BAC Asie 2021)"
+        }
       ]
     },
     "probabilites": {
       "id": "probabilites",
-      "name": "Probabilités",
-      "fiche": "Masterfiche Maths — Fiche Exo 5 : Dénombrement, Probabilités, Variables aléatoires",
-      "ficheUrl": "https://masterbac.com",
-      "detail": "Dénombrement, loi binomiale, arbres, espérance, Tchebychev — 20+ exercices progressifs",
-      "subSkills": ["dénombrement", "combinaisons", "loi_binomiale", "arbres", "espérance", "variance", "tchebychev", "conditionnement"],
+      "name": "Dénombrement, Probabilités et Variables aléatoires",
+      "fiche": "Masterfiche Maths — Fiche Exo 5 : Dénombrement - Probabilités et Variables aléatoires",
+      "ficheUrl": "https://www.masterbac.com/products/les-masterfiches-exercices-de-lelite-2026-packs",
+      "detail": "Combinaisons, loi binomiale, arbres de probabilités, espérance, variance, Tchebychev, conditionnement — 81 pages · 20 ans d'annales (2004-2025) · 3 niveaux progressifs",
+      "subSkills": [
+        "dénombrement",
+        "combinaisons",
+        "loi_binomiale",
+        "arbres",
+        "espérance",
+        "variance",
+        "tchebychev",
+        "conditionnement"
+      ],
       "questions": [
-        {"id":"P-B01","type":"qcm","d":"basique","skill":"combinaisons","q":"Un élève choisit 3 spécialités parmi 12. Le nombre de combinaisons possibles est :","o":["1 728","1 320","220","33"],"c":2,"ref":"Fiche 5 - Basique Exo 1 (BAC Centres étrangers 2021)"},
-        {"id":"P-B02","type":"qcm","d":"basique","skill":"loi_binomiale","q":"X suit B(5 ; 0.4). Que vaut E(X) ?","o":["2","0.4","5","8"],"c":0,"ref":"Fiche 5 - Basique Exo 2"},
-        {"id":"P-B03","type":"trou","d":"basique","skill":"dénombrement","q":"Le nombre d'événements possibles en lançant un dé 3 fois est 6³ = ___","answer":"216","acceptedAnswers":["216"],"ref":"Fiche 5 - Basique"},
-        {"id":"P-B04","type":"vrai_faux","d":"basique","skill":"loi_binomiale","q":"Affirmation : P(A̅) = 1 − P(A) pour tout événement A.","answer":true,"explanation":"C'est la propriété fondamentale de la probabilité de l'événement contraire.","ref":"Fiche 5 - Basique"},
-        {"id":"P-B05","type":"qcm","d":"basique","skill":"arbres","q":"On tire une boule dans une urne contenant 5 vertes et 3 blanches. P(verte) = ?","o":["5/8","3/8","5/3","8/5"],"c":0,"ref":"Fiche 5 - Basique Exo 4"},
-        {"id":"P-B06","type":"association","d":"basique","skill":"loi_binomiale","q":"Associez chaque paramètre à sa définition pour X ~ B(n, p).","pairs":[{"left":"n","right":"Nombre de répétitions"},{"left":"p","right":"Probabilité de succès"},{"left":"E(X)","right":"np"},{"left":"V(X)","right":"np(1−p)"}],"ref":"Fiche 5 - Basique Exo 2-3"},
-        {"id":"P-B07","type":"qcm","d":"basique","skill":"dénombrement","q":"A et B incompatibles, P(A) = 0.3, P(B) = 0.5. P(A ∪ B) = ?","o":["0.8","0.15","0.65","1"],"c":0,"ref":"Fiche 5 - Basique"},
-
-        {"id":"P-C01","type":"qcm","d":"classique","skill":"loi_binomiale","q":"On répète 10 fois une épreuve de Bernoulli (p = 0.3). P(X = 0) = ?","o":["0.7¹⁰ ≈ 0.028","0.3¹⁰","1 − 0.3¹⁰","C(10,0) × 0.3⁰ × 0.7¹⁰"],"c":0,"ref":"Fiche 5 - Classique Exo 1"},
-        {"id":"P-C02","type":"qcm","d":"classique","skill":"conditionnement","q":"P(A ∩ B) = 0.12 et P(B) = 0.4. P(A|B) = ?","o":["0.3","0.48","0.12","0.52"],"c":0,"ref":"Fiche 5 - Classique Exo 2-3"},
-        {"id":"P-C03","type":"ordre","d":"classique","skill":"arbres","q":"Pour résoudre un problème de probabilités conditionnelles, on :","items":["Identifie les événements et leurs complémentaires","Construit l'arbre de probabilités pondéré","Inscrit les probabilités conditionnelles sur chaque branche","Utilise la formule des probabilités totales si nécessaire","Calcule P(A|B) = P(A∩B) / P(B)"],"ref":"Fiche 5 - Classique Exo 2-4"},
-        {"id":"P-C04","type":"qcm","d":"classique","skill":"variance","q":"La variance de X ~ B(100 ; 0.6) vaut :","o":["60","24","40","36"],"c":1,"ref":"Fiche 5 - Classique"},
-        {"id":"P-C05","type":"vrai_faux","d":"classique","skill":"conditionnement","q":"Affirmation : Si P(A|B) = P(A), alors A et B sont indépendants.","answer":true,"explanation":"C'est la définition de l'indépendance : P(A|B) = P(A), ou de manière équivalente P(A∩B) = P(A)×P(B).","ref":"Fiche 5 - Classique"},
-        {"id":"P-C06","type":"trou","d":"classique","skill":"espérance","q":"X suit B(20 ; 0.35). E(X) = ___","answer":"7","acceptedAnswers":["7","7.0","7,0"],"ref":"Fiche 5 - Classique"},
-        {"id":"P-C07","type":"qcm","d":"classique","skill":"arbres","q":"Arbre à 3 niveaux : P(A) = 0.6, P(B|A) = 0.5, P(B|A̅) = 0.2. P(B) = ?","o":["0.38","0.7","0.30","0.50"],"c":0,"ref":"Fiche 5 - Classique Exo 4 (BAC Amérique du sud 2023)"},
-        {"id":"P-C08","type":"qcm","d":"classique","skill":"loi_binomiale","q":"On lance un dé 3 fois. P(au moins un 6) = ?","o":["1 − (5/6)³ ≈ 0.42","3 × (1/6) = 0.5","(1/6)³","1 − (1/6)³"],"c":0,"ref":"Fiche 5 - Classique"},
-
-        {"id":"P-E01","type":"qcm","d":"expert","skill":"tchebychev","q":"X a pour espérance μ = 50 et variance σ² = 25. Par l'inégalité de Tchebychev, P(|X − 50| ≥ 10) ≤ ?","o":["0.25","0.5","0.1","1"],"c":0,"ref":"Fiche 5 - Hors d'oeuvre Exo 4-6"},
-        {"id":"P-E02","type":"qcm","d":"expert","skill":"loi_binomiale","q":"X ~ B(n ; p). Pour quel n minimal a-t-on P(X ≥ 1) ≥ 0.99 si p = 0.1 ?","o":["n = 44","n = 10","n = 22","n = 99"],"c":0,"ref":"Fiche 5 - Hors d'oeuvre Exo 3"},
-        {"id":"P-E03","type":"vrai_faux","d":"expert","skill":"tchebychev","q":"Affirmation : L'inégalité de Bienaymé-Tchebychev donne P(|X − μ| ≥ kσ) ≤ 1/k².","answer":true,"explanation":"C'est l'énoncé exact de l'inégalité de Bienaymé-Tchebychev.","ref":"Fiche 5 - Hors d'oeuvre Exo 4"},
-        {"id":"P-E04","type":"qcm","d":"expert","skill":"espérance","q":"Soient X₁, X₂, ..., Xₙ des variables aléatoires indépendantes de même loi. E(X̄ₙ) = ?","o":["E(X₁)","n × E(X₁)","E(X₁)/n","0"],"c":0,"ref":"Fiche 5 - Hors d'oeuvre Exo 7-8 (BAC Métropole 2024)"},
-        {"id":"P-E05","type":"trou","d":"expert","skill":"variance","q":"Si X ~ B(n ; p), l'écart type σ(X) = √(np(1−p)). Pour B(100 ; 0.5), σ = ___","answer":"5","acceptedAnswers":["5","5.0","5,0"],"ref":"Fiche 5 - Hors d'oeuvre"},
-        {"id":"P-E06","type":"ordre","d":"expert","skill":"tchebychev","q":"Pour appliquer l'inégalité de Tchebychev et estimer P(|X − μ| ≥ α) :","items":["Calculer E(X) = μ","Calculer V(X) = σ²","Écrire α = kσ, donc k = α/σ","Appliquer P(|X − μ| ≥ kσ) ≤ 1/k²","Conclure avec la valeur numérique"],"ref":"Fiche 5 - Hors d'oeuvre Exo 4-6"}
+        {
+          "id": "P-B01",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "combinaisons",
+          "q": "Un élève choisit 3 spécialités parmi 12. Le nombre de combinaisons possibles C(12,3) est :",
+          "o": [
+            "1 728",
+            "1 320",
+            "220",
+            "33"
+          ],
+          "c": 2,
+          "ref": "Fiche 5 - Basique Exo 1 (BAC Centres étrangers Juin 2021)"
+        },
+        {
+          "id": "P-B02",
+          "type": "trou",
+          "d": "basique",
+          "skill": "combinaisons",
+          "q": "La formule du nombre de combinaisons est C(n, k) = n! / (k! × (n − ___) !).",
+          "answer": "k",
+          "acceptedAnswers": [
+            "k",
+            "K"
+          ],
+          "ref": "Fiche 5 - Basique Exo 1 (BAC Centres étrangers 2021)"
+        },
+        {
+          "id": "P-B03",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "dénombrement",
+          "q": "Sur une grille 3×3, on place 3 diamants sur 9 cases. Le nombre de façons est C(9,3) = :",
+          "o": [
+            "84",
+            "72",
+            "36",
+            "27"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Basique Exo 2 (BAC Asie Juin 2021)"
+        },
+        {
+          "id": "P-B04",
+          "type": "vrai_faux",
+          "d": "basique",
+          "skill": "loi_binomiale",
+          "q": "Si X suit une loi binomiale B(20, 2/21), alors P(X = 0) = (19/21)²⁰.",
+          "answer": true,
+          "explanation": "P(X = 0) = C(20,0) × (2/21)⁰ × (19/21)²⁰ = (19/21)²⁰ car C(20,0) = 1 et (2/21)⁰ = 1.",
+          "ref": "Fiche 5 - Basique Exo 2 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-B05",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "espérance",
+          "q": "Un jeu coûte 1€. Si on gagne (proba 2/21), on reçoit 5€. L'espérance du gain algébrique est :",
+          "o": [
+            "−11/21 ≈ −0,52€",
+            "0",
+            "5/21",
+            "2/21"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Basique Exo 2 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-B06",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "arbres",
+          "q": "Une urne contient 5 boules vertes et 3 blanches. On tire 2 boules sans remise. P(V₂ | V₁) = :",
+          "o": [
+            "5/8",
+            "4/7",
+            "5/14",
+            "20/56"
+          ],
+          "c": 1,
+          "ref": "Fiche 5 - Basique Exo 4"
+        },
+        {
+          "id": "P-B07",
+          "type": "trou",
+          "d": "basique",
+          "skill": "loi_binomiale",
+          "q": "Pour une loi binomiale B(n, p), l'espérance est E(X) = ___.",
+          "answer": "np",
+          "acceptedAnswers": [
+            "np",
+            "n×p",
+            "n*p",
+            "n.p"
+          ],
+          "ref": "Fiche 5 - Basique Exo 2 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-B08",
+          "type": "association",
+          "d": "basique",
+          "skill": "dénombrement",
+          "q": "Associez chaque situation au type de dénombrement.",
+          "pairs": [
+            {
+              "left": "Choisir 3 élèves parmi 30",
+              "right": "Combinaison C(30,3)"
+            },
+            {
+              "left": "Ranger 5 livres sur une étagère",
+              "right": "Arrangement/Permutation 5!"
+            },
+            {
+              "left": "Choisir un menu (entrée, plat, dessert) parmi 3 de chaque",
+              "right": "Produit cartésien 3³"
+            },
+            {
+              "left": "Tirer 2 cartes successivement d'un jeu de 52",
+              "right": "Arrangement A(52,2)"
+            }
+          ],
+          "ref": "Fiche 5 - Basique Exo 1"
+        },
+        {
+          "id": "P-B09",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "arbres",
+          "q": "Par la formule des probabilités totales, P(V₂) avec 5 vertes et 3 blanches (tirage sans remise) vaut :",
+          "o": [
+            "5/8",
+            "4/7",
+            "35/56",
+            "15/56"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Basique Exo 4"
+        },
+        {
+          "id": "P-B10",
+          "type": "vrai_faux",
+          "d": "basique",
+          "skill": "loi_binomiale",
+          "q": "Si un jeu a une espérance négative, le jeu est défavorable au joueur.",
+          "answer": true,
+          "explanation": "L'espérance représente le gain moyen sur un grand nombre de parties. Si elle est négative, le joueur perd en moyenne.",
+          "ref": "Fiche 5 - Basique Exo 2 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-B11",
+          "type": "qcm",
+          "d": "basique",
+          "skill": "dénombrement",
+          "q": "Un sac contient 8 lettres (2 voyelles, 6 consonnes). On tire 2 lettres simultanément. Le nombre de tirages possibles est C(8,2) = :",
+          "o": [
+            "28",
+            "56",
+            "16",
+            "64"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Basique Exo 3 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-C01",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "loi_binomiale",
+          "q": "10 joueurs font chacun une partie indépendante avec proba de gagner 3/7. X = nombre de gagnants. X suit :",
+          "o": [
+            "B(10, 3/7)",
+            "B(7, 3/10)",
+            "B(10, 7/3)",
+            "Une loi uniforme"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Classique Exo 1 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-C02",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "loi_binomiale",
+          "q": "X ~ B(10, 3/7). P(X = 4) = C(10,4) × (3/7)⁴ × (4/7)⁶ ≈ :",
+          "o": [
+            "0,247",
+            "0,150",
+            "0,350",
+            "0,100"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Classique Exo 1 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-C03",
+          "type": "vrai_faux",
+          "d": "classique",
+          "skill": "conditionnement",
+          "q": "Dans un test médical, si P(I) = 0,004 (infection), P(T|I) = 0,992 (test positif si infecté), P(T̄|Ī) = 0,984, alors P(T|Ī) = 0,016.",
+          "answer": true,
+          "explanation": "P(T|Ī) = 1 − P(T̄|Ī) = 1 − 0,984 = 0,016. C'est le taux de faux positifs.",
+          "ref": "Fiche 5 - Classique Exo 2 (BAC Métropole Septembre 2023)"
+        },
+        {
+          "id": "P-C04",
+          "type": "ordre",
+          "d": "classique",
+          "skill": "arbres",
+          "q": "Pour construire un arbre de probabilités à 2 niveaux (infection I / test T) :",
+          "items": [
+            "Placer les probabilités du 1er niveau : P(I) et P(Ī)",
+            "Sur chaque branche du 1er niveau, placer les probabilités conditionnelles P(T|I) et P(T̄|I)",
+            "De même pour P(T|Ī) et P(T̄|Ī)",
+            "Vérifier que la somme des probabilités à chaque nœud vaut 1",
+            "Calculer les probabilités des chemins par multiplication le long des branches"
+          ],
+          "ref": "Fiche 5 - Classique Exo 2 (BAC Métropole 2023)"
+        },
+        {
+          "id": "P-C05",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "loi_binomiale",
+          "q": "X ~ B(10, 3/7). Le plus petit n tel que P(X ≤ n) ≥ 0,9 est :",
+          "o": [
+            "n = 6",
+            "n = 5",
+            "n = 7",
+            "n = 4"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Classique Exo 1 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-C06",
+          "type": "trou",
+          "d": "classique",
+          "skill": "espérance",
+          "q": "Pour un jeu où on gagne 10€ avec proba 3/7 et on paie k€, le gain est favorable si E(G) > 0, soit k < ___€.",
+          "answer": "30/7",
+          "acceptedAnswers": [
+            "30/7",
+            "4,3",
+            "4.3",
+            "≈4,3"
+          ],
+          "ref": "Fiche 5 - Basique Exo 3 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-C07",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "loi_binomiale",
+          "q": "P(X ≥ 1) pour X ~ B(20, 2/21) vaut :",
+          "o": [
+            "1 − (19/21)²⁰ ≈ 0,865",
+            "(2/21)²⁰",
+            "1 − (2/21)²⁰",
+            "20 × 2/21"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Basique Exo 2 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-C08",
+          "type": "association",
+          "d": "classique",
+          "skill": "loi_binomiale",
+          "q": "Associez chaque paramètre de la loi binomiale B(n, p) à sa signification.",
+          "pairs": [
+            {
+              "left": "n",
+              "right": "Nombre d'épreuves indépendantes"
+            },
+            {
+              "left": "p",
+              "right": "Probabilité de succès à chaque épreuve"
+            },
+            {
+              "left": "E(X) = np",
+              "right": "Espérance (nombre moyen de succès)"
+            },
+            {
+              "left": "V(X) = np(1−p)",
+              "right": "Variance de X"
+            }
+          ],
+          "ref": "Fiche 5 - Classique Exo 1 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-C09",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "conditionnement",
+          "q": "Avec P(I) = 0,004, P(T|I) = 0,992, P(T|Ī) = 0,016. Par Bayes, P(I|T) ≈ :",
+          "o": [
+            "0,199",
+            "0,992",
+            "0,004",
+            "0,500"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Classique Exo 2 (BAC Métropole 2023)"
+        },
+        {
+          "id": "P-C10",
+          "type": "vrai_faux",
+          "d": "classique",
+          "skill": "arbres",
+          "q": "La formule des probabilités totales dit que P(B) = P(A)P(B|A) + P(Ā)P(B|Ā).",
+          "answer": true,
+          "explanation": "Si {A, Ā} forme un système complet d'événements, alors P(B) = P(A∩B) + P(Ā∩B) = P(A)P(B|A) + P(Ā)P(B|Ā).",
+          "ref": "Fiche 5 - Basique Exo 4"
+        },
+        {
+          "id": "P-C11",
+          "type": "qcm",
+          "d": "classique",
+          "skill": "loi_binomiale",
+          "q": "Pour X ~ B(n, p), la formule P(X = k) est :",
+          "o": [
+            "C(n,k) × pᵏ × (1−p)ⁿ⁻ᵏ",
+            "C(n,k) × pⁿ × (1−p)ᵏ",
+            "n × pᵏ",
+            "pᵏ × (1−p)ⁿ⁻ᵏ"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Classique Exo 1 (BAC Asie 2021)"
+        },
+        {
+          "id": "P-C13",
+          "type": "trou",
+          "d": "classique",
+          "skill": "conditionnement",
+          "q": "La probabilité conditionnelle P(A|B) se calcule par la formule P(A ∩ B) / P(___).",
+          "answer": "B",
+          "acceptedAnswers": [
+            "B",
+            "P(B)"
+          ],
+          "ref": "Fiche 5 - Classique Exo 2"
+        },
+        {
+          "id": "P-E01",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "tchebychev",
+          "q": "L'inégalité de Tchebychev dit que pour une VA X d'espérance μ et de variance σ², P(|X − μ| ≥ δ) ≤ :",
+          "o": [
+            "σ²/δ²",
+            "δ²/σ²",
+            "σ/δ",
+            "μ/δ²"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Hors D'oeuvre Exo 4"
+        },
+        {
+          "id": "P-E02",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "tchebychev",
+          "q": "X ~ B(100, 0,3). E(X) = 30, V(X) = 21. Par Tchebychev, P(|X − 30| ≥ 10) ≤ :",
+          "o": [
+            "21/100 = 0,21",
+            "0,30",
+            "21/10 = 2,1",
+            "0,021"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Hors D'oeuvre Exo 4"
+        },
+        {
+          "id": "P-E03",
+          "type": "ordre",
+          "d": "expert",
+          "skill": "tchebychev",
+          "q": "Pour appliquer l'inégalité de Tchebychev :",
+          "items": [
+            "Identifier la variable aléatoire X et calculer E(X) = μ",
+            "Calculer V(X) = σ²",
+            "Déterminer l'écart δ tel qu'on cherche P(|X − μ| ≥ δ)",
+            "Appliquer : P(|X − μ| ≥ δ) ≤ σ²/δ²",
+            "Interpréter le résultat comme majoration de probabilité"
+          ],
+          "ref": "Fiche 5 - Hors D'oeuvre Exo 4"
+        },
+        {
+          "id": "P-E04",
+          "type": "vrai_faux",
+          "d": "expert",
+          "skill": "espérance",
+          "q": "Si X₁, X₂, …, Xₙ sont indépendantes et de même loi avec E(Xᵢ) = μ, alors E(X̄) = μ où X̄ = (X₁+…+Xₙ)/n.",
+          "answer": true,
+          "explanation": "Par linéarité de l'espérance, E(X̄) = (1/n) × nμ = μ. La moyenne des espérances donne l'espérance commune.",
+          "ref": "Fiche 5 - Hors D'oeuvre Exo 7 (BAC Métropole 2024)"
+        },
+        {
+          "id": "P-E05",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "variance",
+          "q": "Si X₁, …, Xₙ sont indépendantes de même loi avec V(Xᵢ) = σ², alors V(X̄) = :",
+          "o": [
+            "σ²/n",
+            "σ²",
+            "nσ²",
+            "σ²/n²"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Hors D'oeuvre Exo 7 (BAC Métropole 2024)"
+        },
+        {
+          "id": "P-E06",
+          "type": "trou",
+          "d": "expert",
+          "skill": "dénombrement",
+          "q": "P(A ∪ B) = P(A) + P(B) − P(A ∩ ___).",
+          "answer": "B",
+          "acceptedAnswers": [
+            "B",
+            "A ∩ B"
+          ],
+          "ref": "Fiche 5 - Hors D'oeuvre Exo 1"
+        },
+        {
+          "id": "P-E07",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "loi_binomiale",
+          "q": "On cherche le plus petit n tel que P(X ≥ 1) ≥ 0,95 avec X ~ B(n, 0,1). L'inéquation est 1 − 0,9ⁿ ≥ 0,95, soit 0,9ⁿ ≤ 0,05. Alors n ≥ :",
+          "o": [
+            "29",
+            "28",
+            "30",
+            "20"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Hors D'oeuvre Exo 3"
+        },
+        {
+          "id": "P-E08",
+          "type": "association",
+          "d": "expert",
+          "skill": "tchebychev",
+          "q": "Associez chaque inégalité à son nom.",
+          "pairs": [
+            {
+              "left": "P(|X − μ| ≥ δ) ≤ σ²/δ²",
+              "right": "Inégalité de Tchebychev"
+            },
+            {
+              "left": "P(X ≥ a) ≤ E(X)/a pour X ≥ 0",
+              "right": "Inégalité de Markov"
+            },
+            {
+              "left": "V(aX + b) = a²V(X)",
+              "right": "Propriété de la variance"
+            }
+          ],
+          "ref": "Fiche 5 - Hors D'oeuvre Exo 4"
+        },
+        {
+          "id": "P-E09",
+          "type": "qcm",
+          "d": "expert",
+          "skill": "variance",
+          "q": "La variance de la loi binomiale B(n, p) est :",
+          "o": [
+            "np(1 − p)",
+            "np",
+            "n²p²",
+            "p(1 − p)"
+          ],
+          "c": 0,
+          "ref": "Fiche 5 - Hors D'oeuvre Exo 7 (BAC Métropole 2024)"
+        },
+        {
+          "id": "P-E10",
+          "type": "vrai_faux",
+          "d": "expert",
+          "skill": "tchebychev",
+          "q": "L'inégalité de Tchebychev appliquée à X̄ = (X₁+…+Xₙ)/n avec V(Xᵢ) = σ² donne P(|X̄ − μ| ≥ δ) ≤ σ²/(nδ²), ce qui tend vers 0 quand n → +∞.",
+          "answer": true,
+          "explanation": "C'est la loi faible des grands nombres : quand n augmente, X̄ se concentre autour de μ. La borne σ²/(nδ²) → 0 montre que la probabilité de s'éloigner de μ tend vers 0.",
+          "ref": "Fiche 5 - Hors D'oeuvre Exo 8 (BAC Métropole 2024)"
+        }
       ]
     }
   }

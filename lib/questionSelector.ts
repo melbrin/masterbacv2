@@ -5,11 +5,12 @@ import {
   Difficulty,
   MODE_CONFIG,
 } from "./types";
+import { createSeededRandom } from "./seededRandom";
 
-function shuffle<T>(array: T[]): T[] {
+function shuffleWithRandom<T>(array: T[], randomFn: () => number): T[] {
   const arr = [...array];
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(randomFn() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
@@ -35,9 +36,15 @@ export type QuestionWithChapter = Question & { chapterId: string };
 export function selectQuestions(
   mode: Mode,
   chapters: Record<string, Chapter>,
-  selectedChapter?: string
+  selectedChapter?: string,
+  seed?: number
 ): QuestionWithChapter[] {
   const config = MODE_CONFIG[mode];
+
+  // Single PRNG instance that advances through all shuffles for full determinism
+  const randomFn = seed !== undefined
+    ? createSeededRandom(seed)
+    : Math.random;
 
   // Build question pool with chapter info
   let pool: QuestionWithChapter[] = [];
@@ -61,7 +68,7 @@ export function selectQuestions(
     Difficulty,
     number,
   ][]) {
-    const available = shuffle(pool.filter((q) => q.d === diff));
+    const available = shuffleWithRandom(pool.filter((q) => q.d === diff), randomFn);
 
     if (!selectedChapter) {
       // Ensure chapter diversity
@@ -73,7 +80,7 @@ export function selectQuestions(
       for (const chQuestions of Object.values(byChapter)) {
         picked.push(...chQuestions.slice(0, perChapter));
       }
-      picked = shuffle(picked).slice(0, count);
+      picked = shuffleWithRandom(picked, randomFn).slice(0, count);
       selected.push(...picked);
     } else {
       selected.push(...available.slice(0, count));

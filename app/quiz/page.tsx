@@ -11,20 +11,40 @@ import {
 } from "@/lib/types";
 import { selectQuestions, QuestionWithChapter } from "@/lib/questionSelector";
 import { formatTime } from "@/lib/utils";
+import { decodeChallenge, ChallengeData } from "@/lib/challenge";
 import QuestionEngine from "@/components/QuestionEngine";
-import questionsDB from "@/data/questions-maths.json";
+import mathsDB from "@/data/questions-maths.json";
+import physiqueDB from "@/data/questions-physique.json";
 
-const db = questionsDB as {
-  chapters: Record<string, Chapter>;
+const databases: Record<string, { chapters: Record<string, Chapter> }> = {
+  maths: mathsDB as { chapters: Record<string, Chapter> },
+  physique: physiqueDB as { chapters: Record<string, Chapter> },
+};
+
+const subjectLabels: Record<string, { label: string; icon: string }> = {
+  maths: { label: "Maths", icon: "\uD83D\uDCD0" },
+  physique: { label: "Physique-Chimie", icon: "\u269B\uFE0F" },
 };
 
 function QuizContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const mode = (searchParams.get("mode") as Mode) || "diagnostic";
-  const chapter = searchParams.get("chapter") || undefined;
+  // Parse challenge param
+  const challengeParam = searchParams.get("challenge");
+  const challengeData: ChallengeData | null = challengeParam
+    ? decodeChallenge(challengeParam)
+    : null;
+
+  // Override mode/subject/chapter from challenge if present
+  const mode = challengeData
+    ? (challengeData.mode as Mode)
+    : (searchParams.get("mode") as Mode) || "diagnostic";
+  const chapter = challengeData?.chapter || searchParams.get("chapter") || undefined;
+  const subject = challengeData?.subject || searchParams.get("subject") || "maths";
   const modeConfig = MODE_CONFIG[mode];
+  const db = databases[subject] || databases.maths;
+  const subjectInfo = subjectLabels[subject] || subjectLabels.maths;
 
   const [questions, setQuestions] = useState<QuestionWithChapter[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -35,19 +55,20 @@ function QuizContent() {
   const [globalTimer, setGlobalTimer] = useState(0);
   const [animating, setAnimating] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [quizStarted, setQuizStarted] = useState(!challengeData);
 
   const qTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const globalTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Initialize questions
   useEffect(() => {
-    const selected = selectQuestions(mode, db.chapters, chapter);
+    const selected = selectQuestions(mode, db.chapters, chapter, challengeData?.seed);
     setQuestions(selected);
-  }, [mode, chapter]);
+  }, [mode, chapter, db.chapters, challengeData?.seed]);
 
   // Question timer
   useEffect(() => {
-    if (answered || questions.length === 0) {
+    if (!quizStarted || answered || questions.length === 0) {
       if (qTimerRef.current) clearInterval(qTimerRef.current);
       return;
     }
@@ -55,11 +76,11 @@ function QuizContent() {
     return () => {
       if (qTimerRef.current) clearInterval(qTimerRef.current);
     };
-  }, [answered, currentIndex, questions.length]);
+  }, [quizStarted, answered, currentIndex, questions.length]);
 
   // Global timer
   useEffect(() => {
-    if (questions.length === 0) return;
+    if (!quizStarted || questions.length === 0) return;
     globalTimerRef.current = setInterval(
       () => setGlobalTimer((t) => t + 1),
       1000
@@ -67,7 +88,7 @@ function QuizContent() {
     return () => {
       if (globalTimerRef.current) clearInterval(globalTimerRef.current);
     };
-  }, [questions.length]);
+  }, [quizStarted, questions.length]);
 
   // Auto-submit when time runs out
   useEffect(() => {
@@ -77,12 +98,20 @@ function QuizContent() {
   }, [globalTimer, modeConfig.timeMinutes, answered]);
 
   const handleTimeUp = () => {
-    // Store answers and go to results
     const resultsData = {
       answers,
       mode,
       chapter,
+      subject,
       globalTime: globalTimer,
+      ...(challengeData ? {
+        challenge: {
+          seed: challengeData.seed,
+          challengerName: challengeData.name,
+          challengerScore: challengeData.score,
+          challengerGrade: challengeData.grade,
+        },
+      } : {}),
     };
     sessionStorage.setItem("quizResults", JSON.stringify(resultsData));
     router.push("/results");
@@ -108,13 +137,13 @@ function QuizContent() {
         skill: q.skill,
         bonusEarned,
         pointsEarned,
+        ref: q.ref,
       };
 
       setAnswers((prev) => [...prev, record]);
       setAnswered(true);
       setLastCorrect(correct);
 
-      // In BAC Blanc mode, auto-advance after a short delay
       if (modeConfig.noFeedback) {
         setTimeout(() => {
           goNext([...answers, record]);
@@ -137,18 +166,62 @@ function QuizContent() {
         setAnimating(true);
       }, 120);
     } else {
-      // Quiz finished
       if (globalTimerRef.current) clearInterval(globalTimerRef.current);
       const resultsData = {
         answers: ans,
         mode,
         chapter,
+        subject,
         globalTime: globalTimer,
+        ...(challengeData ? {
+          challenge: {
+            seed: challengeData.seed,
+            challengerName: challengeData.name,
+            challengerScore: challengeData.score,
+            challengerGrade: challengeData.grade,
+          },
+        } : {}),
       };
       sessionStorage.setItem("quizResults", JSON.stringify(resultsData));
       router.push("/results");
     }
   };
+
+  // Challenge interstitial
+  if (!quizStarted && challengeData) {
+    return (
+      <div className="min-h-screen bg-[radial-gradient(ellipse_at_50%_0%,#16163a_0%,var(--color-bg)_65%)] flex flex-col items-center justify-center px-5 py-10 text-center">
+        <div className="animate-scale-in text-[52px] mb-4">{"\u2694\uFE0F"}</div>
+        <div className="animate-fade-up-1 text-sm text-sub mb-2">{"Défi"}</div>
+        <h1 className="animate-fade-up-1 text-[clamp(28px,7vw,42px)] font-black leading-tight mb-3">
+          {challengeData.name}{" te d\u00E9fie !"}
+        </h1>
+        <div className="animate-fade-up-2 text-lg mb-1">
+          <span className="font-extrabold" style={{
+            color: challengeData.score >= 90 ? "#fbbf24"
+              : challengeData.score >= 75 ? "#34d399"
+              : challengeData.score >= 50 ? "#635bff"
+              : "#f87171"
+          }}>
+            {challengeData.score}%
+          </span>
+          <span className="text-sub">{" de pr\u00E9paration"}</span>
+        </div>
+        <div className="animate-fade-up-2 text-[13px] text-muted mb-2">
+          {"Estimation : "}{challengeData.grade}/20
+        </div>
+        <div className="animate-fade-up-2 text-[12px] text-dim mb-8">
+          {modeConfig.label}{" \u00B7 "}{modeConfig.questions}{" questions \u00B7 "}{modeConfig.timeMinutes}{" min"}
+        </div>
+        <button
+          onClick={() => setQuizStarted(true)}
+          className="animate-fade-up-3 px-8 py-4 rounded-xl border-none font-bold text-[16px] bg-gradient-to-br from-accent to-[#7c6cf0] text-white shadow-[0_4px_24px_var(--color-accent-glow)] hover:translate-y-[-2px] hover:brightness-110 transition-all cursor-pointer"
+        >
+          {"Relever le d\u00E9fi \u2192"}
+        </button>
+      </div>
+    );
+  }
 
   if (questions.length === 0) {
     return (
@@ -175,8 +248,7 @@ function QuizContent() {
         ? "bg-amber shadow-[0_0_8px_var(--color-amber)]"
         : "bg-coral shadow-[0_0_8px_var(--color-coral)]";
 
-  const chapterName =
-    db.chapters[q.chapterId]?.name || q.chapterId;
+  const chapterName = db.chapters[q.chapterId]?.name || q.chapterId;
   const chapterData = db.chapters[q.chapterId];
 
   return (
@@ -184,7 +256,7 @@ function QuizContent() {
       {/* Top bar */}
       <div className="flex justify-between items-center mb-3">
         <span className="text-[13px] text-muted">
-          📐 Maths · {currentIndex + 1}/{questions.length}
+          {subjectInfo.icon} {subjectInfo.label} · {currentIndex + 1}/{questions.length}
         </span>
         <span
           className={`text-[12px] font-mono font-semibold ${
@@ -192,10 +264,19 @@ function QuizContent() {
           }`}
         >
           {timeLeft <= 0
-            ? "⏰ Temps ecoule"
+            ? "\u23F0 Temps \u00E9coul\u00E9"
             : `${formatTime(timeLeft)} restantes`}
         </span>
       </div>
+
+      {/* Challenge banner */}
+      {challengeData && (
+        <div className="mb-3 p-2.5 rounded-xl bg-accent-soft border border-accent/20 text-center">
+          <div className="text-[12px] font-bold text-accent">
+            {"\u2694\uFE0F D\u00E9fi de "}{challengeData.name}{" \u00B7 "}{challengeData.score}%
+          </div>
+        </div>
+      )}
 
       {/* Progress bar */}
       <div className="flex gap-[3px] mb-4">
@@ -235,7 +316,7 @@ function QuizContent() {
           </span>
           {!answered && isSpeedBonus && (
             <span className="text-[11px] font-bold text-mint">
-              ⚡ Bonus vitesse actif
+              {"\u26A1 Bonus vitesse actif"}
             </span>
           )}
         </div>
@@ -269,7 +350,7 @@ function QuizContent() {
           </div>
           <div className="flex justify-between mt-1">
             <span className="text-[10px] text-dim">
-              ⚡ Bonus si &lt; {diffConfig.timeBonusSec}s
+              {"\u26A1 Bonus si < "}{diffConfig.timeBonusSec}s
             </span>
             <span className="text-[10px] text-dim">
               {diffConfig.timeBonusSec * 2}s
@@ -289,7 +370,7 @@ function QuizContent() {
         >
           {lastCorrect && qTimer <= diffConfig.timeBonusSec && (
             <span className="text-[12px] font-bold text-mint">
-              ⚡ Bonus vitesse ! +
+              {"\u26A1 Bonus vitesse ! +"}
               {Math.round(diffConfig.points * diffConfig.bonusMultiplier * 10) /
                 10}{" "}
               pt{diffConfig.points * diffConfig.bonusMultiplier >= 1 ? "s" : ""}
@@ -297,14 +378,14 @@ function QuizContent() {
           )}
           {lastCorrect && qTimer > diffConfig.timeBonusSec && (
             <span className="text-[12px] text-sub">
-              ✓ Correct · {diffConfig.points} pt
-              {diffConfig.points > 1 ? "s" : ""} · Reponds en moins de{" "}
+              {"\u2713 Correct \u00B7 "}{diffConfig.points} pt
+              {diffConfig.points > 1 ? "s" : ""} · R\u00E9ponds en moins de{" "}
               {diffConfig.timeBonusSec}s pour le bonus !
             </span>
           )}
           {!lastCorrect && (
             <span className="text-[12px] text-coral">
-              ✗ Incorrect · 0 pt
+              {"\u2717 Incorrect \u00B7 0 pt"}
             </span>
           )}
         </div>
@@ -340,7 +421,7 @@ function QuizContent() {
           >
             <div className="flex gap-2.5 items-start">
               <span className="text-lg mt-0.5">
-                {lastCorrect ? "🎯" : "📘"}
+                {lastCorrect ? "\uD83C\uDFAF" : "\uD83D\uDCD8"}
               </span>
               <div>
                 <div
@@ -350,8 +431,14 @@ function QuizContent() {
                 >
                   {lastCorrect
                     ? "Bravo ! Envie d'aller plus loin sur ce chapitre ?"
-                    : "Ce chapitre est a retravailler en priorite"}
+                    : "Ce chapitre est \u00E0 retravailler en priorit\u00E9"}
                 </div>
+                {q.ref && (
+                  <div className="text-[11px] text-sub mb-1.5 flex items-center gap-1">
+                    <span>{"\uD83D\uDCD6"}</span>
+                    <span>Retrouve cet exercice : <strong className="text-text">{q.ref}</strong></span>
+                  </div>
+                )}
                 <div className="text-[12px] text-sub leading-relaxed mb-1.5">
                   <strong className="text-text">{chapterData.fiche}</strong>{" "}
                   — {chapterData.detail}
@@ -367,8 +454,8 @@ function QuizContent() {
                   }`}
                 >
                   {lastCorrect
-                    ? "Exercices avances →"
-                    : "Voir les exercices corriges →"}
+                    ? "Exercices avanc\u00E9s \u2192"
+                    : "Voir les exercices corrig\u00E9s \u2192"}
                 </a>
               </div>
             </div>
@@ -383,8 +470,8 @@ function QuizContent() {
               className="w-full p-4 rounded-xl border-none font-bold text-[15px] transition-all duration-200 bg-gradient-to-br from-accent to-[#7c6cf0] text-white shadow-[0_4px_24px_var(--color-accent-glow)] hover:translate-y-[-2px] hover:brightness-110"
             >
               {currentIndex < questions.length - 1
-                ? "Question suivante →"
-                : "Voir mes resultats →"}
+                ? "Question suivante \u2192"
+                : "Voir mes r\u00E9sultats \u2192"}
             </button>
           </div>
         )}

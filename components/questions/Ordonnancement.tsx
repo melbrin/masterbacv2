@@ -55,7 +55,7 @@ export default function Ordonnancement({
   return (
     <div className="space-y-3">
       <p className="text-xs font-bold text-muted uppercase tracking-widest">
-        Remettez les etapes dans le bon ordre
+        Remettez les étapes dans le bon ordre
       </p>
 
       <div className="flex flex-col gap-2">

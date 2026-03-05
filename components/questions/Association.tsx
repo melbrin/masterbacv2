@@ -79,7 +79,7 @@ export default function Association({
   return (
     <div className="space-y-4">
       <p className="text-xs font-bold text-muted uppercase tracking-widest">
-        Cliquez sur un element a gauche puis sur sa correspondance a droite
+        Cliquez sur un élément à gauche puis sur sa correspondance à droite
       </p>
 
       <div className="grid grid-cols-2 gap-3">

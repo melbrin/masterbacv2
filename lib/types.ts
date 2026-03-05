@@ -107,6 +107,7 @@ export interface AnswerRecord {
   skill: string;
   bonusEarned: boolean;
   pointsEarned: number;
+  ref: string;
 }
 
 export interface QuizConfig {
@@ -178,7 +179,7 @@ export const MODE_CONFIG: Record<
 > = {
   diagnostic: {
     label: "Diagnostic Complet",
-    description: "40 questions, tous les chapitres, feedback apres chaque question",
+    description: "40 questions, tous les chapitres, feedback après chaque question",
     questions: 40,
     timeMinutes: 30,
     noFeedback: false,
