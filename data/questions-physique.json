@@ -111,9 +111,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "optique",
-          "q": "Affirmation : Le grandissement γ d'une lentille est défini par γ = OA'/OA.",
-          "answer": true,
-          "explanation": "Le grandissement est bien γ = OA'/OA = A'B'/AB (rapport algébrique des distances image et objet).",
+          "q": "Affirmation : Le grandissement γ d'une lentille est défini par γ = OA/OA'.",
+          "answer": false,
+          "explanation": "Faux. Le grandissement est γ = OA'/OA (image sur objet), pas OA/OA'. Inverser le rapport donne l'inverse du grandissement.",
           "ref": "Fiche 1 - Basique Q2"
         },
         {
@@ -191,9 +191,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "mecanique_celeste",
-          "q": "Affirmation : La force gravitationnelle dépend de la distance entre les deux corps.",
-          "answer": true,
-          "explanation": "F = GmM/r² : la force est inversement proportionnelle au carré de la distance r.",
+          "q": "Affirmation : La force gravitationnelle ne dépend pas de la distance entre les deux corps.",
+          "answer": false,
+          "explanation": "Faux. F = GmM/r² : la force est inversement proportionnelle au carré de la distance r, elle en dépend donc directement.",
           "ref": "Fiche 1 - Basique Q7"
         },
         {
@@ -261,9 +261,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "energie",
-          "q": "Affirmation : L'énergie potentielle de pesanteur est Ep = mgh, avec h la hauteur par rapport à la référence choisie.",
-          "answer": true,
-          "explanation": "L'énergie potentielle de pesanteur est bien Ep = mgh dans un champ de pesanteur uniforme.",
+          "q": "Affirmation : L'énergie potentielle de pesanteur est Ep = mgh², avec h la hauteur par rapport à la référence choisie.",
+          "answer": false,
+          "explanation": "Faux. L'énergie potentielle de pesanteur est Ep = mgh (proportionnelle à h), pas mgh². Le carré sur h est une erreur.",
           "ref": "Fiche 1 - Basique Q12"
         },
         {
@@ -345,9 +345,9 @@
           "type": "vrai_faux",
           "d": "classique",
           "skill": "mecanique_celeste",
-          "q": "Affirmation : Un satellite géostationnaire a une période de révolution de 24 h et orbite dans le plan équatorial.",
-          "answer": true,
-          "explanation": "Par définition, un satellite géostationnaire est synchrone (T = 24 h) et se trouve dans le plan de l'équateur.",
+          "q": "Affirmation : Un satellite géostationnaire a une période de révolution de 12 h et orbite dans le plan équatorial.",
+          "answer": false,
+          "explanation": "Faux. Un satellite géostationnaire a une période de 24 h (synchrone avec la rotation terrestre), pas 12 h.",
           "ref": "Fiche 1 - Classique Q7"
         },
         {
@@ -515,9 +515,9 @@
           "type": "vrai_faux",
           "d": "expert",
           "skill": "mecanique_celeste",
-          "q": "Affirmation : Pour un satellite en orbite circulaire, l'énergie mécanique est constante et négative.",
-          "answer": true,
-          "explanation": "En orbite circulaire stable, Em = −GmM/(2r) < 0. L'énergie mécanique est constante car seule la gravité (conservative) agit.",
+          "q": "Affirmation : Pour un satellite en orbite circulaire, l'énergie mécanique est constante et positive.",
+          "answer": false,
+          "explanation": "Faux. Em = −GmM/(2r) < 0 : l'énergie mécanique d'un satellite lié est toujours négative, pas positive.",
           "ref": "Fiche 1 - Expert Q7"
         },
         {
@@ -613,9 +613,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "transferts_thermiques",
-          "q": "Affirmation : La résistance thermique d'une paroi est Rth = e/(λS), où e est l'épaisseur, λ la conductivité et S la surface.",
-          "answer": true,
-          "explanation": "Plus l'épaisseur est grande et la conductivité faible, plus la résistance thermique est élevée.",
+          "q": "Affirmation : La résistance thermique d'une paroi est Rth = λS/e, où e est l'épaisseur, λ la conductivité et S la surface.",
+          "answer": false,
+          "explanation": "Faux. La formule correcte est Rth = e/(λS). La formule λS/e donne l'inverse de la résistance thermique.",
           "ref": "Fiche 2 - Basique Q2"
         },
         {
@@ -694,9 +694,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "thermodynamique",
-          "q": "Affirmation : Le flux thermique φ s'exprime en watts (W).",
-          "answer": true,
-          "explanation": "Le flux thermique φ = dQ/dt est une puissance, il s'exprime donc en watts.",
+          "q": "Affirmation : Le flux thermique φ s'exprime en joules (J).",
+          "answer": false,
+          "explanation": "Faux. Le flux thermique φ = dQ/dt est une puissance, il s'exprime en watts (W), pas en joules (J) qui sont une unité d'énergie.",
           "ref": "Fiche 2 - Basique Q7"
         },
         {
@@ -1600,9 +1600,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "piles",
-          "q": "Affirmation : Dans une pile, l'anode est l'électrode où se produit l'oxydation.",
-          "answer": true,
-          "explanation": "Par convention, l'anode est le siège de l'oxydation et la cathode de la réduction.",
+          "q": "Affirmation : Dans une pile, l'anode est l'électrode où se produit la réduction.",
+          "answer": false,
+          "explanation": "Faux. L'anode est le siège de l'oxydation, pas de la réduction. C'est la cathode qui est le siège de la réduction.",
           "ref": "Fiche 4 - Basique Q9"
         },
         {
@@ -2312,9 +2312,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "radioactivite",
-          "q": "Affirmation : Lors d'une désintégration radioactive, le nombre de masse A et le numéro atomique Z sont conservés.",
-          "answer": true,
-          "explanation": "Les lois de conservation de Soddy imposent la conservation de A et Z lors d'une réaction nucléaire.",
+          "q": "Affirmation : Lors d'une désintégration radioactive, seul le nombre de masse A est conservé, pas le numéro atomique Z.",
+          "answer": false,
+          "explanation": "Faux. Les lois de conservation de Soddy imposent la conservation de A et de Z lors d'une réaction nucléaire. Les deux sont conservés.",
           "ref": "Fiche 6 - Basique Q7"
         },
         {
@@ -2567,9 +2567,9 @@
           "type": "vrai_faux",
           "d": "expert",
           "skill": "doppler",
-          "q": "Affirmation : Le décalage spectral Doppler pour la lumière s'écrit Δλ/λ = v/c (en approximation non relativiste).",
-          "answer": true,
-          "explanation": "Pour v << c, le décalage Doppler relatif est bien Δλ/λ ≈ v/c (positif pour un éloignement).",
+          "q": "Affirmation : Le décalage spectral Doppler pour la lumière s'écrit Δλ/λ = c/v (en approximation non relativiste).",
+          "answer": false,
+          "explanation": "Faux. La formule correcte est Δλ/λ = v/c, pas c/v. Inverser donne un résultat sans dimension mais physiquement incorrect.",
           "ref": "Fiche 6 - Expert Q4"
         },
         {

@@ -137,10 +137,14 @@ function ResultsContent() {
     const ctx = cv.getContext("2d");
     if (!ctx) return;
 
+    const scale = 3;
     const w = 600;
     const h = 820;
-    cv.width = w;
-    cv.height = h;
+    cv.width = w * scale;
+    cv.height = h * scale;
+    cv.style.width = w + "px";
+    cv.style.height = h + "px";
+    ctx.scale(scale, scale);
 
     // Background gradient
     const g = ctx.createLinearGradient(0, 0, 0, h);
@@ -288,11 +292,12 @@ function ResultsContent() {
         <div className="animate-fade-up-2 text-sm text-sub leading-relaxed max-w-[400px] mx-auto mt-2">
           {verdict.sub}
         </div>
-        {/* Grade secondary pill */}
-        <div className="animate-fade-up-2 mt-3">
-          <span className="inline-flex items-center gap-1.5 text-[12px] font-bold text-muted bg-card px-3 py-1.5 rounded-full border border-border">
-            Estimation : {score.grade}/20
-          </span>
+        {/* Grade — prominent */}
+        <div className="animate-fade-up-2 mt-4">
+          <div className="text-[13px] text-sub mb-1">{"Estimation"}</div>
+          <div className="text-[clamp(36px,9vw,48px)] font-black leading-none tracking-tight" style={{ color: verdict.color }}>
+            {score.grade}<span className="text-[clamp(20px,5vw,28px)] text-sub font-bold">/20</span>
+          </div>
         </div>
       </div>
 

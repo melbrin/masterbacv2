@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { QCMQuestion } from "@/lib/types";
 
 interface QCMProps {
@@ -12,20 +12,42 @@ interface QCMProps {
 export default function QCM({ question, onAnswer, answered }: QCMProps) {
   const [selected, setSelected] = useState<number | null>(null);
 
+  // Shuffle options order, tracking which shuffled index is correct
+  const { shuffledOptions, correctShuffledIndex } = useMemo(() => {
+    const indices = question.o.map((_, i) => i);
+    // Fisher-Yates shuffle seeded by question id for determinism
+    let seed = 0;
+    for (let i = 0; i < question.id.length; i++) {
+      seed = (seed * 31 + question.id.charCodeAt(i)) | 0;
+    }
+    const rand = () => {
+      seed = (seed * 16807 + 0) % 2147483647;
+      return (seed & 0x7fffffff) / 2147483647;
+    };
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    return {
+      shuffledOptions: indices.map((i) => question.o[i]),
+      correctShuffledIndex: indices.indexOf(question.c),
+    };
+  }, [question.id, question.o, question.c]);
+
   const handleClick = (idx: number) => {
     if (answered) return;
     setSelected(idx);
-    onAnswer(idx === question.c);
+    onAnswer(idx === correctShuffledIndex);
   };
 
   return (
     <div className="flex flex-col gap-2.5">
-      {question.o.map((opt, idx) => {
+      {shuffledOptions.map((opt, idx) => {
         let classes =
           "w-full p-3.5 rounded-xl border-2 text-left text-[15px] font-semibold transition-all duration-200 flex items-center gap-3";
 
         if (answered) {
-          if (idx === question.c) {
+          if (idx === correctShuffledIndex) {
             classes +=
               " bg-mint-soft border-mint text-mint shadow-[0_0_16px_var(--color-mint-glow)]";
           } else if (idx === selected) {
@@ -42,7 +64,7 @@ export default function QCM({ question, onAnswer, answered }: QCMProps) {
         let iconBg = "bg-dim/40 text-muted";
         let icon: string | null = null;
 
-        if (answered && idx === question.c) {
+        if (answered && idx === correctShuffledIndex) {
           iconBg = "bg-mint text-white";
           icon = "✓";
         } else if (answered && idx === selected) {

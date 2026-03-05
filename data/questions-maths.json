@@ -127,9 +127,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "géométrique",
-          "q": "Soit (uₙ) définie par uₙ₊₁ = 3uₙ − 2n + 1 avec u₀ = 12. La suite (vₙ) = uₙ − n est géométrique de raison 3.",
-          "answer": true,
-          "explanation": "On calcule vₙ₊₁ = uₙ₊₁ − (n+1) = 3uₙ − 2n + 1 − n − 1 = 3(uₙ − n) = 3vₙ. La suite (vₙ) est bien géométrique de raison 3 et de premier terme v₀ = 12.",
+          "q": "Soit (uₙ) définie par uₙ₊₁ = 3uₙ − 2n + 1 avec u₀ = 12. La suite (vₙ) = uₙ − n est géométrique de raison 2.",
+          "answer": false,
+          "explanation": "Faux. On calcule vₙ₊₁ = uₙ₊₁ − (n+1) = 3uₙ − 2n + 1 − n − 1 = 3(uₙ − n) = 3vₙ. La raison est 3, pas 2.",
           "ref": "Fiche 1 - Basique Exo 3 (BAC Nouvelle-Calédonie 2023)"
         },
         {
@@ -482,9 +482,9 @@
           "type": "vrai_faux",
           "d": "expert",
           "skill": "récurrence",
-          "q": "La suite (vₙ) définie par vₙ = (−1)ⁿ est un exemple de suite bornée qui ne converge pas.",
-          "answer": true,
-          "explanation": "Elle oscille entre 1 et −1 donc elle est bornée (|vₙ| ≤ 1) mais n'admet pas de limite car elle ne se stabilise jamais.",
+          "q": "La suite (vₙ) définie par vₙ = (−1)ⁿ est un exemple de suite bornée qui converge vers 0.",
+          "answer": false,
+          "explanation": "Faux. La suite (−1)ⁿ oscille entre 1 et −1 sans se stabiliser : elle est bornée mais ne converge pas (elle diverge par oscillation).",
           "ref": "Fiche 1 - Basique Exo 8 (divers BAC 2023)"
         },
         {
@@ -640,9 +640,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "lecture_graphique",
-          "q": "Dans un cube ABCDEFGH d'arête 1, si K est le milieu de [HG], alors KG = 0,5.",
-          "answer": true,
-          "explanation": "K est le milieu du segment [HG] d'un cube d'arête 1, donc KG = HG/2 = 1/2 = 0,5.",
+          "q": "Dans un cube ABCDEFGH d'arête 1, si K est le milieu de [HG], alors KG = 1.",
+          "answer": false,
+          "explanation": "Faux. K est le milieu du segment [HG] d'arête 1, donc KG = HG/2 = 1/2 = 0,5, et non 1.",
           "ref": "Fiche 2 - Basique Exo 2 (BAC Nouvelle-Calédonie 2023)"
         },
         {
@@ -911,9 +911,9 @@
           "type": "vrai_faux",
           "d": "classique",
           "skill": "plans",
-          "q": "Si deux plans ont des vecteurs normaux colinéaires, alors les plans sont parallèles ou confondus.",
-          "answer": true,
-          "explanation": "Des vecteurs normaux colinéaires signifient que les plans ont la même direction, ils sont donc parallèles. S'ils partagent un point commun, ils sont confondus.",
+          "q": "Si deux plans ont des vecteurs normaux colinéaires, alors les plans sont perpendiculaires.",
+          "answer": false,
+          "explanation": "Faux. Des vecteurs normaux colinéaires signifient que les plans ont la même orientation : ils sont parallèles ou confondus, pas perpendiculaires.",
           "ref": "Fiche 2 - Classique Exo 1"
         },
         {
@@ -1439,9 +1439,9 @@
           "type": "vrai_faux",
           "d": "classique",
           "skill": "limites",
-          "q": "La croissance comparée affirme que lim(x→+∞) ln(x)/x = 0.",
-          "answer": true,
-          "explanation": "La fonction exponentielle (et donc x) croît plus vite que le logarithme. On a bien lim ln(x)/x = 0 en +∞.",
+          "q": "La croissance comparée affirme que lim(x→+∞) ln(x)/x = 1.",
+          "answer": false,
+          "explanation": "Faux. Par croissance comparée, x croît plus vite que ln(x), donc lim(x→+∞) ln(x)/x = 0, et non 1.",
           "ref": "Fiche 3 - Basique Exo 1"
         },
         {
@@ -1710,9 +1710,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "primitives",
-          "q": "Une primitive de −sin²(x) + cos²(x) est cos(x)sin(x).",
-          "answer": true,
-          "explanation": "En dérivant cos(x)sin(x) par la formule du produit : (cos x sin x)' = −sin²x + cos²x, ce qui correspond bien à la fonction donnée.",
+          "q": "Une primitive de −sin²(x) + cos²(x) est cos²(x).",
+          "answer": false,
+          "explanation": "Faux. La dérivée de cos²(x) est −2cos(x)sin(x), pas −sin²(x) + cos²(x). La bonne primitive est cos(x)sin(x).",
           "ref": "Fiche 4 - Basique Exo 2 (BAC Polynésie Mai 2022)"
         },
         {
@@ -1846,9 +1846,9 @@
           "type": "vrai_faux",
           "d": "classique",
           "skill": "ipp",
-          "q": "La formule d'intégration par parties est : ∫ₐᵇ u'v = [uv]ₐᵇ − ∫ₐᵇ uv'.",
-          "answer": true,
-          "explanation": "C'est la formule d'IPP qui découle de la dérivée d'un produit : (uv)' = u'v + uv', d'où ∫u'v = uv − ∫uv'.",
+          "q": "La formule d'intégration par parties est : ∫ₐᵇ u'v = [uv]ₐᵇ + ∫ₐᵇ uv'.",
+          "answer": false,
+          "explanation": "Faux. La formule correcte comporte un signe moins : ∫ₐᵇ u'v = [uv]ₐᵇ − ∫ₐᵇ uv'. Le signe + est une erreur.",
           "ref": "Fiche 4 - Classique Exo 4"
         },
         {
@@ -1941,9 +1941,9 @@
           "type": "vrai_faux",
           "d": "classique",
           "skill": "intégrales",
-          "q": "∫ₐᵃ f(t) dt = 0 pour toute fonction f continue en a.",
-          "answer": true,
-          "explanation": "L'intégrale d'une fonction sur un intervalle de longueur nulle [a; a] est toujours 0.",
+          "q": "∫ₐᵃ f(t) dt = f(a) pour toute fonction f continue en a.",
+          "answer": false,
+          "explanation": "Faux. L'intégrale sur un intervalle de longueur nulle [a; a] vaut toujours 0, pas f(a).",
           "ref": "Fiche 4 - Basique Exo 5"
         },
         {
@@ -2290,9 +2290,9 @@
           "type": "vrai_faux",
           "d": "basique",
           "skill": "loi_binomiale",
-          "q": "Si un jeu a une espérance négative, le jeu est défavorable au joueur.",
-          "answer": true,
-          "explanation": "L'espérance représente le gain moyen sur un grand nombre de parties. Si elle est négative, le joueur perd en moyenne.",
+          "q": "Si un jeu a une espérance négative, le jeu est favorable au joueur.",
+          "answer": false,
+          "explanation": "Faux. Une espérance négative signifie que le joueur perd en moyenne : le jeu est défavorable, pas favorable.",
           "ref": "Fiche 5 - Basique Exo 2 (BAC Asie 2021)"
         },
         {
@@ -2456,9 +2456,9 @@
           "type": "vrai_faux",
           "d": "classique",
           "skill": "arbres",
-          "q": "La formule des probabilités totales dit que P(B) = P(A)P(B|A) + P(Ā)P(B|Ā).",
-          "answer": true,
-          "explanation": "Si {A, Ā} forme un système complet d'événements, alors P(B) = P(A∩B) + P(Ā∩B) = P(A)P(B|A) + P(Ā)P(B|Ā).",
+          "q": "La formule des probabilités totales dit que P(B) = P(A)P(B) + P(Ā)P(B).",
+          "answer": false,
+          "explanation": "Faux. La formule correcte utilise les probabilités conditionnelles : P(B) = P(A)P(B|A) + P(Ā)P(B|Ā), et non P(B) directement.",
           "ref": "Fiche 5 - Basique Exo 4"
         },
         {

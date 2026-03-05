@@ -25,10 +25,10 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <head>
-        {/* Anti-flash: apply theme before first paint */}
+        {/* Anti-flash: light mode is default */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{if(localStorage.getItem("theme")==="light"){document.documentElement.classList.add("light")}}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"){document.documentElement.classList.add("dark-mode");document.documentElement.classList.remove("light")}else{document.documentElement.classList.add("light")}}catch(e){document.documentElement.classList.add("light")}})();`,
           }}
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

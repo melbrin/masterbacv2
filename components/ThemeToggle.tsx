@@ -3,17 +3,17 @@
 import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
-  const [light, setLight] = useState(false);
+  const [light, setLight] = useState(true);
 
   useEffect(() => {
-    // Sync state with what the anti-flash script already applied
-    setLight(document.documentElement.classList.contains("light"));
+    setLight(!document.documentElement.classList.contains("dark-mode"));
   }, []);
 
   const toggle = () => {
     const next = !light;
     setLight(next);
     document.documentElement.classList.toggle("light", next);
+    document.documentElement.classList.toggle("dark-mode", !next);
     localStorage.setItem("theme", next ? "light" : "dark");
   };
 
