@@ -26,6 +26,31 @@
   --font-mono: "JetBrains Mono", "SF Mono", monospace;
 }
 
+/* ─── Light mode overrides ─── */
+html.light {
+  --color-bg: #f4f4f9;
+  --color-surface: #eaeaf2;
+  --color-card: #ffffff;
+  --color-card-alt: #f0f0f7;
+  --color-text: #1a1a2e;
+  --color-sub: #52526e;
+  --color-muted: #8585a0;
+  --color-dim: #b8b8cc;
+  --color-border: #d8d8e6;
+  --color-accent: #5046e5;
+  --color-accent-soft: #5046e530;
+  --color-accent-glow: #5046e540;
+  --color-mint: #059669;
+  --color-mint-soft: #05966925;
+  --color-mint-glow: #05966940;
+  --color-coral: #dc2626;
+  --color-coral-soft: #dc262620;
+  --color-coral-glow: #dc262640;
+  --color-amber: #d97706;
+  --color-amber-soft: #d9770620;
+  --color-hero-gradient: #d8d8f0;
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -36,6 +61,7 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    --color-hero-gradient: #16163a;
   }
 
   body {

@@ -190,7 +190,7 @@ function QuizContent() {
   // Challenge interstitial
   if (!quizStarted && challengeData) {
     return (
-      <div className="min-h-screen bg-[radial-gradient(ellipse_at_50%_0%,#16163a_0%,var(--color-bg)_65%)] flex flex-col items-center justify-center px-5 py-10 text-center">
+      <div className="min-h-screen bg-[radial-gradient(ellipse_at_50%_0%,var(--color-hero-gradient)_0%,var(--color-bg)_65%)] flex flex-col items-center justify-center px-5 py-10 text-center">
         <div className="animate-scale-in text-[52px] mb-4">{"\u2694\uFE0F"}</div>
         <div className="animate-fade-up-1 text-sm text-sub mb-2">{"Défi"}</div>
         <h1 className="animate-fade-up-1 text-[clamp(28px,7vw,42px)] font-black leading-tight mb-3">

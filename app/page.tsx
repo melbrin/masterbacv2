@@ -68,7 +68,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_50%_0%,#16163a_0%,var(--color-bg)_65%)] flex flex-col items-center px-5 py-10 text-center">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_50%_0%,var(--color-hero-gradient)_0%,var(--color-bg)_65%)] flex flex-col items-center px-5 py-10 text-center">
       {/* ─── HERO: Hook + CTA above the fold ─── */}
 
       {/* BAC countdown badge */}

@@ -257,7 +257,7 @@ function ResultsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-bg to-[#0a0a18] px-5 py-8 pb-16 max-w-[640px] mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-bg to-surface px-5 py-8 pb-16 max-w-[640px] mx-auto">
       <canvas ref={canvasRef} className="hidden" />
 
       {/* Subject badge */}
