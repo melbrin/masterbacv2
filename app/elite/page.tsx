@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 
 /* ── Access ───────────────────────────────────────────────── */
 const ACCESS_CODE = "ELITE-J3";
+const TIMER_PER_SUBJECT = 15 * 60; // 15 minutes in seconds
 
 /* ── Types ────────────────────────────────────────────────── */
 interface Question {
@@ -329,6 +330,16 @@ function pct(n: number, d: number) {
   return Math.round((n / d) * 100);
 }
 
+function formatTime(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+function getTimerSeconds(subject: "Maths" | "PC" | "all"): number {
+  return subject === "all" ? TIMER_PER_SUBJECT * 2 : TIMER_PER_SUBJECT;
+}
+
 /* ── Sub-components ───────────────────────────────────────── */
 
 function Header() {
@@ -459,10 +470,10 @@ function StartScreen({ onStart }: { onStart: (s: "Maths" | "PC" | "all") => void
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
             {[
-              { key: "Maths" as const, ic: "📐", label: "Maths", count: COUNT_MATHS, border: "#c7d2fe" },
-              { key: "PC" as const, ic: "⚗️", label: "Physique-Chimie", count: COUNT_PC, border: "#99f6e4" },
-              { key: "all" as const, ic: "🎯", label: "Les deux", count: COUNT_ALL, border: "#fde68a" },
-            ].map(({ key, ic, label, count, border }) => (
+              { key: "Maths" as const, ic: "📐", label: "Maths", count: COUNT_MATHS, time: 15, border: "#c7d2fe" },
+              { key: "PC" as const, ic: "⚗️", label: "Physique-Chimie", count: COUNT_PC, time: 15, border: "#99f6e4" },
+              { key: "all" as const, ic: "🎯", label: "Les deux", count: COUNT_ALL, time: 30, border: "#fde68a" },
+            ].map(({ key, ic, label, count, time, border }) => (
               <button
                 key={key}
                 onClick={() => onStart(key)}
@@ -475,7 +486,7 @@ function StartScreen({ onStart }: { onStart: (s: "Maths" | "PC" | "all") => void
                 <span style={{ fontSize: 30, display: "block", marginBottom: 8 }}>{ic}</span>
                 {label}
                 <small style={{ display: "block", fontWeight: 500, fontSize: 12, color: C.mut, marginTop: 4 }}>
-                  {count} questions
+                  {count} questions · {time} min
                 </small>
               </button>
             ))}
@@ -488,19 +499,21 @@ function StartScreen({ onStart }: { onStart: (s: "Maths" | "PC" | "all") => void
 
 /* ── Quiz screen ──────────────────────────────────────────── */
 function QuizScreen({
-  pool, idx, score, answered, chosen, onChoose, onNext,
+  pool, idx, score, answered, chosen, timeLeft, onChoose, onNext,
 }: {
   pool: Question[];
   idx: number;
   score: number;
   answered: boolean;
   chosen: number | null;
+  timeLeft: number;
   onChoose: (i: number) => void;
   onNext: () => void;
 }) {
   const q = pool[idx];
   const progress = (idx / pool.length) * 100;
   const isLast = idx === pool.length - 1;
+  const isUrgent = timeLeft <= 60;
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -527,10 +540,21 @@ function QuizScreen({
             <div style={{ flex: 1, height: 10, background: "#e2e8f0", borderRadius: 6, overflow: "hidden" }}>
               <div style={{ height: "100%", background: C.amber, width: progress + "%", transition: "width .3s" }} />
             </div>
+            <span
+              style={{
+                fontSize: 13, fontWeight: 800, whiteSpace: "nowrap",
+                fontVariantNumeric: "tabular-nums",
+                color: isUrgent ? C.red : C.navy,
+                animation: isUrgent ? "pulse-timer 1s infinite" : "none",
+              }}
+            >
+              ⏱ {formatTime(timeLeft)}
+            </span>
             <span style={{ fontSize: 13, color: C.navy, fontWeight: 800, whiteSpace: "nowrap" }}>
               ⭐ {score}
             </span>
           </div>
+          <style>{`@keyframes pulse-timer{0%,100%{opacity:1}50%{opacity:.4}}`}</style>
 
           {/* Chip */}
           <span
@@ -631,19 +655,22 @@ function QuizScreen({
 
 /* ── End / detailed results ───────────────────────────────── */
 function EndScreen({
-  pool, score, answers, onRestart, onHome,
+  pool, score, answers, timeUp, onRestart, onHome,
 }: {
   pool: Question[];
   score: number;
   answers: AnswerRecord[];
+  timeUp: boolean;
   onRestart: () => void;
   onHome: () => void;
 }) {
   const n = pool.length;
+  const answeredCount = answers.length;
   const p = pct(score, n);
 
-  const msg =
-    p >= 80
+  const msg = timeUp && answeredCount < n
+    ? `Temps écoulé ! Tu as répondu à ${answeredCount} question${answeredCount > 1 ? "s" : ""} sur ${n}. Entraîne-toi à aller plus vite sur les archétypes. ⏱`
+    : p >= 80
       ? "Excellent ! Tu maîtrises les essentiels. Continue sur ta lancée. 🚀"
       : p >= 50
       ? "Bien joué ! Reprends les questions ratées : c'est là que sont tes points faciles. 💪"
@@ -651,6 +678,7 @@ function EndScreen({
 
   const wrongAnswers = answers.filter((a) => !a.correct);
   const rightAnswers = answers.filter((a) => a.correct);
+  const unanswered = n - answeredCount;
 
   return (
     <div style={{ background: C.bg, minHeight: "100vh", fontFamily: '"DM Sans", sans-serif' }}>
@@ -660,7 +688,7 @@ function EndScreen({
         {/* Score card */}
         <div style={{ background: "#fff", borderRadius: 16, boxShadow: "0 10px 30px rgba(15,23,42,.08)", padding: "30px", marginTop: 22 }}>
           <div style={{ color: C.amberDark, fontWeight: 800, letterSpacing: 2, textTransform: "uppercase", fontSize: 13 }}>
-            {p >= 80 ? "Bravo" : "Ton résultat"}
+            {timeUp && answeredCount < n ? "⏱ Temps écoulé" : p >= 80 ? "Bravo" : "Ton résultat"}
           </div>
           <div style={{ fontSize: 64, fontWeight: 800, letterSpacing: -2, color: C.navy }}>
             {score} / {n}
@@ -699,7 +727,7 @@ function EndScreen({
         </div>
 
         {/* Summary stats */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: unanswered > 0 ? "1fr 1fr 1fr" : "1fr 1fr", gap: 12, marginTop: 16 }}>
           <div style={{ background: C.greenBg, border: "1px solid #bbf7d0", borderRadius: 14, padding: "16px 20px", textAlign: "center" }}>
             <div style={{ fontSize: 32, fontWeight: 800, color: C.green }}>{rightAnswers.length}</div>
             <div style={{ fontSize: 13, color: C.green, fontWeight: 600 }}>correctes</div>
@@ -708,6 +736,12 @@ function EndScreen({
             <div style={{ fontSize: 32, fontWeight: 800, color: C.red }}>{wrongAnswers.length}</div>
             <div style={{ fontSize: 13, color: C.red, fontWeight: 600 }}>à retravailler</div>
           </div>
+          {unanswered > 0 && (
+            <div style={{ background: "#f8fafc", border: "1px solid " + C.line, borderRadius: 14, padding: "16px 20px", textAlign: "center" }}>
+              <div style={{ fontSize: 32, fontWeight: 800, color: C.mut }}>{unanswered}</div>
+              <div style={{ fontSize: 13, color: C.mut, fontWeight: 600 }}>non répondues</div>
+            </div>
+          )}
         </div>
 
         {/* Detailed breakdown */}
@@ -794,6 +828,9 @@ function EliteQuiz() {
   const [answered, setAnswered] = useState(false);
   const [chosen, setChosen] = useState<number | null>(null);
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeUpTriggered = useRef(false);
 
   /* Auto-unlock via URL ?code=ELITE-J3 */
   useEffect(() => {
@@ -802,6 +839,33 @@ function EliteQuiz() {
       setPhase("start");
     }
   }, [searchParams]);
+
+  /* Timer countdown */
+  useEffect(() => {
+    if (phase === "quiz") {
+      timerRef.current = setInterval(() => {
+        setTimeLeft((t) => {
+          if (t <= 1) {
+            if (timerRef.current) clearInterval(timerRef.current);
+            return 0;
+          }
+          return t - 1;
+        });
+      }, 1000);
+      return () => {
+        if (timerRef.current) clearInterval(timerRef.current);
+      };
+    }
+    if (timerRef.current) clearInterval(timerRef.current);
+  }, [phase]);
+
+  /* Auto-end when time runs out */
+  useEffect(() => {
+    if (phase === "quiz" && timeLeft === 0 && !timeUpTriggered.current) {
+      timeUpTriggered.current = true;
+      setPhase("end");
+    }
+  }, [timeLeft, phase]);
 
   const handleUnlock = useCallback(() => setPhase("start"), []);
 
@@ -812,6 +876,8 @@ function EliteQuiz() {
     setAnswered(false);
     setChosen(null);
     setAnswers([]);
+    setTimeLeft(getTimerSeconds(subject));
+    timeUpTriggered.current = false;
     setPhase("quiz");
   }, []);
 
@@ -858,13 +924,13 @@ function EliteQuiz() {
     return (
       <QuizScreen
         pool={pool} idx={idx} score={score}
-        answered={answered} chosen={chosen}
+        answered={answered} chosen={chosen} timeLeft={timeLeft}
         onChoose={handleChoose} onNext={handleNext}
       />
     );
   return (
     <EndScreen
-      pool={pool} score={score} answers={answers}
+      pool={pool} score={score} answers={answers} timeUp={timeLeft === 0}
       onRestart={handleRestart} onHome={handleHome}
     />
   );
