@@ -69,6 +69,14 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_50%_0%,var(--color-hero-gradient)_0%,var(--color-bg)_65%)] flex flex-col items-center px-5 py-10 text-center">
+      {/* Accès à l'application, visible dès l'arrivée */}
+      <a
+        href="/compte/connexion"
+        className="self-start inline-flex items-center min-h-[44px] px-4 rounded-full border border-border bg-card text-[13px] font-bold text-accent"
+      >
+        {"Se connecter"}
+      </a>
+
       {/* ─── HERO: Hook + CTA above the fold ─── */}
 
       {/* BAC countdown badge */}
