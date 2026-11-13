@@ -11,7 +11,8 @@
     "test": "vitest run",
     "verif": "npm run lint && npm run typecheck && npm run test",
     "test:couverture": "vitest run --coverage",
-    "tout": "npm run lint && npm run typecheck && npm run test:couverture && npm run build"
+    "tout": "npm run lint && npm run typecheck && npm run test:couverture && npm run contenu:verifier && npm run build",
+    "contenu:verifier": "vitest run --config vitest.contenu.config.mts"
   },
   "dependencies": {
     "@vercel/analytics": "1.6.1",
