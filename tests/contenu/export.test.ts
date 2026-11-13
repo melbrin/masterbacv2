@@ -3,7 +3,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { nettoie } from "@/lib/commun/contenu/nettoie";
+import { nettoie } from "@/lib/commun/html/nettoie";
 
 const RACINE = join(process.cwd(), "contenu", "export");
 const lis = (nom: string) => JSON.parse(readFileSync(join(RACINE, "data", nom), "utf8"));

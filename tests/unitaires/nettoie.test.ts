@@ -1,6 +1,6 @@
 import fc from "fast-check";
 import { describe, expect, it } from "vitest";
-import { nettoie, texDe } from "@/lib/commun/contenu/nettoie";
+import { nettoie, texDe } from "@/lib/commun/html/nettoie";
 
 const brut = (html: string) => nettoie(html, { rendreFormules: false });
 
