@@ -4,46 +4,60 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 
 ## Où on en est
 
-- **Phase en cours** : phase 0, mise en place (du 13 au 15 novembre 2026).
-- **Lot en cours** : 0.1, installer le kit, lire la documentation, auditer l'existant, présenter le plan de la phase.
-- **Prochaine échéance** : 7 décembre 2026, ouverture de la bêta fermée.
-- **État de `main`** : le test gratuit en ligne, sans compte ni base (Next.js 15.5.12, 9 commits).
-- **Dossier de travail** : `Documents/App Masterbac/app-masterbac/`, copie neuve du dépôt GitHub faite le 13 novembre. L'ancien dossier `masterbac-simulator/` (travail non enregistré de juillet 2026) est resté intact à côté et n'est pas repris.
+- **Cap** : une version complète en local d'abord (décision 0003). La mise en ligne et les comptes distants viennent ensuite. La branche se pousse quand la version locale est finie.
+- **Vente** : sur Shopify ; les accès s'ouvrent dans l'administration (décision 0002). Pas de Stripe dans l'application.
+- **Branche de travail** : `lot/0.2-outillage`, empilée sur `lot/0.1-installation-du-kit`. Rien n'est poussé sur GitHub.
+- **Dossier de travail** : `Documents/App Masterbac/app-masterbac/`, copie neuve du dépôt GitHub. L'ancien dossier `masterbac-simulator/` (travail non enregistré de juillet 2026) est intact à côté et n'est pas repris.
+- **Lancer en local** : `npm run dev -- --port 3457`, puis http://localhost:3457. Le port 3456 est celui de l'ancien dossier.
+- **Bloqué par** : Docker Desktop, pas encore installé. Sans lui, pas de base locale.
 
 ## Fait
 
-- 13 novembre 2026 : kit de départ posé dans le dépôt (documentation, règles, prototype figé, cas de référence du moteur, sources et export des 14 fiches).
+- Lot 0.1 : kit installé, documentation lue, audit dans `docs/audit-de-l-existant.md` (écarts avec le kit en section 7).
+- Lots 0.2 et 0.3, partie locale : versions exactes, Node 24, Next.js 16.4.5, React 19.3.1, KaTeX 0.19.1 ; ESLint avec les frontières d'import ; Vitest ; polices servies par l'application ; en-têtes de sécurité ; compte à rebours sur le 16 juin 2027 ; paramètres d'adresse et lien de défi validés. Vérifié dans le navigateur en 375 points de large.
+- Lot 1.4 : moteur porté dans `lib/moteur/`, 43 cas de référence reproduits, tests de propriété et cas limites, couverture 100 % des lignes et 99 % des branches.
+- Lot 1.2, partie sans base : nettoyage du HTML (`lib/commun/html/nettoie.ts`) et `npm run contenu:verifier` (9 418 formules, 188 figures, 406 étapes de corrigé).
+- `npm run tout` : lint, types, 117 tests avec couverture, contrôle du contenu, compilation. Vert le 13 novembre.
 
-- 13 novembre 2026 : kit installé sur la branche `lot/0.1-installation-du-kit` (826 fichiers, aucun conflit). Documentation lue. Audit écrit dans `docs/audit-de-l-existant.md`. État de départ mesuré : la compilation et les types passent, il n'y a ni lint configuré ni test, `npm audit` signale 6 failles dont une critique sur Next.js.
+## Reste à faire pour la version locale, dans l'ordre
 
-## En cours
+1. Base locale : `supabase init`, schéma et règles d'accès (comptes, contenu, travail de l'élève, droits), tests pgTAP, types générés.
+2. Import du contenu en base et figures dans le stockage privé. Format des sources de quiz, d'indices et de barèmes (décision à écrire).
+3. Squelette de `lib/serveur/` : variables d'environnement, session, fabriques `action`, `route`, `requete`, registre, `/api/sante`.
+4. Comptes : connexion par code (lu dans la boîte locale), profil, appareils, moins de 15 ans.
+5. Administration : double authentification, écran « Accès » (décision 0002), signalements.
+6. Écrans de l'élève : cours et fiche, quiz, carnet, mode DS, Aujourd'hui, séance du jour, progrès, plan de l'année, parents, offres (renvoi vers la boutique).
+7. Évolutions du moteur de `docs/08-moteur.md`, section 6, dans `REGLAGES_ACTUELS` (seul le réglage de la décision 0004 y est).
+8. Playwright, tests de sécurité (cas d'abus), relectures par les agents, fiche de recette.
 
-- Lot 0.1 : synthèse, questions et plan de la phase 0 présentés à Yane le 13 novembre. En attente de son accord pour dérouler les lots 0.2 à 0.5.
+## Remis à la mise en ligne
+
+Politique de sécurité du contenu avec jeton dans `proxy.ts`, vérifications automatiques GitHub, recherche de secrets à chaque commit, tableau ASVS, envoi réel des e-mails, tâches planifiées, test anti-robot, sonde.
+
+## Dette connue
+
+- Les pages du test d'avant le kit gardent 13 avertissements de lint (règles React récentes) : liste et raison dans `eslint.config.mjs`. Elles seront réécrites avec la charte commune.
+- Émojis dans l'interface du test, contraires aux règles de rédaction : à retirer avec la charte.
+- `npm audit` : 9 failles modérées, toutes dans les outils de développement (`minimatch`, via ESLint 10). Aucune dans le code livré.
+- TypeScript reste en 5.8.3 : la version 7 n'a pas été essayée.
 
 ## En attente de Yane
 
 | Quoi | Pourquoi | Marche à suivre | Pour quand |
 | --- | --- | --- | --- |
 | Installer Docker Desktop | sans lui, pas de base locale : le lot 0.4 et les tests de base sont bloqués | télécharger sur docker.com, installer, ouvrir l'application une fois | 14 novembre |
-| Installer GitHub CLI (`gh`) et s'y connecter | pour que Claude Code prépare les demandes de fusion | marche à suivre donnée dans la conversation | 14 novembre |
 | Valider l'architecture de départ | décision 0001 | lire `docs/02-architecture.md`, section 2, et répondre | 15 novembre |
 | Confirmer ou retirer les cinq ajustements, et répondre aux points de la section 7 du cahier des charges | ils fixent le périmètre de la bêta | `docs/01-cahier-des-charges.md`, sections 4 et 7 | 15 novembre |
-| Lancer la vérification du compte Stripe | elle prend plusieurs jours | `docs/06-comptes-et-secrets.md`, section 3.5 | tout de suite |
 | Ouvrir Resend et ajouter les enregistrements du domaine d'envoi | les e-mails de connexion en dépendent | section 3.4 | tout de suite |
 | Ouvrir le projet Supabase de recette | la base des essais | section 3.3 | 16 novembre |
 | Vérifier la liste de protection de ses comptes | première menace pour le projet | section 1 | 16 novembre |
 | Choisir les élèves de la bêta, avec la date et les chapitres de leur prochain DS | fixe l'ordre de préparation du contenu | une liste de prénoms et d'adresses gardée hors du dépôt ; ne donner à Claude Code que les chapitres et les dates | 22 novembre |
 
-## Prochaines étapes
-
-1. Lot 0.1 : audit de l'existant et plan de la phase 0.
-2. Lots 0.2 à 0.5, dans l'ordre de `docs/05-plan-de-livraison.md`.
-3. Recette de la phase 0, puis phase 1.
-
 ## Décisions récentes
 
 - 0001, architecture de départ : validée par Yane le 13 novembre, sauf le point 7 (paiement), remplacé par la décision 0002.
 - 0002, vente sur Shopify, accès ouverts dans l'administration : pas de Stripe dans l'application.
+- 0004, pas de doublon dans la partie « à revoir » de la séance : proposée, à confirmer.
 - 0003, version complète en local d'abord ; la mise en ligne et les comptes distants viennent ensuite. Y figure aussi le besoin de faire vivre le contenu (corriger, ajouter exercices et quiz) plus tard.
 
 ## Points de vigilance
