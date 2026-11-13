@@ -87,29 +87,13 @@ export default function Home() {
       </h1>
 
       {/* Punchy subtitle */}
-      <p className="animate-fade-up-1 text-[15px] text-muted max-w-[340px] mb-4 leading-snug">
+      <p className="animate-fade-up-1 text-[15px] text-muted max-w-[340px] mb-8 leading-snug">
         {"Fais le test en "}
         <span className="text-text font-bold">{"5 min"}</span>
-        {" · Questions d\u2019annales · Note "}
+        {" · Questions au format du BAC · Note "}
         <span className="text-text font-bold">{"/20"}</span>
         {" instantanée"}
       </p>
-
-      {/* Social proof */}
-      <div className="animate-fade-up-2 inline-flex items-center gap-1.5 mb-8">
-        <div className="flex -space-x-1.5">
-          {["#6C5CE7", "#00B894", "#E17055", "#0984E3"].map((c, i) => (
-            <div
-              key={i}
-              className="w-5 h-5 rounded-full border-2 border-bg"
-              style={{ background: c }}
-            />
-          ))}
-        </div>
-        <span className="text-[12px] text-muted ml-1">
-          <span className="text-text font-bold">{"2 000+"}</span>{" élèves ont déjà testé"}
-        </span>
-      </div>
 
       {/* ─── ACTION AREA ─── */}
 
@@ -203,7 +187,7 @@ export default function Home() {
           }
           className="w-full p-4 rounded-xl border-none font-bold text-[16px] transition-all duration-200 bg-gradient-to-br from-accent to-[#7c6cf0] text-white shadow-[0_4px_24px_var(--color-accent-glow)] hover:translate-y-[-2px] hover:brightness-110 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-y-0"
         >
-          {"Découvrir ma note →"}
+          {"Voir ma note →"}
         </button>
       </div>
 
@@ -225,8 +209,8 @@ export default function Home() {
         <div className="flex gap-3">
           {[
             { n: "1", title: "Choisis", sub: "ta matière et ton mode" },
-            { n: "2", title: "Réponds", sub: "aux questions d\u2019annales" },
-            { n: "3", title: "Découvre", sub: "ta note /20 + points faibles" },
+            { n: "2", title: "Réponds", sub: "aux questions, chapitre par chapitre" },
+            { n: "3", title: "Lis", sub: "ta note /20 et tes points faibles" },
           ].map((step, i) => (
             <div key={i} className="flex-1 text-center">
               <div className="w-8 h-8 rounded-full bg-accent-soft text-accent text-[13px] font-extrabold flex items-center justify-center mx-auto mb-2">
@@ -243,7 +227,7 @@ export default function Home() {
       <div className="w-full max-w-[400px] mb-10">
         <div className="grid grid-cols-2 gap-2">
           {[
-            { icon: "\uD83D\uDCDD", text: "Questions issues des vrais sujets BAC" },
+            { icon: "\uD83D\uDCDD", text: "Questions au format des épreuves du BAC" },
             { icon: "\uD83C\uDFAF", text: "Note calibrée sur 3 niveaux de difficulté" },
             { icon: "\uD83D\uDCCA", text: "Diagnostic précis chapitre par chapitre" },
             { icon: "\u2728", text: "Défie tes amis avec un lien de défi" },
@@ -279,7 +263,7 @@ export default function Home() {
 
       {/* Footer */}
       <div className="text-[11px] text-dim">
-        {"Conçu par un ingénieur diplômé du top 3 · 8 ans d\u2019expérience"}
+        {"Conçu par un professeur de maths et de physique-chimie"}
       </div>
     </div>
   );

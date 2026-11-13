@@ -1,4 +1,4 @@
-// mulberry32 PRNG — deterministic random from a 32-bit seed
+// Générateur mulberry32 : un tirage reproductible à partir d'une graine de 32 bits
 export function createSeededRandom(seed: number): () => number {
   let s = seed | 0;
   return function () {

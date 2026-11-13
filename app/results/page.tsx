@@ -157,7 +157,7 @@ function ResultsContent() {
     ctx.textAlign = "center";
     ctx.fillStyle = "#fff";
     ctx.font = "bold 22px system-ui";
-    ctx.fillText(`\u00C0 J-${daysLeft} du BAC 2026`, w / 2, 50);
+    ctx.fillText(`\u00C0 J-${daysLeft} du BAC 2027`, w / 2, 50);
 
     // Subject
     ctx.fillStyle = "#6b6b88";
@@ -292,7 +292,7 @@ function ResultsContent() {
         <div className="animate-fade-up-2 text-sm text-sub leading-relaxed max-w-[400px] mx-auto mt-2">
           {verdict.sub}
         </div>
-        {/* Grade — prominent */}
+        {/* Note, mise en avant */}
         <div className="animate-fade-up-2 mt-4">
           <div className="text-[13px] text-sub mb-1">{"Estimation"}</div>
           <div className="text-[clamp(36px,9vw,48px)] font-black leading-none tracking-tight" style={{ color: verdict.color }}>
@@ -495,7 +495,7 @@ function ResultsContent() {
                     {ch.percent >= 75 ? "\uD83C\uDFAF" : "\uD83D\uDCD8"}
                   </span>
                   <div>
-                    <strong className="text-text">{ch.fiche}</strong> —{" "}
+                    <strong className="text-text">{ch.fiche}</strong> :{" "}
                     {ch.percent >= 75
                       ? "Blinde ce chapitre pour 0 impasse."
                       : ch.detail}

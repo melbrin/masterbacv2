@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import katex from "katex";
 import "katex/dist/katex.min.css";
+import ContenuHtml from "@/components/socle/ContenuHtml";
 
 /* ── Access ───────────────────────────────────────────────── */
 const ACCESS_CODE = "ELITE-J3";
@@ -48,10 +49,7 @@ function MathText({ children }: { children: string }) {
       {parts.map((part, i) => {
         if (part.length >= 2 && part.startsWith("$") && part.endsWith("$")) {
           return (
-            <span
-              key={i}
-              dangerouslySetInnerHTML={{ __html: renderMath(part.slice(1, -1)) }}
-            />
+            <ContenuHtml key={i} html={renderMath(part.slice(1, -1))} />
           );
         }
         return <span key={i}>{part}</span>;
@@ -64,7 +62,7 @@ function MathText({ children }: { children: string }) {
 const QUESTIONS: Question[] = [
   /* ═════════ MATHS ═════════ */
 
-  /* — Probabilités (27,7 % des points) — */
+  /* Probabilités (27,7 % des points) */
   {
     s: "Maths", t: "Probabilités · dénombrement",
     q: "Un élève de première choisit 3 spécialités parmi les 12 proposées. Combien de choix différents sont possibles ?",
@@ -90,7 +88,7 @@ const QUESTIONS: Question[] = [
     e: "Formule des probabilités totales : $P(M)=P(V)\\,P_V(M)+P(\\bar V)\\,P_{\\bar V}(M)=0{,}6\\times0{,}05+0{,}4\\times0{,}30=0{,}03+0{,}12=0{,}15$.",
   },
 
-  /* — Géométrie dans l'espace (25,3 %) — */
+  /* Géométrie dans l'espace (25,3 %) */
   {
     s: "Maths", t: "Géométrie dans l'espace · vecteur normal",
     q: "Un vecteur normal au plan d'équation $2x-y+3z+1=0$ est :",
@@ -121,7 +119,7 @@ const QUESTIONS: Question[] = [
     e: "$\\vec n\\,(3\\,;0\\,;-2)$ donne $3x-2z+d=0$. Comme $A$ appartient au plan : $3(1)-2(-1)+d=0$, soit $5+d=0$, d'où $d=-5$ : $3x-2z-5=0$.",
   },
 
-  /* — Suites numériques (19,3 %) — */
+  /* Suites numériques (19,3 %) */
   {
     s: "Maths", t: "Suites · récurrence",
     q: "Soit $(u_n)$ définie par $u_0=5$ et $u_{n+1}=\\dfrac{3}{4}\\,u_n+2$. Que vaut $u_1$ ?",
@@ -146,7 +144,7 @@ const QUESTIONS: Question[] = [
     e: "Comme $-1<0{,}8<1$, on a $0{,}8^{\\,n}\\to0$, donc $u_n\\to 2-3\\times0=2$.",
   },
 
-  /* — Primitives / Intégrales / Équa. diff. (14,5 %) — */
+  /* Primitives / Intégrales / Équa. diff. (14,5 %) */
   {
     s: "Maths", t: "Intégration · primitive",
     q: "Une primitive de $f(x)=e^{2x}$ sur $\\mathbb{R}$ est :",
@@ -166,7 +164,7 @@ const QUESTIONS: Question[] = [
     e: "$y'=ay \\Rightarrow y=Ce^{ax}$. Ici $a=3$, d'où $y=Ce^{3x}$ avec $C\\in\\mathbb{R}$.",
   },
 
-  /* — Fonctions (exp/ln, convexité) (13,3 %) — */
+  /* Fonctions (exp/ln, convexité) (13,3 %) */
   {
     s: "Maths", t: "Fonctions · convexité",
     q: "Soit $f$ deux fois dérivable sur un intervalle $I$. $f$ est convexe sur $I$ si et seulement si :",
@@ -182,7 +180,7 @@ const QUESTIONS: Question[] = [
 
   /* ═════════ PHYSIQUE-CHIMIE ═════════ */
 
-  /* — Mécanique du point (18,3 %) — */
+  /* Mécanique du point (18,3 %) */
   {
     s: "PC", t: "Mécanique · 2e loi de Newton",
     q: "Dans un référentiel galiléen, la deuxième loi de Newton s'écrit :",
@@ -202,7 +200,7 @@ const QUESTIONS: Question[] = [
     e: "En chute libre l'accélération vaut $g$, donc $v=g\\,t=9{,}8\\times2{,}0=19{,}6$ m·s⁻¹.",
   },
 
-  /* — Optique & ondes lumineuses (12,4 %) — */
+  /* Optique & ondes lumineuses (12,4 %) */
   {
     s: "PC", t: "Optique · lunette afocale",
     q: "Une lunette afocale a un objectif de focale $f'_1=50$ cm et un oculaire de focale $f'_2=2{,}0$ cm. Son grossissement vaut :",
@@ -222,7 +220,7 @@ const QUESTIONS: Question[] = [
     e: "Une source qui se rapproche $\\Rightarrow$ fréquence perçue plus élevée (son plus aigu) : c'est l'effet Doppler.",
   },
 
-  /* — Mécanique céleste (7,3 %) — */
+  /* Mécanique céleste (7,3 %) */
   {
     s: "PC", t: "Mécanique céleste · gravitation",
     q: "La force gravitationnelle entre deux masses $m$ et $M$ séparées d'une distance $d$ a pour valeur :",
@@ -236,7 +234,7 @@ const QUESTIONS: Question[] = [
     e: "$\\dfrac{T^2}{a^3}$ est identique pour tous les corps en orbite autour d'un même astre.",
   },
 
-  /* — Thermodynamique & transferts (10,2 %) — */
+  /* Thermodynamique & transferts (10,2 %) */
   {
     s: "PC", t: "Thermodynamique · transfert thermique",
     q: "Quelle énergie faut-il pour chauffer $m=2{,}0$ kg d'eau de $20$ °C à $80$ °C ? (capacité thermique massique $c=4180$ J·kg⁻¹·K⁻¹)",
@@ -250,7 +248,7 @@ const QUESTIONS: Question[] = [
     e: "$\\Phi=\\dfrac{\\Delta T}{R_{th}}$ (analogie avec la loi d'Ohm $I=\\tfrac{U}{R}$).",
   },
 
-  /* — Synthèse organique (11,8 %) — */
+  /* Synthèse organique (11,8 %) */
   {
     s: "PC", t: "Synthèse · groupes caractéristiques",
     q: "Le groupe caractéristique d'un acide carboxylique est :",
@@ -264,7 +262,7 @@ const QUESTIONS: Question[] = [
     e: "$\\eta=\\dfrac{n_{\\text{obtenu}}}{n_{\\text{théorique}}}=\\dfrac{0{,}35}{0{,}50}=0{,}70=70\\,\\%$. Un rendement est toujours $\\leq 100\\,\\%$.",
   },
 
-  /* — Dosages & titrages (10,3 %) — */
+  /* Dosages & titrages (10,3 %) */
   {
     s: "PC", t: "Titrages · équivalence",
     q: "À l'équivalence d'un titrage, les réactifs titrant et titré sont :",
@@ -278,7 +276,7 @@ const QUESTIONS: Question[] = [
     e: "À l'équivalence $C_A V_A=C_B V_E$, donc $C_A=\\dfrac{C_B V_E}{V_A}=\\dfrac{0{,}10\\times15{,}0}{20{,}0}=0{,}075$ mol·L⁻¹.",
   },
 
-  /* — Acides / bases & pH (5,1 %) — */
+  /* Acides / bases & pH (5,1 %) */
   {
     s: "PC", t: "Acides-bases · pH",
     q: "Une solution a une concentration $[\\text{H}_3\\text{O}^+]=1{,}0\\times10^{-3}$ mol·L⁻¹. Son pH vaut :",

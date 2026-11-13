@@ -11,7 +11,7 @@ import {
 } from "@/lib/types";
 import { selectQuestions, QuestionWithChapter } from "@/lib/questionSelector";
 import { formatTime } from "@/lib/utils";
-import { decodeChallenge, ChallengeData } from "@/lib/challenge";
+import { decodeChallenge, ChallengeData, MODES } from "@/lib/challenge";
 import QuestionEngine from "@/components/QuestionEngine";
 import mathsDB from "@/data/questions-maths.json";
 import physiqueDB from "@/data/questions-physique.json";
@@ -37,13 +37,15 @@ function QuizContent() {
     ? decodeChallenge(challengeParam)
     : null;
 
-  const mode = challengeData
-    ? (challengeData.mode as Mode)
-    : (searchParams.get("mode") as Mode) || "diagnostic";
-  const chapter = challengeData?.chapter || searchParams.get("chapter") || undefined;
-  const subject = challengeData?.subject || searchParams.get("subject") || "maths";
+  // Les paramètres de l'adresse viennent de l'extérieur : une valeur inconnue retombe sur la valeur par défaut.
+  const modeDemande = challengeData ? challengeData.mode : searchParams.get("mode");
+  const mode: Mode = MODES.includes(modeDemande as Mode) ? (modeDemande as Mode) : "diagnostic";
+  const matiereDemandee = challengeData?.subject || searchParams.get("subject") || "maths";
+  const subject = matiereDemandee in databases ? matiereDemandee : "maths";
+  const chapitreDemande = challengeData?.chapter || searchParams.get("chapter") || undefined;
+  const chapter = chapitreDemande && chapitreDemande in databases[subject].chapters ? chapitreDemande : undefined;
   const modeConfig = MODE_CONFIG[mode];
-  const db = databases[subject] || databases.maths;
+  const db = databases[subject];
   const subjectInfo = subjectLabels[subject] || subjectLabels.maths;
 
   const [questions, setQuestions] = useState<QuestionWithChapter[]>([]);
@@ -364,7 +366,7 @@ function QuizContent() {
                   </div>
                 )}
                 <div className="text-[12px] text-sub leading-relaxed mb-1.5">
-                  <strong className="text-text">{chapterData.fiche}</strong> — {chapterData.detail}
+                  <strong className="text-text">{chapterData.fiche}</strong> : {chapterData.detail}
                 </div>
                 <a href={chapterData.ficheUrl} target="_blank" rel="noopener noreferrer"
                   className={`text-[12px] font-bold no-underline border-b ${lastCorrect ? "text-mint border-mint/30" : "text-accent border-accent/30"}`}>

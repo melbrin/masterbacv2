@@ -23,8 +23,8 @@
   --color-dim: #b8b8cc;
   --color-border: #d8d8e6;
 
-  --font-sans: "DM Sans", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "SF Mono", monospace;
+  --font-sans: var(--police-sans), system-ui, sans-serif;
+  --font-mono: var(--police-mono), "SF Mono", monospace;
 }
 
 /* ─── Dark mode overrides ─── */

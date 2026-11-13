@@ -1,49 +1,39 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { DM_Sans, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import ThemeToggle from "@/components/ThemeToggle";
+import ScriptTheme from "@/components/socle/ScriptTheme";
 import "./globals.css";
 
+// Polices téléchargées à la fabrication et servies par l'application : aucun appel à un tiers.
+const dmSans = DM_Sans({ subsets: ["latin"], variable: "--police-sans", display: "swap" });
+const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--police-mono", display: "swap" });
+
 export const metadata: Metadata = {
-  title: "Simulateur BAC 2026 — Teste ton niveau | MasterBac",
+  title: "Test de niveau BAC 2027 | MasterBac",
   description:
-    "Simulateur BAC gratuit, sans inscription. Questions calibrées par difficulté. Découvre ta note estimée et tes lacunes chapitre par chapitre.",
-  keywords: "BAC 2026, simulateur, maths, révisions, quiz, note BAC",
+    "Test de niveau gratuit, sans inscription. Questions calibrées par difficulté. Ta note estimée et tes lacunes, chapitre par chapitre.",
+  keywords: "BAC 2027, test de niveau, maths, physique-chimie, révisions, quiz",
   openGraph: {
-    title: "Quel est ton niveau BAC ? — MasterBac",
-    description:
-      "Teste-toi en 10 à 40 questions et découvre ta note estimée au BAC de maths.",
+    title: "Quel est ton niveau pour le BAC ? | MasterBac",
+    description: "Teste-toi en 10 à 40 questions et vois ta note estimée, en maths ou en physique-chimie.",
     type: "website",
-    url: "https://masterbac.com/test",
+    url: "https://app.masterbac.fr",
     siteName: "MasterBac",
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#06060c",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang="fr" className={`${dmSans.variable} ${jetBrainsMono.variable}`} suppressHydrationWarning>
       <head>
-        {/* Anti-flash: light mode is default */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"){document.documentElement.classList.add("dark-mode");document.documentElement.classList.remove("light")}else{document.documentElement.classList.add("light")}}catch(e){document.documentElement.classList.add("light")}})();`,
-          }}
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#06060c" />
+        <ScriptTheme />
       </head>
       <body className="antialiased">
         <ThemeToggle />
