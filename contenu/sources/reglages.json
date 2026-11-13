@@ -1,0 +1,13 @@
+{
+  "_lisez_moi": "Informations communes à toutes les fiches. Modifier une valeur ici la change partout à la prochaine fabrication.",
+  "marque": "MasterBac",
+  "collection": "Les fiches d'exercices de l'élite",
+  "site": "masterbac.com",
+  "compte": "@bac.objectif.mention",
+  "edition": "Édition 2026-2027",
+  "sessions": "BAC 2025 et 2026",
+  "premiere_session": "2004",
+  "derniere_session": "2026",
+  "niveau": "Terminale, enseignement de spécialité",
+  "date_maj": "auto"
+}

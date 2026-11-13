@@ -1,0 +1,10 @@
+# Ce qui ne part jamais dans un déploiement : le contenu des fiches, le prototype, la documentation, les tests.
+contenu/
+reference/
+docs/
+tests/
+supabase/
+secrets/
+kit-claude-code/
+.claude/
+CLAUDE.md

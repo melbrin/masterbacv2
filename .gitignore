@@ -34,9 +34,31 @@ yarn-error.log*
 # vercel
 .vercel
 
-# claude code
-.claude/
-
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# --- kit MasterBac : lignes ajoutées à l'installation ---
+
+# secrets : jamais dans le dépôt
+.env
+.env.*
+secrets/
+
+# réglages personnels de Claude Code (les règles partagées de .claude/ sont suivies)
+.claude/settings.local.json
+
+# contenu : fichiers fabriqués ou réservés à l'ordinateur de Yane
+contenu/pdf/
+contenu/sources/sorties/
+contenu/export/data/formules.json
+kit-claude-code/
+
+# outils
+__pycache__/
+*.pyc
+supabase/.temp/
+supabase/.branches/
+test-results/
+playwright-report/
+reports/

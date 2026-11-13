@@ -1,0 +1,7475 @@
+{
+ "version": 1,
+ "objet": "Cas de référence du moteur de préparation. Ils décrivent le comportement du prototype du 13 novembre 2026 ; la réécriture doit les reproduire avant toute évolution des règles.",
+ "donnees": {
+  "description": "Contenu figé du prototype (export du 13 novembre 2026). Un autre contenu donne d'autres tirages : les tests du moteur lisent ces deux fichiers, pas le contenu vivant.",
+  "dossier": "reference/prototype/site/data",
+  "sha256": {
+   "fiches.json": "938bdb64fbf92bb265fedea43395d2ff6f0b3cde9811e8b8ede81ec0abebabb0",
+   "quiz.json": "a7ce8d24a403fe94932a3fec6190a8dbe11e3156c8b14c594f76a943543244d2"
+  }
+ },
+ "fuseau": "Europe/Paris",
+ "conventions": {
+  "cle": "« <fiche>-q<numéro> » pour une question, « <fiche>-ex<numéro> » pour un exercice, « quiz:<identifiant> » pour une question de quiz",
+  "resultat": "ok = 1, partiel = 0,5, ko = 0 ; un exercice corrigé au barème porte son propre score entre 0 et 1",
+  "jour": "AAAA-MM-JJ, heure de Paris",
+  "tirages": "Les tirages suivent melange() et graineDuJour() de reference/prototype/site/js/util.js ; les reprendre à l'identique.",
+  "flottants": "Comparer les taux et la note estimée avec une tolérance de 1e-9."
+ },
+ "fonctions": {
+  "carnet / carnetDuJour": "moteur.js : carnet(), carnetDu()",
+  "fiches[n].etats": "etatsFiche(n) ; etatsNotions : etatNotion(n, notion)",
+  "fiches[n].niveau": "niveauFiche(n)",
+  "noteEstimee": "noteEstimee()",
+  "plans": "construitPlan(ds)",
+  "quizPour": "quizPour(fiches, n, objectif, graine)",
+  "questionsPassage": "questionsPassage(fiche, niveau)",
+  "pointsFaibles": "pointsFaibles(fiches, objectif, n)",
+  "seanceDuJour": "seanceDuJour(), calculée sur un état sans séance du jour",
+  "actions de la séquence": "reponse : enregistre(cle, resultat, score) ; seance-faite : marqueSeanceFaite() ; vu, passage, ds : écriture directe dans l'état"
+ },
+ "scenarios": [
+  {
+   "nom": "demo",
+   "description": "L'élève de démonstration : quatre chapitres vus, deux DS notés, un DS dans six jours préparé sur une semaine.",
+   "maintenant": "2026-11-13T18:00:00+01:00",
+   "etat": {
+    "version": 1,
+    "mode": "demo",
+    "profil": {
+     "prenom": "Inès",
+     "classe": "Terminale",
+     "specialites": [
+      "Physique-chimie",
+      "Mathématiques"
+     ],
+     "objectif": 14,
+     "email": "ines.demo@exemple.fr",
+     "emailParent": "parent.ines@exemple.fr",
+     "offre": "pass",
+     "moins15": false
+    },
+    "reglages": {
+     "theme": "auto",
+     "reperes": true
+    },
+    "vuEnClasse": {
+     "1": true,
+     "3": true,
+     "9": true,
+     "11": true
+    },
+    "tentatives": {
+     "1-q1": [
+      {
+       "t": 1792773000000,
+       "r": "ok",
+       "s": 1
+      },
+      {
+       "t": 1793640600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-q2": [
+      {
+       "t": 1792773000000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-q3": [
+      {
+       "t": 1792859400000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-q4": [
+      {
+       "t": 1792859400000,
+       "r": "partiel",
+       "s": 0.5
+      },
+      {
+       "t": 1793035800000,
+       "r": "ok",
+       "s": 1
+      },
+      {
+       "t": 1793640600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-q5": [
+      {
+       "t": 1793035800000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-q6": [
+      {
+       "t": 1793035800000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-q7": [
+      {
+       "t": 1793122200000,
+       "r": "ko",
+       "s": 0
+      },
+      {
+       "t": 1793295000000,
+       "r": "partiel",
+       "s": 0.5
+      },
+      {
+       "t": 1794245400000,
+       "r": "partiel",
+       "s": 0.5
+      }
+     ],
+     "1-q8": [
+      {
+       "t": 1793208600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-q9": [
+      {
+       "t": 1793381400000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-q10": [
+      {
+       "t": 1793381400000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-q11": [
+      {
+       "t": 1793467800000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-q12": [
+      {
+       "t": 1793899800000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "1-ex1": [
+      {
+       "t": 1793554200000,
+       "r": "ok",
+       "s": 0.78
+      }
+     ],
+     "3-q1": [
+      {
+       "t": 1793727000000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "3-q2": [
+      {
+       "t": 1793727000000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "3-q3": [
+      {
+       "t": 1793813400000,
+       "r": "partiel",
+       "s": 0.5
+      },
+      {
+       "t": 1793986200000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "3-q4": [
+      {
+       "t": 1793813400000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "3-q5": [
+      {
+       "t": 1793986200000,
+       "r": "ko",
+       "s": 0
+      },
+      {
+       "t": 1794159000000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "3-q6": [
+      {
+       "t": 1793986200000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "11-q1": [
+      {
+       "t": 1793554200000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "11-q2": [
+      {
+       "t": 1793554200000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "11-q3": [
+      {
+       "t": 1793640600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "11-q4": [
+      {
+       "t": 1793640600000,
+       "r": "partiel",
+       "s": 0.5
+      },
+      {
+       "t": 1793813400000,
+       "r": "ok",
+       "s": 1
+      },
+      {
+       "t": 1794418200000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "11-q5": [
+      {
+       "t": 1793727000000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "9-q1": [
+      {
+       "t": 1794072600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "9-q2": [
+      {
+       "t": 1794072600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "9-q3": [
+      {
+       "t": 1794159000000,
+       "r": "partiel",
+       "s": 0.5
+      }
+     ],
+     "9-q4": [
+      {
+       "t": 1794159000000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "9-q6": [
+      {
+       "t": 1794331800000,
+       "r": "ko",
+       "s": 0
+      }
+     ],
+     "9-q8": [
+      {
+       "t": 1794418200000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "9-q9": [
+      {
+       "t": 1794418200000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "9-q10": [
+      {
+       "t": 1794504600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "9-q12": [
+      {
+       "t": 1794504600000,
+       "r": "ko",
+       "s": 0
+      }
+     ],
+     "quiz:CS-B01": [
+      {
+       "t": 1794421800000,
+       "r": "ko",
+       "s": 0
+      }
+     ],
+     "quiz:CS-B02": [
+      {
+       "t": 1794421800000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:CS-B03": [
+      {
+       "t": 1794421800000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:CS-B04": [
+      {
+       "t": 1794421800000,
+       "r": "ko",
+       "s": 0
+      }
+     ],
+     "quiz:CS-B05": [
+      {
+       "t": 1794421800000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:CS-B07": [
+      {
+       "t": 1794421800000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:CS-B08": [
+      {
+       "t": 1794421800000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:OM-B06": [
+      {
+       "t": 1793298600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:OM-B11": [
+      {
+       "t": 1793298600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:OM-C05": [
+      {
+       "t": 1793298600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:OM-C12": [
+      {
+       "t": 1793298600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:SC-B05": [
+      {
+       "t": 1793730600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:SC-B10": [
+      {
+       "t": 1793730600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:SC-C01": [
+      {
+       "t": 1793730600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:SC-C05": [
+      {
+       "t": 1793730600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:SC-E01": [
+      {
+       "t": 1793730600000,
+       "r": "ok",
+       "s": 1
+      }
+     ],
+     "quiz:SC-E02": [
+      {
+       "t": 1793730600000,
+       "r": "ok",
+       "s": 1
+      }
+     ]
+    },
+    "carnet": {
+     "1-q4": {
+      "due": "2026-11-23",
+      "step": 2
+     },
+     "1-q7": {
+      "due": "2026-11-11",
+      "step": 0
+     },
+     "11-q4": {
+      "due": "2026-12-02",
+      "step": 2
+     },
+     "3-q3": {
+      "due": "2026-11-13",
+      "step": 1
+     },
+     "3-q5": {
+      "due": "2026-11-15",
+      "step": 1
+     },
+     "9-q3": {
+      "due": "2026-11-10",
+      "step": 0
+     },
+     "9-q6": {
+      "due": "2026-11-12",
+      "step": 0
+     },
+     "quiz:CS-B01": {
+      "due": "2026-11-13",
+      "step": 0
+     },
+     "quiz:CS-B04": {
+      "due": "2026-11-13",
+      "step": 0
+     },
+     "9-q12": {
+      "due": "2026-11-14",
+      "step": 0
+     }
+    },
+    "passages": {
+     "11": {
+      "14": 1793907000000
+     }
+    },
+    "ds": [
+     {
+      "id": "ds-a",
+      "date": "2026-10-21",
+      "duree": 2,
+      "fiches": [
+       1
+      ],
+      "objectif": 14,
+      "format": "trois-jours",
+      "note": 11.5,
+      "cree": "2026-10-17",
+      "seances": []
+     },
+     {
+      "id": "ds-b",
+      "date": "2026-11-04",
+      "duree": 1,
+      "fiches": [
+       11
+      ],
+      "objectif": 14,
+      "format": "express",
+      "note": 13.5,
+      "cree": "2026-11-03",
+      "seances": []
+     },
+     {
+      "id": "ds-c",
+      "date": "2026-11-19",
+      "duree": 2,
+      "fiches": [
+       9
+      ],
+      "objectif": 14,
+      "cree": "2026-11-12",
+      "format": "semaine",
+      "seances": [
+       {
+        "id": "s1",
+        "date": "2026-11-12",
+        "titre": "Le cours en une page et 10 questions",
+        "minutes": 30,
+        "taches": [
+         {
+          "type": "essentiel",
+          "fiche": 9
+         },
+         {
+          "type": "quiz",
+          "ids": [
+           "CS-B01",
+           "CS-B04",
+           "CS-C01",
+           "CS-C11",
+           "CS-C02",
+           "CS-B10",
+           "CS-C07",
+           "CS-C10",
+           "CS-B03",
+           "CS-B07"
+          ]
+         }
+        ],
+        "faite": true
+       },
+       {
+        "id": "s2",
+        "date": "2026-11-13",
+        "titre": "Questions de cours, objectif 10",
+        "minutes": 30,
+        "taches": [
+         {
+          "type": "questions",
+          "refs": [
+           "9-q6",
+           "9-q15",
+           "9-q18",
+           "9-q21"
+          ]
+         }
+        ],
+        "faite": false
+       },
+       {
+        "id": "s3",
+        "date": "2026-11-14",
+        "titre": "Questions de cours, objectif 14",
+        "minutes": 30,
+        "taches": [
+         {
+          "type": "questions",
+          "refs": [
+           "9-q12",
+           "9-q3",
+           "9-q14"
+          ]
+         }
+        ],
+        "faite": false
+       },
+       {
+        "id": "s4",
+        "date": "2026-11-15",
+        "titre": "Exercice type BAC",
+        "minutes": 35,
+        "taches": [
+         {
+          "type": "exercice",
+          "ref": "9-ex2",
+          "minutes": 35
+         }
+        ],
+        "faite": false
+       },
+       {
+        "id": "s5",
+        "date": "2026-11-16",
+        "titre": "Points faibles et carnet d'erreurs",
+        "minutes": 30,
+        "taches": [
+         {
+          "type": "questions",
+          "refs": [
+           "9-q16",
+           "9-q19",
+           "9-q20"
+          ]
+         },
+         {
+          "type": "carnet"
+         }
+        ],
+        "faite": false
+       },
+       {
+        "id": "s6",
+        "date": "2026-11-17",
+        "titre": "DS blanc chronométré",
+        "minutes": 120,
+        "taches": [
+         {
+          "type": "ds-blanc",
+          "minutes": 120,
+          "refs": [
+           "9-ex1",
+           "9-ex3",
+           "9-q22",
+           "9-q13"
+          ]
+         }
+        ],
+        "faite": false
+       },
+       {
+        "id": "s7",
+        "date": "2026-11-18",
+        "titre": "Fiche éclair",
+        "minutes": 20,
+        "taches": [
+         {
+          "type": "essentiel",
+          "fiche": 9
+         },
+         {
+          "type": "pieges",
+          "fiches": [
+           9
+          ]
+         }
+        ],
+        "faite": false
+       }
+      ],
+      "note": null
+     }
+    ],
+    "seances": [
+     {
+      "date": "2026-11-12",
+      "minutes": 25
+     },
+     {
+      "date": "2026-11-11",
+      "minutes": 25
+     },
+     {
+      "date": "2026-11-10",
+      "minutes": 25
+     },
+     {
+      "date": "2026-11-08",
+      "minutes": 25
+     },
+     {
+      "date": "2026-11-07",
+      "minutes": 25
+     },
+     {
+      "date": "2026-11-05",
+      "minutes": 25
+     },
+     {
+      "date": "2026-11-04",
+      "minutes": 25
+     },
+     {
+      "date": "2026-11-03",
+      "minutes": 25
+     },
+     {
+      "date": "2026-11-01",
+      "minutes": 25
+     },
+     {
+      "date": "2026-10-31",
+      "minutes": 25
+     },
+     {
+      "date": "2026-10-29",
+      "minutes": 25
+     },
+     {
+      "date": "2026-10-28",
+      "minutes": 25
+     },
+     {
+      "date": "2026-10-25",
+      "minutes": 25
+     },
+     {
+      "date": "2026-10-24",
+      "minutes": 25
+     },
+     {
+      "date": "2026-10-22",
+      "minutes": 25
+     },
+     {
+      "date": "2026-10-21",
+      "minutes": 25
+     }
+    ],
+    "seance": null,
+    "signalements": [],
+    "test": null
+   },
+   "attendus": {
+    "jour": "2026-11-13",
+    "carnet": [
+     {
+      "k": "9-q3",
+      "due": "2026-11-10",
+      "step": 0
+     },
+     {
+      "k": "1-q7",
+      "due": "2026-11-11",
+      "step": 0
+     },
+     {
+      "k": "9-q6",
+      "due": "2026-11-12",
+      "step": 0
+     },
+     {
+      "k": "3-q3",
+      "due": "2026-11-13",
+      "step": 1
+     },
+     {
+      "k": "quiz:CS-B01",
+      "due": "2026-11-13",
+      "step": 0
+     },
+     {
+      "k": "quiz:CS-B04",
+      "due": "2026-11-13",
+      "step": 0
+     },
+     {
+      "k": "9-q12",
+      "due": "2026-11-14",
+      "step": 0
+     },
+     {
+      "k": "3-q5",
+      "due": "2026-11-15",
+      "step": 1
+     },
+     {
+      "k": "1-q4",
+      "due": "2026-11-23",
+      "step": 2
+     },
+     {
+      "k": "11-q4",
+      "due": "2026-12-02",
+      "step": 2
+     }
+    ],
+    "carnetDuJour": [
+     {
+      "k": "9-q3",
+      "due": "2026-11-10",
+      "step": 0
+     },
+     {
+      "k": "1-q7",
+      "due": "2026-11-11",
+      "step": 0
+     },
+     {
+      "k": "9-q6",
+      "due": "2026-11-12",
+      "step": 0
+     },
+     {
+      "k": "3-q3",
+      "due": "2026-11-13",
+      "step": 1
+     },
+     {
+      "k": "quiz:CS-B01",
+      "due": "2026-11-13",
+      "step": 0
+     },
+     {
+      "k": "quiz:CS-B04",
+      "due": "2026-11-13",
+      "step": 0
+     }
+    ],
+    "fiches": {
+     "1": {
+      "etats": {
+       "a-voir": 8,
+       "en-cours": 2,
+       "acquis": 7,
+       "solide": 7,
+       "total": 24
+      },
+      "niveau": {
+       "atteint": 10,
+       "prochain": 14,
+       "testDispo": true,
+       "res": {
+        "10": {
+         "total": 10,
+         "faits": 8,
+         "taux": 1
+        },
+        "14": {
+         "total": 10,
+         "faits": 8,
+         "taux": 0.9375
+        },
+        "18": {
+         "total": 2,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "2": {
+      "etats": {
+       "a-voir": 25,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 25
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 11,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 9,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 7,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "3": {
+      "etats": {
+       "a-voir": 8,
+       "en-cours": 4,
+       "acquis": 12,
+       "solide": 0,
+       "total": 24
+      },
+      "niveau": {
+       "atteint": 10,
+       "prochain": 14,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 8,
+         "faits": 5,
+         "taux": 1
+        },
+        "14": {
+         "total": 10,
+         "faits": 1,
+         "taux": 1
+        },
+        "18": {
+         "total": 4,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "4": {
+      "etats": {
+       "a-voir": 24,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 24
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 16,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 10,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 4,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "5": {
+      "etats": {
+       "a-voir": 24,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 24
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 16,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 9,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 5,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "6": {
+      "etats": {
+       "a-voir": 31,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 31
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 24,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 18,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 7,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "7": {
+      "etats": {
+       "a-voir": 26,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 26
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 21,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 12,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 3,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "8": {
+      "etats": {
+       "a-voir": 22,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 22
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 16,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 9,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 4,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "9": {
+      "etats": {
+       "a-voir": 9,
+       "en-cours": 6,
+       "acquis": 5,
+       "solide": 0,
+       "total": 20
+      },
+      "niveau": {
+       "atteint": 10,
+       "prochain": 14,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 20,
+         "faits": 14,
+         "taux": 0.7857142857142857
+        },
+        "14": {
+         "total": 15,
+         "faits": 2,
+         "taux": 0.25
+        },
+        "18": {
+         "total": 3,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "10": {
+      "etats": {
+       "a-voir": 18,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 18
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 13,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 10,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 4,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "11": {
+      "etats": {
+       "a-voir": 18,
+       "en-cours": 0,
+       "acquis": 4,
+       "solide": 1,
+       "total": 23
+      },
+      "niveau": {
+       "atteint": 14,
+       "prochain": 18,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 18,
+         "faits": 5,
+         "taux": 1
+        },
+        "14": {
+         "total": 18,
+         "faits": 4,
+         "taux": 1
+        },
+        "18": {
+         "total": 8,
+         "faits": 2,
+         "taux": 1
+        }
+       }
+      }
+     },
+     "12": {
+      "etats": {
+       "a-voir": 22,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 22
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 12,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 13,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 3,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "13": {
+      "etats": {
+       "a-voir": 28,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 28
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 20,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 16,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 5,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "14": {
+      "etats": {
+       "a-voir": 21,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 21
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 11,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 7,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 1,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     }
+    },
+    "etatsNotions": {},
+    "noteEstimee": {
+     "valeur": 14.4,
+     "bas": 13,
+     "haut": 16,
+     "chapitres": 4,
+     "essais": 49,
+     "notes": 2
+    },
+    "prochainDS": "ds-c",
+    "dsANoter": [],
+    "lundi": "2026-11-09",
+    "seancesSemaine": 3,
+    "periode": "t1",
+    "formatPour": [
+     "express",
+     "express",
+     "trois-jours",
+     "trois-jours",
+     "trois-jours",
+     "trois-jours",
+     "trois-jours",
+     "semaine",
+     "semaine",
+     "semaine",
+     "semaine"
+    ],
+    "plans": [
+     {
+      "entree": {
+       "id": "ref-express",
+       "date": "2026-11-14",
+       "duree": 1,
+       "fiches": [
+        9
+       ],
+       "objectif": 10,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "express",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-13",
+         "titre": "Fiche éclair",
+         "minutes": 20,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 9
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "CS-B04",
+            "CS-B01",
+            "CS-B10",
+            "CS-B05",
+            "CS-B07",
+            "CS-B02",
+            "CS-B03",
+            "CS-B08",
+            "CS-C01",
+            "CS-C02"
+           ]
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            9
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-trois-jours",
+       "date": "2026-11-16",
+       "duree": 2,
+       "fiches": [
+        1
+       ],
+       "objectif": 14,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "trois-jours",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-13",
+         "titre": "Test de 5 questions",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 1
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "OM-C05",
+            "OM-B11",
+            "OM-B06",
+            "OM-C12",
+            "OM-E09"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-14",
+         "titre": "Exercices ciblés sur tes points faibles",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "1-q7",
+            "1-q13",
+            "1-q15",
+            "1-q16"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-15",
+         "titre": "Un exercice type",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "1-ex3",
+           "minutes": 40
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            1
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-semaine",
+       "date": "2026-11-20",
+       "duree": 2,
+       "fiches": [
+        11
+       ],
+       "objectif": 14,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "semaine",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-13",
+         "titre": "Le cours en une page et 10 questions",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 11
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "ON-B05",
+            "ON-B08",
+            "ON-B07",
+            "ON-C03",
+            "ON-C05",
+            "ON-C09",
+            "SC-B10",
+            "SC-B05",
+            "SC-C05",
+            "SC-C01"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-14",
+         "titre": "Questions de cours, objectif 10",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "11-q7",
+            "11-q9",
+            "11-q12",
+            "11-q13"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-15",
+         "titre": "Questions de cours, objectif 14",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "11-q8",
+            "11-q10",
+            "11-q11"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s4",
+         "date": "2026-11-16",
+         "titre": "Exercice type BAC",
+         "minutes": 35,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "11-ex1",
+           "minutes": 35
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s5",
+         "date": "2026-11-17",
+         "titre": "Points faibles et carnet d'erreurs",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "11-q15",
+            "11-q17",
+            "11-q18"
+           ]
+          },
+          {
+           "type": "carnet"
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s6",
+         "date": "2026-11-18",
+         "titre": "DS blanc chronométré",
+         "minutes": 120,
+         "taches": [
+          {
+           "type": "ds-blanc",
+           "minutes": 120,
+           "refs": [
+            "11-ex2",
+            "11-ex3",
+            "11-q19",
+            "11-q22"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s7",
+         "date": "2026-11-19",
+         "titre": "Fiche éclair",
+         "minutes": 20,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 11
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            11
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-deux-chapitres",
+       "date": "2026-11-23",
+       "duree": 4,
+       "fiches": [
+        6,
+        7
+       ],
+       "objectif": 18,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "semaine",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-16",
+         "titre": "Le cours en une page et 10 questions",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 6
+          },
+          {
+           "type": "essentiel",
+           "fiche": 7
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "ON-B06",
+            "ON-C07",
+            "ON-B03",
+            "OM-B09",
+            "OM-B10",
+            "TE-C07",
+            "TE-B10",
+            "ON-C01",
+            "OM-E08",
+            "ON-B04"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-17",
+         "titre": "Questions de cours, objectif 10",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "7-q5",
+            "6-q8",
+            "7-q8",
+            "7-q12"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-18",
+         "titre": "Questions de cours, objectif 18",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "7-q6",
+            "6-q9",
+            "7-q9",
+            "6-q24"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s4",
+         "date": "2026-11-19",
+         "titre": "Exercice type BAC",
+         "minutes": 35,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "7-ex1",
+           "minutes": 35
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s5",
+         "date": "2026-11-20",
+         "titre": "Points faibles et carnet d'erreurs",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "6-q13",
+            "6-q15",
+            "7-q18"
+           ]
+          },
+          {
+           "type": "carnet"
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s6",
+         "date": "2026-11-21",
+         "titre": "DS blanc chronométré",
+         "minutes": 240,
+         "taches": [
+          {
+           "type": "ds-blanc",
+           "minutes": 240,
+           "refs": [
+            "6-ex1",
+            "7-ex3",
+            "6-q19",
+            "7-q19"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s7",
+         "date": "2026-11-22",
+         "titre": "Fiche éclair",
+         "minutes": 20,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 6
+          },
+          {
+           "type": "essentiel",
+           "fiche": 7
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            6,
+            7
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-sans-quiz",
+       "date": "2026-11-18",
+       "duree": 2,
+       "fiches": [
+        14
+       ],
+       "objectif": 14,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "trois-jours",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-15",
+         "titre": "Le cours en une page",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 14
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-16",
+         "titre": "Exercices ciblés sur tes points faibles",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "14-q1",
+            "14-q5",
+            "14-q8",
+            "14-q7"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-17",
+         "titre": "Un exercice type",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "14-ex4",
+           "minutes": 25
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            14
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-peu-de-quiz",
+       "date": "2026-11-15",
+       "duree": 1,
+       "fiches": [
+        10
+       ],
+       "objectif": 10,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "trois-jours",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-13",
+         "titre": "Test de 8 questions",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 10
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "CS-B11",
+            "CS-C04",
+            "CS-C08",
+            "CS-C05",
+            "CS-E07",
+            "CS-E10",
+            "CS-E02",
+            "CS-E05"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-13",
+         "titre": "Exercices ciblés sur tes points faibles",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "10-q1",
+            "10-q2",
+            "10-q7",
+            "10-q8"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-14",
+         "titre": "Un exercice type",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "10-ex4",
+           "minutes": 35
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            10
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-semaine-viser-10",
+       "date": "2026-11-20",
+       "duree": 1,
+       "fiches": [
+        9
+       ],
+       "objectif": 10,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "semaine",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-13",
+         "titre": "Le cours en une page et 10 questions",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 9
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "CS-B04",
+            "CS-B01",
+            "CS-B10",
+            "CS-B05",
+            "CS-B08",
+            "CS-B02",
+            "CS-B03",
+            "CS-B07",
+            "CS-C07",
+            "CS-C02"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-14",
+         "titre": "Questions de cours, objectif 10",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "9-q6",
+            "9-q15",
+            "9-q18",
+            "9-q21"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-15",
+         "titre": "Questions de cours, deuxième passage",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "9-q13",
+            "9-q23",
+            "9-q1",
+            "9-q2"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s4",
+         "date": "2026-11-16",
+         "titre": "Exercice type BAC",
+         "minutes": 35,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "9-ex2",
+           "minutes": 35
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s5",
+         "date": "2026-11-17",
+         "titre": "Points faibles et carnet d'erreurs",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": []
+          },
+          {
+           "type": "carnet"
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s6",
+         "date": "2026-11-18",
+         "titre": "DS blanc chronométré",
+         "minutes": 60,
+         "taches": [
+          {
+           "type": "ds-blanc",
+           "minutes": 60,
+           "refs": [
+            "9-ex1"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s7",
+         "date": "2026-11-19",
+         "titre": "Fiche éclair",
+         "minutes": 20,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 9
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            9
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     }
+    ],
+    "quizPour": [
+     {
+      "entree": {
+       "fiches": [
+        9
+       ],
+       "n": 10,
+       "objectif": 14,
+       "graine": 12345
+      },
+      "sortie": [
+       "CS-B04",
+       "CS-B01",
+       "CS-C10",
+       "CS-C11",
+       "CS-B10",
+       "CS-C07",
+       "CS-C02",
+       "CS-C01",
+       "CS-B02",
+       "CS-B08"
+      ]
+     },
+     {
+      "entree": {
+       "fiches": [
+        10
+       ],
+       "n": 10,
+       "objectif": 10,
+       "graine": 777
+      },
+      "sortie": [
+       "CS-B11",
+       "CS-C08",
+       "CS-C05",
+       "CS-C04",
+       "CS-E02",
+       "CS-E10",
+       "CS-E07",
+       "CS-E05"
+      ]
+     },
+     {
+      "entree": {
+       "fiches": [
+        1,
+        3
+       ],
+       "n": 6,
+       "objectif": 18,
+       "graine": 42
+      },
+      "sortie": [
+       "OM-B05",
+       "OM-C04",
+       "OM-B07",
+       "OM-C09",
+       "OM-C03",
+       "OM-E01"
+      ]
+     },
+     {
+      "entree": {
+       "fiches": [
+        14
+       ],
+       "n": 10,
+       "objectif": 14,
+       "graine": 1
+      },
+      "sortie": []
+     }
+    ],
+    "questionsPassage": [
+     {
+      "entree": {
+       "fiche": 1,
+       "niveau": 14
+      },
+      "sortie": [
+       "OM-C12",
+       "OM-C05",
+       "OM-B06",
+       "OM-B11",
+       "OM-E09"
+      ]
+     },
+     {
+      "entree": {
+       "fiche": 9,
+       "niveau": 14
+      },
+      "sortie": [
+       "CS-C07",
+       "CS-C02",
+       "CS-C01",
+       "CS-C11",
+       "CS-C10"
+      ]
+     },
+     {
+      "entree": {
+       "fiche": 11,
+       "niveau": 18
+      },
+      "sortie": [
+       "SC-E06",
+       "ON-E01",
+       "ON-E06",
+       "ON-E03",
+       "ON-E09"
+      ]
+     }
+    ],
+    "pointsFaibles": [
+     {
+      "entree": {
+       "fiches": [
+        9
+       ],
+       "objectif": 14,
+       "n": 5
+      },
+      "sortie": [
+       "9-q6",
+       "9-q12",
+       "9-q3",
+       "9-q15",
+       "9-q18"
+      ]
+     },
+     {
+      "entree": {
+       "fiches": [
+        1,
+        3
+       ],
+       "objectif": 10,
+       "n": 4
+      },
+      "sortie": [
+       "3-q9",
+       "1-q15",
+       "1-q16"
+      ]
+     }
+    ],
+    "seanceDuJour": {
+     "revoir": [
+      "9-q3",
+      "1-q7",
+      "9-q6"
+     ],
+     "exercice": "9-q14",
+     "raison": "ds",
+     "dsId": "ds-c"
+    }
+   }
+  },
+  {
+   "nom": "nouveau",
+   "description": "Un nouvel élève en offre gratuite, sans aucune réponse.",
+   "maintenant": "2026-11-13T18:00:00+01:00",
+   "etat": {
+    "version": 1,
+    "mode": "nouveau",
+    "profil": {
+     "offre": "gratuit",
+     "dsOffertes": 1,
+     "prenom": "Sami",
+     "classe": "Terminale",
+     "objectif": 14
+    },
+    "reglages": {
+     "theme": "auto",
+     "reperes": true
+    },
+    "vuEnClasse": {},
+    "tentatives": {},
+    "carnet": {},
+    "passages": {},
+    "ds": [],
+    "seances": [],
+    "seance": null,
+    "signalements": [],
+    "test": null
+   },
+   "attendus": {
+    "jour": "2026-11-13",
+    "carnet": [],
+    "carnetDuJour": [],
+    "fiches": {
+     "1": {
+      "etats": {
+       "a-voir": 24,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 24
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 10,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 10,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 2,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "2": {
+      "etats": {
+       "a-voir": 25,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 25
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 11,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 9,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 7,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "3": {
+      "etats": {
+       "a-voir": 24,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 24
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 8,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 10,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 4,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "4": {
+      "etats": {
+       "a-voir": 24,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 24
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 16,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 10,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 4,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "5": {
+      "etats": {
+       "a-voir": 24,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 24
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 16,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 9,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 5,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "6": {
+      "etats": {
+       "a-voir": 31,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 31
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 24,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 18,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 7,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "7": {
+      "etats": {
+       "a-voir": 26,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 26
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 21,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 12,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 3,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "8": {
+      "etats": {
+       "a-voir": 22,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 22
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 16,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 9,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 4,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "9": {
+      "etats": {
+       "a-voir": 20,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 20
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 20,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 15,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 3,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "10": {
+      "etats": {
+       "a-voir": 18,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 18
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 13,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 10,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 4,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "11": {
+      "etats": {
+       "a-voir": 23,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 23
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 18,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 18,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 8,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "12": {
+      "etats": {
+       "a-voir": 22,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 22
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 12,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 13,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 3,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "13": {
+      "etats": {
+       "a-voir": 28,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 28
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 20,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 16,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 5,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     },
+     "14": {
+      "etats": {
+       "a-voir": 21,
+       "en-cours": 0,
+       "acquis": 0,
+       "solide": 0,
+       "total": 21
+      },
+      "niveau": {
+       "atteint": 0,
+       "prochain": 10,
+       "testDispo": false,
+       "res": {
+        "10": {
+         "total": 11,
+         "faits": 0,
+         "taux": 0
+        },
+        "14": {
+         "total": 7,
+         "faits": 0,
+         "taux": 0
+        },
+        "18": {
+         "total": 1,
+         "faits": 0,
+         "taux": 0
+        }
+       }
+      }
+     }
+    },
+    "etatsNotions": {},
+    "noteEstimee": null,
+    "prochainDS": null,
+    "dsANoter": [],
+    "lundi": "2026-11-09",
+    "seancesSemaine": 0,
+    "periode": "t1",
+    "formatPour": [
+     "express",
+     "express",
+     "trois-jours",
+     "trois-jours",
+     "trois-jours",
+     "trois-jours",
+     "trois-jours",
+     "semaine",
+     "semaine",
+     "semaine",
+     "semaine"
+    ],
+    "plans": [
+     {
+      "entree": {
+       "id": "ref-express",
+       "date": "2026-11-14",
+       "duree": 1,
+       "fiches": [
+        9
+       ],
+       "objectif": 10,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "express",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-13",
+         "titre": "Fiche éclair",
+         "minutes": 20,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 9
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "CS-B08",
+            "CS-B04",
+            "CS-B05",
+            "CS-B10",
+            "CS-B03",
+            "CS-B02",
+            "CS-B01",
+            "CS-B07",
+            "CS-C01",
+            "CS-C02"
+           ]
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            9
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-trois-jours",
+       "date": "2026-11-16",
+       "duree": 2,
+       "fiches": [
+        1
+       ],
+       "objectif": 14,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "trois-jours",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-13",
+         "titre": "Test de 5 questions",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 1
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "OM-B11",
+            "OM-B06",
+            "OM-C12",
+            "OM-C05",
+            "OM-E09"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-14",
+         "titre": "Exercices ciblés sur tes points faibles",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "1-q2",
+            "1-q13",
+            "1-q1",
+            "1-q3"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-15",
+         "titre": "Un exercice type",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "1-ex1",
+           "minutes": 40
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            1
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-semaine",
+       "date": "2026-11-20",
+       "duree": 2,
+       "fiches": [
+        11
+       ],
+       "objectif": 14,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "semaine",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-13",
+         "titre": "Le cours en une page et 10 questions",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 11
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "SC-B05",
+            "ON-C05",
+            "SC-C01",
+            "ON-B07",
+            "ON-B08",
+            "ON-C09",
+            "ON-B05",
+            "SC-C05",
+            "SC-B10",
+            "ON-C03"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-14",
+         "titre": "Questions de cours, objectif 10",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "11-q1",
+            "11-q2",
+            "11-q4",
+            "11-q7"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-15",
+         "titre": "Questions de cours, objectif 14",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "11-q3",
+            "11-q5",
+            "11-q8"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s4",
+         "date": "2026-11-16",
+         "titre": "Exercice type BAC",
+         "minutes": 35,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "11-ex1",
+           "minutes": 35
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s5",
+         "date": "2026-11-17",
+         "titre": "Points faibles et carnet d'erreurs",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "11-q9",
+            "11-q12",
+            "11-q13"
+           ]
+          },
+          {
+           "type": "carnet"
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s6",
+         "date": "2026-11-18",
+         "titre": "DS blanc chronométré",
+         "minutes": 120,
+         "taches": [
+          {
+           "type": "ds-blanc",
+           "minutes": 120,
+           "refs": [
+            "11-ex2",
+            "11-ex3",
+            "11-q15",
+            "11-q17"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s7",
+         "date": "2026-11-19",
+         "titre": "Fiche éclair",
+         "minutes": 20,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 11
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            11
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-deux-chapitres",
+       "date": "2026-11-23",
+       "duree": 4,
+       "fiches": [
+        6,
+        7
+       ],
+       "objectif": 18,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "semaine",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-16",
+         "titre": "Le cours en une page et 10 questions",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 6
+          },
+          {
+           "type": "essentiel",
+           "fiche": 7
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "ON-B06",
+            "ON-C07",
+            "ON-B03",
+            "OM-B09",
+            "OM-B10",
+            "TE-C07",
+            "TE-B10",
+            "ON-C01",
+            "OM-E08",
+            "ON-B04"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-17",
+         "titre": "Questions de cours, objectif 10",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "7-q5",
+            "6-q8",
+            "7-q8",
+            "7-q12"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-18",
+         "titre": "Questions de cours, objectif 18",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "7-q6",
+            "6-q9",
+            "7-q9",
+            "6-q24"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s4",
+         "date": "2026-11-19",
+         "titre": "Exercice type BAC",
+         "minutes": 35,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "7-ex1",
+           "minutes": 35
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s5",
+         "date": "2026-11-20",
+         "titre": "Points faibles et carnet d'erreurs",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "6-q13",
+            "6-q15",
+            "7-q18"
+           ]
+          },
+          {
+           "type": "carnet"
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s6",
+         "date": "2026-11-21",
+         "titre": "DS blanc chronométré",
+         "minutes": 240,
+         "taches": [
+          {
+           "type": "ds-blanc",
+           "minutes": 240,
+           "refs": [
+            "6-ex1",
+            "7-ex3",
+            "6-q19",
+            "7-q19"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s7",
+         "date": "2026-11-22",
+         "titre": "Fiche éclair",
+         "minutes": 20,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 6
+          },
+          {
+           "type": "essentiel",
+           "fiche": 7
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            6,
+            7
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-sans-quiz",
+       "date": "2026-11-18",
+       "duree": 2,
+       "fiches": [
+        14
+       ],
+       "objectif": 14,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "trois-jours",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-15",
+         "titre": "Le cours en une page",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 14
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-16",
+         "titre": "Exercices ciblés sur tes points faibles",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "14-q1",
+            "14-q5",
+            "14-q8",
+            "14-q7"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-17",
+         "titre": "Un exercice type",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "14-ex4",
+           "minutes": 25
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            14
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-peu-de-quiz",
+       "date": "2026-11-15",
+       "duree": 1,
+       "fiches": [
+        10
+       ],
+       "objectif": 10,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "trois-jours",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-13",
+         "titre": "Test de 8 questions",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 10
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "CS-B11",
+            "CS-C04",
+            "CS-C08",
+            "CS-C05",
+            "CS-E07",
+            "CS-E10",
+            "CS-E02",
+            "CS-E05"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-13",
+         "titre": "Exercices ciblés sur tes points faibles",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "10-q1",
+            "10-q2",
+            "10-q7",
+            "10-q8"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-14",
+         "titre": "Un exercice type",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "10-ex4",
+           "minutes": 35
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            10
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     },
+     {
+      "entree": {
+       "id": "ref-semaine-viser-10",
+       "date": "2026-11-20",
+       "duree": 1,
+       "fiches": [
+        9
+       ],
+       "objectif": 10,
+       "cree": "2026-11-13",
+       "note": null
+      },
+      "sortie": {
+       "format": "semaine",
+       "seances": [
+        {
+         "id": "s1",
+         "date": "2026-11-13",
+         "titre": "Le cours en une page et 10 questions",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 9
+          },
+          {
+           "type": "quiz",
+           "ids": [
+            "CS-B03",
+            "CS-B08",
+            "CS-B01",
+            "CS-B10",
+            "CS-B05",
+            "CS-B07",
+            "CS-B04",
+            "CS-B02",
+            "CS-C07",
+            "CS-C02"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s2",
+         "date": "2026-11-14",
+         "titre": "Questions de cours, objectif 10",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "9-q1",
+            "9-q2",
+            "9-q4",
+            "9-q6"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s3",
+         "date": "2026-11-15",
+         "titre": "Questions de cours, deuxième passage",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "9-q8",
+            "9-q9",
+            "9-q15",
+            "9-q18"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s4",
+         "date": "2026-11-16",
+         "titre": "Exercice type BAC",
+         "minutes": 35,
+         "taches": [
+          {
+           "type": "exercice",
+           "ref": "9-ex2",
+           "minutes": 35
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s5",
+         "date": "2026-11-17",
+         "titre": "Points faibles et carnet d'erreurs",
+         "minutes": 30,
+         "taches": [
+          {
+           "type": "questions",
+           "refs": [
+            "9-q21",
+            "9-q10",
+            "9-q13"
+           ]
+          },
+          {
+           "type": "carnet"
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s6",
+         "date": "2026-11-18",
+         "titre": "DS blanc chronométré",
+         "minutes": 60,
+         "taches": [
+          {
+           "type": "ds-blanc",
+           "minutes": 60,
+           "refs": [
+            "9-ex1",
+            "9-q23"
+           ]
+          }
+         ],
+         "faite": false
+        },
+        {
+         "id": "s7",
+         "date": "2026-11-19",
+         "titre": "Fiche éclair",
+         "minutes": 20,
+         "taches": [
+          {
+           "type": "essentiel",
+           "fiche": 9
+          },
+          {
+           "type": "pieges",
+           "fiches": [
+            9
+           ]
+          }
+         ],
+         "faite": false
+        }
+       ]
+      }
+     }
+    ],
+    "quizPour": [
+     {
+      "entree": {
+       "fiches": [
+        9
+       ],
+       "n": 10,
+       "objectif": 14,
+       "graine": 12345
+      },
+      "sortie": [
+       "CS-B02",
+       "CS-B05",
+       "CS-B07",
+       "CS-C11",
+       "CS-C02",
+       "CS-C07",
+       "CS-B08",
+       "CS-B01",
+       "CS-B04",
+       "CS-C10"
+      ]
+     },
+     {
+      "entree": {
+       "fiches": [
+        10
+       ],
+       "n": 10,
+       "objectif": 10,
+       "graine": 777
+      },
+      "sortie": [
+       "CS-B11",
+       "CS-C08",
+       "CS-C05",
+       "CS-C04",
+       "CS-E02",
+       "CS-E10",
+       "CS-E07",
+       "CS-E05"
+      ]
+     },
+     {
+      "entree": {
+       "fiches": [
+        1,
+        3
+       ],
+       "n": 6,
+       "objectif": 18,
+       "graine": 42
+      },
+      "sortie": [
+       "OM-C05",
+       "OM-C12",
+       "OM-B11",
+       "OM-B05",
+       "OM-C03",
+       "OM-C07"
+      ]
+     },
+     {
+      "entree": {
+       "fiches": [
+        14
+       ],
+       "n": 10,
+       "objectif": 14,
+       "graine": 1
+      },
+      "sortie": []
+     }
+    ],
+    "questionsPassage": [
+     {
+      "entree": {
+       "fiche": 1,
+       "niveau": 14
+      },
+      "sortie": [
+       "OM-C12",
+       "OM-C05",
+       "OM-B06",
+       "OM-B11",
+       "OM-E09"
+      ]
+     },
+     {
+      "entree": {
+       "fiche": 9,
+       "niveau": 14
+      },
+      "sortie": [
+       "CS-C07",
+       "CS-C02",
+       "CS-C01",
+       "CS-C11",
+       "CS-C10"
+      ]
+     },
+     {
+      "entree": {
+       "fiche": 11,
+       "niveau": 18
+      },
+      "sortie": [
+       "SC-E06",
+       "ON-E01",
+       "ON-E06",
+       "ON-E03",
+       "ON-E09"
+      ]
+     }
+    ],
+    "pointsFaibles": [
+     {
+      "entree": {
+       "fiches": [
+        9
+       ],
+       "objectif": 14,
+       "n": 5
+      },
+      "sortie": [
+       "9-q1",
+       "9-q2",
+       "9-q4",
+       "9-q6",
+       "9-q8"
+      ]
+     },
+     {
+      "entree": {
+       "fiches": [
+        1,
+        3
+       ],
+       "objectif": 10,
+       "n": 4
+      },
+      "sortie": [
+       "1-q2",
+       "1-q1",
+       "3-q1",
+       "1-q3"
+      ]
+     }
+    ],
+    "seanceDuJour": {
+     "revoir": [
+      "quiz:OM-C05",
+      "quiz:OM-C12",
+      "quiz:OM-B11"
+     ],
+     "exercice": "1-q2",
+     "raison": "defaut",
+     "dsId": null
+    }
+   }
+  }
+ ],
+ "sequence": {
+  "description": "Un nouvel élève suivi du 2 novembre au 3 décembre 2026 : carnet d'erreurs, état des notions, niveau du chapitre 9, note estimée.",
+  "depart": {
+   "version": 1,
+   "mode": "nouveau",
+   "profil": {
+    "offre": "gratuit",
+    "dsOffertes": 1,
+    "prenom": "Sami",
+    "classe": "Terminale",
+    "objectif": 14
+   },
+   "reglages": {
+    "theme": "auto",
+    "reperes": true
+   },
+   "vuEnClasse": {},
+   "tentatives": {},
+   "carnet": {},
+   "passages": {},
+   "ds": [],
+   "seances": [],
+   "seance": null,
+   "signalements": [],
+   "test": null
+  },
+  "etapes": [
+   {
+    "titre": "Premier soir : le chapitre 9 est coché, cinq réponses dont trois ratées ou incomplètes",
+    "maintenant": "2026-11-02T18:00:00+01:00",
+    "actions": [
+     {
+      "type": "vu",
+      "fiche": 9,
+      "valeur": true
+     },
+     {
+      "type": "reponse",
+      "cle": "9-q1",
+      "resultat": "ok"
+     },
+     {
+      "type": "reponse",
+      "cle": "9-q2",
+      "resultat": "ko"
+     },
+     {
+      "type": "reponse",
+      "cle": "9-q4",
+      "resultat": "partiel"
+     },
+     {
+      "type": "reponse",
+      "cle": "quiz:CS-B01",
+      "resultat": "ok"
+     },
+     {
+      "type": "reponse",
+      "cle": "quiz:CS-B02",
+      "resultat": "ko"
+     }
+    ],
+    "attendus": {
+     "jour": "2026-11-02",
+     "carnet": [
+      {
+       "k": "9-q2",
+       "due": "2026-11-04",
+       "step": 0
+      },
+      {
+       "k": "9-q4",
+       "due": "2026-11-04",
+       "step": 0
+      },
+      {
+       "k": "quiz:CS-B02",
+       "due": "2026-11-04",
+       "step": 0
+      }
+     ],
+     "carnetDuJour": [],
+     "fiches": {
+      "1": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 2,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "2": {
+       "etats": {
+        "a-voir": 25,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 25
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 11,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "3": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 8,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "4": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "5": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 5,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "6": {
+       "etats": {
+        "a-voir": 31,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 31
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 24,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "7": {
+       "etats": {
+        "a-voir": 26,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 26
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 21,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 12,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "8": {
+       "etats": {
+        "a-voir": 22,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 22
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "9": {
+       "etats": {
+        "a-voir": 16,
+        "en-cours": 3,
+        "acquis": 1,
+        "solide": 0,
+        "total": 20
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 20,
+          "faits": 5,
+          "taux": 0.5
+         },
+         "14": {
+          "total": 15,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "10": {
+       "etats": {
+        "a-voir": 18,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 18
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 13,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "11": {
+       "etats": {
+        "a-voir": 23,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 23
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 8,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "12": {
+       "etats": {
+        "a-voir": 22,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 22
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 12,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 13,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "13": {
+       "etats": {
+        "a-voir": 28,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 28
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 20,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 5,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "14": {
+       "etats": {
+        "a-voir": 21,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 21
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 11,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 1,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      }
+     },
+     "etatsNotions": {
+      "9": {
+       "n4": "en-cours",
+       "n8": "en-cours",
+       "n19": "en-cours",
+       "n20": "acquis"
+      }
+     },
+     "noteEstimee": {
+      "valeur": 9.4,
+      "bas": 6,
+      "haut": 13,
+      "chapitres": 1,
+      "essais": 5,
+      "notes": 0
+     },
+     "prochainDS": null,
+     "dsANoter": [],
+     "lundi": "2026-11-02",
+     "seancesSemaine": 0,
+     "periode": "t1",
+     "formatPour": [
+      "express",
+      "express",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "semaine",
+      "semaine",
+      "semaine",
+      "semaine"
+     ],
+     "plans": [
+      {
+       "entree": {
+        "id": "ref-express",
+        "date": "2026-11-03",
+        "duree": 1,
+        "fiches": [
+         9
+        ],
+        "objectif": 10,
+        "cree": "2026-11-02",
+        "note": null
+       },
+       "sortie": {
+        "format": "express",
+        "seances": [
+         {
+          "id": "s1",
+          "date": "2026-11-02",
+          "titre": "Fiche éclair",
+          "minutes": 20,
+          "taches": [
+           {
+            "type": "essentiel",
+            "fiche": 9
+           },
+           {
+            "type": "quiz",
+            "ids": [
+             "CS-B02",
+             "CS-B03",
+             "CS-B10",
+             "CS-B05",
+             "CS-B04",
+             "CS-B08",
+             "CS-B07",
+             "CS-B01",
+             "CS-C01",
+             "CS-C10"
+            ]
+           },
+           {
+            "type": "pieges",
+            "fiches": [
+             9
+            ]
+           }
+          ],
+          "faite": false
+         }
+        ]
+       }
+      },
+      {
+       "entree": {
+        "id": "ref-trois-jours",
+        "date": "2026-11-05",
+        "duree": 2,
+        "fiches": [
+         1
+        ],
+        "objectif": 14,
+        "cree": "2026-11-02",
+        "note": null
+       },
+       "sortie": {
+        "format": "trois-jours",
+        "seances": [
+         {
+          "id": "s1",
+          "date": "2026-11-02",
+          "titre": "Test de 5 questions",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "essentiel",
+            "fiche": 1
+           },
+           {
+            "type": "quiz",
+            "ids": [
+             "OM-C05",
+             "OM-C12",
+             "OM-B11",
+             "OM-B06",
+             "OM-E09"
+            ]
+           }
+          ],
+          "faite": false
+         },
+         {
+          "id": "s2",
+          "date": "2026-11-03",
+          "titre": "Exercices ciblés sur tes points faibles",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "questions",
+            "refs": [
+             "1-q2",
+             "1-q13",
+             "1-q1",
+             "1-q3"
+            ]
+           }
+          ],
+          "faite": false
+         },
+         {
+          "id": "s3",
+          "date": "2026-11-04",
+          "titre": "Un exercice type",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "exercice",
+            "ref": "1-ex1",
+            "minutes": 40
+           },
+           {
+            "type": "pieges",
+            "fiches": [
+             1
+            ]
+           }
+          ],
+          "faite": false
+         }
+        ]
+       }
+      }
+     ],
+     "quizPour": [
+      {
+       "entree": {
+        "fiches": [
+         9
+        ],
+        "n": 10,
+        "objectif": 14,
+        "graine": 12345
+       },
+       "sortie": [
+        "CS-B02",
+        "CS-B04",
+        "CS-B08",
+        "CS-C07",
+        "CS-C02",
+        "CS-B03",
+        "CS-C10",
+        "CS-B10",
+        "CS-C01",
+        "CS-B07"
+       ]
+      }
+     ],
+     "questionsPassage": [
+      {
+       "entree": {
+        "fiche": 9,
+        "niveau": 14
+       },
+       "sortie": [
+        "CS-C11",
+        "CS-C07",
+        "CS-C10",
+        "CS-C02",
+        "CS-C01"
+       ]
+      }
+     ],
+     "pointsFaibles": [
+      {
+       "entree": {
+        "fiches": [
+         9
+        ],
+        "objectif": 14,
+        "n": 5
+       },
+       "sortie": [
+        "9-q2",
+        "9-q4",
+        "9-q6",
+        "9-q8",
+        "9-q9"
+       ]
+      }
+     ],
+     "seanceDuJour": {
+      "revoir": [
+       "quiz:CS-B02",
+       "quiz:CS-B03",
+       "quiz:CS-B05"
+      ],
+      "exercice": "9-q4",
+      "raison": "classe",
+      "dsId": null
+     }
+    }
+   },
+   {
+    "titre": "Deux jours après : les trois erreurs sont revues et réussies, une question de plus",
+    "maintenant": "2026-11-04T18:00:00+01:00",
+    "actions": [
+     {
+      "type": "reponse",
+      "cle": "9-q2",
+      "resultat": "ok"
+     },
+     {
+      "type": "reponse",
+      "cle": "9-q4",
+      "resultat": "ok"
+     },
+     {
+      "type": "reponse",
+      "cle": "quiz:CS-B02",
+      "resultat": "ok"
+     },
+     {
+      "type": "reponse",
+      "cle": "9-q6",
+      "resultat": "ok"
+     },
+     {
+      "type": "seance-faite"
+     }
+    ],
+    "attendus": {
+     "jour": "2026-11-04",
+     "carnet": [
+      {
+       "k": "9-q2",
+       "due": "2026-11-11",
+       "step": 1
+      },
+      {
+       "k": "9-q4",
+       "due": "2026-11-11",
+       "step": 1
+      },
+      {
+       "k": "quiz:CS-B02",
+       "due": "2026-11-11",
+       "step": 1
+      }
+     ],
+     "carnetDuJour": [],
+     "fiches": {
+      "1": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 2,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "2": {
+       "etats": {
+        "a-voir": 25,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 25
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 11,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "3": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 8,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "4": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "5": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 5,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "6": {
+       "etats": {
+        "a-voir": 31,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 31
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 24,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "7": {
+       "etats": {
+        "a-voir": 26,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 26
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 21,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 12,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "8": {
+       "etats": {
+        "a-voir": 22,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 22
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "9": {
+       "etats": {
+        "a-voir": 15,
+        "en-cours": 2,
+        "acquis": 3,
+        "solide": 0,
+        "total": 20
+       },
+       "niveau": {
+        "atteint": 10,
+        "prochain": 14,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 20,
+          "faits": 6,
+          "taux": 1
+         },
+         "14": {
+          "total": 15,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "10": {
+       "etats": {
+        "a-voir": 18,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 18
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 13,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "11": {
+       "etats": {
+        "a-voir": 23,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 23
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 8,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "12": {
+       "etats": {
+        "a-voir": 22,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 22
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 12,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 13,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "13": {
+       "etats": {
+        "a-voir": 28,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 28
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 20,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 5,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "14": {
+       "etats": {
+        "a-voir": 21,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 21
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 11,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 1,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      }
+     },
+     "etatsNotions": {
+      "9": {
+       "n4": "en-cours",
+       "n8": "acquis",
+       "n19": "en-cours",
+       "n20": "acquis"
+      }
+     },
+     "noteEstimee": {
+      "valeur": 12.7,
+      "bas": 9,
+      "haut": 16,
+      "chapitres": 1,
+      "essais": 6,
+      "notes": 0
+     },
+     "prochainDS": null,
+     "dsANoter": [],
+     "lundi": "2026-11-02",
+     "seancesSemaine": 1,
+     "periode": "t1",
+     "formatPour": [
+      "express",
+      "express",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "semaine",
+      "semaine",
+      "semaine",
+      "semaine"
+     ],
+     "plans": [
+      {
+       "entree": {
+        "id": "ref-express",
+        "date": "2026-11-05",
+        "duree": 1,
+        "fiches": [
+         9
+        ],
+        "objectif": 10,
+        "cree": "2026-11-04",
+        "note": null
+       },
+       "sortie": {
+        "format": "express",
+        "seances": [
+         {
+          "id": "s1",
+          "date": "2026-11-04",
+          "titre": "Fiche éclair",
+          "minutes": 20,
+          "taches": [
+           {
+            "type": "essentiel",
+            "fiche": 9
+           },
+           {
+            "type": "quiz",
+            "ids": [
+             "CS-B03",
+             "CS-B10",
+             "CS-B05",
+             "CS-B07",
+             "CS-B08",
+             "CS-B04",
+             "CS-B02",
+             "CS-B01",
+             "CS-C01",
+             "CS-C11"
+            ]
+           },
+           {
+            "type": "pieges",
+            "fiches": [
+             9
+            ]
+           }
+          ],
+          "faite": false
+         }
+        ]
+       }
+      },
+      {
+       "entree": {
+        "id": "ref-trois-jours",
+        "date": "2026-11-07",
+        "duree": 2,
+        "fiches": [
+         1
+        ],
+        "objectif": 14,
+        "cree": "2026-11-04",
+        "note": null
+       },
+       "sortie": {
+        "format": "trois-jours",
+        "seances": [
+         {
+          "id": "s1",
+          "date": "2026-11-04",
+          "titre": "Test de 5 questions",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "essentiel",
+            "fiche": 1
+           },
+           {
+            "type": "quiz",
+            "ids": [
+             "OM-B11",
+             "OM-C12",
+             "OM-B06",
+             "OM-C05",
+             "OM-E09"
+            ]
+           }
+          ],
+          "faite": false
+         },
+         {
+          "id": "s2",
+          "date": "2026-11-05",
+          "titre": "Exercices ciblés sur tes points faibles",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "questions",
+            "refs": [
+             "1-q2",
+             "1-q13",
+             "1-q1",
+             "1-q3"
+            ]
+           }
+          ],
+          "faite": false
+         },
+         {
+          "id": "s3",
+          "date": "2026-11-06",
+          "titre": "Un exercice type",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "exercice",
+            "ref": "1-ex1",
+            "minutes": 40
+           },
+           {
+            "type": "pieges",
+            "fiches": [
+             1
+            ]
+           }
+          ],
+          "faite": false
+         }
+        ]
+       }
+      }
+     ],
+     "quizPour": [
+      {
+       "entree": {
+        "fiches": [
+         9
+        ],
+        "n": 10,
+        "objectif": 14,
+        "graine": 12345
+       },
+       "sortie": [
+        "CS-B04",
+        "CS-B08",
+        "CS-C07",
+        "CS-C02",
+        "CS-B03",
+        "CS-C10",
+        "CS-B10",
+        "CS-C01",
+        "CS-B07",
+        "CS-C11"
+       ]
+      }
+     ],
+     "questionsPassage": [
+      {
+       "entree": {
+        "fiche": 9,
+        "niveau": 14
+       },
+       "sortie": [
+        "CS-C01",
+        "CS-C02",
+        "CS-C07",
+        "CS-C10",
+        "CS-C11"
+       ]
+      }
+     ],
+     "pointsFaibles": [
+      {
+       "entree": {
+        "fiches": [
+         9
+        ],
+        "objectif": 14,
+        "n": 5
+       },
+       "sortie": [
+        "9-q8",
+        "9-q9",
+        "9-q15",
+        "9-q18",
+        "9-q21"
+       ]
+      }
+     ],
+     "seanceDuJour": {
+      "revoir": [
+       "quiz:CS-B05",
+       "quiz:CS-B07",
+       "quiz:CS-C07"
+      ],
+      "exercice": "9-q3",
+      "raison": "classe",
+      "dsId": null
+     }
+    }
+   },
+   {
+    "titre": "Une semaine après : une révision réussie, une rechute, trois questions d'objectif 14",
+    "maintenant": "2026-11-11T18:00:00+01:00",
+    "actions": [
+     {
+      "type": "reponse",
+      "cle": "9-q2",
+      "resultat": "ok"
+     },
+     {
+      "type": "reponse",
+      "cle": "9-q4",
+      "resultat": "ko"
+     },
+     {
+      "type": "reponse",
+      "cle": "9-q1",
+      "resultat": "ok"
+     },
+     {
+      "type": "reponse",
+      "cle": "9-q3",
+      "resultat": "ok"
+     },
+     {
+      "type": "reponse",
+      "cle": "9-q5",
+      "resultat": "ok"
+     },
+     {
+      "type": "reponse",
+      "cle": "9-q7",
+      "resultat": "partiel"
+     },
+     {
+      "type": "seance-faite"
+     }
+    ],
+    "attendus": {
+     "jour": "2026-11-11",
+     "carnet": [
+      {
+       "k": "quiz:CS-B02",
+       "due": "2026-11-11",
+       "step": 1
+      },
+      {
+       "k": "9-q4",
+       "due": "2026-11-13",
+       "step": 0
+      },
+      {
+       "k": "9-q7",
+       "due": "2026-11-13",
+       "step": 0
+      },
+      {
+       "k": "9-q2",
+       "due": "2026-12-02",
+       "step": 2
+      }
+     ],
+     "carnetDuJour": [
+      {
+       "k": "quiz:CS-B02",
+       "due": "2026-11-11",
+       "step": 1
+      }
+     ],
+     "fiches": {
+      "1": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 2,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "2": {
+       "etats": {
+        "a-voir": 25,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 25
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 11,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "3": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 8,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "4": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "5": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 5,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "6": {
+       "etats": {
+        "a-voir": 31,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 31
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 24,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "7": {
+       "etats": {
+        "a-voir": 26,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 26
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 21,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 12,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "8": {
+       "etats": {
+        "a-voir": 22,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 22
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "9": {
+       "etats": {
+        "a-voir": 14,
+        "en-cours": 3,
+        "acquis": 0,
+        "solide": 3,
+        "total": 20
+       },
+       "niveau": {
+        "atteint": 10,
+        "prochain": 14,
+        "testDispo": true,
+        "res": {
+         "10": {
+          "total": 20,
+          "faits": 6,
+          "taux": 0.8333333333333334
+         },
+         "14": {
+          "total": 15,
+          "faits": 3,
+          "taux": 0.8333333333333334
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "10": {
+       "etats": {
+        "a-voir": 18,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 18
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 13,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "11": {
+       "etats": {
+        "a-voir": 23,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 23
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 8,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "12": {
+       "etats": {
+        "a-voir": 22,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 22
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 12,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 13,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "13": {
+       "etats": {
+        "a-voir": 28,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 28
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 20,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 5,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "14": {
+       "etats": {
+        "a-voir": 21,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 21
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 11,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 1,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      }
+     },
+     "etatsNotions": {
+      "9": {
+       "n4": "solide",
+       "n8": "en-cours",
+       "n19": "solide",
+       "n20": "solide"
+      }
+     },
+     "noteEstimee": {
+      "valeur": 14.4,
+      "bas": 11,
+      "haut": 18,
+      "chapitres": 1,
+      "essais": 9,
+      "notes": 0
+     },
+     "prochainDS": null,
+     "dsANoter": [],
+     "lundi": "2026-11-09",
+     "seancesSemaine": 1,
+     "periode": "t1",
+     "formatPour": [
+      "express",
+      "express",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "semaine",
+      "semaine",
+      "semaine",
+      "semaine"
+     ],
+     "plans": [
+      {
+       "entree": {
+        "id": "ref-express",
+        "date": "2026-11-12",
+        "duree": 1,
+        "fiches": [
+         9
+        ],
+        "objectif": 10,
+        "cree": "2026-11-11",
+        "note": null
+       },
+       "sortie": {
+        "format": "express",
+        "seances": [
+         {
+          "id": "s1",
+          "date": "2026-11-11",
+          "titre": "Fiche éclair",
+          "minutes": 20,
+          "taches": [
+           {
+            "type": "essentiel",
+            "fiche": 9
+           },
+           {
+            "type": "quiz",
+            "ids": [
+             "CS-B03",
+             "CS-B10",
+             "CS-B08",
+             "CS-B04",
+             "CS-B05",
+             "CS-B07",
+             "CS-B02",
+             "CS-B01",
+             "CS-C11",
+             "CS-C07"
+            ]
+           },
+           {
+            "type": "pieges",
+            "fiches": [
+             9
+            ]
+           }
+          ],
+          "faite": false
+         }
+        ]
+       }
+      },
+      {
+       "entree": {
+        "id": "ref-trois-jours",
+        "date": "2026-11-14",
+        "duree": 2,
+        "fiches": [
+         1
+        ],
+        "objectif": 14,
+        "cree": "2026-11-11",
+        "note": null
+       },
+       "sortie": {
+        "format": "trois-jours",
+        "seances": [
+         {
+          "id": "s1",
+          "date": "2026-11-11",
+          "titre": "Test de 5 questions",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "essentiel",
+            "fiche": 1
+           },
+           {
+            "type": "quiz",
+            "ids": [
+             "OM-B11",
+             "OM-C05",
+             "OM-C12",
+             "OM-B06",
+             "OM-E09"
+            ]
+           }
+          ],
+          "faite": false
+         },
+         {
+          "id": "s2",
+          "date": "2026-11-12",
+          "titre": "Exercices ciblés sur tes points faibles",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "questions",
+            "refs": [
+             "1-q2",
+             "1-q13",
+             "1-q1",
+             "1-q3"
+            ]
+           }
+          ],
+          "faite": false
+         },
+         {
+          "id": "s3",
+          "date": "2026-11-13",
+          "titre": "Un exercice type",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "exercice",
+            "ref": "1-ex1",
+            "minutes": 40
+           },
+           {
+            "type": "pieges",
+            "fiches": [
+             1
+            ]
+           }
+          ],
+          "faite": false
+         }
+        ]
+       }
+      }
+     ],
+     "quizPour": [
+      {
+       "entree": {
+        "fiches": [
+         9
+        ],
+        "n": 10,
+        "objectif": 14,
+        "graine": 12345
+       },
+       "sortie": [
+        "CS-B04",
+        "CS-B08",
+        "CS-C07",
+        "CS-C02",
+        "CS-B03",
+        "CS-C10",
+        "CS-B10",
+        "CS-C01",
+        "CS-B07",
+        "CS-C11"
+       ]
+      }
+     ],
+     "questionsPassage": [
+      {
+       "entree": {
+        "fiche": 9,
+        "niveau": 14
+       },
+       "sortie": [
+        "CS-C07",
+        "CS-C11",
+        "CS-C01",
+        "CS-C02",
+        "CS-C10"
+       ]
+      }
+     ],
+     "pointsFaibles": [
+      {
+       "entree": {
+        "fiches": [
+         9
+        ],
+        "objectif": 14,
+        "n": 5
+       },
+       "sortie": [
+        "9-q4",
+        "9-q7",
+        "9-q8",
+        "9-q9",
+        "9-q15"
+       ]
+      }
+     ],
+     "seanceDuJour": {
+      "revoir": [
+       "quiz:CS-B02",
+       "quiz:CS-B03",
+       "quiz:CS-B05"
+      ],
+      "exercice": "9-q14",
+      "raison": "classe",
+      "dsId": null
+     }
+    }
+   },
+   {
+    "titre": "Le lendemain : test de passage réussi vers l'objectif 14, un DS noté, un exercice corrigé au barème",
+    "maintenant": "2026-11-12T18:00:00+01:00",
+    "actions": [
+     {
+      "type": "passage",
+      "fiche": 9,
+      "niveau": 14
+     },
+     {
+      "type": "ds",
+      "ds": {
+       "id": "ds-seq",
+       "date": "2026-11-10",
+       "duree": 2,
+       "fiches": [
+        9
+       ],
+       "objectif": 14,
+       "format": "trois-jours",
+       "note": 12,
+       "cree": "2026-11-07",
+       "seances": []
+      }
+     },
+     {
+      "type": "reponse",
+      "cle": "9-ex1",
+      "resultat": "partiel",
+      "score": 0.6
+     }
+    ],
+    "attendus": {
+     "jour": "2026-11-12",
+     "carnet": [
+      {
+       "k": "quiz:CS-B02",
+       "due": "2026-11-11",
+       "step": 1
+      },
+      {
+       "k": "9-q4",
+       "due": "2026-11-13",
+       "step": 0
+      },
+      {
+       "k": "9-q7",
+       "due": "2026-11-13",
+       "step": 0
+      },
+      {
+       "k": "9-ex1",
+       "due": "2026-11-14",
+       "step": 0
+      },
+      {
+       "k": "9-q2",
+       "due": "2026-12-02",
+       "step": 2
+      }
+     ],
+     "carnetDuJour": [
+      {
+       "k": "quiz:CS-B02",
+       "due": "2026-11-11",
+       "step": 1
+      }
+     ],
+     "fiches": {
+      "1": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 2,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "2": {
+       "etats": {
+        "a-voir": 25,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 25
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 11,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "3": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 8,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "4": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "5": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 5,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "6": {
+       "etats": {
+        "a-voir": 31,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 31
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 24,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "7": {
+       "etats": {
+        "a-voir": 26,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 26
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 21,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 12,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "8": {
+       "etats": {
+        "a-voir": 22,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 22
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "9": {
+       "etats": {
+        "a-voir": 14,
+        "en-cours": 5,
+        "acquis": 0,
+        "solide": 1,
+        "total": 20
+       },
+       "niveau": {
+        "atteint": 14,
+        "prochain": 18,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 20,
+          "faits": 6,
+          "taux": 0.8333333333333334
+         },
+         "14": {
+          "total": 15,
+          "faits": 3,
+          "taux": 0.8333333333333334
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "10": {
+       "etats": {
+        "a-voir": 18,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 18
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 13,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "11": {
+       "etats": {
+        "a-voir": 23,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 23
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 8,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "12": {
+       "etats": {
+        "a-voir": 22,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 22
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 12,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 13,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "13": {
+       "etats": {
+        "a-voir": 28,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 28
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 20,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 5,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "14": {
+       "etats": {
+        "a-voir": 21,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 21
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 11,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 1,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      }
+     },
+     "etatsNotions": {
+      "9": {
+       "n4": "solide",
+       "n8": "en-cours",
+       "n19": "en-cours",
+       "n20": "en-cours"
+      }
+     },
+     "noteEstimee": {
+      "valeur": 13.5,
+      "bas": 11,
+      "haut": 16,
+      "chapitres": 1,
+      "essais": 9,
+      "notes": 1
+     },
+     "prochainDS": null,
+     "dsANoter": [],
+     "lundi": "2026-11-09",
+     "seancesSemaine": 1,
+     "periode": "t1",
+     "formatPour": [
+      "express",
+      "express",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "semaine",
+      "semaine",
+      "semaine",
+      "semaine"
+     ],
+     "plans": [
+      {
+       "entree": {
+        "id": "ref-express",
+        "date": "2026-11-13",
+        "duree": 1,
+        "fiches": [
+         9
+        ],
+        "objectif": 10,
+        "cree": "2026-11-12",
+        "note": null
+       },
+       "sortie": {
+        "format": "express",
+        "seances": [
+         {
+          "id": "s1",
+          "date": "2026-11-12",
+          "titre": "Fiche éclair",
+          "minutes": 20,
+          "taches": [
+           {
+            "type": "essentiel",
+            "fiche": 9
+           },
+           {
+            "type": "quiz",
+            "ids": [
+             "CS-B04",
+             "CS-B07",
+             "CS-B03",
+             "CS-B10",
+             "CS-B08",
+             "CS-B05",
+             "CS-B01",
+             "CS-B02",
+             "CS-C11",
+             "CS-C01"
+            ]
+           },
+           {
+            "type": "pieges",
+            "fiches": [
+             9
+            ]
+           }
+          ],
+          "faite": false
+         }
+        ]
+       }
+      },
+      {
+       "entree": {
+        "id": "ref-trois-jours",
+        "date": "2026-11-15",
+        "duree": 2,
+        "fiches": [
+         1
+        ],
+        "objectif": 14,
+        "cree": "2026-11-12",
+        "note": null
+       },
+       "sortie": {
+        "format": "trois-jours",
+        "seances": [
+         {
+          "id": "s1",
+          "date": "2026-11-12",
+          "titre": "Test de 5 questions",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "essentiel",
+            "fiche": 1
+           },
+           {
+            "type": "quiz",
+            "ids": [
+             "OM-B06",
+             "OM-C05",
+             "OM-B11",
+             "OM-C12",
+             "OM-E09"
+            ]
+           }
+          ],
+          "faite": false
+         },
+         {
+          "id": "s2",
+          "date": "2026-11-13",
+          "titre": "Exercices ciblés sur tes points faibles",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "questions",
+            "refs": [
+             "1-q2",
+             "1-q13",
+             "1-q1",
+             "1-q3"
+            ]
+           }
+          ],
+          "faite": false
+         },
+         {
+          "id": "s3",
+          "date": "2026-11-14",
+          "titre": "Un exercice type",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "exercice",
+            "ref": "1-ex1",
+            "minutes": 40
+           },
+           {
+            "type": "pieges",
+            "fiches": [
+             1
+            ]
+           }
+          ],
+          "faite": false
+         }
+        ]
+       }
+      }
+     ],
+     "quizPour": [
+      {
+       "entree": {
+        "fiches": [
+         9
+        ],
+        "n": 10,
+        "objectif": 14,
+        "graine": 12345
+       },
+       "sortie": [
+        "CS-B04",
+        "CS-B08",
+        "CS-C07",
+        "CS-C02",
+        "CS-B03",
+        "CS-C10",
+        "CS-B10",
+        "CS-C01",
+        "CS-B07",
+        "CS-C11"
+       ]
+      }
+     ],
+     "questionsPassage": [
+      {
+       "entree": {
+        "fiche": 9,
+        "niveau": 14
+       },
+       "sortie": [
+        "CS-C02",
+        "CS-C10",
+        "CS-C07",
+        "CS-C01",
+        "CS-C11"
+       ]
+      }
+     ],
+     "pointsFaibles": [
+      {
+       "entree": {
+        "fiches": [
+         9
+        ],
+        "objectif": 14,
+        "n": 5
+       },
+       "sortie": [
+        "9-q4",
+        "9-q7",
+        "9-q8",
+        "9-q9",
+        "9-q15"
+       ]
+      }
+     ],
+     "seanceDuJour": {
+      "revoir": [
+       "quiz:CS-B02",
+       "quiz:CS-C11",
+       "quiz:CS-B10"
+      ],
+      "exercice": "9-q14",
+      "raison": "classe",
+      "dsId": null
+     }
+    }
+   },
+   {
+    "titre": "Trois semaines après : troisième révision réussie, la question sort du carnet",
+    "maintenant": "2026-12-03T18:00:00+01:00",
+    "actions": [
+     {
+      "type": "reponse",
+      "cle": "9-q2",
+      "resultat": "ok"
+     }
+    ],
+    "attendus": {
+     "jour": "2026-12-03",
+     "carnet": [
+      {
+       "k": "quiz:CS-B02",
+       "due": "2026-11-11",
+       "step": 1
+      },
+      {
+       "k": "9-q4",
+       "due": "2026-11-13",
+       "step": 0
+      },
+      {
+       "k": "9-q7",
+       "due": "2026-11-13",
+       "step": 0
+      },
+      {
+       "k": "9-ex1",
+       "due": "2026-11-14",
+       "step": 0
+      }
+     ],
+     "carnetDuJour": [
+      {
+       "k": "quiz:CS-B02",
+       "due": "2026-11-11",
+       "step": 1
+      },
+      {
+       "k": "9-q4",
+       "due": "2026-11-13",
+       "step": 0
+      },
+      {
+       "k": "9-q7",
+       "due": "2026-11-13",
+       "step": 0
+      },
+      {
+       "k": "9-ex1",
+       "due": "2026-11-14",
+       "step": 0
+      }
+     ],
+     "fiches": {
+      "1": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 2,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "2": {
+       "etats": {
+        "a-voir": 25,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 25
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 11,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "3": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 8,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "4": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "5": {
+       "etats": {
+        "a-voir": 24,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 24
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 5,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "6": {
+       "etats": {
+        "a-voir": 31,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 31
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 24,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "7": {
+       "etats": {
+        "a-voir": 26,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 26
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 21,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 12,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "8": {
+       "etats": {
+        "a-voir": 22,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 22
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 9,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "9": {
+       "etats": {
+        "a-voir": 14,
+        "en-cours": 4,
+        "acquis": 0,
+        "solide": 2,
+        "total": 20
+       },
+       "niveau": {
+        "atteint": 14,
+        "prochain": 18,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 20,
+          "faits": 6,
+          "taux": 0.8333333333333334
+         },
+         "14": {
+          "total": 15,
+          "faits": 3,
+          "taux": 0.8333333333333334
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "10": {
+       "etats": {
+        "a-voir": 18,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 18
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 13,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 10,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 4,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "11": {
+       "etats": {
+        "a-voir": 23,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 23
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 18,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 8,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "12": {
+       "etats": {
+        "a-voir": 22,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 22
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 12,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 13,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 3,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "13": {
+       "etats": {
+        "a-voir": 28,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 28
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 20,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 16,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 5,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      },
+      "14": {
+       "etats": {
+        "a-voir": 21,
+        "en-cours": 0,
+        "acquis": 0,
+        "solide": 0,
+        "total": 21
+       },
+       "niveau": {
+        "atteint": 0,
+        "prochain": 10,
+        "testDispo": false,
+        "res": {
+         "10": {
+          "total": 11,
+          "faits": 0,
+          "taux": 0
+         },
+         "14": {
+          "total": 7,
+          "faits": 0,
+          "taux": 0
+         },
+         "18": {
+          "total": 1,
+          "faits": 0,
+          "taux": 0
+         }
+        }
+       }
+      }
+     },
+     "etatsNotions": {
+      "9": {
+       "n4": "solide",
+       "n8": "en-cours",
+       "n19": "solide",
+       "n20": "en-cours"
+      }
+     },
+     "noteEstimee": {
+      "valeur": 13.5,
+      "bas": 11,
+      "haut": 16,
+      "chapitres": 1,
+      "essais": 9,
+      "notes": 1
+     },
+     "prochainDS": null,
+     "dsANoter": [],
+     "lundi": "2026-11-30",
+     "seancesSemaine": 0,
+     "periode": "t1",
+     "formatPour": [
+      "express",
+      "express",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "trois-jours",
+      "semaine",
+      "semaine",
+      "semaine",
+      "semaine"
+     ],
+     "plans": [
+      {
+       "entree": {
+        "id": "ref-express",
+        "date": "2026-12-04",
+        "duree": 1,
+        "fiches": [
+         9
+        ],
+        "objectif": 10,
+        "cree": "2026-12-03",
+        "note": null
+       },
+       "sortie": {
+        "format": "express",
+        "seances": [
+         {
+          "id": "s1",
+          "date": "2026-12-03",
+          "titre": "Fiche éclair",
+          "minutes": 20,
+          "taches": [
+           {
+            "type": "essentiel",
+            "fiche": 9
+           },
+           {
+            "type": "quiz",
+            "ids": [
+             "CS-B05",
+             "CS-B07",
+             "CS-B08",
+             "CS-B10",
+             "CS-B03",
+             "CS-B04",
+             "CS-B02",
+             "CS-B01",
+             "CS-C01",
+             "CS-C07"
+            ]
+           },
+           {
+            "type": "pieges",
+            "fiches": [
+             9
+            ]
+           }
+          ],
+          "faite": false
+         }
+        ]
+       }
+      },
+      {
+       "entree": {
+        "id": "ref-trois-jours",
+        "date": "2026-12-06",
+        "duree": 2,
+        "fiches": [
+         1
+        ],
+        "objectif": 14,
+        "cree": "2026-12-03",
+        "note": null
+       },
+       "sortie": {
+        "format": "trois-jours",
+        "seances": [
+         {
+          "id": "s1",
+          "date": "2026-12-03",
+          "titre": "Test de 5 questions",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "essentiel",
+            "fiche": 1
+           },
+           {
+            "type": "quiz",
+            "ids": [
+             "OM-C05",
+             "OM-C12",
+             "OM-B11",
+             "OM-B06",
+             "OM-E09"
+            ]
+           }
+          ],
+          "faite": false
+         },
+         {
+          "id": "s2",
+          "date": "2026-12-04",
+          "titre": "Exercices ciblés sur tes points faibles",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "questions",
+            "refs": [
+             "1-q2",
+             "1-q13",
+             "1-q1",
+             "1-q3"
+            ]
+           }
+          ],
+          "faite": false
+         },
+         {
+          "id": "s3",
+          "date": "2026-12-05",
+          "titre": "Un exercice type",
+          "minutes": 30,
+          "taches": [
+           {
+            "type": "exercice",
+            "ref": "1-ex1",
+            "minutes": 40
+           },
+           {
+            "type": "pieges",
+            "fiches": [
+             1
+            ]
+           }
+          ],
+          "faite": false
+         }
+        ]
+       }
+      }
+     ],
+     "quizPour": [
+      {
+       "entree": {
+        "fiches": [
+         9
+        ],
+        "n": 10,
+        "objectif": 14,
+        "graine": 12345
+       },
+       "sortie": [
+        "CS-B04",
+        "CS-B08",
+        "CS-C07",
+        "CS-C02",
+        "CS-B03",
+        "CS-C10",
+        "CS-B10",
+        "CS-C01",
+        "CS-B07",
+        "CS-C11"
+       ]
+      }
+     ],
+     "questionsPassage": [
+      {
+       "entree": {
+        "fiche": 9,
+        "niveau": 14
+       },
+       "sortie": [
+        "CS-C01",
+        "CS-C07",
+        "CS-C10",
+        "CS-C02",
+        "CS-C11"
+       ]
+      }
+     ],
+     "pointsFaibles": [
+      {
+       "entree": {
+        "fiches": [
+         9
+        ],
+        "objectif": 14,
+        "n": 5
+       },
+       "sortie": [
+        "9-q4",
+        "9-q7",
+        "9-q8",
+        "9-q9",
+        "9-q15"
+       ]
+      }
+     ],
+     "seanceDuJour": {
+      "revoir": [
+       "quiz:CS-B02",
+       "9-q4",
+       "9-q7"
+      ],
+      "exercice": "9-q14",
+      "raison": "classe",
+      "dsId": null
+     }
+    }
+   }
+  ],
+  "etat_final": {
+   "version": 1,
+   "mode": "nouveau",
+   "profil": {
+    "offre": "gratuit",
+    "dsOffertes": 1,
+    "prenom": "Sami",
+    "classe": "Terminale",
+    "objectif": 14
+   },
+   "reglages": {
+    "theme": "auto",
+    "reperes": true
+   },
+   "vuEnClasse": {
+    "9": true
+   },
+   "tentatives": {
+    "9-q1": [
+     {
+      "t": 1793638800000,
+      "r": "ok",
+      "s": 1
+     },
+     {
+      "t": 1794416400000,
+      "r": "ok",
+      "s": 1
+     }
+    ],
+    "9-q2": [
+     {
+      "t": 1793638800000,
+      "r": "ko",
+      "s": 0
+     },
+     {
+      "t": 1793811600000,
+      "r": "ok",
+      "s": 1
+     },
+     {
+      "t": 1794416400000,
+      "r": "ok",
+      "s": 1
+     },
+     {
+      "t": 1796317200000,
+      "r": "ok",
+      "s": 1
+     }
+    ],
+    "9-q4": [
+     {
+      "t": 1793638800000,
+      "r": "partiel",
+      "s": 0.5
+     },
+     {
+      "t": 1793811600000,
+      "r": "ok",
+      "s": 1
+     },
+     {
+      "t": 1794416400000,
+      "r": "ko",
+      "s": 0
+     }
+    ],
+    "quiz:CS-B01": [
+     {
+      "t": 1793638800000,
+      "r": "ok",
+      "s": 1
+     }
+    ],
+    "quiz:CS-B02": [
+     {
+      "t": 1793638800000,
+      "r": "ko",
+      "s": 0
+     },
+     {
+      "t": 1793811600000,
+      "r": "ok",
+      "s": 1
+     }
+    ],
+    "9-q6": [
+     {
+      "t": 1793811600000,
+      "r": "ok",
+      "s": 1
+     }
+    ],
+    "9-q3": [
+     {
+      "t": 1794416400000,
+      "r": "ok",
+      "s": 1
+     }
+    ],
+    "9-q5": [
+     {
+      "t": 1794416400000,
+      "r": "ok",
+      "s": 1
+     }
+    ],
+    "9-q7": [
+     {
+      "t": 1794416400000,
+      "r": "partiel",
+      "s": 0.5
+     }
+    ],
+    "9-ex1": [
+     {
+      "t": 1794502800000,
+      "r": "partiel",
+      "s": 0.6
+     }
+    ]
+   },
+   "carnet": {
+    "9-q4": {
+     "due": "2026-11-13",
+     "step": 0
+    },
+    "quiz:CS-B02": {
+     "due": "2026-11-11",
+     "step": 1
+    },
+    "9-q7": {
+     "due": "2026-11-13",
+     "step": 0
+    },
+    "9-ex1": {
+     "due": "2026-11-14",
+     "step": 0
+    }
+   },
+   "passages": {
+    "9": {
+     "14": 1794502800000
+    }
+   },
+   "ds": [
+    {
+     "id": "ds-seq",
+     "date": "2026-11-10",
+     "duree": 2,
+     "fiches": [
+      9
+     ],
+     "objectif": 14,
+     "format": "trois-jours",
+     "note": 12,
+     "cree": "2026-11-07",
+     "seances": []
+    }
+   ],
+   "seances": [
+    {
+     "date": "2026-11-04",
+     "minutes": 25
+    },
+    {
+     "date": "2026-11-11",
+     "minutes": 25
+    }
+   ],
+   "seance": null,
+   "signalements": [],
+   "test": null
+  }
+ }
+}
