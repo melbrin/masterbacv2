@@ -22,6 +22,12 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - Administration : double authentification, accès ouverts ou préparés pour une adresse, retrait avec motif, signalements, journal.
 - `npm run tout` : lint, types, 133 tests avec couverture, 23 contrôles de contenu, 33 tests de base, compilation. Vert le 13 novembre.
 
+## Film de présentation
+
+- `scripts/presentation/` : `textes.mts` (ce que dit la voix), `voix.mts` (ElevenLabs, clé lue dans `ELEVENLABS_API_KEY`, jamais écrite), `filmer.mts` (parcours filmé en local avec Playwright, puis montage avec ffmpeg).
+- Refaire le film sans refaire la voix : `node scripts/presentation/filmer.mts sorties/presentation sorties/presentation/masterbac-presentation.mp4`, serveur et base locale démarrés. Le dossier `sorties/` n'est pas suivi par git.
+- Ajouts du 13 novembre : `@playwright/test` 1.65.0 (prévu pour les parcours), ffmpeg installé sur l'ordinateur par Homebrew.
+
 ## Reste à faire pour la version locale
 
 1. Évolutions du moteur de `docs/08-moteur.md`, section 6 : retour d'une réussite à 7 jours, niveau 10 validé par test, niveau proposé seulement s'il existe.

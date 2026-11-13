@@ -15,3 +15,7 @@ fieldset.champ legend { font-weight: 600; color: var(--encre); padding: 0; margi
 form .champ + .champ, form fieldset.champ, form .champ + fieldset { margin-top: 12px; }
 .aide { font-size: .85rem; color: var(--discret); margin: 0; }
 .pile > * + * { margin-top: 14px; }
+
+/* Corrigé au barème : une formule large défile dans son cadre, elle n'élargit pas l'étape (sinon les boutons de note sortent de l'écran). */
+.etape-bareme > * { min-width: 0; }
+.etape-bareme .contenu { min-width: 0; overflow-x: auto; }

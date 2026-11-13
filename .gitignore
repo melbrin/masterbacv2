@@ -62,3 +62,6 @@ supabase/.branches/
 test-results/
 playwright-report/
 reports/
+
+# films de présentation fabriqués en local
+sorties/
