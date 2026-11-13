@@ -42,7 +42,9 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 
 ## Décisions récentes
 
-- 0001, architecture de départ : proposée, à valider.
+- 0001, architecture de départ : validée par Yane le 13 novembre, sauf le point 7 (paiement), remplacé par la décision 0002.
+- 0002, vente sur Shopify, accès ouverts dans l'administration : pas de Stripe dans l'application.
+- 0003, version complète en local d'abord ; la mise en ligne et les comptes distants viennent ensuite. Y figure aussi le besoin de faire vivre le contenu (corriger, ajouter exercices et quiz) plus tard.
 
 ## Points de vigilance
 
