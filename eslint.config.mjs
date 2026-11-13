@@ -3,12 +3,14 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 
 // Les frontières d'import de docs/02-architecture.md, section 3.
 const horsCode = {
-  group: ["**/contenu/**", "**/reference/**", "**/docs/**", "@/contenu/**", "@/reference/**", "@/docs/**"],
+  // les dossiers de la racine : par l'alias, ou par un chemin relatif qui remonte jusqu'à eux
+  regex: "^(@/|(\\.\\./)+)(contenu|reference|docs)/",
   message: "Aucun fichier de code n'importe depuis contenu/, reference/ ou docs/.",
 };
 const serveurEtMoteur = {
-  group: ["@/lib/serveur/**", "@/lib/moteur/**", "**/lib/serveur/**", "**/lib/moteur/**"],
-  message: "Un composant d'interface n'importe ni lib/serveur/ ni lib/moteur/.",
+  // seule exception : les fichiers "use server" de lib/serveur/commandes/, faits pour être appelés par l'interface
+  group: ["@/lib/serveur/**", "!@/lib/serveur/commandes", "!@/lib/serveur/commandes/**", "@/lib/moteur/**"],
+  message: "Un composant d'interface n'importe ni lib/serveur/ (hors actions de commandes/) ni lib/moteur/.",
 };
 const clientSupabase = {
   group: ["@/lib/serveur/supabase/**"],
@@ -64,7 +66,7 @@ export default defineConfig([
     // réécrits quand le test adoptera la charte commune (lots 1.5 et 1.7). D'ici là, ces deux règles de React
     // y restent des avertissements. Tout nouveau fichier les respecte comme des erreurs.
     files: [
-      "app/quiz/page.tsx", "app/results/page.tsx", "app/elite/page.tsx", "components/ThemeToggle.tsx",
+      "app/(test)/quiz/page.tsx", "app/(test)/results/page.tsx", "app/(test)/elite/page.tsx", "components/ThemeToggle.tsx",
       "components/questions/Association.tsx", "components/questions/Ordonnancement.tsx", "components/questions/TexteATrou.tsx",
     ],
     rules: { "react-hooks/set-state-in-effect": "warn", "react-hooks/immutability": "warn" },
