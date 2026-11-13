@@ -261,6 +261,11 @@ export default function Home() {
         ))}
       </div>
 
+      {/* Accès à l'application */}
+      <a href="/compte/connexion" className="text-[13px] font-bold text-accent underline mb-6">
+        {"Me connecter à l\u2019application MasterBac"}
+      </a>
+
       {/* Footer */}
       <div className="text-[11px] text-dim">
         {"Conçu par un professeur de maths et de physique-chimie"}

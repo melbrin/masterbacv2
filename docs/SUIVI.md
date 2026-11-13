@@ -7,39 +7,47 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - **Cap** : une version complète en local d'abord (décision 0003). La mise en ligne et les comptes distants viennent ensuite. La branche se pousse quand la version locale est finie.
 - **Vente** : sur Shopify ; les accès s'ouvrent dans l'administration (décision 0002). Pas de Stripe dans l'application.
 - **Branche de travail** : `lot/0.2-outillage`, empilée sur `lot/0.1-installation-du-kit`. Rien n'est poussé sur GitHub.
-- **Dossier de travail** : `Documents/App Masterbac/app-masterbac/`, copie neuve du dépôt GitHub. L'ancien dossier `masterbac-simulator/` (travail non enregistré de juillet 2026) est intact à côté et n'est pas repris.
-- **Lancer en local** : `npm run dev -- --port 3457`, puis http://localhost:3457. Le port 3456 est celui de l'ancien dossier.
-- **Bloqué par** : Docker Desktop, pas encore installé. Sans lui, pas de base locale.
+- **Dossier de travail** : `Documents/App Masterbac/app-masterbac/`. L'ancien dossier `masterbac-simulator/` (juillet 2026) est intact à côté et n'est pas repris.
+- **Lancer en local** : voir `docs/recettes/version-locale-1.md`. Port 3457 ; le port 3456 est celui de l'ancien dossier.
+- **Première version locale** : essayable depuis le 13 novembre. En attente de l'essai de Yane.
 
-## Fait
+## Fait et vérifié
 
-- Lot 0.1 : kit installé, documentation lue, audit dans `docs/audit-de-l-existant.md` (écarts avec le kit en section 7).
-- Lots 0.2 et 0.3, partie locale : versions exactes, Node 24, Next.js 16.4.5, React 19.3.1, KaTeX 0.19.1 ; ESLint avec les frontières d'import ; Vitest ; polices servies par l'application ; en-têtes de sécurité ; compte à rebours sur le 16 juin 2027 ; paramètres d'adresse et lien de défi validés. Vérifié dans le navigateur en 375 points de large.
-- Lot 1.4 : moteur porté dans `lib/moteur/`, 43 cas de référence reproduits, tests de propriété et cas limites, couverture 100 % des lignes et 99 % des branches.
-- Lot 1.2, partie sans base : nettoyage du HTML (`lib/commun/html/nettoie.ts`) et `npm run contenu:verifier` (9 418 formules, 188 figures, 406 étapes de corrigé).
-- `npm run tout` : lint, types, 117 tests avec couverture, contrôle du contenu, compilation. Vert le 13 novembre.
+- Lots 0.1 à 0.3 (partie locale) : kit, audit, Next.js 16.4.5, lint avec frontières d'import, polices locales, en-têtes, compte à rebours 2027.
+- Moteur (`lib/moteur/`) : 43 cas de référence, propriétés, cas limites ; couverture 100 % des lignes, 99 % des branches.
+- Contenu : nettoyage du HTML, `npm run contenu:verifier`, `npm run contenu:importer` (rejouable, par versions, figures dans un compartiment privé).
+- Base locale : trois migrations, règles d'accès sur toutes les tables, schéma `contenu` réservé au serveur, 33 tests pgTAP (`npm run test:db`).
+- Serveur : variables validées, session vérifiée par `getClaims()`, fabriques `action` et `requete` avec registre, limite de débit, droits calculés dans `lib/serveur/acces.ts`.
+- Écrans, essayés dans le navigateur en largeur téléphone : connexion par code, profil, Aujourd'hui, cours, fiche (six onglets), question et exercice (indices, corrigé après contrôle du droit, autocorrection, barème avec ligne « Rédaction »), quiz corrigé par le serveur, test de passage, carnet, mode DS (création, plan, préparation offerte, note et moyenne de classe), séance du jour, progrès, profil, offres.
+- Administration : double authentification, accès ouverts ou préparés pour une adresse, retrait avec motif, signalements, journal.
+- `npm run tout` : lint, types, 133 tests avec couverture, 23 contrôles de contenu, 33 tests de base, compilation. Vert le 13 novembre.
 
-## Reste à faire pour la version locale, dans l'ordre
+## Reste à faire pour la version locale
 
-1. Base locale : `supabase init`, schéma et règles d'accès (comptes, contenu, travail de l'élève, droits), tests pgTAP, types générés.
-2. Import du contenu en base et figures dans le stockage privé. Format des sources de quiz, d'indices et de barèmes (décision à écrire).
-3. Squelette de `lib/serveur/` : variables d'environnement, session, fabriques `action`, `route`, `requete`, registre, `/api/sante`.
-4. Comptes : connexion par code (lu dans la boîte locale), profil, appareils, moins de 15 ans.
-5. Administration : double authentification, écran « Accès » (décision 0002), signalements.
-6. Écrans de l'élève : cours et fiche, quiz, carnet, mode DS, Aujourd'hui, séance du jour, progrès, plan de l'année, parents, offres (renvoi vers la boutique).
-7. Évolutions du moteur de `docs/08-moteur.md`, section 6, dans `REGLAGES_ACTUELS` (seul le réglage de la décision 0004 y est).
-8. Playwright, tests de sécurité (cas d'abus), relectures par les agents, fiche de recette.
+1. Évolutions du moteur de `docs/08-moteur.md`, section 6 : retour d'une réussite à 7 jours, niveau 10 validé par test, niveau proposé seulement s'il existe.
+2. Parents : invitation, page de suivi, bilan. Accord parental avant 15 ans (aujourd'hui le compte reste limité, sans moyen de le débloquer).
+3. Plan de l'année. DS blanc avec chronomètre et énoncés seuls. Vrai ou faux à justifier.
+4. Compte : trois appareils, e-mail de nouvelle connexion, « mes données » (téléchargement, suppression).
+5. Test gratuit : rattacher le résultat au compte, « Envoyer à mes parents », page élite sur le compte.
+6. Administration : relecture des brouillons de contenu, invitations à la bêta, recherche des signalements traités.
+7. Rappels par e-mail et tâches planifiées (testables dans la boîte locale).
+8. Application installable : manifeste, service worker, page hors ligne.
+9. Tests : intégration des commandes contre la base locale, parcours Playwright, 28 cas d'abus, matrice des accès depuis le registre. Relectures par `relecteur-securite` et `relecteur-conformite`.
+10. Format des sources de quiz, d'indices et de barèmes (décision à écrire), puis préparation du contenu en brouillon.
 
 ## Remis à la mise en ligne
 
-Politique de sécurité du contenu avec jeton dans `proxy.ts`, vérifications automatiques GitHub, recherche de secrets à chaque commit, tableau ASVS, envoi réel des e-mails, tâches planifiées, test anti-robot, sonde.
+Politique de sécurité du contenu avec jeton, vérifications automatiques GitHub, recherche de secrets à chaque commit, tableau ASVS, envoi réel des e-mails, test anti-robot, sonde.
 
-## Dette connue
+## Dette et écarts connus
 
-- Les pages du test d'avant le kit gardent 13 avertissements de lint (règles React récentes) : liste et raison dans `eslint.config.mjs`. Elles seront réécrites avec la charte commune.
-- Émojis dans l'interface du test, contraires aux règles de rédaction : à retirer avec la charte.
-- `npm audit` : 9 failles modérées, toutes dans les outils de développement (`minimatch`, via ESLint 10). Aucune dans le code livré.
-- TypeScript reste en 5.8.3 : la version 7 n'a pas été essayée.
+- Un composant d'interface peut importer les actions de `lib/serveur/commandes/` : c'est la seule exception à la frontière d'import, écrite dans `eslint.config.mjs`.
+- `enregistreTentative` écrit la tentative puis le carnet en deux requêtes, pas dans une transaction. À regrouper dans une fonction de base.
+- Les lectures du contenu passent par des fonctions SQL réservées au rôle de service, pour ne pas exposer le schéma `contenu`.
+- Le plan d'un DS est gardé en JSON dans la table `ds`, pas dans une table `ds_seances`.
+- Le droit « fiches » ouvre les corrigés de toutes les fiches, pas seulement de celles achetées.
+- Les pages du test d'avant le kit gardent 13 avertissements de lint et des émojis. Elles seront réécrites avec la charte commune.
+- `npm audit` : 9 failles modérées, toutes dans les outils de développement. TypeScript reste en 5.8.3.
 
 ## En attente de Yane
 
