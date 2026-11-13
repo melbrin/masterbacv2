@@ -19,7 +19,9 @@
     "db:types": "PATH=\"$PATH:/Applications/Docker.app/Contents/Resources/bin:$HOME/.docker/bin\" supabase gen types typescript --local --schema public > lib/serveur/supabase/types.ts",
     "test:db": "PATH=\"$PATH:/Applications/Docker.app/Contents/Resources/bin:$HOME/.docker/bin\" supabase test db",
     "env:local": "node scripts/env-local.mjs",
-    "contenu:importer": "node --env-file=.env.local scripts/contenu-importer.mts"
+    "contenu:importer": "node --env-file=.env.local scripts/contenu-importer.mts",
+    "admin:local": "node --env-file=.env.local scripts/admin-local.mjs",
+    "db:migrer": "PATH=\"$PATH:/Applications/Docker.app/Contents/Resources/bin:$HOME/.docker/bin\" supabase migration up"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

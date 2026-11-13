@@ -35,7 +35,9 @@ export const verifierCode = action({
     const { data, error } = await base.auth.verifyOtp({ email: adresse, token: code, type: "email" });
     if (error || !data.user) throw new Refus("invalide", "Ce code n'est pas le bon, ou il a expiré. Vérifie-le ou demande-en un nouveau.");
     const admin = clientAdmin();
-    await admin.rpc("droits_reclame", { p_user: data.user.id });
+    // les accès préparés pour cette adresse dans l'administration s'attachent au compte
+    const { error: refus } = await admin.rpc("droits_reclame", { p_user: data.user.id });
+    if (refus) throw new Error("droits_reclame a échoué");
     const { data: profil } = await admin.from("profils").select("user_id").eq("user_id", data.user.id).maybeSingle();
     return { suite: profil ? "/app" : "/compte/profil" };
   },

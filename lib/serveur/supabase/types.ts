@@ -199,7 +199,13 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "contenu_fiche":
+            "adresses_des_comptes":
+{ Args: { "p_ids": (string)[] }; Returns: Json
+                           },
+"compte_par_adresse":
+{ Args: { "p_adresse": string }; Returns: Json
+                           },
+"contenu_fiche":
 { Args: { "p_num": number }; Returns: Json
                            },
 "contenu_figure":

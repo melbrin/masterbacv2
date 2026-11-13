@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "katex/dist/katex.min.css";
 import "./charte.css";
+import "./complements.css";
 
 export const metadata: Metadata = {
   title: { default: "MasterBac", template: "%s · MasterBac" },

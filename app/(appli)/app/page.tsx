@@ -78,7 +78,7 @@ export default async function Aujourdhui() {
           ))}
         </ol>
         <div className="actions" style={{ marginTop: 12 }}>
-          <Link className="btn btn-cuivre" href="/app/seance"><Icone nom="lecture" />{faite ? "Revoir la séance" : seance.etape > 0 ? "Reprendre la séance" : "Commencer la séance"}</Link>
+          <Link className="btn btn-cuivre" href="/app/seance"><Icone nom="lecture" />{faite ? "Revoir la séance" : ctx.etat.seance ? "Reprendre la séance" : "Commencer la séance"}</Link>
           {exo && <Link className="btn-texte" href={`/app/fiche/${p2(exo.fiche)}`}>Ouvrir la fiche {exo.fiche}</Link>}
         </div>
       </div>

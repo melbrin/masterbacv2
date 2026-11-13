@@ -1,0 +1,17 @@
+/* Compléments à la charte du prototype : ce que l'application ajoute (liens-filtres, choix à segments, tableaux larges). */
+.filtres a[role="button"] { border: 1px solid var(--filet); background: var(--carte); border-radius: 999px; padding: 6px 14px; min-height: 36px;
+  font-size: .9rem; color: var(--texte); text-decoration: none; display: inline-flex; align-items: center; }
+.filtres a[role="button"][aria-pressed="true"] { background: var(--encre); color: var(--fond); border-color: var(--encre); }
+fieldset.champ { border: 0; padding: 0; margin: 0; min-width: 0; }
+fieldset.champ legend { font-weight: 600; color: var(--encre); padding: 0; margin-bottom: 6px; font-size: .95rem; }
+.segments { display: flex; flex-wrap: wrap; gap: 8px; }
+.segments button { border: 1.5px solid var(--filet); background: var(--carte); color: var(--texte); border-radius: 12px; padding: 10px 16px; min-height: 44px;
+  font: inherit; font-weight: 600; cursor: pointer; }
+.segments button[aria-checked="true"], .segments button[aria-pressed="true"] { border-color: var(--cuivre-texte); background: color-mix(in srgb, var(--cuivre) 14%, var(--carte)); color: var(--encre); }
+.options button.choisi { border-color: var(--cuivre); }
+/* un tableau large défile dans son cadre, jamais la page */
+.contenu table { display: block; max-width: 100%; overflow-x: auto; }
+.contenu img { max-width: min(100%, var(--w, 100%)); height: auto; }
+form .champ + .champ, form fieldset.champ, form .champ + fieldset { margin-top: 12px; }
+.aide { font-size: .85rem; color: var(--discret); margin: 0; }
+.pile > * + * { margin-top: 14px; }
