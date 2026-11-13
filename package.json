@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "verif": "npm run lint && npm run typecheck && npm run test"
+    "verif": "npm run lint && npm run typecheck && npm run test",
+    "test:couverture": "vitest run --coverage",
+    "tout": "npm run lint && npm run typecheck && npm run test:couverture && npm run build"
   },
   "dependencies": {
     "@vercel/analytics": "1.6.1",
