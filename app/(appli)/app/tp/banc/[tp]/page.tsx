@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Entete } from "@/components/appli/Morceaux";
-import Banc from "@/components/tp/Banc";
+import BancDesTp from "@/components/tp/BancDesTp";
 import { tp as trouveTp } from "@/lib/serveur/contenu/tp";
 import { env } from "@/lib/serveur/env";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
@@ -21,7 +21,7 @@ export default async function PageBanc({ params, searchParams }: { params: Promi
   return (
     <>
       <Entete fil={<Link href="/app/tp">TP</Link>} surtitre="Banc d'essai, en local seulement" titre={t.titre} sous={`Graine ${graine}. Rien n'est enregistré.`} />
-      <Banc tp={t.id} graine={graine} paillasses={paillasses} />
+      <BancDesTp tp={t.id} graine={graine} paillasses={paillasses} />
     </>
   );
 }

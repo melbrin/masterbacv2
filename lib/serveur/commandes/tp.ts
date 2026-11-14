@@ -12,22 +12,19 @@ import { nouvelleGraine } from "@/lib/serveur/quiz";
 import { profilCourant } from "@/lib/serveur/requetes/profil";
 import { clientAdmin } from "@/lib/serveur/supabase/clients";
 import { bilanDuTp, tpVisible, verifie } from "@/lib/serveur/tp";
+import { gestes } from "@/lib/serveur/tp-gestes";
 
 async function eleveActif() {
   const profil = await profilCourant();
   if (!profil || profil.etat !== "actif" || profil.role !== "eleve") throw new Refus("interdit");
 }
 
-// Un geste de manipulation : un nom, et au plus sept valeurs simples et bornées. Chaque paillasse y lit ce qu'elle connaît
-// et ignore le reste (lib/commun/tp/types.ts).
-const geste = z.record(z.string().regex(/^[a-z][a-zA-Z0-9]{0,11}$/), z.union([z.number().min(-1e6).max(1e6), z.string().regex(/^[a-zA-Z0-9+_.:-]{0,24}$/), z.boolean()]))
-  .refine((g) => typeof g.g === "string" && /^[a-z]{2,20}$/.test(g.g) && Object.keys(g).length <= 8);
 const reponse = z.discriminatedUnion("g", [
   z.object({ g: z.literal("lecture") }),
   z.object({ g: z.literal("materiel"), choisis: z.array(z.string().regex(/^[a-z]{2,20}$/)).max(20) }),
   z.object({ g: z.literal("ordre"), ordre: z.array(z.number().int().min(0).max(19)).max(20) }),
   z.object({ g: z.literal("choix"), choix: z.number().int().min(0).max(9) }),
-  z.object({ g: z.literal("paillasse"), gestes: z.array(geste).max(4000) }),
+  z.object({ g: z.literal("paillasse"), gestes }),
   z.object({ g: z.literal("valeur"), valeur: z.number().min(-1e9).max(1e9) }),
 ]);
 
@@ -86,7 +83,7 @@ export const repondreTp = action({
 export const essayerPaillasse = action({
   nom: "tp.essayerPaillasse",
   acces: "eleve",
-  entree: z.object({ tp: z.string().regex(/^[a-z]{2,20}$/), graine: z.number().int().min(0).max(2 ** 31), etape: z.number().int().min(0).max(40), gestes: z.array(geste).max(4000) }),
+  entree: z.object({ tp: z.string().regex(/^[a-z]{2,20}$/), graine: z.number().int().min(0).max(2 ** 31), etape: z.number().int().min(0).max(40), gestes }),
   limite: { max: 600, secondes: 3600 },
   async executer(e, session): Promise<{ retour: RetourEtape; mesures: Record<string, number> }> {
     if (env().APP_ENV !== "local") throw new Refus("introuvable");

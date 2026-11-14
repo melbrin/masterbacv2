@@ -60,7 +60,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 
 ## En cours (soir du 14 novembre)
 
-Quinze TP et quatorze paillasses sont en construction, chacun dans ses fichiers, inscrits dans les registres avec `pret: false` (ils ne se montrent pas). À relire, essayer dans le navigateur et intégrer un par un :
+Quinze TP et quatorze paillasses sont en construction, chacun dans ses fichiers. Ils ne sont pas inscrits dans l'application : chaque famille a son banc de chantier (`/app/tp/chantier/<famille>`, en local), qui ne charge que ses fichiers. À relire, essayer dans le navigateur, puis inscrire un par un dans les trois registres :
 
 | Famille | Paillasses | TP |
 | --- | --- | --- |
@@ -71,7 +71,9 @@ Quinze TP et quatorze paillasses sont en construction, chacun dans ses fichiers,
 | Thermique, électrochimie, fluides | `archimede`, `calorimetre`, `pile`, `electrolyse` | `archimede`, `calorimetrie`, `pile`, `electrolyse` |
 | Synthèse organique | `reflux`, `ccm` | `synthese` |
 
-Tant que la paillasse Circuits n'est pas refaite, ses deux TP gardent l'ancienne vue à boutons.
+Les deux TP de circuits ne se montrent plus tant que leur paillasse n'est pas refaite : l'application propose les trois TP de titrage.
+
+Incident du 14 novembre au soir : un fichier de règles en cours de réécriture, encore inscrit dans les registres, a cassé toutes les pages de TP pendant un essai de Yane. Depuis, rien d'inachevé n'est inscrit (voir `docs/09-paillasses.md`, section 3).
 
 ## Remis à la mise en ligne
 
@@ -145,5 +147,5 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - La demande de code de connexion est limitée à cinq par heure et par adresse, et à dix par heure et par poste : des essais lancés à la suite se font refuser. Les scripts d'essai gardent donc la session du compte d'essai dans un fichier hors du dépôt (`scripts/essais/outils.mts`, variable `ESSAI_SESSION` ; `MEMOIRE_SESSION` pour la mémoire). `scripts/essais/session.mts` prépare une session. On ne vide pas la table des limites pour passer.
 - Yane refuse les mises en forme « typiques des IA » : carte arrondie à barre de couleur sur un côté, rangées d'icônes dans des carrés. Les formes de la maison : feuille de sujet (filet gras et filet maigre), sommaire de cahier, affiche de nuit avec un vrai dessin.
 - Un élément en `position: fixed` placé sous un parent animé ou transformé ne prend pas tout l'écran : l'établi des paillasses se monte donc tout en haut de la page (`createPortal`).
-- Quand plusieurs agents travaillent dans le même dossier, chacun reçoit ses fichiers et sa session d'essai ; les registres partagés sont remplis à l'avance avec des fichiers d'attente.
+- Quand plusieurs agents travaillent dans le même dossier, chacun reçoit ses fichiers, sa session d'essai et son banc de chantier. Rien d'inachevé ne s'inscrit dans les registres de l'application : avec Turbopack, un module cassé casse toute page qui l'importe, même par un import à la demande.
 - Une action qui écrit recharge la page en cours (c'est ainsi que Next.js fonctionne). Un écran qui doit garder un retour à l'écran après l'action (verdict, correction) a donc une adresse qui ne dépend pas de l'avancement, ou un composant qui reste monté.

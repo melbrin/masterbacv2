@@ -1,23 +1,28 @@
 "use client";
 
 // Le banc d'essai d'un TP (en local seulement) : chaque paillasse du TP, et ce que le serveur dit de la manipulation.
+// Il sert aux TP de l'application (app/(appli)/app/tp/banc/) et à chaque chantier (app/(appli)/app/tp/chantier/).
 
-import { useState } from "react";
-import type { EtapePublique, GesteBrut, RetourEtape } from "@/lib/commun/tp/types";
-import { essayerPaillasse } from "@/lib/serveur/commandes/tp";
+import { useState, type ComponentType } from "react";
+import type { EtapePublique, GesteBrut, Paillasse, RetourEtape } from "@/lib/commun/tp/types";
 import { AvecIndices } from "./Etapes";
-import VuePaillasse from "./paillasses";
+
+type Retour = { ok: true; valeur: { retour: RetourEtape; mesures: Record<string, number> } } | { ok: false; message: string };
+/** La commande qui juge une manipulation : celle de l'application, ou celle d'un chantier. */
+export type Essayer = (entree: { tp: string; graine: number; etape: number; gestes: GesteBrut[] }) => Promise<Retour>;
+/** Ce qui dessine la paillasse d'une étape. */
+export type VueDuBanc = ComponentType<{ paillasse: Paillasse; protocole: string[]; attente: boolean; fini: (gestes: GesteBrut[]) => void }>;
 
 interface Verdict { retour: RetourEtape; mesures: Record<string, number>; gestes: GesteBrut[] }
 
-function UnePaillasse({ tp, graine, rang, etape }: { tp: string; graine: number; rang: number; etape: Extract<EtapePublique, { genre: "paillasse" }> }) {
+function UnePaillasse({ tp, graine, rang, etape, essayer, Vue }: { tp: string; graine: number; rang: number; etape: Extract<EtapePublique, { genre: "paillasse" }>; essayer: Essayer; Vue: VueDuBanc }) {
   const [attente, setAttente] = useState(false);
   const [verdict, setVerdict] = useState<Verdict | null>(null);
   const [erreur, setErreur] = useState("");
   const fini = (gestes: GesteBrut[]) => {
     setAttente(true);
     setErreur("");
-    essayerPaillasse({ tp, graine, etape: rang, gestes }).then((r) => {
+    essayer({ tp, graine, etape: rang, gestes }).then((r) => {
       setAttente(false);
       if (r.ok) setVerdict({ ...r.valeur, gestes }); else setErreur(r.message);
     }, () => { setAttente(false); setErreur("Le serveur n'a pas répondu."); });
@@ -27,7 +32,7 @@ function UnePaillasse({ tp, graine, rang, etape }: { tp: string; graine: number;
     <section className="tp-etape" data-banc={rang}>
       <h2>Étape {rang + 1} : {etape.paillasse.genre}</h2>
       <p>{etape.consigne}</p>
-      <VuePaillasse paillasse={etape.paillasse} protocole={etape.protocole} attente={attente} fini={fini} />
+      <Vue paillasse={etape.paillasse} protocole={etape.protocole} attente={attente} fini={fini} />
       {erreur && <p role="alert" className="labo-erreur">{erreur}</p>}
       {verdict && c?.genre === "paillasse" && (
         <div className="tp-correction" role="status" data-score={verdict.retour.score}>
@@ -45,10 +50,13 @@ function UnePaillasse({ tp, graine, rang, etape }: { tp: string; graine: number;
   );
 }
 
-export default function Banc({ tp, graine, paillasses }: { tp: string; graine: number; paillasses: { rang: number; etape: EtapePublique }[] }) {
+export interface PropsBanc { tp: string; graine: number; paillasses: { rang: number; etape: EtapePublique }[]; essayer: Essayer }
+
+export default function Banc({ tp, graine, paillasses, essayer, Vue }: PropsBanc & { Vue: VueDuBanc }) {
   return (
     <div className="tp">
-      {paillasses.map(({ rang, etape }) => (etape.genre === "paillasse" ? <UnePaillasse key={rang} tp={tp} graine={graine} rang={rang} etape={etape} /> : null))}
+      {paillasses.length === 0 && <p className="carte">Ce TP n&apos;a pas encore d&apos;étape de paillasse.</p>}
+      {paillasses.map(({ rang, etape }) => (etape.genre === "paillasse" ? <UnePaillasse key={rang} tp={tp} graine={graine} rang={rang} etape={etape} essayer={essayer} Vue={Vue} /> : null))}
     </div>
   );
 }

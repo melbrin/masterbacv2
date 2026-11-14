@@ -18,23 +18,10 @@ function vue<R>(importe: () => Promise<{ default: ComponentType<PropsPaillasse<R
   return dynamic(importe, { ssr: false, loading: Attente }) as unknown as Vue;
 }
 
+// Seules les paillasses relues et essayées sont inscrites ici. Une paillasse en construction se met au point sur son
+// banc de chantier (app/(appli)/app/tp/chantier/) : un fichier à moitié écrit ne doit jamais atteindre les pages des élèves.
 const VUES: Record<string, Vue> = {
   titrage: vue(() => import("./Titrage")),
-  circuit: vue(() => import("./Circuit")),
-  microcontroleur: vue(() => import("./Microcontroleur")),
-  solutions: vue(() => import("./Solutions")),
-  spectro: vue(() => import("./Spectro")),
-  optique: vue(() => import("./Optique")),
-  diffraction: vue(() => import("./Diffraction")),
-  ultrasons: vue(() => import("./Ultrasons")),
-  doppler: vue(() => import("./Doppler")),
-  pointage: vue(() => import("./Pointage")),
-  calorimetre: vue(() => import("./Calorimetre")),
-  pile: vue(() => import("./Pile")),
-  electrolyse: vue(() => import("./Electrolyse")),
-  archimede: vue(() => import("./Archimede")),
-  reflux: vue(() => import("./Reflux")),
-  ccm: vue(() => import("./Ccm")),
 };
 
 /** La paillasse d'une étape de manipulation. */

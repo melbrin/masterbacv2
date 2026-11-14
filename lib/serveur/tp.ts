@@ -12,25 +12,13 @@ export const tpVisibles = (admin: boolean): Tp[] => TP.filter((t) => tpVisible(t
 
 // ---------- les règles des paillasses ----------
 
-type Regles = ReglesPaillasse<unknown, unknown>;
-/** Les règles de chaque paillasse, chargées à la demande : le serveur rejoue avec elles les gestes de l'élève. */
+export type Regles = ReglesPaillasse<unknown, unknown>;
+/**
+ * Les règles de chaque paillasse, chargées à la demande : le serveur rejoue avec elles les gestes de l'élève.
+ * Seules les paillasses relues et essayées sont inscrites ici (voir components/tp/paillasses/index.tsx).
+ */
 const REGLES: Record<string, () => Promise<{ regles: Regles }>> = {
   titrage: () => import("@/lib/commun/tp/paillasses/titrage"),
-  circuit: () => import("@/lib/commun/tp/paillasses/circuit"),
-  microcontroleur: () => import("@/lib/commun/tp/paillasses/microcontroleur"),
-  solutions: () => import("@/lib/commun/tp/paillasses/solutions"),
-  spectro: () => import("@/lib/commun/tp/paillasses/spectro"),
-  optique: () => import("@/lib/commun/tp/paillasses/optique"),
-  diffraction: () => import("@/lib/commun/tp/paillasses/diffraction"),
-  ultrasons: () => import("@/lib/commun/tp/paillasses/ultrasons"),
-  doppler: () => import("@/lib/commun/tp/paillasses/doppler"),
-  pointage: () => import("@/lib/commun/tp/paillasses/pointage"),
-  calorimetre: () => import("@/lib/commun/tp/paillasses/calorimetre"),
-  pile: () => import("@/lib/commun/tp/paillasses/pile"),
-  electrolyse: () => import("@/lib/commun/tp/paillasses/electrolyse"),
-  archimede: () => import("@/lib/commun/tp/paillasses/archimede"),
-  reflux: () => import("@/lib/commun/tp/paillasses/reflux"),
-  ccm: () => import("@/lib/commun/tp/paillasses/ccm"),
 };
 export const GENRES_DE_PAILLASSE = Object.keys(REGLES);
 /** Les règles d'une paillasse ; null si ce genre n'existe pas. */
@@ -74,8 +62,9 @@ const voisins = (a: number[], b: number[]): boolean => {
 /**
  * Vérifie la réponse à une étape, comme le professeur à un appel : un score de 0 à 1 et la correction.
  * Renvoie aussi les mesures tirées de la manipulation, pour les étapes d'exploitation. Vide si la réponse n'est pas du genre de l'étape.
+ * `trouveRegles` donne les règles d'une paillasse : celles de l'application, ou celles d'un chantier en construction.
  */
-export async function verifie(etape: EtapeTp, reponse: ReponseEtape, mesures: Mesures, graine: number): Promise<{ retour: RetourEtape; mesures?: Mesures } | null> {
+export async function verifie(etape: EtapeTp, reponse: ReponseEtape, mesures: Mesures, graine: number, trouveRegles: (genre: string) => Promise<Regles | null> = reglesDe): Promise<{ retour: RetourEtape; mesures?: Mesures } | null> {
   if (etape.genre === "lecture" && reponse.g === "lecture") return { retour: { score: 1, correction: { genre: "lecture" } } };
   if (etape.genre === "materiel" && reponse.g === "materiel") {
     const choisis = new Set(reponse.choisis);
@@ -103,7 +92,7 @@ export async function verifie(etape: EtapeTp, reponse: ReponseEtape, mesures: Me
   }
   if (etape.genre === "paillasse" && reponse.g === "paillasse") {
     // le serveur rejoue les gestes de l'élève avec les règles de la paillasse : le résultat ne se déclare pas
-    const regles = await reglesDe(etape.paillasse.genre);
+    const regles = await trouveRegles(etape.paillasse.genre);
     if (!regles) return null;
     const r = etape.paillasse.reglages;
     const b = regles.bilan(r, rejoue(regles, r, reponse.gestes));

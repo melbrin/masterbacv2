@@ -42,7 +42,15 @@ Un TP suit le fil d'un sujet d'ECE : préparer, manipuler, exploiter. C'est une 
 | `components/tp/paillasses/<Genre>.tsx` | la vue : elle dessine l'état, recueille les gestes |
 | `lib/serveur/contenu/tp/<id>.ts` | un TP qui se sert de la paillasse |
 
-Les registres (`lib/serveur/tp.ts`, `components/tp/paillasses/index.tsx`, `lib/serveur/contenu/tp/index.ts`) inscrivent chaque genre et chaque TP. Un TP garde `pret: false` tant qu'il n'est pas jouable de bout en bout : il ne se montre alors nulle part.
+Les registres de l'application (`lib/serveur/tp.ts`, `components/tp/paillasses/index.tsx`, `lib/serveur/contenu/tp/index.ts`) n'inscrivent que les paillasses et les TP relus et essayés.
+
+**Une paillasse en construction ne s'inscrit jamais dans ces registres.** Un fichier à moitié écrit qui entre dans l'application casse les pages des élèves : c'est arrivé le 14 novembre, pendant que Yane essayait. Elle se met au point sur un banc de chantier, qui ne charge que les fichiers de sa famille :
+
+- `app/(appli)/app/tp/chantier/<famille>/page.tsx` : le banc, en local seulement (`/app/tp/chantier/<famille>?tp=<id>&graine=3`) ;
+- `components/tp/chantier/<Famille>.tsx` : les vues de la famille ;
+- `lib/serveur/commandes/chantier/<famille>.ts` : la commande qui juge une manipulation avec les règles de la famille.
+
+Quand un TP est relu, essayé et vert, il passe dans les trois registres de l'application, et son chantier peut être retiré.
 
 ### Les règles
 
@@ -90,6 +98,6 @@ Le modèle à suivre est la paillasse Titrage : `lib/commun/tp/paillasses/titrag
 
 ## 6. Tester
 
-- **Sans navigateur** : un fichier dans `tests/unitaires/tp/`, avec `tests/outils/tp.ts`. Il joue la manipulation soignée de chaque TP pour chaque graine (`joueJuste`, `GRAINES`) : A partout, aucune faute. Il joue des manipulations fautives et vérifie les codes des fautes. Il vérifie qu'un geste inconnu ne change rien, et que deux morceaux d'un versement valent leur somme. Les règles sont couvertes à peu près en entier.
-- **Dans un vrai navigateur** : un script dans `scripts/essais/`, avec `scripts/essais/outils.mts`. Le banc d'essai local, `/app/tp/banc/<id>?graine=3`, montre les paillasses d'un TP sans les autres étapes et affiche le jugement du serveur (le score est dans l'attribut `data-score`). Le script glisse, maintient, tourne, lit, note, puis relève le jugement, la largeur de la page et les erreurs de console. Il prend des captures : il faut les regarder et corriger ce qui se chevauche, se coupe ou se lit mal.
+- **Sans navigateur** : un fichier dans `tests/unitaires/tp/`, avec `tests/outils/tp.ts`. Pour un TP en construction, le test importe le fichier du TP et donne ses règles en dernier argument (`{ optique: regles }`), et il appelle `controlesCommuns`. Il joue la manipulation soignée de chaque TP pour chaque graine (`joueJuste`, `GRAINES`) : A partout, aucune faute. Il joue des manipulations fautives et vérifie les codes des fautes. Il vérifie qu'un geste inconnu ne change rien, et que deux morceaux d'un versement valent leur somme. Les règles sont couvertes à peu près en entier.
+- **Dans un vrai navigateur** : un script dans `scripts/essais/`, avec `scripts/essais/outils.mts`. Le banc (de chantier pour un TP en construction, `/app/tp/banc/<id>?graine=3` pour un TP inscrit) montre les paillasses d'un TP sans les autres étapes et affiche le jugement du serveur (le score est dans l'attribut `data-score`). Le script glisse, maintient, tourne, lit, note, puis relève le jugement, la largeur de la page et les erreurs de console. Il prend des captures : il faut les regarder et corriger ce qui se chevauche, se coupe ou se lit mal.
 - La connexion par code est limitée (cinq par heure et par adresse, dix par poste). Un essai garde sa session dans un fichier hors du dépôt (`ESSAI_SESSION`). Une session ne sert qu'à un essai à la fois.

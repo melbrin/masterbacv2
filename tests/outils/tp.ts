@@ -1,8 +1,14 @@
 // Les outils des tests des TP : jouer un TP du début à la fin sans le navigateur, comme le serveur le fait à chaque étape.
 // Chaque TP a son fichier de tests dans tests/unitaires/tp/ : il y joue sa manipulation soignée et des manipulations fautives.
-import type { EtapePublique, GesteBrut, ReponseEtape, RetourEtape } from "@/lib/commun/tp/types";
-import type { EtapeTp, Mesures, Tp } from "@/lib/serveur/contenu/tp";
-import { bilanDuTp, etapePublique, verifie } from "@/lib/serveur/tp";
+// Un TP en construction n'est pas inscrit dans l'application : son test importe son fichier et donne ses règles (`regles`).
+import { expect } from "vitest";
+import type { EtapePublique, GesteBrut, ReglesPaillasse, ReponseEtape, RetourEtape } from "@/lib/commun/tp/types";
+import type { EtapeTp, Mesures, Tp } from "@/lib/serveur/contenu/tp/types";
+import { bilanDuTp, etapePublique, reglesDe, verifie } from "@/lib/serveur/tp";
+
+/** Les règles des paillasses d'un TP en construction, par genre : `{ optique: regles }`. Sans elles, celles de l'application. */
+export type ReglesDuTest = Record<string, ReglesPaillasse<unknown, unknown>>;
+const trouve = (regles?: ReglesDuTest) => async (genre: string) => (regles && Object.hasOwn(regles, genre) ? regles[genre] : reglesDe(genre));
 
 /** Des graines d'essai : assez pour passer par toutes les valeurs possibles d'une situation qui en a jusqu'à six. */
 export const GRAINES = [1, 2, 3, 4, 5, 6, 20261114];
@@ -54,12 +60,12 @@ export interface Partie {
 }
 
 /** Joue un TP du début à la fin avec la graine donnée. `reponse` choisit ce que l'élève répond à chaque étape. */
-export async function joue(t: Tp, graine: number, reponse: (etape: EtapeTp, publique: EtapePublique, mesures: Mesures, rang: number) => ReponseEtape): Promise<Partie> {
+export async function joue(t: Tp, graine: number, reponse: (etape: EtapeTp, publique: EtapePublique, mesures: Mesures, rang: number) => ReponseEtape, regles?: ReglesDuTest): Promise<Partie> {
   const etapes = t.etapes(graine);
   let mesures: Mesures = {};
   const retours: RetourEtape[] = [];
   for (const [rang, etape] of etapes.entries()) {
-    const verdict = await verifie(etape, reponse(etape, etapePublique(etape, graine), mesures, rang), mesures, graine);
+    const verdict = await verifie(etape, reponse(etape, etapePublique(etape, graine), mesures, rang), mesures, graine, trouve(regles));
     if (!verdict) throw new Error(`réponse refusée à l'étape ${rang + 1} (« ${etape.genre} ») de ${t.id}`);
     mesures = { ...mesures, ...(verdict.mesures ?? {}) };
     retours.push(verdict.retour);
@@ -70,5 +76,57 @@ export async function joue(t: Tp, graine: number, reponse: (etape: EtapeTp, publ
 }
 
 /** Joue un TP en répondant juste partout, avec la manipulation donnée pour chaque étape de paillasse. */
-export const joueJuste = (t: Tp, graine: number, gestes: (etape: EtapeDePaillasse) => GesteBrut[]): Promise<Partie> =>
-  joue(t, graine, (etape, publique, mesures) => juste(etape, publique, mesures, gestes));
+export const joueJuste = (t: Tp, graine: number, gestes: (etape: EtapeDePaillasse) => GesteBrut[], regles?: ReglesDuTest): Promise<Partie> =>
+  joue(t, graine, (etape, publique, mesures) => juste(etape, publique, mesures, gestes), regles);
+
+/**
+ * Les contrôles communs à tous les TP, à appeler dans un test : la forme des étapes pour chaque graine, rien de la
+ * réponse dans ce que le navigateur reçoit, un protocole toujours présenté mélangé, et un TP qui va au bout même en
+ * se trompant partout et sans manipuler.
+ */
+export async function controlesCommuns(t: Tp, regles?: ReglesDuTest): Promise<void> {
+  expect(t.id).toMatch(/^[a-z]{2,20}$/);
+  expect(t.etat).toBe("brouillon");
+  expect(t.minutes).toBeGreaterThanOrEqual(15);
+  const longueurs = new Set<number>();
+  for (const graine of GRAINES) {
+    const etapes = t.etapes(graine);
+    longueurs.add(etapes.length);
+    expect(etapes[0].genre).toBe("lecture");
+    expect(etapes.filter((e) => e.genre === "paillasse").length).toBeGreaterThanOrEqual(1);
+    expect(new Set(etapes.flatMap((e) => (e.genre === "lecture" ? [] : [e.competence])))).toEqual(new Set(["APP", "ANA", "REA", "VAL"]));
+    for (const e of etapes) {
+      if (e.genre === "materiel") {
+        expect(new Set(e.objets.map((o) => o.id)).size).toBe(e.objets.length);
+        expect(e.objets.some((o) => o.utile) && e.objets.some((o) => !o.utile)).toBe(true);
+      }
+      if (e.genre === "ordre") {
+        for (const autre of e.autres ?? []) expect([...autre].sort()).toEqual(e.etapes.map((_, i) => i));
+        // les étapes arrivent mélangées, jamais dans un bon ordre, et toujours pareil pour la même graine
+        const montrees = (etapePublique(e, graine) as Extract<EtapePublique, { genre: "ordre" }>).etapes;
+        expect([...montrees].sort()).toEqual([...e.etapes].sort());
+        expect([e.etapes.map((_, i) => i), ...(e.autres ?? [])].map((o) => o.join())).not.toContain(montrees.map((x) => e.etapes.indexOf(x)).join());
+      }
+      if (e.genre === "choix" && typeof e.bonne === "number") expect(e.bonne).toBeLessThan(e.options.length);
+      if (e.genre === "paillasse") {
+        expect(await trouve(regles)(e.paillasse.genre), `les règles de la paillasse « ${e.paillasse.genre} »`).not.toBeNull();
+        expect(e.protocole.length).toBeGreaterThanOrEqual(2);
+      }
+      // aucune étape ne porte sa réponse
+      expect(/"(utile|bonne|pourquoi|explication|autres|attendu|detail)"/.test(JSON.stringify(etapePublique(e, graine))), `${t.id} : ${e.genre}`).toBe(false);
+    }
+    const publiques = JSON.stringify(etapes.map((e) => etapePublique(e, graine)));
+    // ni tiret long ni émoji dans ce que l'élève lit ; la même graine redonne les mêmes étapes
+    expect(/[—–\u{1F300}-\u{1FAFF}]/u.test(publiques)).toBe(false);
+    expect(JSON.stringify(t.etapes(graine).map((e) => etapePublique(e, graine)))).toBe(publiques);
+  }
+  // le nombre d'étapes ne dépend pas de la graine : un essai repris retrouve sa place
+  expect(longueurs.size).toBe(1);
+  // en se trompant partout et sans manipuler : D partout, et l'exploitation reste calculable
+  for (const graine of GRAINES.slice(0, 3)) {
+    const { etapes, scores, mesures, bilan } = await joue(t, graine, (e, p, m) => fausse(e, p, m), regles);
+    expect(scores.filter((_, i) => etapes[i].genre !== "lecture").every((x) => x === 0), `graine ${graine} : ${scores.join(" ")}`).toBe(true);
+    expect(bilan).toEqual({ APP: "D", ANA: "D", REA: "D", VAL: "D" });
+    expect(Object.values(mesures).every((v) => Number.isFinite(v))).toBe(true);
+  }
+}
