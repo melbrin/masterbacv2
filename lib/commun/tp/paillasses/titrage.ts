@@ -1,5 +1,5 @@
 // La paillasse Titrage (décision 0012) : une burette, un flacon de solution titrante, une prise d'essai à prélever à la
-// pipette jaugée, un indicateur coloré ou un pH-mètre. L'élève fait les gestes du laboratoire : rincer et remplir la
+// pipette jaugée, et de quoi repérer l'équivalence : un indicateur coloré, un pH-mètre ou un conductimètre. L'élève fait les gestes du laboratoire : rincer et remplir la
 // burette, régler le zéro au robinet, prélever au trait de jauge, verser au filet puis goutte à goutte, lire le volume.
 // Chaque geste a ses conséquences : une burette non rincée dilue la solution titrante, une prise mal ajustée décale
 // l'équivalence, sans agitation la couleur change en retard.
@@ -18,12 +18,17 @@ export interface ReglagesTitrage {
   /** la concentration de la solution titrante, dans son flacon */
   Cb: number;
   /** ce qui repère l'équivalence */
-  suivi: "indicateur" | "phmetre";
+  suivi: "indicateur" | "phmetre" | "conductimetre";
   indicateur: "bbt" | "phenolphtaleine";
-  /** l'eau distillée à ajouter pour que la sonde du pH-mètre trempe ; 0 s'il n'en faut pas */
+  /** l'eau distillée à ajouter pour que la sonde trempe ; 0 s'il n'en faut pas */
   eau: number;
-  /** ce qui est écrit sur les étiquettes : la solution titrante, la solution à titrer */
-  noms: { titrante: string; titree: string };
+  /**
+   * Pour un suivi par conductimétrie : les conductivités molaires des ions, en mS·m²/mol. L'ion spectateur qui accompagne
+   * l'espèce titrée, l'ion titré, l'ion qui accompagne le réactif titrant, le réactif titrant lui-même.
+   */
+  ions?: { spectateur: number; titre: number; contre: number; titrant: number };
+  /** les noms des solutions : la solution titrante, la solution à titrer ; `etiquette` : ce qui tient sur le flacon, si le nom est long */
+  noms: { titrante: string; titree: string; etiquette?: string };
 }
 
 export interface EtatTitrage {
@@ -56,7 +61,7 @@ export interface EtatTitrage {
   barreau: boolean;
   /** la vitesse de l'agitateur, de 0 à 5 */
   agitation: number;
-  /** la sonde du pH-mètre : rincée, plongée dans l'erlenmeyer */
+  /** la sonde du pH-mètre ou du conductimètre : rincée, plongée dans le récipient */
   sondeRincee: boolean;
   sonde: boolean;
   // ----- le titrage -----
@@ -66,8 +71,13 @@ export interface EtatTitrage {
   verse: number;
   /** comment l'équivalence a été franchie : goutte à goutte, ou au filet */
   franchi: "goutte" | "filet" | null;
-  /** les relevés du pH-mètre : un point à chaque ajout, quand la sonde trempe */
-  releves: { V: number; pH: number }[];
+  /** les relevés de l'appareil : un point à chaque ajout, quand la sonde trempe. `y` : le pH, ou la conductivité en µS/cm */
+  releves: { V: number; y: number }[];
+  /**
+   * Pendant qu'un filet coule, le relevé suit le volume versé : c'est le volume du point que ce filet a posé, à
+   * remplacer au morceau suivant. Un ajout ne laisse donc qu'un point, là où le robinet s'est refermé. Null hors d'un filet.
+   */
+  filetEnCours: number | null;
   /** le volume que l'élève retient pour l'équivalence ; null tant qu'il ne l'a pas noté */
   note: number | null;
   /** le nombre de titrages recommencés */
@@ -90,7 +100,7 @@ const ml = (x: number) => `${nombre(x, 2)} mL`;
 const DEPART: EtatTitrage = {
   volume: 0, eauBurette: true, dilue: false, recu: 0, dessous: "rien", renverse: 0,
   pipette: "repos", dansPipette: 0, aspireTrop: false, prise: 0, eau: 0, gouttes: 0, barreau: false, agitation: 0, sondeRincee: false, sonde: false,
-  depart: null, verse: 0, franchi: null, releves: [], note: null, essais: 0,
+  depart: null, verse: 0, franchi: null, releves: [], filetEnCours: null, note: null, essais: 0,
 };
 
 /** La graduation en face du niveau du liquide : 0 en haut, 25 en bas ; négative au-dessus du zéro. */
@@ -131,18 +141,40 @@ export const pHVu = (r: ReglagesTitrage, etat: EtatTitrage): number =>
   pHMelange(r, etat.prise, etat.eau, agite(etat) ? etat.verse : Math.max(0, etat.verse - RETARD), titrant(r, etat));
 /** Le volume de liquide dans l'erlenmeyer. */
 export const dansErlenmeyer = (etat: EtatTitrage): number => etat.prise + etat.eau + etat.verse;
-/** Vrai si la sonde du pH-mètre trempe assez pour mesurer. */
+/**
+ * La conductivité du mélange, en µS/cm. Avant l'équivalence, l'ion titré est remplacé par l'ion qui accompagne le
+ * réactif titrant ; après, le réactif titrant s'accumule. Chaque ion compte pour sa conductivité molaire fois sa concentration.
+ */
+export function conductivite(r: ReglagesTitrage, etat: EtatTitrage): number {
+  const total = dansErlenmeyer(etat);
+  if (!r.ions || total <= 0) return 0;
+  const depart = r.Ca * etat.prise;
+  const ajoute = titrant(r, etat) * etat.verse;
+  const somme = r.ions.spectateur * depart + r.ions.titre * Math.max(0, depart - ajoute) + r.ions.contre * ajoute + r.ions.titrant * Math.max(0, ajoute - depart);
+  // des mS·m²/mol fois des mol/L donnent des S/m ; un S/m vaut 10 000 µS/cm
+  return Math.round(((somme / total) * 10000) * 10) / 10;
+}
+/** Vrai si la sonde trempe assez pour mesurer. */
 export const sondeTrempe = (r: ReglagesTitrage, etat: EtatTitrage): boolean => etat.sonde && etat.prise + etat.eau >= r.Va + r.eau - 5;
 
-/** Ajoute le relevé du pH-mètre pour le volume versé, si la sonde trempe. */
+/** Ajoute le relevé de l'appareil pour le volume versé, si la sonde trempe. */
 function avecReleve(r: ReglagesTitrage, etat: EtatTitrage): EtatTitrage {
-  if (r.suivi !== "phmetre" || !sondeTrempe(r, etat) || etat.prise <= 0) return etat;
+  if (r.suivi === "indicateur" || !sondeTrempe(r, etat) || etat.prise <= 0) return etat;
   const V = centieme(etat.verse);
-  return { ...etat, releves: [...etat.releves.filter((p) => p.V !== V), { V, pH: pHActuel(r, etat) }] };
+  return { ...etat, releves: [...etat.releves.filter((p) => p.V !== V), { V, y: r.suivi === "phmetre" ? pHActuel(r, etat) : conductivite(r, etat) }] };
 }
 
-/** Applique un geste. Un geste inconnu, mal formé ou impossible ne change rien. */
+/**
+ * Applique un geste. Un geste inconnu, mal formé ou impossible ne change rien.
+ * Tout geste qui n'est pas un morceau de filet met fin à l'ajout en cours : c'est le cas de « pause », que la paillasse
+ * envoie quand le robinet se referme. Deux morceaux de filet à la suite valent donc leur somme, relevés compris.
+ */
 function geste(r: ReglagesTitrage, etat: EtatTitrage, g: GesteBrut): EtatTitrage {
+  const suite = applique(r, etat, g);
+  return (g.g === "couler" && g.filet === true) || suite.filetEnCours === null ? suite : { ...suite, filetEnCours: null };
+}
+
+function applique(r: ReglagesTitrage, etat: EtatTitrage, g: GesteBrut): EtatTitrage {
   const v = nombreDe(g, "v");
   const positif = v !== null && v > 0 && v <= 30 ? centieme(v) : null;
   switch (g.g) {
@@ -173,7 +205,10 @@ function geste(r: ReglagesTitrage, etat: EtatTitrage, g: GesteBrut): EtatTitrage
       const verse = centieme(avant + sort);
       const equivalence = equivalenceReelle(r, etat);
       const franchi = etat.prise > 0 && avant < equivalence && verse >= equivalence ? (g.filet === true ? "filet" : "goutte") : etat.franchi;
-      return avecReleve(r, { ...burette, verse, franchi, depart: etat.depart ?? lecture(etat), ...(reste === 0 ? { recu: 0 } : {}) });
+      // le point posé par le morceau de filet d'avant est remplacé : un ajout ne laisse qu'un relevé
+      const releves = g.filet === true && etat.filetEnCours !== null ? etat.releves.filter((p) => p.V !== etat.filetEnCours) : etat.releves;
+      const apres = avecReleve(r, { ...burette, releves, verse, franchi, depart: etat.depart ?? lecture(etat), ...(reste === 0 ? { recu: 0 } : {}) });
+      return { ...apres, filetEnCours: g.filet === true && apres.releves.some((p) => p.V === verse) ? verse : null };
     }
     // la pipette jaugée : la poser dans le bécher de solution, au-dessus de l'erlenmeyer, ou la reposer
     case "pipette": {
@@ -215,7 +250,8 @@ function bilan(r: ReglagesTitrage, etat: EtatTitrage): BilanPaillasse {
   const fautes: Faute[] = [];
   const faute = (code: string, grave: boolean, texte: string) => fautes.push({ code, grave, texte });
   const reelle = etat.prise > 0 ? equivalenceReelle(r, etat) : exact;
-  const recipient = r.suivi === "phmetre" ? "le bécher" : "l'erlenmeyer";
+  const recipient = r.suivi === "indicateur" ? "l'erlenmeyer" : "le bécher";
+  const appareil = r.suivi === "conductimetre" ? "du conductimètre" : "du pH-mètre";
 
   if (etat.verse <= 0) {
     faute("titrage", true, `Tu n'as rien versé dans ${recipient} : le titrage n'est pas fait.`);
@@ -231,8 +267,8 @@ function bilan(r: ReglagesTitrage, etat: EtatTitrage): BilanPaillasse {
     // le mélange
     if (!agite(etat)) faute("agitation", false, "Le mélange n'était pas agité : la couleur change en retard, loin de l'endroit où la goutte tombe.");
     if (r.suivi === "indicateur" && etat.gouttes === 0) faute("indicateur", true, "Tu n'as pas ajouté l'indicateur coloré : rien ne signale l'équivalence.");
-    if (r.suivi === "phmetre") {
-      if (!etat.sonde && etat.releves.length === 0) faute("sonde", true, "La sonde du pH-mètre n'était pas dans la solution : il n'y a pas de courbe.");
+    if (r.suivi !== "indicateur") {
+      if (!etat.sonde && etat.releves.length === 0) faute("sonde", true, `La sonde ${appareil} n'était pas dans la solution : il n'y a pas de courbe.`);
       else if (!sondeTrempe(r, etat) && etat.releves.length < 4) faute("sonde", true, "La sonde ne trempait pas assez : ajoute de l'eau distillée pour la recouvrir.");
       if (!etat.sondeRincee) faute("rincersonde", false, "Tu n'as pas rincé la sonde à l'eau distillée avant de la plonger.");
     }
@@ -252,6 +288,14 @@ function bilan(r: ReglagesTitrage, etat: EtatTitrage): BilanPaillasse {
       if (volumes[volumes.length - 1] < reelle + 0.5) faute("avant", true, "Tu t'es arrêté avant la fin du saut de pH : la courbe ne montre pas l'équivalence.");
       else if (!serre) faute("espace", false, "Près du saut de pH, tes ajouts étaient trop espacés pour lire le volume avec précision.");
     }
+    if (etat.prise > 0 && r.suivi === "conductimetre" && etat.releves.length > 0) {
+      // deux droites se tracent avec des points de chaque côté de la rupture de pente : inutile de les serrer, il en faut assez
+      const avant = etat.releves.filter((p) => p.V < reelle - 0.5).length;
+      const apres = etat.releves.filter((p) => p.V > reelle + 0.5).length;
+      if (apres === 0) faute("avant", true, "Tu t'es arrêté avant la rupture de pente : la courbe ne montre pas l'équivalence.");
+      else if (apres < 4) faute("apres", false, `Après la rupture de pente, tu n'as que ${apres} point${apres > 1 ? "s" : ""} : il en faut au moins quatre pour tracer la seconde droite.`);
+      if (avant < 4) faute("espace", false, `Avant la rupture de pente, tu n'as que ${avant} point${avant > 1 ? "s" : ""} : il en faut au moins quatre pour tracer la première droite.`);
+    }
     // ce que l'élève retient
     if (etat.note === null) {
       faute("note", true, "Tu n'as pas noté le volume à l'équivalence.");
@@ -263,10 +307,14 @@ function bilan(r: ReglagesTitrage, etat: EtatTitrage): BilanPaillasse {
         faute("zero", Math.abs(decalage) > 0.2, `La burette n'était pas au zéro au départ : le niveau était ${decalage < 0 ? "au-dessus du zéro" : `à ${ml(decalage)}`}. Ton volume est décalé d'autant. Règle le zéro au robinet avant de commencer.`);
       } else if (Math.abs(erreur) > 0.2) faute("lecture", true, `Tu as noté ${ml(etat.note)} ; la burette a versé ${ml(etat.verse)}. Lis la graduation en face du bas du ménisque.`);
       else if (Math.abs(erreur) > 0.07) faute("lecture", false, `Tu as noté ${ml(etat.note)} ; la burette a versé ${ml(etat.verse)}. Lis la graduation en face du bas du ménisque.`);
-    } else {
+    } else if (r.suivi === "phmetre") {
       const ecart = Math.abs(etat.note - reelle);
       if (ecart > 0.5) faute("lecture", true, `Ta lecture de l'équivalence sur la courbe est à ${ml(ecart)} du saut de pH.`);
       else if (ecart > 0.2) faute("lecture", false, `Ta lecture de l'équivalence sur la courbe est à ${ml(ecart)} du saut de pH.`);
+    } else {
+      const ecart = Math.abs(etat.note - reelle);
+      if (ecart > 0.8) faute("lecture", true, `Ta lecture de l'équivalence sur la courbe est à ${ml(ecart)} de la rupture de pente.`);
+      else if (ecart > 0.3) faute("lecture", false, `Ta lecture de l'équivalence sur la courbe est à ${ml(ecart)} de la rupture de pente.`);
     }
   }
   const lignes = etat.note === null

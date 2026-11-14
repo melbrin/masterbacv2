@@ -14,6 +14,7 @@ import focale from "./focale";
 import jauge from "./jauge";
 import lunette from "./lunette";
 import pile from "./pile";
+import serum from "./serum";
 import synthese from "./synthese";
 import ultrasons from "./ultrasons";
 import vinaigre from "./vinaigre";
@@ -25,7 +26,7 @@ export * from "./types";
 // Tous les TP, dans l'ordre de la page : la chimie, puis la physique. Chaque TP a son fichier.
 // Un TP en construction (`pret: false`) est inscrit ici, mais ne se montre nulle part.
 export const TP: Tp[] = [
-  detartrant, vinaigre, dilution, etalonnage, cinetique, pile, electrolyse, synthese,
+  detartrant, vinaigre, serum, dilution, etalonnage, cinetique, pile, electrolyse, synthese,
   condensateur, jauge, focale, lunette, cheveu, young, ultrasons, doppler, chute, archimede, calorimetrie,
 ];
 

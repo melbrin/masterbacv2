@@ -51,12 +51,20 @@ Fais ces essais sur ton téléphone si tu peux : les paillasses sont faites pour
 | 25 | Verse par ajouts, plus serrés quand le pH monte vite, jusqu'après le saut ; « Ouvrir la courbe » | la courbe de tes relevés ; un repère à glisser jusqu'au milieu du saut |
 | 26 | « Noter ce volume », « J'ai fini » | avec des ajouts trop espacés, le professeur le dit |
 
+## Le sérum physiologique, au conductimètre
+
+| N° | Ce que tu fais | Ce que tu dois voir |
+| --- | --- | --- |
+| 27 | « Un sérum physiologique à contrôler », jusqu'à la paillasse | le flacon de nitrate d'argent, le conductimètre et sa sonde |
+| 28 | Prépare tout comme pour le vinaigre (50 mL d'eau), puis verse par ajouts d'un millilitre jusqu'à 20 mL | la conductivité baisse doucement, puis remonte |
+| 29 | « Ouvrir la courbe », glisse le repère sur la rupture de pente, « Noter ce volume » | une courbe en V ; avec trop peu de points d'un côté, le professeur le dit |
+
 ## Sur l'ordinateur
 
 | N° | Ce que tu fais | Ce que tu dois voir |
 | --- | --- | --- |
-| 27 | Ouvre une paillasse sur un grand écran | la scène à gauche, le protocole toujours affiché à droite |
-| 28 | Avec la touche Tab, va jusqu'au robinet ; flèches, puis « G » | les flèches ouvrent et ferment ; « G » fait tomber une goutte, « F » verse un millilitre |
+| 30 | Ouvre une paillasse sur un grand écran | la scène à gauche, le protocole toujours affiché à droite |
+| 31 | Avec la touche Tab, va jusqu'au robinet ; flèches, puis « G » | les flèches ouvrent et ferment ; « G » fait tomber une goutte, « F » verse un millilitre |
 
 ## Ce que tu dois me dire
 

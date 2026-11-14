@@ -106,7 +106,7 @@ Ce qui change :
 - **Il est libre de mal faire, et ça se voit dans sa mesure.** Au titrage : une burette non rincée dilue la solution titrante et retarde l'équivalence ; une prise d'essai mal ajustée au trait de jauge la décale ; sans agitation, la couleur change en retard ; verser sans rien sous la burette renverse.
 - **La situation change d'un essai à l'autre.** La graine de l'essai choisit les valeurs cachées. Refaire un TP donne une autre inconnue, et parfois une autre conclusion.
 - **Le serveur juge toujours.** Il rejoue la liste des gestes avec les règles de la paillasse. Rien de ce que dit le navigateur n'est cru sur parole.
-- **Plus de TP.** Les lots B et C sont lancés ensemble : dilution, dosage par étalonnage, cinétique, pile, électrolyse, synthèse, distance focale, lunette, diffraction, interférences, ultrasons, effet Doppler, chute filmée, poussée d'Archimède, calorimétrie.
+- **Plus de TP.** Un troisième titrage est ajouté (un sérum physiologique, suivi au conductimètre). Les lots B et C sont lancés ensemble : dilution, dosage par étalonnage, cinétique, pile, électrolyse, synthèse, distance focale, lunette, diffraction, interférences, ultrasons, effet Doppler, chute filmée, poussée d'Archimède, calorimétrie.
 - **Les documents** d'un TP ne sont plus des cartes arrondies à barre cuivre, que Yane jugeait « typiques des IA » : ce sont des feuilles de sujet, avec un filet gras et un filet maigre en tête.
 
 ## Le bilan d'un TP
@@ -122,7 +122,7 @@ Ce qui change :
 - Les seuils des niveaux (0,9, 0,6, 0,3) et le poids des fautes (un quart, la moitié).
 - Au titrage avec indicateur : franchir l'équivalence au filet est une faute importante, même si l'on s'arrête tout près ; goutte à goutte, on a droit à deux gouttes de trop.
 - Ce que coûte un geste oublié au titrage : burette non rincée, solution titrante diluée de 2,5 % ; mélange non agité, couleur en retard de 0,6 mL.
-- Les valeurs des situations. Le détartrant : 2,5 mol/L annoncés ; selon l'essai, 2,34, 2,44, 2,53 ou 2,59 mol/L. Le vinaigre : 8 degrés annoncés ; selon l'essai, 7,4, 7,8, 7,9 ou 8,2 degrés. Dans chaque TP, une des situations dément l'étiquette.
+- Les valeurs des situations. Le détartrant : 2,5 mol/L annoncés ; selon l'essai, 2,34, 2,44, 2,53 ou 2,59 mol/L. Le vinaigre : 8 degrés annoncés ; selon l'essai, 7,4, 7,8, 7,9 ou 8,2 degrés. Le sérum physiologique : 9,0 g/L annoncés ; selon l'essai, 8,1, 8,7, 9,0 ou 9,4 g/L. Dans chaque TP, une des situations dément l'étiquette.
 - Après la manipulation, la valeur attendue est montrée à côté de celle de l'élève.
 - Les réglages de la paillasse (dont la valeur à trouver) sont dans le code envoyé au navigateur, puisqu'il dessine la paillasse : un élève qui lit ce code peut les trouver. Le jugement, lui, reste au serveur.
 - Les petits sons des gestes (une goutte, un objet posé) sont en marche par défaut, avec un bouton pour les couper.

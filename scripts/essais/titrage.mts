@@ -1,11 +1,11 @@
 // Essai à la main de la paillasse Titrage dans un vrai navigateur, sur le banc d'essai local (/app/tp/banc/detartrant).
 // Il manipule comme un élève : il glisse les objets, maintient « Verser », tourne le robinet, aspire à la pipette, lit la
 // loupe et note le volume. Puis il appelle le professeur et relève le jugement du serveur.
-// Usage : ESSAI_SESSION=<fichier> node scripts/essais/titrage.mts <dossier des captures> [detartrant|vinaigre] [graine]
+// Usage : ESSAI_SESSION=<fichier> node scripts/essais/titrage.mts <dossier des captures> [detartrant|vinaigre|serum] [graine] [volume à l'équivalence]
 import type { Locator, Page } from "@playwright/test";
 import { BASE, attends, glisse, maintiens, ouvre, pointEcran, type Point } from "./outils.mts";
 
-const [sortie, tp = "detartrant", graine = "1"] = process.argv.slice(2);
+const [sortie, tp = "detartrant", graine = "1", equivalence] = process.argv.slice(2);
 if (!sortie) throw new Error("Usage : node scripts/essais/titrage.mts <dossier des captures> [tp] [graine]");
 const e = await ouvre({ sortie });
 const page: Page = e.page;
@@ -24,7 +24,9 @@ const touche = async (nom: string | RegExp, cle: string, fois = 1) => { const el
 const HAUT_BURETTE = { x: 108, y: 22 }, DESSOUS = { x: 108, y: 444 }, SOUDE = { x: 226, y: 226 }, SOUDE_POSEE = { x: 142, y: -4 };
 const PIPETTE = { x: 340, y: 212 }, BECHER = { x: 287, y: 230 }, VASE = { x: 296, y: 398 }, COMPTE = { x: 254, y: 322 }, PISSETTE = { x: 220, y: 320 };
 const POUBELLE = { x: 227, y: 418 }, POUBELLE_DESSOUS = { x: 108, y: 462 }, ERLENMEYER = { x: 296, y: 434 }, BARREAU = { x: 227, y: 466 };
-const phmetre = tp === "vinaigre";
+/** le vinaigre se suit au pH-mètre, le sérum au conductimètre : une sonde, un bécher, une courbe */
+const sonde = tp !== "detartrant";
+const conducti = tp === "serum";
 
 // ----- rincer la burette -----
 await deplace(POUBELLE, DESSOUS);
@@ -60,9 +62,9 @@ await deplace({ x: 287, y: 192 }, VASE);
 await touche("Vider la pipette dans le récipient", "ArrowRight", 10);
 await deplace({ x: 296, y: 336 }, PIPETTE);
 // ----- préparer le récipient -----
-if (phmetre) {
+if (sonde) {
   await deplace(PISSETTE, VASE);
-  await touche("Ajouter de l'eau distillée", "ArrowRight", 8); // 40 mL
+  await touche("Ajouter de l'eau distillée", "ArrowRight", conducti ? 10 : 8); // 50 mL, ou 40 mL
   await deplace({ x: 336, y: 376 }, PISSETTE);
   await deplace(PISSETTE, COMPTE); // rincer la sonde
   bilan.rincage = await message();
@@ -78,11 +80,15 @@ await deplace(ERLENMEYER, DESSOUS);
 await touche("Vitesse de l'agitateur", "ArrowRight", 3);
 bilan.agitation = await message();
 // ----- le titrage -----
-const VE = Number(process.argv[5] ?? (phmetre ? 13.85 : 10.12));
-if (phmetre) {
-  await touche("Robinet de la burette", "f", Math.floor(VE - 1.5));
-  await touche("Robinet de la burette", "g", Math.ceil((VE + 1 - Math.floor(VE - 1.5)) / 0.05)); // serré autour du saut
-  await touche("Robinet de la burette", "f", 3);
+const VE = Number(equivalence ?? (conducti ? 14.9 : sonde ? 13.85 : 10.12));
+if (sonde) {
+  if (conducti) {
+    await touche("Robinet de la burette", "f", 22); // des ajouts réguliers d'un millilitre, bien au-delà de l'équivalence
+  } else {
+    await touche("Robinet de la burette", "f", Math.floor(VE - 1.5));
+    await touche("Robinet de la burette", "g", Math.ceil((VE + 1 - Math.floor(VE - 1.5)) / 0.05)); // serré autour du saut
+    await touche("Robinet de la burette", "f", 3);
+  }
   await e.photo("9-apres-le-saut");
   await page.getByRole("button", { name: "Ouvrir la courbe" }).click();
   await attends(400);

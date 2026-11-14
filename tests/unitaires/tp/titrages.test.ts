@@ -1,16 +1,19 @@
 // La paillasse Titrage (lib/commun/tp/paillasses/titrage.ts) et ses deux TP : un détartrant à contrôler (indicateur coloré)
 // et le degré d'un vinaigre (pH-mètre). Les manipulations sont jouées ici sans le navigateur, geste par geste.
 import { describe, expect, it } from "vitest";
-import { DILUTION, agite, equivalenceReelle, lecture, pHActuel, pHMelange, pHVu, regles, sondeTrempe, volumeEquivalence, type EtatTitrage, type ReglagesTitrage } from "@/lib/commun/tp/paillasses/titrage";
+import { DILUTION, agite, conductivite, equivalenceReelle, lecture, pHActuel, pHMelange, pHVu, regles, sondeTrempe, volumeEquivalence, type EtatTitrage, type ReglagesTitrage } from "@/lib/commun/tp/paillasses/titrage";
 import { rejoue, type GesteBrut } from "@/lib/commun/tp/types";
 import { tp } from "@/lib/serveur/contenu/tp";
 import { GRAINES, joueJuste, type EtapeDePaillasse } from "../../outils/tp";
 
 const fort: ReglagesTitrage = { Ca: 0.0976, pKa: null, Va: 10, Cb: 0.1, suivi: "indicateur", indicateur: "bbt", eau: 0, noms: { titrante: "Soude", titree: "Détartrant dilué" } };
 const faible: ReglagesTitrage = { Ca: 0.131, pKa: 4.76, Va: 10, Cb: 0.1, suivi: "phmetre", indicateur: "phenolphtaleine", eau: 40, noms: { titrante: "Soude", titree: "Vinaigre dilué" } };
+const chlorure: ReglagesTitrage = { Ca: 0.0154, pKa: null, Va: 10, Cb: 0.01, suivi: "conductimetre", indicateur: "bbt", eau: 50, ions: { spectateur: 5.01, titre: 7.63, contre: 7.14, titrant: 6.19 }, noms: { titrante: "Nitrate d'argent", titree: "Sérum dilué", etiquette: "AgNO₃" } };
 const joue = (r: ReglagesTitrage, gestes: GesteBrut[]): EtatTitrage => rejoue(regles, r, gestes);
 const fautes = (r: ReglagesTitrage, gestes: GesteBrut[]) => regles.bilan(r, joue(r, gestes)).fautes.map((f) => `${f.code}${f.grave ? "!" : ""}`);
 const fois = (n: number, g: GesteBrut): GesteBrut[] => Array.from({ length: n }, () => g);
+/** Des ajouts successifs : à chacun, un filet coule, puis le robinet se referme. */
+const ajouts = (n: number, v: number): GesteBrut[] => Array.from({ length: n }, () => [{ g: "couler", v, filet: true }, { g: "pause" }] as GesteBrut[]).flat();
 
 // ---------- les gestes d'un élève soigneux ----------
 const rincer: GesteBrut[] = [{ g: "dessous", quoi: "poubelle" }, { g: "remplir", v: 4 }, { g: "couler", v: 4, filet: true }];
@@ -34,8 +37,14 @@ function phmetrique(r: ReglagesTitrage): GesteBrut[] {
   const large = Math.floor(VE - 1.5);
   const serres = Math.ceil((VE + 1 - large) / 0.2);
   return [...rincer, ...remplir, ...prelever, { g: "eau", v: 40 }, { g: "rincersonde" }, { g: "sonde", dans: true }, ...agiter,
-    ...fois(large, { g: "couler", v: 1, filet: true }), ...fois(serres, { g: "couler", v: 0.2, filet: true }), ...fois(3, { g: "couler", v: 1, filet: true }),
+    ...ajouts(large, 1), ...ajouts(serres, 0.2), ...ajouts(3, 1),
     { g: "noter", v: Math.round(VE * 20) / 20 }];
+}
+
+/** Le titrage par conductimétrie soigné d'une situation : des ajouts réguliers d'un millilitre, bien au-delà de l'équivalence. */
+function conductimetrique(r: ReglagesTitrage): GesteBrut[] {
+  return [...rincer, ...remplir, ...prelever, { g: "eau", v: 50 }, { g: "rincersonde" }, { g: "sonde", dans: true }, ...agiter,
+    ...ajouts(22, 1), { g: "noter", v: Math.round(volumeEquivalence(r) * 20) / 20 }];
 }
 
 describe("le pH pendant un titrage", () => {
@@ -135,9 +144,16 @@ describe("le mélange", () => {
     expect(pHVu(fort, agitee)).toBe(pHActuel(fort, agitee));
   });
   it("le pH-mètre relève un point à chaque ajout, si la sonde trempe assez", () => {
-    const trempe = joue(faible, [...remplir, ...prelever, { g: "eau", v: 40 }, { g: "sonde", dans: true }, { g: "dessous", quoi: "erlenmeyer" }, { g: "couler", v: 1, filet: true }, { g: "couler", v: 1, filet: true }]);
+    const trempe = joue(faible, [...remplir, ...prelever, { g: "eau", v: 40 }, { g: "sonde", dans: true }, { g: "dessous", quoi: "erlenmeyer" }, ...ajouts(2, 1)]);
     expect(sondeTrempe(faible, trempe)).toBe(true);
     expect(trempe.releves.map((p) => p.V)).toEqual([0, 1, 2]);
+    // tant que le filet coule, le relevé suit le volume : deux morceaux à la suite ne laissent qu'un point, comme leur somme
+    const debut: GesteBrut[] = [...remplir, ...prelever, { g: "eau", v: 40 }, { g: "sonde", dans: true }, { g: "dessous", quoi: "erlenmeyer" }];
+    const morceaux = joue(faible, [...debut, { g: "couler", v: 0.6, filet: true }, { g: "couler", v: 0.4, filet: true }]);
+    expect(morceaux.releves.map((p) => p.V)).toEqual([0, 1]);
+    expect(morceaux).toEqual(joue(faible, [...debut, { g: "couler", v: 1, filet: true }]));
+    // le robinet refermé entre les deux, ce sont deux ajouts : deux points
+    expect(joue(faible, [...debut, { g: "couler", v: 0.6, filet: true }, { g: "pause" }, { g: "couler", v: 0.4, filet: true }]).releves.map((p) => p.V)).toEqual([0, 0.6, 1]);
     const seche = joue(faible, [...remplir, ...prelever, { g: "sonde", dans: true }, { g: "dessous", quoi: "erlenmeyer" }, { g: "couler", v: 1, filet: true }]);
     expect([sondeTrempe(faible, seche), seche.releves.length]).toEqual([false, 0]);
   });
@@ -205,8 +221,8 @@ describe("le bilan d'un titrage au pH-mètre", () => {
   });
   it("il faut dépasser le saut, serrer les ajouts autour, rincer la sonde, et lire le volume avec précision", () => {
     const debut: GesteBrut[] = [...rincer, ...remplir, ...prelever, { g: "eau", v: 40 }, { g: "rincersonde" }, { g: "sonde", dans: true }, ...agiter];
-    expect(fautes(faible, [...debut, ...fois(18, { g: "couler", v: 1, filet: true }), { g: "noter", v: 13.4 }])).toEqual(["espace", "lecture"]);
-    expect(fautes(faible, [...debut, ...fois(12, { g: "couler", v: 1, filet: true }), { g: "noter", v: 12 }])).toEqual(["avant!", "lecture!"]);
+    expect(fautes(faible, [...debut, ...ajouts(18, 1), { g: "noter", v: 13.4 }])).toEqual(["espace", "lecture"]);
+    expect(fautes(faible, [...debut, ...ajouts(12, 1), { g: "noter", v: 12 }])).toEqual(["avant!", "lecture!"]);
     const sansRincerSonde = phmetrique(faible).filter((g) => g.g !== "rincersonde");
     expect(fautes(faible, sansRincerSonde)).toEqual(["rincersonde"]);
     const sansSonde = phmetrique(faible).filter((g) => g.g !== "sonde");
@@ -216,12 +232,43 @@ describe("le bilan d'un titrage au pH-mètre", () => {
   });
 });
 
-describe("les deux TP de titrage", () => {
+describe("le titrage suivi par conductimétrie", () => {
+  it("la conductivité baisse doucement jusqu'à l'équivalence, puis monte : la rupture de pente est à l'équivalence", () => {
+    const etat = joue(chlorure, conductimetrique(chlorure));
+    const VE = volumeEquivalence(chlorure);
+    expect(VE).toBeCloseTo(15.4, 9);
+    const sigma = (V: number) => etat.releves.find((p) => p.V === V)!.y;
+    expect(etat.releves.map((p) => p.V)).toEqual(Array.from({ length: 23 }, (_, i) => i));
+    // au départ : 10 000 × (5,01 + 7,63) × 0,0154 × 10 / 60, en µS/cm
+    expect(sigma(0)).toBeCloseTo((10000 * (5.01 + 7.63) * 0.0154 * 10) / 60, 0);
+    for (let V = 1; V <= 15; V++) expect(sigma(V), `V = ${V}`).toBeLessThan(sigma(V - 1));
+    for (let V = 17; V <= 22; V++) expect(sigma(V), `V = ${V}`).toBeGreaterThan(sigma(V - 1));
+    // sans les conductivités des ions, l'appareil n'affiche rien
+    expect(conductivite({ ...chlorure, ions: undefined }, etat)).toBe(0);
+  });
+  it("une manipulation soignée n'a aucune faute", () => {
+    const b = regles.bilan(chlorure, joue(chlorure, conductimetrique(chlorure)));
+    expect(b.fautes).toEqual([]);
+    expect(b.mesures).toEqual({ VE: 15.4 });
+  });
+  it("il faut assez de points de chaque côté de la rupture de pente, et une lecture juste", () => {
+    const debut: GesteBrut[] = [...rincer, ...remplir, ...prelever, { g: "eau", v: 50 }, { g: "rincersonde" }, { g: "sonde", dans: true }, ...agiter];
+    expect(fautes(chlorure, [...debut, ...ajouts(15, 1), { g: "noter", v: 15 }])).toEqual(["avant!", "lecture"]);
+    expect(fautes(chlorure, [...debut, ...ajouts(18, 1), { g: "noter", v: 15.4 }])).toEqual(["apres"]);
+    expect(fautes(chlorure, [...debut, ...ajouts(4, 5), { g: "noter", v: 15.4 }])).toEqual(["apres", "espace"]);
+    expect(fautes(chlorure, [...debut, ...ajouts(22, 1), { g: "noter", v: 16 }])).toEqual(["lecture"]);
+    expect(fautes(chlorure, [...debut, ...ajouts(22, 1), { g: "noter", v: 17 }])).toEqual(["lecture!"]);
+    // sans eau distillée, la sonde ne trempe pas
+    expect(fautes(chlorure, conductimetrique(chlorure).filter((g) => g.g !== "eau"))).toContain("sonde!");
+  });
+});
+
+describe("les trois TP de titrage", () => {
   const manipulation = (etape: EtapeDePaillasse): GesteBrut[] => {
     const r = etape.paillasse.reglages as ReglagesTitrage;
-    return r.suivi === "indicateur" ? colorimetrique(r) : phmetrique(r);
+    return r.suivi === "indicateur" ? colorimetrique(r) : r.suivi === "phmetre" ? phmetrique(r) : conductimetrique(r);
   };
-  for (const id of ["detartrant", "vinaigre"]) {
+  for (const id of ["detartrant", "vinaigre", "serum"]) {
     it(`${id} : fait avec soin, le TP donne A partout, quelle que soit la situation tirée`, async () => {
       const vues = new Set<number>();
       for (const graine of GRAINES) {
@@ -236,14 +283,15 @@ describe("les deux TP de titrage", () => {
     });
   }
   it("l'exploitation se juge sur les mesures de l'élève : une étiquette démentie par sa mesure appelle « Non »", async () => {
-    const t = tp("detartrant")!;
-    const conclusions = new Set<number>();
-    for (const graine of GRAINES) {
-      const partie = await joueJuste(t, graine, manipulation);
-      const derniere = partie.retours[partie.retours.length - 1].correction;
-      if (derniere.genre === "choix") conclusions.add(derniere.bonne);
+    for (const id of ["detartrant", "vinaigre", "serum"]) {
+      const conclusions = new Set<number>();
+      for (const graine of GRAINES) {
+        const partie = await joueJuste(tp(id)!, graine, manipulation);
+        const derniere = partie.retours[partie.retours.length - 1].correction;
+        if (derniere.genre === "choix") conclusions.add(derniere.bonne);
+      }
+      // selon la situation tirée, l'étiquette est confirmée ou démentie
+      expect(conclusions, id).toEqual(new Set([0, 1]));
     }
-    // selon la situation tirée, l'étiquette est confirmée ou démentie
-    expect(conclusions).toEqual(new Set([0, 1]));
   });
 });

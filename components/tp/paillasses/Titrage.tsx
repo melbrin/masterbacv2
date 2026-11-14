@@ -7,7 +7,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { nombre } from "@/lib/commun/format";
-import { AU_DESSUS, CAPACITE, GOUTTE, agite, dansErlenmeyer, equivalenceReelle, lecture, pHActuel, pHVu, regles, sondeTrempe, type EtatTitrage, type ReglagesTitrage } from "@/lib/commun/tp/paillasses/titrage";
+import { AU_DESSUS, CAPACITE, GOUTTE, agite, dansErlenmeyer, equivalenceReelle, conductivite, lecture, pHActuel, pHVu, regles, sondeTrempe, type EtatTitrage, type ReglagesTitrage } from "@/lib/commun/tp/paillasses/titrage";
 import type { GesteBrut, PropsPaillasse } from "@/lib/commun/tp/types";
 import { INCOLORE, TEINTES_INDICATEUR, couleurIndicateur } from "../couleurs";
 import { Afficheur, Becher, Burette, Cible, CompteGouttes, Erlenmeyer, Etabli, Filet, Flacon, Goutte, LoupeNiveau, Manipulation, Molette, Objet, PipetteJaugee, Pissette, Poussoir, Releve, Scene, son, useGlisse, type Vue } from "../kit";
@@ -46,38 +46,49 @@ const AU_FILET = 0.35;
 const entreGouttes = (ouverture: number) => 1.1 - ((ouverture - 0.05) / (AU_FILET - 0.05)) * 0.85;
 const debitFilet = (ouverture: number) => 0.4 + ((ouverture - AU_FILET) / (1 - AU_FILET)) * 1.8;
 
-// ---------- la courbe du pH-mètre ----------
+// ---------- la courbe des relevés ----------
 
-// La courbe des relevés, avec un repère que l'élève glisse jusqu'au milieu du saut de pH.
-function Courbe(props: { releves: { V: number; pH: number }[]; repere: number; place: (V: number) => void }) {
+/** La grandeur relevée par l'appareil : son nom sur l'axe, le haut de l'axe, l'écart entre deux graduations. */
+interface Grandeur { nom: string; haut: number; pas: number }
+const AXE_PH: Grandeur = { nom: "pH", haut: 14, pas: 2 };
+/** L'axe d'une conductivité, en µS/cm : il monte un peu au-dessus de la plus grande valeur relevée. */
+function axeConductivite(releves: { y: number }[]): Grandeur {
+  const max = Math.max(100, ...releves.map((p) => p.y));
+  const pas = max <= 400 ? 100 : max <= 1000 ? 200 : max <= 2500 ? 500 : 1000;
+  return { nom: "σ (µS/cm)", haut: Math.ceil((max * 1.08) / pas) * pas, pas };
+}
+
+interface PropsCourbe { releves: { V: number; y: number }[]; repere: number; place: (V: number) => void; grandeur: Grandeur }
+
+// La courbe des relevés, avec un repère que l'élève glisse jusqu'à l'équivalence : le milieu du saut de pH, ou la
+// rupture de pente de la conductivité.
+function Courbe(props: PropsCourbe) {
   return (
-    <Scene vue={{ x: 0, y: 0, l: 360, h: 470 }} nom="La courbe du pH en fonction du volume de solution titrante versé">
+    <Scene vue={{ x: 0, y: 0, l: 360, h: 470 }} nom={`La courbe : ${props.grandeur.nom} en fonction du volume de solution titrante versé`}>
       <TraceCourbe {...props} />
     </Scene>
   );
 }
-function TraceCourbe({ releves, repere, place }: { releves: { V: number; pH: number }[]; repere: number; place: (V: number) => void }) {
-  const cadre = { x: 44, y: 20, l: 296, h: 380 };
+function TraceCourbe({ releves, repere, place, grandeur }: PropsCourbe) {
+  const cadre = { x: 48, y: 34, l: 292, h: 366 };
   const max = Math.max(20, Math.ceil((Math.max(0, ...releves.map((p) => p.V)) + 1) / 5) * 5);
   const X = (V: number) => cadre.x + (V / max) * cadre.l;
-  const Y = (pH: number) => cadre.y + cadre.h - (pH / 14) * cadre.h;
+  const Y = (y: number) => cadre.y + cadre.h - (Math.min(y, grandeur.haut) / grandeur.haut) * cadre.h;
   const points = [...releves].sort((a, b) => a.V - b.V);
-  const glisse = useGlisse({
-    depart: (p) => place(Math.round(Math.max(0, Math.min(max, ((p.x - cadre.x) / cadre.l) * max)) * 20) / 20),
-    bouge: (p) => place(Math.round(Math.max(0, Math.min(max, ((p.x - cadre.x) / cadre.l) * max)) * 20) / 20),
-  });
+  const ici = (x: number) => Math.round(Math.max(0, Math.min(max, ((x - cadre.x) / cadre.l) * max)) * 20) / 20;
+  const glisse = useGlisse({ depart: (p) => place(ici(p.x)), bouge: (p) => place(ici(p.x)) });
   return (
     <>
-      {Array.from({ length: 8 }, (_, i) => i * 2).map((pH) => (
-        <g key={pH}><line x1={cadre.x} x2={cadre.x + cadre.l} y1={Y(pH)} y2={Y(pH)} stroke="var(--filet)" /><text x={cadre.x - 6} y={Y(pH) + 3} textAnchor="end">{pH}</text></g>
+      {Array.from({ length: Math.round(grandeur.haut / grandeur.pas) + 1 }, (_, i) => i * grandeur.pas).map((y) => (
+        <g key={y}><line x1={cadre.x} x2={cadre.x + cadre.l} y1={Y(y)} y2={Y(y)} stroke="var(--filet)" /><text x={cadre.x - 6} y={Y(y) + 3} textAnchor="end">{y}</text></g>
       ))}
       {Array.from({ length: max / 5 + 1 }, (_, i) => i * 5).map((V) => (
         <g key={V}><line x1={X(V)} x2={X(V)} y1={cadre.y} y2={cadre.y + cadre.h} stroke="var(--filet)" /><text x={X(V)} y={cadre.y + cadre.h + 13} textAnchor="middle">{V}</text></g>
       ))}
-      <text x={cadre.x - 30} y={cadre.y - 6} className="pl-fort">pH</text>
+      <text x={4} y={cadre.y - 14} className="pl-fort">{grandeur.nom}</text>
       <text x={cadre.x + cadre.l} y={cadre.y + cadre.h + 28} textAnchor="end" className="pl-fort">volume versé (mL)</text>
-      {points.length > 1 && <polyline points={points.map((p) => `${X(p.V).toFixed(1)},${Y(p.pH).toFixed(1)}`).join(" ")} fill="none" stroke="var(--cuivre)" strokeWidth={1.4} />}
-      {points.map((p) => <circle key={p.V} cx={X(p.V)} cy={Y(p.pH)} r={2.6} fill="var(--encre)" />)}
+      {points.length > 1 && <polyline points={points.map((p) => `${X(p.V).toFixed(1)},${Y(p.y).toFixed(1)}`).join(" ")} fill="none" stroke="var(--cuivre)" strokeWidth={1.4} />}
+      {points.map((p) => <circle key={p.V} cx={X(p.V)} cy={Y(p.y)} r={2.6} fill="var(--encre)" />)}
       <g role="slider" tabIndex={0} aria-label="Repère sur la courbe" aria-valuemin={0} aria-valuemax={max} aria-valuenow={repere} aria-valuetext={ml(repere)} {...glisse}
         onKeyDown={(e) => { const pas = e.key === "ArrowRight" ? 0.05 : e.key === "ArrowLeft" ? -0.05 : e.key === "PageUp" ? 1 : e.key === "PageDown" ? -1 : 0; if (pas) { e.preventDefault(); place(Math.round(Math.max(0, Math.min(max, repere + pas)) * 20) / 20); } }}>
         <rect x={cadre.x} y={cadre.y} width={cadre.l} height={cadre.h} fill="transparent" />
@@ -93,7 +104,7 @@ function TraceCourbe({ releves, repere, place }: { releves: { V: number; pH: num
 
 export default function Titrage({ reglages: r, protocole, attente, fini }: PropsPaillasse<ReglagesTitrage>) {
   const [partie, setPartie] = useState<Partie>(() => ({ etat: regles.depart(r), gestes: [] }));
-  const [message, setMessage] = useState("Ta paillasse est prête. Le protocole est en haut de l'écran.");
+  const [message, setMessage] = useState("Prends un objet en le glissant, ou touche-le puis touche l'endroit où le poser. Le protocole est en haut de l'écran.");
   const [ouverture, setOuverture] = useState(0);
   /** les outils posés : le flacon au-dessus de la burette, la pissette ou le compte-gouttes au-dessus du récipient */
   const [pose, setPose] = useState<{ soude: boolean; outil: "pissette" | "compte" | null }>({ soude: false, outil: null });
@@ -103,8 +114,11 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
   const [courbe, setCourbe] = useState(false);
   const [repere, setRepere] = useState(10);
   const { etat, gestes } = partie;
-  const phmetre = r.suivi === "phmetre";
-  const vase = phmetre ? "bécher" : "erlenmeyer";
+  /** le suivi par un appareil à sonde (pH-mètre ou conductimètre) se fait dans un bécher, et finit par une courbe */
+  const sonde = r.suivi !== "indicateur";
+  const conducti = r.suivi === "conductimetre";
+  const appareil = conducti ? "conductimètre" : "pH-mètre";
+  const vase = sonde ? "bécher" : "erlenmeyer";
 
   const agit = useCallback((g: GesteBrut) => setPartie((p) => ({ etat: regles.geste(r, p.etat, g), gestes: ajoute(p.gestes, g) })), [r]);
   const reserve = useRef(0);
@@ -146,10 +160,11 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
 
   const tourneRobinet = (o: number) => {
     setOuverture(o);
-    if (o === 0) { setMessage("Robinet fermé."); return; }
+    // le robinet se referme : l'ajout est fini, l'appareil garde le point relevé
+    if (o === 0) { if (ouverture > 0) agit({ g: "pause" }); setMessage("Robinet fermé."); return; }
     if (etat.volume <= 0) { setMessage("Le robinet est ouvert, mais la burette est vide."); return; }
     const ou = etat.dessous === "rien" ? "sur la paillasse : rien n'est posé dessous" : etat.dessous === "poubelle" ? "dans le bécher poubelle" : `dans ${vase === "bécher" ? "le bécher" : "l'erlenmeyer"}`;
-    setMessage(`${r.noms.titrante} : elle coule ${o <= AU_FILET ? "goutte à goutte" : "au filet"}, ${ou}.`);
+    setMessage(`La solution titrante coule ${o <= AU_FILET ? "goutte à goutte" : "au filet"}, ${ou}.`);
   };
 
   // ----- prendre et poser -----
@@ -189,7 +204,7 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
         break;
       case "sonde":
         agit({ g: "sonde", dans: !rangement });
-        setMessage(rangement ? "La sonde est sortie de la solution." : "La sonde du pH-mètre est dans le bécher.");
+        setMessage(rangement ? "La sonde est sortie de la solution." : `La sonde du ${appareil} est dans le bécher.`);
         break;
     }
   };
@@ -204,9 +219,9 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
   const niveauVase = volumeVase <= 0 ? 0 : Math.min(0.95, 0.14 + volumeVase / 105);
   const surface = vaseHaut + VASE.h - niveauVase * VASE.h * 0.7;
   const pH = pHVu(r, etat);
-  const couleurVase = !phmetre && etat.gouttes > 0 ? couleurIndicateur(r.indicateur, pH) : INCOLORE;
+  const couleurVase = !sonde && etat.gouttes > 0 ? couleurIndicateur(r.indicateur, pH) : INCOLORE;
   const avantEquivalence = etat.prise > 0 && etat.verse < equivalenceReelle(r, etat);
-  const eclat = !phmetre && etat.gouttes > 0 && sousBurette && avantEquivalence;
+  const eclat = !sonde && etat.gouttes > 0 && sousBurette && avantEquivalence;
   const resteAvant = Math.max(0.05, equivalenceReelle(r, etat) - etat.verse);
   const niveauBurette = etat.volume > 0 ? lecture(etat) : null;
   const loupePipette = etat.pipette === "becher" || (etat.dansPipette > 0 && etat.pipette !== "repos");
@@ -241,15 +256,15 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
   ) : (
     <>
       <button type="button" className="btn btn-ligne" onClick={recommence}>Recommencer le titrage</button>
-      {phmetre
+      {sonde
         ? <button type="button" className="btn btn-ligne" disabled={etat.releves.length < 2} onClick={() => { setOuverture(0); setRepere(Math.round((etat.verse / 2) * 20) / 20); setCourbe(true); }}>Ouvrir la courbe</button>
         : <button type="button" className="btn btn-ligne" onClick={() => { setOuverture(0); setSaisie(true); }}>Noter le volume</button>}
     </>
   );
 
   return (
-    <Etabli titre={phmetre ? "pH-métrie" : "Titrage"} protocole={protocole} message={message} attente={attente} fini={() => fini(gestes)} recommence={toutRecommencer} outils={outils} saisie={saisie}>
-      {courbe ? <Courbe releves={etat.releves} repere={repere} place={setRepere} /> : (
+    <Etabli titre={conducti ? "Conductimétrie" : sonde ? "pH-métrie" : "Titrage"} protocole={protocole} message={message} attente={attente} fini={() => fini(gestes)} recommence={toutRecommencer} outils={outils} saisie={saisie}>
+      {courbe ? <Courbe releves={etat.releves} repere={repere} place={setRepere} grandeur={conducti ? axeConductivite(etat.releves) : AXE_PH} /> : (
         <Scene vue={saisie ? VUE_LOUPE : VUE} nom="La paillasse du titrage : une burette sur son support, un agitateur, les flacons et la verrerie">
           <Manipulation pose={poser}>
             {/* le support, la burette, son robinet et sa pointe */}
@@ -262,7 +277,7 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
               texte={ouverture === 0 ? "fermé" : ouverture <= AU_FILET ? "ouvert, goutte à goutte" : "ouvert, au filet"}
               touches={(e) => {
                 if (e.key === "g" || e.key === "G") { agit({ g: "couler", v: GOUTTE }); setChute((n) => n + 1); son("goutte"); }
-                if (e.key === "f" || e.key === "F") agit({ g: "couler", v: 1, filet: true });
+                if (e.key === "f" || e.key === "F") { agit({ g: "couler", v: 1, filet: true }); agit({ g: "pause" }); }
               }}
               dessin={(angle) => (
                 <g transform={`translate(${BX} ${ROBINET})`}>
@@ -289,16 +304,17 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
             <Becher x={BECHER.x} y={BECHER.y} l={BECHER.l} h={BECHER.h} niveau={0.7} couleur={INCOLORE} />
             <text x={BECHER.x + BECHER.l / 2} y={BECHER.y + BECHER.h + 11} textAnchor="middle">{r.noms.titree}</text>
 
-            {/* le pH-mètre */}
-            {phmetre && <Afficheur x={232} y={PLAQUE - 2} l={120} h={28} nom="pH-mètre" unite="pH" eteint={!etat.sonde} valeur={sondeTrempe(r, etat) ? nombre(pHActuel(r, etat), 2) : "air"} />}
+            {/* le pH-mètre ou le conductimètre */}
+            {sonde && <Afficheur x={226} y={PLAQUE - 2} l={128} h={28} nom={conducti ? "Conductimètre" : "pH-mètre"} unite={conducti ? "µS/cm" : "pH"} eteint={!etat.sonde}
+              valeur={!sondeTrempe(r, etat) ? "air" : conducti ? nombre(conductivite(r, etat), 0) : nombre(pHActuel(r, etat), 2)} />}
 
             {/* les cibles : où poser ce qu'on tient */}
             <Cible id="burette" nom="le haut de la burette" x={BX} y={BURETTE.y - 8} r={22} accepte={pose.soude ? [] : ["soude"]} />
             <Cible id="dessous" nom="l'agitateur, sous la burette" x={BX} y={PLAQUE - 40} r={34} accepte={etat.dessous === "rien" ? ["erlenmeyer", "poubelle"] : []} />
             <Cible id="becher" nom="le bécher de solution" x={BECHER.x + BECHER.l / 2} y={BECHER.y + 14} r={24} accepte={etat.pipette === "becher" ? [] : ["pipette"]} />
             <Cible id="vase" nom={vase === "bécher" ? "le bécher du titrage" : "l'erlenmeyer"} x={vaseX} y={vaseHaut + 6} r={30}
-              accepte={outilsPossibles ? [...(etat.pipette === "erlenmeyer" ? [] : ["pipette"]), ...(pose.outil === "pissette" ? [] : ["pissette"]), ...(pose.outil === "compte" || phmetre ? [] : ["compte"]), ...(etat.barreau ? [] : ["barreau"]), ...(phmetre && !etat.sonde ? ["sonde"] : [])] : (etat.barreau ? [] : ["barreau"])} />
-            {phmetre && !etat.sonde && <Cible id="sonde" nom="la sonde du pH-mètre, pour la rincer" x={REPOS.compte.x} y={REPOS.compte.y} r={22} accepte={["pissette"]} />}
+              accepte={outilsPossibles ? [...(etat.pipette === "erlenmeyer" ? [] : ["pipette"]), ...(pose.outil === "pissette" ? [] : ["pissette"]), ...(pose.outil === "compte" || sonde ? [] : ["compte"]), ...(etat.barreau ? [] : ["barreau"]), ...(sonde && !etat.sonde ? ["sonde"] : [])] : (etat.barreau ? [] : ["barreau"])} />
+            {sonde && !etat.sonde && <Cible id="sonde" nom={`la sonde du ${appareil}, pour la rincer`} x={REPOS.compte.x} y={REPOS.compte.y} r={22} accepte={["pissette"]} />}
             <Cible id="rangement-soude" nom="son rangement" x={REPOS.soude.x} y={REPOS.soude.y} r={26} accepte={pose.soude ? ["soude"] : []} />
             <Cible id="rangement-pipette" nom="son rangement" x={REPOS.pipette.x} y={REPOS.pipette.y} r={24} accepte={etat.pipette !== "repos" ? ["pipette"] : []} />
             <Cible id="rangement-pissette" nom="son rangement" x={REPOS.pissette.x} y={REPOS.pissette.y} r={22} accepte={pose.outil === "pissette" ? ["pissette"] : []} />
@@ -315,7 +331,7 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
             {/* le récipient du titrage, avec ce qu'il contient */}
             <Objet id="erlenmeyer" nom={vase === "bécher" ? "Bécher du titrage" : "Erlenmeyer"} x={vaseX} y={vaseHaut + VASE.h / 2} l={VASE.l + 4} h={VASE.h + 4}>
               <g transform={`translate(${-vaseX} ${-(vaseHaut + VASE.h / 2)})`}>
-                {phmetre
+                {sonde
                   ? <Becher x={vaseX - VASE.l / 2 + 6} y={vaseHaut + 8} l={VASE.l - 12} h={VASE.h - 8} niveau={niveauVase} couleur={couleurVase} />
                   : <Erlenmeyer x={vaseX} y={vaseHaut} l={VASE.l} h={VASE.h} niveau={niveauVase} couleur={couleurVase} />}
                 {eclat && (ouverture > AU_FILET
@@ -336,7 +352,7 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
 
             {/* le flacon de solution titrante : sur l'étagère, ou penché au-dessus de la burette */}
             <Objet id="soude" nom={`Flacon de ${r.noms.titrante.toLowerCase()}`} x={pose.soude ? BX + 34 : REPOS.soude.x} y={pose.soude ? BURETTE.y - 34 : REPOS.soude.y} l={50} h={76}>
-              <g transform={pose.soude ? "rotate(-112)" : undefined}><Flacon x={0} y={-36} l={46} h={72} couleur={INCOLORE} etiquette={r.noms.titrante} sous={`${nombre(r.Cb, 3)} mol/L`} /></g>
+              <g transform={pose.soude ? "rotate(-112)" : undefined}><Flacon x={0} y={-36} l={52} h={72} couleur={INCOLORE} etiquette={r.noms.etiquette ?? r.noms.titrante} sous={`${nombre(r.Cb, r.Cb < 0.05 ? 4 : 3)} mol/L`} /></g>
             </Objet>
             {pose.soude && (
               <>
@@ -376,9 +392,9 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
               </>
             )}
 
-            {/* l'indicateur coloré, ou la sonde du pH-mètre */}
-            {phmetre ? !etat.sonde && (
-              <Objet id="sonde" nom="Sonde du pH-mètre" x={REPOS.compte.x} y={REPOS.compte.y} l={44} h={56}>
+            {/* l'indicateur coloré, ou la sonde de l'appareil */}
+            {sonde ? !etat.sonde && (
+              <Objet id="sonde" nom={`Sonde du ${appareil}`} x={REPOS.compte.x} y={REPOS.compte.y} l={44} h={56}>
                 <path d="M 0 -26 V 22" stroke="var(--sable)" strokeWidth={5} strokeLinecap="round" />
                 <text y={-30} textAnchor="middle">{etat.sondeRincee ? "sonde rincée" : "sonde"}</text>
               </Objet>
@@ -392,7 +408,7 @@ export default function Titrage({ reglages: r, protocole, attente, fini }: Props
                 appuie={() => { agit({ g: "goutte" }); setMessage(`${etat.gouttes + 1} goutte${etat.gouttes ? "s" : ""} de ${TEINTES_INDICATEUR[r.indicateur].nom}.`); son("goutte"); }} />
             )}
             {etat.sonde && (
-              <Objet id="sonde" nom="Sonde du pH-mètre, dans le bécher" x={vaseX + 22} y={vaseHaut - 6} l={44} h={44}><rect x={-6} y={-14} width={12} height={12} rx={3} fill="var(--sable)" /></Objet>
+              <Objet id="sonde" nom={`Sonde du ${appareil}, dans le bécher`} x={vaseX + 22} y={vaseHaut - 6} l={44} h={44}><rect x={-6} y={-14} width={12} height={12} rx={3} fill="var(--sable)" /></Objet>
             )}
           </Manipulation>
           <text x={352} y={VUE.y + 16} textAnchor="end">{etat.essais > 0 ? `titrage n° ${etat.essais + 1}` : ""}</text>
