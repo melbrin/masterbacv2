@@ -76,6 +76,15 @@ Quinze TP et quatorze paillasses sont en construction, chacun dans ses fichiers.
 
 Les deux TP de circuits ne se montrent plus tant que leur paillasse n'est pas refaite : l'application propose les trois TP de titrage.
 
+Arrivé le 14 novembre au soir, à relire et à inscrire : la synthèse organique (`reflux`, `ccm`, TP `synthese`), avec son guide. Les cinq autres familles ajoutent leur guide.
+
+Signalé pendant ce chantier, à traiter en inscrivant les TP :
+
+- `CadreTp.tsx` ne rappelle, pendant l'exploitation, que les mesures de la première paillasse d'un TP : un TP à deux paillasses (la synthèse) doit montrer les deux.
+- `Cible` : sa zone de toucher fait au moins 22 de rayon ; deux cibles à moins de 44 se recouvrent au toucher simple.
+- `LoupeNiveau` : un chiffre loin du centre est rogné par le bord de la loupe.
+- `faisLeGeste` (essais) attend 260 ms après un glisser, moins que le temps d'un rapprochement de la vue (360 ms).
+
 Incident du 14 novembre au soir : un fichier de règles en cours de réécriture, encore inscrit dans les registres, a cassé toutes les pages de TP pendant un essai de Yane. Depuis, rien d'inachevé n'est inscrit (voir `docs/09-paillasses.md`, section 3).
 
 ## Remis à la mise en ligne
