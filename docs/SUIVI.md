@@ -63,21 +63,24 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 
 ## En cours (soir du 14 novembre)
 
-Quatorze TP et douze paillasses sont en construction, chacun dans ses fichiers. Ils ne sont pas inscrits dans l'application : chaque famille a son banc de chantier (`/app/tp/chantier/<famille>`, en local), qui ne charge que ses fichiers. Chacune doit recevoir son guide (un fichier `<genre>-guide.ts`, un test où l'élève suit le guide, un essai où un robot suit la main). À relire, essayer dans le navigateur, puis inscrire un par un dans les trois registres :
+L'application propose six TP : les trois titrages, la synthèse organique (« Un parfum de jasmin »), et les deux TP de circuits (« Un condensateur sans étiquette », « Une jauge de niveau d'eau »). Chacun a son guide, et a été essayé avec et sans guide dans un vrai navigateur.
+
+Douze TP et dix paillasses sont encore en construction, chacun dans ses fichiers. Ils ne sont pas inscrits dans l'application : chaque famille a son banc de chantier (`/app/tp/chantier/<famille>`, en local), qui ne charge que ses fichiers. Chacune reçoit son guide (un fichier `<genre>-guide.ts`, un test où l'élève suit le guide, un essai où un robot suit la main). À relire, essayer dans le navigateur, puis inscrire dans les trois registres :
 
 | Famille | Paillasses | TP |
 | --- | --- | --- |
-| Circuits (à refaire en immersif) | `circuit`, `microcontroleur` | `condensateur`, `jauge` |
 | Chimie des solutions | `solutions`, `spectro` | `dilution`, `etalonnage`, `cinetique` |
 | Optique | `optique`, `diffraction` | `focale`, `lunette`, `cheveu`, `young` |
 | Ondes et mécanique | `ultrasons`, `doppler`, `pointage` | `ultrasons`, `doppler`, `chute` |
 | Thermique, électrochimie, fluides | `archimede`, `calorimetre`, `pile`, `electrolyse` | `archimede`, `calorimetrie`, `pile`, `electrolyse` |
 
-Les deux TP de circuits ne se montrent plus tant que leur paillasse n'est pas refaite : l'application propose les trois TP de titrage.
+Pour inscrire une famille : ses tests, son lint, son essai guidé en 390 et en 720 de large, son essai sans guide, puis les trois registres, `scripts/essais/tp.mts` sur ses TP, et un commit qui ne prend que ses fichiers.
 
-Inscrite le 14 novembre au soir : la synthèse organique (« Un parfum de jasmin », paillasses `reflux` et `ccm`), relue et essayée avec et sans guide. L'application propose quatre TP. Les cinq autres familles ajoutent leur guide.
+Signalé par ce chantier, pas encore traité dans le kit :
 
-Reste signalé par ce chantier : dans `LoupeNiveau`, un chiffre loin du centre est rogné par le bord de la loupe (à corriger quand les paillasses qui s'en servent seront toutes arrivées : leurs essais lisent ces chiffres).
+- `LoupeNiveau` : un chiffre loin du centre est rogné par le bord de la loupe ; il manque une option « surface plate » pour une cuve (les circuits dessinent un ménisque d'un millimètre).
+- `Fils` : la croix qui retire un fil passe sous les bornes voisines, et la paillasse ne sait pas quel fil est choisi. Les circuits ont leur propre composant (`circuitFils.tsx`) ; la synthèse et les ultrasons se servent de celui du kit.
+- La main du guide couvre parfois ce qui est sous son doigt : chaque paillasse décale ses points.
 
 Incident du 14 novembre au soir : un fichier de règles en cours de réécriture, encore inscrit dans les registres, a cassé toutes les pages de TP pendant un essai de Yane. Depuis, rien d'inachevé n'est inscrit (voir `docs/09-paillasses.md`, section 3).
 

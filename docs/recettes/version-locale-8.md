@@ -91,12 +91,23 @@ Les mêmes gestes, sans la main. Tu peux les faire dans le désordre ou mal : la
 | 45 | Suis la main : l'éluant, la ligne au crayon, trois dépôts, la migration, le front marqué, la lampe | les taches apparaissent sous la lampe ; la règle et sa loupe pour lire trois distances, notées dans un carnet |
 | 46 | Finis le TP | pendant les calculs, tes mesures des deux paillasses restent affichées ; au bilan, B pour « Réaliser » avec le guide |
 
+## Les circuits
+
+| N° | Ce que tu fais | Ce que tu dois voir |
+| --- | --- | --- |
+| 47 | « Un condensateur sans étiquette », jusqu'à la paillasse, guide en marche | une plaque de montage, une boîte de composants, un générateur, une carte d'acquisition et son écran |
+| 48 | Suis la main : les composants sur la plaque, la tension, puis les fils tirés d'une borne à l'autre | chaque fil se dessine ; un fil mal placé met le générateur en sécurité |
+| 49 | Décharge le condensateur, lance l'acquisition, ferme l'interrupteur | la courbe de charge se trace sur l'écran de la carte |
+| 50 | « Ouvrir la courbe », déplace le repère avec les deux flèches, « Noter ce temps » | le repère avance point par point ; tu lis le temps où la tension vaut 0,63 fois sa valeur finale |
+| 51 | « Une jauge de niveau d'eau », jusqu'à la paillasse | une plaque d'essai, une carte à microcontrôleur, un capteur dans sa cuve, un carnet |
+| 52 | Suis la main : les fils, puis verser, mesurer, lire le niveau à la loupe et la durée sur le moniteur, noter | le carnet se remplit ligne par ligne |
+
 ## Sur l'ordinateur
 
 | N° | Ce que tu fais | Ce que tu dois voir |
 | --- | --- | --- |
-| 47 | Ouvre une paillasse sur un grand écran | la scène à gauche, le protocole toujours affiché à droite |
-| 48 | Avec la touche Tab, va jusqu'au robinet ; flèches, puis « G » | les flèches ouvrent et ferment ; « G » fait tomber une goutte, « F » verse un millilitre |
+| 53 | Ouvre une paillasse sur un grand écran | la scène à gauche, le protocole toujours affiché à droite |
+| 54 | Avec la touche Tab, va jusqu'au robinet ; flèches, puis « G » | les flèches ouvrent et ferment ; « G » fait tomber une goutte, « F » verse un millilitre |
 
 ## Ce que tu dois me dire
 
@@ -110,8 +121,7 @@ Les mêmes gestes, sans la main. Tu peux les faire dans le désordre ou mal : la
 
 ## Ce qui n'est pas encore dans cette version
 
-- Quatorze autres TP sont en construction sur le même principe : dilution, dosage par étalonnage, cinétique, pile, électrolyse, distance focale, lunette, diffraction, interférences, ultrasons, effet Doppler, chute filmée, poussée d'Archimède, calorimétrie. Ils n'apparaissent pas tant qu'ils ne sont pas prêts.
-- Les deux TP de circuits (« Un condensateur sans étiquette », « Une jauge de niveau d'eau ») ne se montrent plus tant que leur nouvelle paillasse n'est pas prête.
-- Le guide existe pour les trois TP de titrage et pour la synthèse. Il s'ajoute aux autres paillasses avant qu'elles arrivent.
+- Douze autres TP sont en construction sur le même principe : dilution, dosage par étalonnage, cinétique, pile, électrolyse, distance focale, lunette, diffraction, interférences, ultrasons, effet Doppler, chute filmée, poussée d'Archimède, calorimétrie. Ils n'apparaissent pas tant qu'ils ne sont pas prêts.
+- Les gestes au doigt ne sont vérifiés qu'avec des touchers émulés. Dis-moi ce que ça donne sur ton téléphone : glisser un objet, garder le doigt sur « Verser », tourner le robinet.
 - Les valeurs du modèle de la synthèse (constante d'équilibre, pertes par minute sans eau ou sans pierre ponce) sont plausibles, sans source : à valider.
 - Les TP n'entrent pas encore dans le parcours ni dans les progrès.
