@@ -133,6 +133,18 @@ export interface Reglages {
   /** décision 0004 : une question du carnet n'est pas reprise par le complément de quiz de la partie « à revoir » */
   revoirSansDoublon: boolean;
   seancesParSemaine: Record<number, number>;
+  /** décision 0008 : le plan d'un DS sur plusieurs chapitres donne plus de questions et les répartit entre les chapitres */
+  planParChapitre: boolean;
+  /** nombre de questions qu'une séance de questions d'un plan de DS ne dépasse pas */
+  questionsMaxSeanceDs: number;
+  /** décision 0009 : nombre de questions qu'un test de calibrage ne dépasse pas */
+  questionsCalibrage: number;
+  /** au bout de ce nombre de jours, le parcours propose de refaire le test de calibrage */
+  joursCalibrageAncien: number;
+  /** au bout de ce nombre de jours sans séance, le parcours signale une pause */
+  joursDePause: number;
+  /** réussite sous laquelle un objectif travaillé est signalé comme fragile */
+  tauxFragile: number;
 }
 
 /** Tout ce dont une règle a besoin : rien n'est lu ailleurs. */

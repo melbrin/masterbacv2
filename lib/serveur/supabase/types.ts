@@ -89,6 +89,20 @@ export type Database = {
                   Relationships: [
                     
                   ]
+                },"parties": {
+                  Row: {
+                    "cree_le": string,"fiches": (number)[],"id": string,"jeu": string,"score": number,"secondes": number,"user_id": string,"verifiee": boolean
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cree_le"?: string,"fiches": (number)[],"id"?: string,"jeu": string,"score": number,"secondes": number,"user_id": string,"verifiee"?: boolean
+                  }
+                  Update: {
+                    "cree_le"?: string,"fiches"?: (number)[],"id"?: string,"jeu"?: string,"score"?: number,"secondes"?: number,"user_id"?: string,"verifiee"?: boolean
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"passages": {
                   Row: {
                     "fiche": number,"niveau": number,"reussi_le": string,"user_id": string

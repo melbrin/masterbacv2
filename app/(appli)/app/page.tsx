@@ -7,11 +7,22 @@ import { ajouteJours, ecartEnJours } from "@/lib/commun/dates";
 import { dateLongue, dateSimple, duree, initialeJour, nombre, p2, pluriel } from "@/lib/commun/format";
 import * as m from "@/lib/moteur";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
+import { calibragesDe, suiviPour } from "@/lib/serveur/suivi";
+import { afficheAlerte, afficheEtape } from "./parcours/textes";
 
 export const metadata = { title: "Aujourd'hui" };
 
 export default async function Aujourdhui() {
-  const { profil, droits, ctx, catalogue, jour, devoirs } = await espaceEleve();
+  const espace = await espaceEleve();
+  const { profil, droits, ctx, catalogue, jour, devoirs, session } = espace;
+  // le parcours : le palier en cours, un signal s'il y en a un, et la prochaine étape hors séance du jour (elle a sa carte)
+  const { passes, enCours } = await calibragesDe(session.userId, espace);
+  const parcours = m.parcours(ctx, suiviPour(espace, passes));
+  const titreFiche = (n: number) => catalogue.fiches.find((f) => f.num === n)?.titre_court ?? `Fiche ${n}`;
+  const etape = parcours.etapes.find((e) => e.type !== "seance" && e.type !== "calibrage");
+  const prochaine = etape ? afficheEtape(etape, titreFiche, droits.coach ? 25 : 20) : null;
+  const signal = parcours.alertes[0] ? afficheAlerte(parcours.alertes[0], titreFiche, m.seancesPrevues(ctx.reglages, profil.note_visee)) : null;
+  const palier = parcours.paliers.find((x) => x.niveau === parcours.palier);
   const titre = (fiches: number[]) => fiches.map((n) => catalogue.sommaire.parNum.get(n) && catalogue.fiches.find((f) => f.num === n)?.titre_court).join(", ");
   const ds = m.prochainDS(ctx);
   const dsComplet = ds ? devoirs.find((d) => d.id === ds.id) : null;
@@ -73,6 +84,23 @@ export default async function Aujourdhui() {
         </div>
       )}
 
+      <div className="section-titre"><h2>Ton parcours pour viser {parcours.vise}</h2><Link href="/app/parcours">Voir mon parcours</Link></div>
+      {passes.length === 0 ? (
+        <div className="carte" style={{ borderColor: "var(--cuivre)" }}>
+          <b>{enCours ? "Ton test de calibrage est en cours." : "Commence par ton test de calibrage."}</b> Dix minutes pour savoir où tu en es et construire ton parcours.
+          <div className="actions" style={{ marginTop: 10 }}><Link className="btn btn-cuivre" href={enCours ? `/app/quiz/${enCours}` : "/app/calibrage"}>{enCours ? "Reprendre mon test" : "Faire le test"}</Link></div>
+        </div>
+      ) : (
+        <div className="carte">
+          {palier && parcours.chapitres.length > 0 ? (
+            <><p style={{ margin: "0 0 8px" }}>Palier « viser {palier.niveau} » : <b>{palier.atteints} {palier.atteints > 1 ? "chapitres" : "chapitre"} sur {palier.total}</b>.</p>
+              <div className="barre" style={{ marginBottom: 10 }}><i className="b-solide" style={{ width: `${(100 * palier.atteints) / Math.max(1, palier.total)}%` }} /></div></>
+          ) : parcours.chapitres.length > 0 ? <p style={{ margin: "0 0 8px" }}>Tu as atteint ta note visée sur tous tes chapitres vus en classe.</p> : null}
+          {signal && <p className={`signal signal-${signal.ton}`} role="status"><Icone nom={signal.ton === "bravo" ? "ok" : "cible"} taille={20} /><span>{signal.texte}</span></p>}
+          {prochaine && <p style={{ margin: 0 }}><b>Prochaine étape :</b> {prochaine.titre}. <Link href={prochaine.href}>{prochaine.bouton}</Link></p>}
+        </div>
+      )}
+
       <div className="section-titre"><h2>Ta séance du jour · {droits.coach ? 25 : 20} min</h2>
         <span className={`puce ${seance.raison === "ds" ? "puce-bleu" : ""}`}>{seance.raison === "ds" ? "Pour préparer ton DS" : seance.raison === "defaut" ? "Premier chapitre de l'année" : "Chapitres vus en classe"}</span></div>
       <div className="carte seance">
@@ -114,6 +142,7 @@ export default async function Aujourdhui() {
         })() : (
           <Link className="carte carte-lien" href="/app/ds/nouveau"><h2>Tu as un DS bientôt ?</h2><p className="discret" style={{ margin: 0 }}>Saisis la date et les chapitres. Ton plan de révision est généré automatiquement.</p></Link>
         )}
+        <Link className="carte carte-lien" href="/app/jeux"><h2>Jeux</h2><p className="discret" style={{ margin: 0 }}>Revois ton cours en jouant : dix jeux et une simulation.</p></Link>
         <Link className="carte carte-lien" href="/app/carnet">
           <div className="tete"><h2>Carnet d&apos;erreurs</h2><span className={`puce ${aRevoir.length ? "puce-ko" : "puce-ok"}`}>{aRevoir.length} à revoir</span></div>
           <p className="discret" style={{ margin: 0 }}>Tu revois chaque question ratée 2 jours plus tard, puis une semaine après, puis trois semaines après.</p>

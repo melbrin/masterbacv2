@@ -9,7 +9,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - **Branche de travail** : `lot/0.2-outillage`, empilée sur `lot/0.1-installation-du-kit`. Rien n'est poussé sur GitHub.
 - **Dossier de travail** : `Documents/App Masterbac/app-masterbac/`. L'ancien dossier `masterbac-simulator/` (juillet 2026) est intact à côté et n'est pas repris.
 - **Lancer en local** : voir `docs/recettes/version-locale-1.md`. Port 3457 ; le port 3456 est celui de l'ancien dossier.
-- **Version locale** : essayée par Yane le 14 novembre. Ses remarques sont traitées dans la deuxième version (décisions 0005 à 0007, recette `docs/recettes/version-locale-2.md`). En attente de son nouvel essai.
+- **Version locale** : essayée par Yane le 14 novembre. Ses remarques sont traitées dans la deuxième version (décisions 0005 à 0007), puis ses demandes du même jour dans la troisième (décisions 0008 à 0010 : calibrage, parcours, jeux, simulation, quiz mélangé, plan de DS par chapitre). Recette : `docs/recettes/version-locale-3.md`. En attente de son essai.
 
 ## Fait et vérifié
 
@@ -22,7 +22,9 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - Administration : double authentification, accès ouverts ou préparés pour une adresse, retrait avec motif, signalements, journal.
 - Deuxième version locale (14 novembre), essayée dans le navigateur en largeur téléphone avec un compte gratuit puis un Pass : textes réécrits en langue simple ; séance du jour guidée question par question, avec fin automatique, bilan, confettis et séries ; retour animé après l'autocorrection ; mode DS étape par étape, avec l'écran du DS blanc et son minuteur ; année sur « Tombé au BAC » ; questions cumulées par note visée ; écran des progrès avec la courbe des notes, le travail par semaine, la régularité sur quatre semaines, la réussite par objectif et le bilan du mois ; retour au carnet après une question du carnet.
 - Défauts trouvés à l'essai et corrigés : la correction de la dernière question d'un quiz disparaissait ; le terminal de développement écrivait l'adresse e-mail et le code de connexion (coupé dans `next.config.ts`).
-- `npm run tout` : lint, types, 168 tests avec couverture (moteur : 100 % des lignes), 23 contrôles de contenu, 33 tests de base, compilation. Vert le 14 novembre.
+- Troisième version locale (14 novembre) : test de calibrage à la première connexion et refaisable, parcours recalculé à chaque affichage (paliers, étapes, signaux), dix jeux (sept dans le navigateur, trois corrigés par le serveur), quiz mélangé, simulation du basketteur, plan de DS réparti entre les chapitres, table `parties` (records), menu avec « Jeux » en bas et « Parcours » en haut.
+- Essais de la troisième version : calibrage, parcours, quiz mélangé, trois jeux du serveur et plan de DS sur trois chapitres dans le navigateur intégré ; les sept jeux du navigateur et la simulation avec Playwright (`scripts/essais/jeux.mts`), parce que le navigateur intégré met les animations en pause.
+- `npm run tout` : lint, types, 232 tests avec couverture (moteur : 100 % des lignes), 24 contrôles de contenu, 42 tests de base, compilation. Vert le 14 novembre.
 
 ## Film de présentation
 
@@ -43,7 +45,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 8. Application installable : manifeste, service worker, page hors ligne.
 9. Tests : intégration des commandes contre la base locale, parcours Playwright, 28 cas d'abus, matrice des accès depuis le registre. Relectures par `relecteur-securite` et `relecteur-conformite`.
 10. Format des sources de quiz, d'indices et de barèmes (décision à écrire), puis préparation du contenu en brouillon.
-11. Demandes de Yane du 14 novembre, à cadrer avec lui avant de coder : une section de jeux pour travailler sa mémoire sur le cours ; un test de calibrage ; plusieurs quiz par chapitre et des quiz qui mélangent les chapitres ; un plan de DS qui tient compte du nombre de chapitres.
+11. Suites des demandes du 14 novembre : écrire de nouvelles questions de quiz, en brouillon, pour avoir plusieurs quiz par chapitre (il y en a 5 à 21 par chapitre, aucune pour la fiche 14) ; d'autres simulations (satellite, circuit RC, décroissance radioactive) si Yane valide celle du basketteur ; faire entrer les jeux et le calibrage dans la page des parents et le bilan.
 12. Relire dans la langue de la décision 0005 les pages du test de niveau et de l'administration.
 
 ## Remis à la mise en ligne
@@ -57,6 +59,9 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - Les lectures du contenu passent par des fonctions SQL réservées au rôle de service, pour ne pas exposer le schéma `contenu`.
 - Le plan d'un DS est gardé en JSON dans la table `ds`, pas dans une table `ds_seances`. Les étapes de lecture cochées y sont aussi (champ `lues`), écrites en lecture puis écriture, sans verrou.
 - Le droit « fiches » ouvre les corrigés de toutes les fiches, pas seulement de celles achetées.
+- Le score d'un jeu qui tourne dans le navigateur est annoncé par le navigateur (`verifiee` à faux dans `parties`). Il ne sert qu'au record personnel.
+- Les nouvelles commandes (calibrage, jeux) n'ont pas encore leurs cas dans la matrice des accès, qui reste à écrire (point 9).
+- `scripts/essais/jeux.mts` joue les sept jeux et la simulation avec le compte local `theo.essai@exemple.fr`. C'est un essai à la main, à transformer en parcours Playwright (point 9).
 - Les pages du test d'avant le kit gardent 13 avertissements de lint et des émojis. Elles seront réécrites avec la charte commune.
 - `npm audit` : 9 failles modérées, toutes dans les outils de développement. TypeScript reste en 5.8.3.
 
@@ -66,7 +71,8 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 | --- | --- | --- | --- |
 | Essayer la deuxième version locale | vérifier que ses remarques du 14 novembre sont bien traitées | `docs/recettes/version-locale-2.md` | 16 novembre |
 | Confirmer les décisions 0004 à 0007 | séries de jours et de semaines, liste des questions ouverte sur la note visée | lire la partie « À confirmer » de chaque décision | 16 novembre |
-| Répondre aux quatre questions du point 11 | jeux, calibrage, quiz, plan de DS selon le nombre de chapitres | répondre dans la conversation | 16 novembre |
+| Essayer la troisième version locale | calibrage, parcours, dix jeux, simulation, plan de DS par chapitre | `docs/recettes/version-locale-3.md` | 16 novembre |
+| Confirmer les décisions 0008 à 0010 | plan de DS par chapitre, règles du calibrage et du parcours, liste des jeux, place des jeux dans le menu, valeurs de la simulation | lire la partie « à confirmer » de chaque décision | 16 novembre |
 | Valider l'architecture de départ | décision 0001 | lire `docs/02-architecture.md`, section 2, et répondre | 15 novembre |
 | Confirmer ou retirer les cinq ajustements, et répondre aux points de la section 7 du cahier des charges | ils fixent le périmètre de la bêta | `docs/01-cahier-des-charges.md`, sections 4 et 7 | 15 novembre |
 | Ouvrir Resend et ajouter les enregistrements du domaine d'envoi | les e-mails de connexion en dépendent | section 3.4 | tout de suite |
@@ -79,6 +85,9 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - 0001, architecture de départ : validée par Yane le 13 novembre, sauf le point 7 (paiement), remplacé par la décision 0002.
 - 0002, vente sur Shopify, accès ouverts dans l'administration : pas de Stripe dans l'application.
 - 0004, pas de doublon dans la partie « à revoir » de la séance : proposée, à confirmer.
+- 0008, plan de DS réparti entre les chapitres : choisie par Claude Code à la demande de Yane, à confirmer.
+- 0009, test de calibrage et parcours suivi en continu : demandée par Yane, règles de détail à confirmer.
+- 0010, dix jeux, quiz mélangé, simulation du basketteur : demandée par Yane, liste des jeux à confirmer.
 - 0005, textes de l'interface en langue simple, année sur « Tombé au BAC », questions cumulées par note visée : demandée par Yane le 14 novembre.
 - 0006, séance du jour guidée, fin de séance fêtée, séries de jours et de semaines : demandée par Yane ; les règles des séries sont à confirmer.
 - 0007, mode DS étape par étape : demandée par Yane le 14 novembre.

@@ -97,3 +97,59 @@ ol.liste { list-style: none; padding: 0; margin: 0; }
     100% { opacity: 0; transform: translate3d(var(--dx, 0px), 105vh, 0) rotate(calc(var(--r, 0deg) + 540deg)); }
   }
 }
+
+/* Signaux du parcours : une alerte ou un bravo, sur une ligne. */
+.signal { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 10px; border-radius: 12px; padding: 10px 12px; }
+.signal svg { flex: none; margin-top: 2px; }
+.signal-alerte { background: color-mix(in srgb, var(--cuivre) 12%, var(--carte)); border-color: color-mix(in srgb, var(--cuivre) 45%, var(--filet)); }
+.signal-alerte svg { color: var(--cuivre-texte); }
+.signal-bravo { background: var(--vert-fond); border-color: color-mix(in srgb, var(--vert) 45%, var(--filet)); }
+.signal-bravo svg { color: var(--vert); }
+p.carte.signal { margin: 0; }
+
+/* Page des jeux : une carte par jeu. */
+.hub-liste { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.hub-carte { display: grid; grid-template-columns: 44px 1fr; gap: 6px 12px; align-items: start; }
+.hub-carte h3 { margin: 0; font-size: 1.05rem; color: var(--encre); }
+.hub-carte p { margin: 2px 0 6px; font-size: .9rem; color: var(--discret); }
+.hub-carte .actions { grid-column: 2; }
+.hub-icone { width: 44px; height: 44px; border-radius: 12px; background: var(--carte-2); color: var(--cuivre-texte); display: grid; place-items: center; }
+.hub-icone svg { width: 24px; height: 24px; }
+@media (min-width: 960px) { .hub-liste { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Jeux corrigés par le serveur : bandeau, barre de temps, question. */
+.partie { display: grid; gap: 12px; }
+.partie-tete { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; font-size: .92rem; }
+.partie-tete b { font-size: 1.3rem; color: var(--encre); }
+.partie-temps { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--encre); font-variant-numeric: tabular-nums; }
+.partie-barre { height: 8px; border-radius: 999px; background: var(--carte-2); overflow: hidden; }
+.partie-barre i { display: block; height: 100%; background: var(--cuivre-texte); border-radius: 999px; transition: width .25s linear; }
+.partie-question.est-juste { border-color: var(--vert); background: var(--vert-fond); }
+.partie-question.est-faux { border-color: var(--brique); background: var(--brique-fond); }
+.partie-retour { min-height: 1.5em; margin: 10px 0 0; font-weight: 700; color: var(--encre); }
+.vf-zone { min-height: 190px; display: grid; align-items: center; overflow: hidden; padding: 6px 0; }
+.vf-carte { touch-action: pan-y; user-select: none; cursor: grab; border-width: 2px; }
+.vf-boutons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.vf-boutons .btn { min-height: 56px; font-size: 1.05rem; }
+.vf-faux { background: var(--brique-fond); color: var(--brique); border-color: color-mix(in srgb, var(--brique) 40%, var(--filet)); }
+.vf-vrai { background: var(--vert-fond); color: var(--vert); border-color: color-mix(in srgb, var(--vert) 40%, var(--filet)); }
+.vf-carte.part-vrai, .vf-carte.part-faux { opacity: .35; }
+.ordre-jeu { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 8px; }
+.ordre-jeu li { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: stretch; }
+.ordre-etape { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: center; text-align: left; min-height: 52px; padding: 8px 12px; border-radius: 12px;
+  border: 1.5px solid var(--filet); background: var(--carte); color: var(--texte); font: inherit; cursor: pointer; }
+.ordre-etape .num { font-family: var(--display); font-weight: 800; color: var(--cuivre-texte); }
+.ordre-jeu li.prise .ordre-etape { border-color: var(--cuivre); background: color-mix(in srgb, var(--cuivre) 14%, var(--carte)); }
+.ordre-jeu .fl { display: grid; gap: 4px; }
+.ordre-jeu .fl button { min-width: 40px; min-height: 24px; border: 1px solid var(--filet); background: var(--carte); border-radius: 8px; cursor: pointer; color: var(--texte); }
+.ordre-jeu .fl button[disabled] { opacity: .35; cursor: default; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .partie-question { animation: apparait .25s ease-out both; }
+  .vf-carte { animation: apparait .25s ease-out both; }
+  .vf-carte.part-vrai { animation: part-droite .35s ease-in both; }
+  .vf-carte.part-faux { animation: part-gauche .35s ease-in both; }
+  .ordre-jeu li { animation: apparait .2s ease-out both; }
+  @keyframes part-droite { to { transform: translateX(120%) rotate(14deg); opacity: 0; } }
+  @keyframes part-gauche { to { transform: translateX(-120%) rotate(-14deg); opacity: 0; } }
+}

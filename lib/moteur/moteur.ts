@@ -241,13 +241,25 @@ function questionsNiveau(ctx: Contexte, fiches: number[], L: number, n: number, 
     .sort((a, b) => rang(a) - rang(b) || un(b.demande) - un(a.demande) || a.n - b.n)
     .slice(0, n).map((q) => q.cle);
 }
-function exercicePour(ctx: Contexte, fiches: number[], objectif: number, exclure: ReadonlySet<string>): Question | null {
+// « eviter » : les chapitres qui ont déjà un exercice dans le plan passent après les autres (décision 0008).
+// Vide, il ne change rien au tri du prototype.
+function exercicePour(ctx: Contexte, fiches: number[], objectif: number, exclure: ReadonlySet<string>, eviter: ReadonlySet<number> = new Set()): Question | null {
   const ex: Question[] = [];
   for (const num of fiches) for (const i of ficheConnue(ctx, num).items) if (i.k === "ex") ex.push({ ...i, fiche: num, cle: cle(num, "ex", i.n) });
   const fait = (e: Question) => un(tentatives(ctx.etat, e.cle).length);
   const tri = ex.filter((e) => !exclure.has(e.cle))
-    .sort((a, b) => un(a.niveau > objectif) - un(b.niveau > objectif) || fait(a) - fait(b) || (a.duree || 99) - (b.duree || 99));
+    .sort((a, b) => un(eviter.has(a.fiche)) - un(eviter.has(b.fiche)) || un(a.niveau > objectif) - un(b.niveau > objectif) || fait(a) - fait(b) || (a.duree || 99) - (b.duree || 99));
   return tri[0] ?? null;
+}
+
+/** Tire n éléments en passant d'un chapitre à l'autre, pour qu'aucun chapitre du devoir ne soit oublié (décision 0008). */
+function parTour(fiches: number[], n: number, candidats: (fiche: number) => string[]): string[] {
+  const files = fiches.map((f) => candidats(f));
+  const out: string[] = [];
+  for (let rang = 0; out.length < n && files.some((l) => rang < l.length); rang++) {
+    for (const l of files) if (rang < l.length && out.length < n) out.push(l[rang]);
+  }
+  return out;
 }
 
 export function quizPour(ctx: Contexte, fiches: number[], n: number, objectif: number, graine: number): string[] {
@@ -286,6 +298,10 @@ export function construitPlan(ctx: Contexte, ds: Devoir, depuis: Jour = jourCour
   const pieges: Tache = { type: "pieges", fiches: F };
   const faibles = (n: number): Tache => ({ type: "questions", refs: garde(pointsFaibles(ctx, F, obj, n, pris)) });
   const exercice = (e: Question): Tache => ({ type: "exercice", ref: e.cle, minutes: e.duree });
+  if (ctx.reglages.planParChapitre && F.length > 1) {
+    seances.push(...planParChapitre(ctx, { ...ds, format }, { quiz, essentiel, pieges, date, nbQuiz: qz.length }));
+    return { format, seances };
+  }
   if (format === "express") {
     add(1, "Fiche éclair", 20, [...essentiel, ...quiz, pieges]);
   } else if (format === "trois-jours") {
@@ -315,6 +331,74 @@ export function construitPlan(ctx: Contexte, ds: Devoir, depuis: Jour = jourCour
     add(1, "Fiche éclair", 20, [...essentiel, pieges]);
   }
   return { format, seances };
+}
+
+/**
+ * Le plan d'un devoir qui porte sur plusieurs chapitres (décision 0008). Les formats et le nombre de séances
+ * sont ceux du prototype ; ce qui change : une séance de questions en donne deux par chapitre (au moins autant
+ * que le prototype, huit au plus), tirées en passant d'un chapitre à l'autre, sa durée suit le nombre de questions,
+ * et les exercices viennent de chapitres différents quand c'est possible.
+ */
+function planParChapitre(
+  ctx: Contexte, ds: Devoir & { format: Format },
+  p: { quiz: Tache[]; essentiel: Tache[]; pieges: Tache; date: (n: number) => Jour; nbQuiz: number },
+): SeancePlan[] {
+  const F = ds.fiches;
+  const obj = ds.objectif;
+  const pris = new Set<string>();
+  const fichesExo = new Set<number>();
+  const seances: SeancePlan[] = [];
+  const add = (n: number, titre: string, minutes: number, taches: Tache[]) =>
+    seances.push({ id: "s" + (seances.length + 1), date: p.date(n), titre, minutes, taches, faite: false });
+  const garde = (liste: string[]) => { liste.forEach((k) => pris.add(k)); return liste; };
+  const combien = (base: number) => Math.min(ctx.reglages.questionsMaxSeanceDs, Math.max(base, 2 * F.length));
+  const minutes = (n: number) => (n > 4 ? 30 + 10 * Math.ceil((n - 4) / 2) : 30);
+  const faibles = (base: number) => { const n = combien(base); return garde(parTour(F, n, (f) => pointsFaibles(ctx, [f], obj, n, pris))); };
+  const duNiveau = (L: number, base: number) => { const n = combien(base); return garde(parTour(F, n, (f) => questionsNiveau(ctx, [f], L, n, pris))); };
+  const questions = (refs: string[]): Tache => ({ type: "questions", refs });
+  const exo = (): Question | null => {
+    const e = exercicePour(ctx, F, obj, pris, fichesExo);
+    if (e) { pris.add(e.cle); fichesExo.add(e.fiche); }
+    return e;
+  };
+  if (ds.format === "express") {
+    add(1, "Fiche éclair", 20, [...p.essentiel, ...p.quiz, p.pieges]);
+  } else if (ds.format === "trois-jours") {
+    add(3, p.nbQuiz ? `Test de ${nQuestions(p.nbQuiz)}` : "Le cours en une page", 30, [...p.essentiel, ...p.quiz]);
+    const cibles = faibles(4);
+    add(2, "Exercices ciblés sur tes points faibles", minutes(cibles.length), [questions(cibles)]);
+    const e = exo();
+    add(1, "Un exercice type", 30, [e ? { type: "exercice", ref: e.cle, minutes: e.duree } : questions(faibles(2)), p.pieges]);
+  } else {
+    add(7, p.nbQuiz ? `Le cours en une page et ${nQuestions(p.nbQuiz)}` : "Le cours en une page", 30, [...p.essentiel, ...p.quiz]);
+    const dix = duNiveau(10, 4);
+    add(6, "Questions de cours, objectif 10", minutes(dix.length), [questions(dix)]);
+    if (obj >= 14) {
+      // viser 18 : une question d'objectif 18 par chapitre, trois au plus, prises sur la place de la séance
+      const n18 = obj === 18 ? Math.min(F.length, 3) : 0;
+      const n14 = Math.min(combien(3), ctx.reglages.questionsMaxSeanceDs - n18);
+      const suite = garde(parTour(F, n14, (f) => questionsNiveau(ctx, [f], 14, n14, pris)));
+      if (n18) suite.push(...garde(parTour(F, n18, (f) => questionsNiveau(ctx, [f], 18, 1, pris))));
+      add(5, `Questions de cours, objectif ${obj}`, minutes(suite.length), [questions(suite)]);
+    } else {
+      const encore = duNiveau(10, 4);
+      add(5, "Questions de cours, deuxième passage", minutes(encore.length), [questions(encore)]);
+    }
+    const ex1 = exo();
+    add(4, "Exercice type BAC", ex1?.duree || 40, [ex1 ? { type: "exercice", ref: ex1.cle, minutes: ex1.duree } : questions(faibles(3))]);
+    const reprises = faibles(3);
+    add(3, "Points faibles et carnet d'erreurs", minutes(reprises.length), [questions(reprises), { type: "carnet" }]);
+    const blanc: string[] = [];
+    const ex2 = exo();
+    if (ex2) blanc.push(ex2.cle);
+    if (ds.duree >= 2) { const ex3 = exo(); if (ex3) blanc.push(ex3.cle); }
+    // le DS blanc garde la durée du devoir : une question par chapitre, quatre au plus
+    const nBlanc = Math.min(4, Math.max(ds.duree >= 2 ? 2 : 3, F.length));
+    blanc.push(...garde(parTour(F, nBlanc, (f) => pointsFaibles(ctx, [f], obj, nBlanc, pris))));
+    add(2, "DS blanc chronométré", ds.duree * 60, [{ type: "ds-blanc", minutes: ds.duree * 60, refs: blanc }]);
+    add(1, "Fiche éclair", 20, [...p.essentiel, p.pieges]);
+  }
+  return seances;
 }
 
 // ---- séance du jour : à revoir, un exercice sur papier, la correction ----

@@ -20,6 +20,7 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
   const num = Number((await params).num);
   const sp = await searchParams;
   const onglet = ONGLETS.some(([id]) => id === sp.onglet) ? (sp.onglet as string) : "essentiel";
+  const jeux = `/app/jeux?fiche=${num}`;
   const { ctx, catalogue, profil } = await espaceEleve();
   // les questions s'affichent pour un objectif : viser 14 demande aussi celles de l'objectif 10. Par défaut, l'objectif de l'élève.
   const visee = [10, 14, 18].includes(Number(sp.niveau)) ? Number(sp.niveau) : profil.note_visee;
@@ -52,6 +53,8 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
       <ContenuHtml bloc className="carte contenu" html={complet.essentiel_html} />
       {complet.pieges.length > 0 && <div className="carte" style={{ marginTop: 14 }}><h2>Les pièges qui coûtent des points</h2>
         <ul className="contenu">{complet.pieges.map((p, i) => <li key={i}><ContenuHtml html={p} /></li>)}</ul></div>}
+      <Link className="carte carte-lien" href={jeux} style={{ marginTop: 14, display: "block" }}><h2>Retiens ces relations en jouant</h2>
+        <p className="discret" style={{ margin: 0 }}>Paires, cartes mémoire, pluie de formules : dix jeux sur ce chapitre.</p></Link>
     </>;
   } else if (onglet === "questions") {
     const nb = f.items.filter((i) => i.k === "q" && i.niveau <= visee).length;
@@ -112,6 +115,7 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
       </div>
       <nav className="onglets" aria-label="Parties de la fiche">
         {ONGLETS.map(([id, nom]) => <Link key={id} href={id === "essentiel" ? base : `${base}?onglet=${id}`} aria-current={id === onglet ? "page" : undefined}>{nom}</Link>)}
+        <Link href={jeux}>Jeux</Link>
       </nav>
       {corps}
       <p className="petit discret" style={{ marginTop: 18 }}>Objectif visé : {profil.note_visee}.</p>

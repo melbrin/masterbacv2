@@ -3,7 +3,7 @@ import { enregistre, type Resultat } from "@/lib/moteur";
 import { travailDe } from "@/lib/serveur/etat";
 import { clientAdmin } from "@/lib/serveur/supabase/clients";
 
-type Contexte = "libre" | "seance" | "ds" | "quiz" | "passage" | "carnet" | "test";
+type Contexte = "libre" | "seance" | "ds" | "quiz" | "passage" | "carnet" | "test" | "calibrage" | "jeu";
 
 /**
  * Enregistre une tentative de l'élève et met son carnet d'erreurs à jour, selon les règles du moteur.

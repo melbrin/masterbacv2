@@ -9,7 +9,7 @@ import * as m from "@/lib/moteur";
 import { droitsDe } from "@/lib/serveur/acces";
 import { travailDe } from "@/lib/serveur/etat";
 import { action, Refus } from "@/lib/serveur/fabriques";
-import { nouvelleGraine, questionCourante, sessionDe, type QuestionVue } from "@/lib/serveur/quiz";
+import { cloturePartie, nouvelleGraine, questionCourante, sessionDe, type FinDeJeu, type QuestionVue } from "@/lib/serveur/quiz";
 import { profilCourant } from "@/lib/serveur/requetes/profil";
 import { clientAdmin } from "@/lib/serveur/supabase/clients";
 import { enregistreTentative } from "@/lib/serveur/travail";
@@ -32,12 +32,13 @@ export const demarrerQuiz = action({
     z.object({ genre: z.literal("ds"), ds: s.uuid, seance: z.string().regex(/^s\d{1,2}$/) }),
     z.object({ genre: z.literal("carnet") }),
     z.object({ genre: z.literal("seance") }),
+    z.object({ genre: z.literal("melange") }),
   ]),
   limite: { max: 60, secondes: 3600 },
   async executer(e, session) {
     const profil = await profilActif();
     const userId = session!.userId;
-    const { ctx, jour, devoirs, catalogue } = await travailDe(userId, profil.note_visee);
+    const { ctx, devoirs, catalogue } = await travailDe(userId, profil.note_visee);
     let questions: string[] = [];
     let fiche: number | null = null;
     let niveau: number | null = null;
@@ -46,7 +47,8 @@ export const demarrerQuiz = action({
     if (e.genre === "chapitre") {
       if (!catalogue.sommaire.parNum.has(e.fiche)) throw new Refus("introuvable");
       fiche = e.fiche;
-      questions = m.quizPour(ctx, [e.fiche], 10, profil.note_visee, m.graineDuJour(jour, `q${e.fiche}`));
+      // une graine par quiz : quand le chapitre a plus de dix questions, deux quiz de suite ne sont pas les mêmes
+      questions = m.quizPour(ctx, [e.fiche], 10, profil.note_visee, nouvelleGraine());
     } else if (e.genre === "passage") {
       if (!(await droitsDe(userId)).coach) throw new Refus("reserve", "Les tests de passage font partie du Pass.");
       const nv = m.niveauFiche(ctx, e.fiche);
@@ -60,6 +62,11 @@ export const demarrerQuiz = action({
       if (!tache || tache.type !== "quiz") throw new Refus("introuvable");
       questions = tache.ids;
       origine = { ds: e.ds, seance: e.seance };
+    } else if (e.genre === "melange") {
+      // le quiz mélangé : dix questions tirées dans tous les chapitres vus en classe
+      const vus = m.chapitresVus(ctx).filter((n) => (catalogue.sommaire.quizParFiche.get(n) ?? []).length > 0);
+      if (!vus.length) throw new Refus("introuvable", "Coche d'abord dans les cours les chapitres que tu as vus en classe.");
+      questions = m.quizPour(ctx, vus, 10, profil.note_visee, nouvelleGraine());
     } else if (e.genre === "carnet") {
       questions = m.carnetDuJour(ctx).map((c) => c.k).filter((k) => k.startsWith("quiz:")).map((k) => k.slice(5)).slice(0, 20);
     } else {
@@ -89,6 +96,8 @@ export interface RetourQuiz {
   explication: string;
   suivante: QuestionVue | null;
   bilan: { bonnes: number; total: number; passage: "reussi" | "rate" | null } | null;
+  /** la fin d'une partie de jeu : son score et le record de l'élève */
+  partie?: FinDeJeu | null;
 }
 
 // La correction se fait ici, sur le serveur. Le navigateur n'a reçu que l'énoncé et les choix.
@@ -106,16 +115,25 @@ export const repondreQuiz = action({
     // une réponse ne vaut que pour la question attendue : ni rejeu, ni saut
     if (!courante || courante.rang !== e.rang) throw new Refus("invalide", "Cette question a déjà reçu une réponse.");
     const horsDelai = sq.limite !== null && Date.now() > Date.parse(sq.limite);
+    // un jeu dont le temps est écoulé s'arrête là : la réponse arrivée trop tard n'est ni corrigée ni enregistrée
+    if (horsDelai && sq.genre === "jeu") {
+      const partie = await cloturePartie(sq, sq.reponses);
+      revalidatePath("/app", "layout");
+      return { juste: false, bonneReponse: "", explication: "", suivante: null, bilan: { bonnes: partie.bonnes, total: partie.total, passage: null }, partie };
+    }
     const { q, vue } = courante;
     const verdict = horsDelai
       ? { juste: false, bonneReponse: "" }
       : corrige(q.type, vue.choix, q.type === "qcm" ? { c: vue.choix?.indexOf(q.enonce.choix?.[q.correction.c ?? -1] ?? "") } : q.correction, e.reponse as Reponse);
-    await enregistreTentative(userId, profil.note_visee, m.cleQuiz(q.id), verdict.juste ? "ok" : "ko", null, sq.genre === "passage" ? "passage" : "quiz", { session: sq.id });
+    const contexte = sq.genre === "passage" ? "passage" : sq.genre === "calibrage" ? "calibrage" : sq.genre === "jeu" ? "jeu" : "quiz";
+    await enregistreTentative(userId, profil.note_visee, m.cleQuiz(q.id), verdict.juste ? "ok" : "ko", null, contexte, { session: sq.id });
     const reponses = [...sq.reponses, { id: q.id, juste: verdict.juste }];
     const fini = reponses.length >= sq.questions.length || horsDelai;
     const bonnes = reponses.filter((r) => r.juste).length;
     const base = clientAdmin();
-    await base.from("quiz_sessions").update({ reponses, ...(fini ? { termine_le: new Date().toISOString(), bonnes } : {}) }).eq("id", sq.id).eq("user_id", userId);
+    let partie: FinDeJeu | null = null;
+    if (fini && sq.genre === "jeu") partie = await cloturePartie(sq, reponses);
+    else await base.from("quiz_sessions").update({ reponses, ...(fini ? { termine_le: new Date().toISOString(), bonnes } : {}) }).eq("id", sq.id).eq("user_id", userId);
     let passage: "reussi" | "rate" | null = null;
     if (fini && sq.genre === "passage" && sq.fiche && sq.niveau) {
       passage = bonnes / sq.questions.length >= SEUIL_PASSAGE ? "reussi" : "rate";
@@ -129,6 +147,7 @@ export const repondreQuiz = action({
       explication: horsDelai ? "" : q.explication,
       suivante: suite?.vue ?? null,
       bilan: fini ? { bonnes, total: sq.questions.length, passage } : null,
+      partie,
     };
   },
 });

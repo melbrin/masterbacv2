@@ -1,0 +1,75 @@
+/* Styles des simulations (décision 0010). Toutes les classes commencent par « simu- ». */
+
+/* Le basketteur : deux onglets, puis pour chaque mouvement la scène et ses mesures, les réglages et les équations.
+   Au téléphone tout est en une colonne. Quand la simulation dispose de 640 px, la scène est à gauche et les réglages à droite. */
+.simu { display: grid; gap: 12px; min-width: 0; container-type: inline-size; }
+.simu-onglets { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--carte-2); }
+.simu-onglets button { min-height: 44px; padding: 8px 12px; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--discret); font-weight: 700; cursor: pointer; }
+.simu-onglets button[aria-pressed="true"] { background: var(--carte); border-color: var(--filet); color: var(--encre); }
+/* des appuis rapprochés sur un bouton ne doivent pas agrandir la page */
+.simu button, .simu input { touch-action: manipulation; }
+.simu-panneau { display: grid; gap: 12px; min-width: 0; }
+.simu-panneau[hidden] { display: none; }
+.simu-vue, .simu-reglages { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.simu-modele { margin: 0; }
+.simu-suite { margin-top: 16px; }
+.simu-suite .btn { text-align: center; }
+
+/* la scène : un dessin à l'échelle, qui prend toute la largeur. Sur un écran peu haut (téléphone couché), elle rétrécit pour rester visible en entier. */
+.simu-scene { position: relative; overflow: hidden; border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--carte); }
+.simu-scene svg { display: block; width: 100%; height: auto; max-height: 80vh; }
+.simu-repere { fill: var(--discret); font-size: 10px; font-variant-numeric: tabular-nums; }
+.simu-cote { fill: var(--cuivre-texte); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.simu-fleche { fill: var(--bleu); font-size: 12px; font-weight: 700; }
+.simu-score { position: absolute; top: 8px; right: 8px; margin: 0; }
+
+/* le résultat du tir : la place de deux lignes est gardée, pour que rien ne bouge quand il s'affiche */
+.simu-retour { display: grid; align-content: center; min-height: 4em; }
+.simu-retour p { margin: 0; }
+.simu-verdict { border-radius: 10px; padding: 8px 12px; font-weight: 700; }
+.simu-verdict:empty { padding: 0; }
+.simu-verdict-ok { background: var(--vert-fond); color: var(--vert); }
+.simu-verdict-rate { background: var(--brique-fond); color: var(--texte); }
+/* le bilan du saut : chaque résultat reste sur une ligne */
+.simu-bilan p { margin: 0 0 4px; }
+.simu-bilan b { color: var(--encre); white-space: nowrap; }
+
+/* les mesures, mises à jour pendant le mouvement. Les cases ont une largeur fixe : rien ne bouge quand un nombre change de signe. */
+.simu-mesures { display: grid; gap: 6px; margin: 0; }
+.simu-mesures > div { display: flex; align-items: baseline; justify-content: space-between; gap: 4px; min-width: 0; padding: 6px 8px;
+  border-radius: 10px; background: var(--carte-2); }
+.simu-mesures dt { color: var(--discret); font-size: .86rem; }
+.simu-mesures dd { margin: 0; color: var(--encre); font-size: .86rem; font-weight: 700; white-space: nowrap; }
+/* le saut : t, y et v_y sur une ligne ; v_y porte un signe, sa case est la plus large */
+.simu-mesures-3 { grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) minmax(0, 7fr); }
+/* le tir : t, x et y sur une ligne, v_x et v_y sur la suivante */
+.simu-mesures-5 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.simu-mesures-5 > div { grid-column: span 2; }
+.simu-mesures-5 > div:nth-child(n + 4) { grid-column: span 3; }
+
+/* les deux graphiques du saut, côte à côte */
+.simu-graphes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.simu-graphe { margin: 0; min-width: 0; padding: 8px 6px 2px; border: 1px solid var(--filet); border-radius: var(--rayon); background: var(--carte); }
+.simu-graphe figcaption { padding: 0 4px 2px; color: var(--encre); font-size: .8rem; font-weight: 600; }
+.simu-graphe svg { display: block; width: 100%; height: auto; }
+
+/* un curseur : son nom à gauche, sa valeur à droite, la glissière dessous sur toute la largeur et 44 px de haut */
+.simu-curseurs { display: grid; gap: 2px; }
+.simu-curseur { display: grid; grid-template-columns: 1fr auto; align-items: baseline; column-gap: 10px; }
+.simu-curseur label { color: var(--encre); font-size: .92rem; font-weight: 600; }
+.simu-curseur span { color: var(--encre); font-weight: 700; }
+.simu-curseur input { grid-column: 1 / -1; width: 100%; min-height: 44px; margin: 0; padding: 0; accent-color: var(--cuivre-texte); cursor: pointer; }
+.simu-reglages .actions .btn { flex: 1 1 auto; }
+
+/* les équations horaires : la forme du cours, puis la même avec les valeurs choisies ; une ligne trop longue se coupe avant un « + » */
+.simu-equations { display: grid; gap: 8px; }
+.simu-equations h2 { font-size: 1rem; }
+.simu-equations > p { margin: 0; }
+.simu-equation { color: var(--encre); font-size: .95rem; font-variant-numeric: tabular-nums; }
+.simu-equation span { display: block; padding-left: 1.4em; text-indent: -1.4em; }
+.simu-equation span + span { margin-left: 2.25em; color: var(--cuivre-texte); }
+.simu-equation sub, .simu-equation sup, .simu-mesures sub { font-size: .72em; line-height: 0; }
+
+@container (min-width: 640px) {
+  .simu-panneau { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr); column-gap: 20px; align-items: start; }
+}

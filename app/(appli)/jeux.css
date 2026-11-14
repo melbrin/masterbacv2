@@ -1,0 +1,181 @@
+/* Styles des jeux (décision 0010). Toutes les classes commencent par « jeu- ». */
+/* Les couleurs viennent de la charte : le thème sombre suit sans rien ajouter ici.
+   Sans animation, tout reste jouable : les mouvements sont réunis à la fin du fichier, pour qui ne les a pas refusés. */
+
+/* ---------- cadre, bandeau, écran de fin ---------- */
+/* une seule colonne qui ne s'élargit jamais avec son contenu : une formule large défile dans son cadre, pas la page */
+.jeu-cadre, .jeu-plateau, .jeu-options, .jeu-question, .jeu-indice, .jeu-memo, .jeu-fin { display: grid; grid-template-columns: minmax(0, 1fr); }
+.jeu-cadre { gap: 12px; margin-top: 4px; }
+.jeu-plateau { gap: 12px; }
+/* ces éléments reçoivent le focus par le programme, pour qu'on ne reparte pas du haut de la page : pas de contour autour d'eux */
+.jeu-plateau:focus, .jeu-fin-titre:focus, .jeu-relie:focus, .jeu-fiche-verso:focus { outline: none; }
+/* quand le focus les amène à l'écran, ils ne se glissent pas sous la barre du haut */
+.jeu-plateau, .jeu-fin-titre, .jeu-relie { scroll-margin-top: 76px; }
+.jeu-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* deux appuis rapprochés sont deux coups de jeu, pas un zoom de la page */
+.jeu-cadre button { touch-action: manipulation; }
+
+.jeu-bandeau { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 16px; min-height: 44px;
+  padding: 6px 14px; background: var(--carte-2); border-radius: 12px; }
+.jeu-compteur { display: inline-flex; align-items: baseline; gap: 6px; font-size: .84rem; font-weight: 600; color: var(--discret); white-space: nowrap; }
+.jeu-compteur b { font-family: var(--display); font-weight: 800; font-stretch: 80%; font-size: 1.3rem; line-height: 1.15; color: var(--encre); }
+.jeu-compteur svg { width: 16px; height: 16px; align-self: center; }
+.jeu-vies { align-items: center; }
+.jeu-vie { width: 12px; height: 12px; border-radius: 50%; background: var(--brique); }
+.jeu-vie-perdue { background: transparent; box-shadow: inset 0 0 0 2px var(--filet); }
+
+.jeu-annonce { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; min-height: 30px; margin: 0; font-size: .92rem; color: var(--texte); }
+.jeu-pastille { white-space: normal; border-radius: 12px; padding: 3px 10px; font-size: .84rem; font-weight: 700; }
+.jeu-pastille svg { flex: none; stroke-width: 2.6; }
+.jeu-etiquette { font-family: var(--display); font-weight: 750; font-stretch: 112%; text-transform: uppercase; letter-spacing: .18em;
+  font-size: .68rem; color: var(--cuivre-texte); }
+/* une formule large défile dans son cadre, jamais la page */
+.jeu-formule { min-width: 0; overflow-x: auto; overflow-y: hidden; padding: 6px 0; font-size: 1.05rem; color: var(--encre); }
+.jeu-cadre .btn[aria-disabled="true"] { opacity: .45; cursor: not-allowed; filter: none; }
+.jeu-actions > .btn { flex: 1 1 140px; }
+
+.jeu-vide > p { margin: 0 0 12px; }
+.jeu-fin { gap: 10px; justify-items: start; }
+.jeu-fin > h2, .jeu-fin > p { margin: 0; }
+.jeu-fin-phrase { color: var(--texte); }
+.jeu-fin-record { display: flex; align-items: center; gap: 6px; min-height: 30px; color: var(--discret); }
+.jeu-fin-record b { font-family: var(--display); font-weight: 800; font-stretch: 80%; font-size: 1.2rem; color: var(--encre); }
+
+/* ---------- réponses proposées ---------- */
+.jeu-options { gap: 8px; }
+.jeu-option { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 10px 14px; border-radius: 12px;
+  border: 1.5px solid var(--filet); background: var(--carte); color: var(--texte); text-align: left; font-size: .98rem; line-height: 1.35; cursor: pointer; }
+.jeu-option:focus-visible, .jeu-lien:focus-visible, .jeu-paire:focus-visible { border-radius: 12px; }
+.jeu-option[aria-disabled="true"] { cursor: default; }
+.jeu-option-repere { flex: none; min-width: 1.5em; font-family: var(--display); font-weight: 800; font-stretch: 85%; font-size: 1.1rem; color: var(--cuivre-texte); }
+.jeu-option-texte { flex: 1; min-width: 0; overflow-x: auto; }
+.jeu-marque { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: var(--carte); }
+.jeu-marque svg { width: 16px; height: 16px; stroke-width: 2.6; }
+.jeu-marque-ok { background: var(--vert); }
+.jeu-marque-ko { background: var(--brique); }
+
+/* ---------- carte d'une question, indices ---------- */
+.jeu-question { gap: 10px; }
+.jeu-question-titre { font-size: 1.08rem; font-weight: 600; line-height: 1.4; color: var(--encre); overflow-x: auto; overflow-wrap: break-word; }
+.jeu-indice { gap: 2px; }
+.jeu-indice-texte { font-size: 1.02rem; line-height: 1.45; color: var(--encre); overflow-x: auto; }
+
+/* ---------- Paires ---------- */
+.jeu-paires { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.jeu-paires-serrees { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.jeu-paire { position: relative; display: block; width: 100%; height: 88px; padding: 0; border: 0; background: none; border-radius: 12px;
+  color: var(--texte); cursor: pointer; }
+.jeu-paire[aria-disabled="true"] { cursor: default; }
+.jeu-paire-int { position: absolute; inset: 0; display: block; }
+.jeu-paire-dos, .jeu-paire-face { position: absolute; inset: 0; display: flex; border-radius: 12px; }
+.jeu-paire-dos { align-items: center; justify-content: center; background: var(--nuit); border: 1.5px solid var(--cuivre); color: var(--cuivre);
+  font-family: var(--display); font-weight: 800; font-size: 1.6rem; }
+.jeu-paire-face { visibility: hidden; overflow: auto; padding: 6px 8px; background: var(--carte); border: 1.5px solid var(--filet);
+  font-size: .86rem; line-height: 1.22; text-align: center; }
+/* une marge automatique centre le contenu quand il tient, et le laisse défiler depuis son début quand il déborde */
+.jeu-paire-face > * { margin: auto; }
+.jeu-paire-face .katex { font-size: .98em; }
+.jeu-retournee .jeu-paire-face { visibility: visible; }
+.jeu-retournee .jeu-paire-dos { visibility: hidden; }
+.jeu-trouvee .jeu-paire-face { border-color: var(--vert); background: var(--vert-fond); }
+.jeu-ratee .jeu-paire-face { border-color: var(--brique); background: var(--brique-fond); }
+
+/* ---------- Cartes mémoire ---------- */
+.jeu-memo { gap: 12px; }
+.jeu-fiche-int { display: grid; grid-template-columns: minmax(0, 1fr); }
+.jeu-fiche-face { grid-area: 1 / 1; min-height: 190px; display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; gap: 6px; padding: 18px 16px;
+  background: var(--carte); border: 1.5px solid var(--filet); border-radius: var(--rayon); }
+.jeu-fiche-recto { justify-items: center; text-align: center; border-color: color-mix(in srgb, var(--cuivre) 55%, var(--filet)); }
+.jeu-fiche-verso { visibility: hidden; border-color: color-mix(in srgb, var(--vert) 45%, var(--filet)); }
+.jeu-retournee .jeu-fiche-recto { visibility: hidden; }
+.jeu-retournee .jeu-fiche-verso { visibility: visible; }
+.jeu-fiche-notion { font-family: var(--display); font-weight: 750; font-stretch: 92%; font-size: 1.5rem; line-height: 1.2; color: var(--encre); overflow-wrap: anywhere; }
+.jeu-fiche-rappel { font-weight: 700; color: var(--encre); margin-bottom: 4px; }
+.jeu-fiche-retenir { line-height: 1.45; overflow-x: auto; }
+
+/* ---------- Pluie de formules ---------- */
+.jeu-pluie { position: relative; height: clamp(180px, 32vh, 300px); overflow: hidden; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 12px; padding: 12px; border: 1px solid var(--filet); border-radius: var(--rayon);
+  background: linear-gradient(var(--bleu-fond), var(--carte-2)); }
+/* le sol : la formule ne doit pas l'atteindre */
+.jeu-pluie::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--brique); opacity: .55; }
+.jeu-goutte { display: flex; justify-content: center; max-width: 100%; min-width: 0; }
+.jeu-goutte-formule { display: block; max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 10px 14px; border-radius: 12px;
+  background: var(--carte); border: 1.5px solid var(--bleu); color: var(--encre); font-size: 1.05rem; }
+.jeu-goutte-juste .jeu-goutte-formule { border-color: var(--vert); background: var(--vert-fond); }
+.jeu-goutte-fausse .jeu-goutte-formule { border-color: var(--brique); background: var(--brique-fond); }
+.jeu-rebours { font-family: var(--display); font-weight: 800; font-stretch: 80%; font-size: 2.2rem; line-height: 1; color: var(--bleu); }
+
+/* ---------- Relie ---------- */
+/* les deux colonnes partagent leurs rangées : une notion et la relation d'en face ont la même hauteur */
+.jeu-relie { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 8px 10px; }
+.jeu-relie-colonne { grid-row: 1 / span var(--jeu-rangees, 5); display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; row-gap: 8px; }
+.jeu-relie-colonne:first-child { grid-column: 1; }
+.jeu-relie-colonne:last-child { grid-column: 2; }
+.jeu-lien { display: flex; align-items: center; gap: 6px; width: 100%; min-height: 60px; padding: 8px 10px; border-radius: 12px;
+  border: 1.5px solid var(--filet); background: var(--carte); color: var(--texte); text-align: left; font-size: .92rem; line-height: 1.25; cursor: pointer; }
+.jeu-lien[aria-disabled="true"] { cursor: default; }
+.jeu-lien-texte { flex: 1; min-width: 0; overflow-x: auto; }
+.jeu-lien .katex { font-size: 1em; }
+.jeu-lien-rang { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--vert); color: var(--carte);
+  font-size: .78rem; font-weight: 800; }
+
+/* ---------- états d'une réponse : après les boutons qu'ils colorent, pour l'emporter sur leur couleur de départ ---------- */
+.jeu-choisi { border-color: var(--cuivre-texte); background: color-mix(in srgb, var(--cuivre) 16%, var(--carte)); }
+.jeu-bon { border-color: var(--vert); background: var(--vert-fond); }
+.jeu-faux { border-color: var(--brique); background: var(--brique-fond); }
+.jeu-eteint { opacity: .55; }
+
+/* la souris survole ; au doigt, pas de survol qui reste collé après un appui */
+@media (hover: hover) {
+  .jeu-option:not([aria-disabled="true"]):hover, .jeu-lien:not([aria-disabled="true"]):not(.jeu-faux):hover { border-color: var(--cuivre); }
+  .jeu-paire:not([aria-disabled="true"]):hover .jeu-paire-dos { box-shadow: 0 0 0 2px var(--cuivre); }
+}
+@media (min-width: 640px) {
+  .jeu-paires, .jeu-paires-serrees { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .jeu-paire { height: 104px; }
+  .jeu-paire-face { font-size: .95rem; }
+  .jeu-relie { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 16px; }
+}
+
+/* ---------- mouvements ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* la couleur d'une réponse arrive en douceur ; le retour à la couleur de départ, à la question suivante, est immédiat */
+  .jeu-bon, .jeu-faux, .jeu-choisi, .jeu-eteint { transition: background-color .18s ease-out, border-color .18s ease-out, opacity .18s ease-out; }
+  .jeu-pastille, .jeu-marque, .jeu-lien-rang { animation: jeu-saute .4s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .jeu-vie { transition: background-color .3s ease-out, box-shadow .3s ease-out; }
+  @keyframes jeu-saute { from { transform: scale(.3); opacity: .001; } to { transform: none; opacity: 1; } }
+  @keyframes jeu-secousse { 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+  @keyframes jeu-halo { from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--vert) 55%, transparent); } to { box-shadow: 0 0 0 7px transparent; } }
+
+  /* Paires : la carte tourne sur elle-même. Ses deux côtés s'échangent à mi-course, quand elle est vue par la tranche :
+     le retournement ne dépend d'aucun rendu en relief à l'intérieur d'un bouton, que tous les navigateurs ne font pas pareil. */
+  .jeu-paire { perspective: 700px; }
+  .jeu-paire-int { transition: transform .45s ease-in-out; }
+  .jeu-retournee .jeu-paire-int { transform: rotateY(180deg); }
+  .jeu-paire-dos, .jeu-paire-face { transition: visibility 0s linear .225s; }
+  .jeu-paire-face { transform: rotateY(180deg); }
+  .jeu-trouvee .jeu-paire-face { animation: jeu-halo .45s ease-out .3s; }
+  .jeu-ratee { animation: jeu-secousse .35s ease-in-out .45s; }
+
+  /* Cartes mémoire : la carte se retourne en relief */
+  .jeu-fiche { perspective: 1100px; }
+  .jeu-fiche-int { transform-style: preserve-3d; transition: transform .55s cubic-bezier(.3, .7, .3, 1); }
+  .jeu-retournee .jeu-fiche-int { transform: rotateY(180deg); }
+  .jeu-fiche-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .jeu-fiche-recto { transition: visibility 0s linear .55s; }
+  .jeu-fiche-verso { transform: rotateY(180deg); }
+
+  /* Pluie de formules : la formule tombe du haut de la zone jusqu'au sol, dans le temps donné par le jeu ; le compte à rebours est caché */
+  .jeu-goutte { position: absolute; left: 0; right: 0; top: 0; padding: 0 10px; animation: jeu-chute var(--jeu-duree, 8s) linear both; }
+  .jeu-goutte-arretee { animation-play-state: paused; }
+  .jeu-rebours { display: none; }
+  @keyframes jeu-chute { from { top: 0; transform: translateY(0); } to { top: calc(100% - 4px); transform: translateY(-100%); } }
+
+  /* Relie : une mauvaise paire est secouée */
+  .jeu-secoue { animation: jeu-secousse .4s ease-in-out; }
+
+  /* Quel chapitre ? : la carte part vers le bouton choisi */
+  .jeu-envol { animation: jeu-envol .5s cubic-bezier(.5, 0, .8, .4) both; }
+  @keyframes jeu-envol { to { transform: translate(var(--jeu-dx, 0px), var(--jeu-dy, 80px)) scale(.12); opacity: 0; } }
+}

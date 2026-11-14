@@ -12,6 +12,9 @@ export const sessionQuiz = requete({ nom: "quiz.session", acces: "eleve" }, asyn
     id: s.id, genre: s.genre, fiche: s.fiche, niveau: s.niveau, total: s.questions.length, limite: s.limite,
     // un test lancé depuis une séance de DS y retourne : ces deux champs ne servent qu'à construire ce lien
     ds: s.secret.ds ?? null, seance: s.secret.seance ?? null,
+    // pour une partie de jeu : lequel, sur quels chapitres, et l'instant où elle a commencé
+    jeu: s.secret.jeu ?? null, fiches: s.secret.fiches ?? [], debut: s.debut,
+    justes: s.reponses.filter((r) => r.juste).length,
     terminee: !!s.termine_le, bonnes: s.bonnes, rang: courante?.rang ?? s.reponses.length, vue: courante?.vue ?? null,
   };
 });

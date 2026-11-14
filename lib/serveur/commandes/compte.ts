@@ -58,7 +58,8 @@ export const creerProfil = action({
       { onConflict: "user_id", ignoreDuplicates: true },
     );
     if (error) throw new Refus("invalide");
-    return { suite: "/app" };
+    // à la première connexion, l'élève passe son test de calibrage : il donne son point de départ et son parcours
+    return { suite: e.quinzeAnsOuPlus ? "/app/calibrage?bienvenue=1" : "/app" };
   },
 });
 

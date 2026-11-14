@@ -4,6 +4,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { nettoie } from "@/lib/commun/html/nettoie";
+import { aUneFormule, lignesEssentiel } from "@/lib/commun/jeux";
 
 const RACINE = join(process.cwd(), "contenu", "export");
 const lis = (nom: string) => JSON.parse(readFileSync(join(RACINE, "data", nom), "utf8"));
@@ -141,5 +142,20 @@ describe("rédaction", () => {
     for (const f of fiches) for (const [ou, html] of champs(f)) if (html.includes("—")) trouves.push(ou);
     for (const q of quiz) if (JSON.stringify(q).includes("—")) trouves.push(`quiz ${String(q.id)}`);
     expect(trouves).toEqual([]);
+  });
+});
+
+describe("matière des jeux", () => {
+  it("chaque fiche donne au moins cinq lignes « notion, relation, à retenir », dont quatre avec une formule", () => {
+    const compte: string[] = [];
+    for (const f of fiches) {
+      const lignes = lignesEssentiel(nettoie(f.essentiel).html, f.num);
+      compte.push(`${f.num}:${lignes.length}/${lignes.filter((l) => aUneFormule(l.relation)).length}`);
+      expect(lignes.length, `fiche ${f.num}`).toBeGreaterThanOrEqual(5);
+      expect(lignes.filter((l) => aUneFormule(l.relation)).length, `fiche ${f.num} : formules`).toBeGreaterThanOrEqual(4);
+      expect(new Set(lignes.map((l) => l.notion)).size, `fiche ${f.num} : notions en double`).toBe(lignes.length);
+    }
+    // lignes et lignes avec formule, par fiche : utile pour régler les jeux
+    console.info(`lignes de jeu par fiche (lignes/formules) : ${compte.join(" ")}`);
   });
 });

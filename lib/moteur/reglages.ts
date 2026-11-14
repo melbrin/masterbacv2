@@ -14,12 +14,19 @@ export const REGLAGES_PROTOTYPE: Reglages = Object.freeze({
   minutesSeance: 25,
   revoirSansDoublon: false,
   seancesParSemaine: { 10: 3, 14: 4, 18: 5 },
+  planParChapitre: false,
+  questionsMaxSeanceDs: 8,
+  questionsCalibrage: 15,
+  joursCalibrageAncien: 30,
+  joursDePause: 4,
+  tauxFragile: 0.5,
 });
 
 /** Les réglages de l'application : le prototype, plus les évolutions décidées (docs/08-moteur.md, section 6). */
 export const REGLAGES_ACTUELS: Reglages = Object.freeze({
   ...REGLAGES_PROTOTYPE,
   revoirSansDoublon: true,
+  planParChapitre: true,
 });
 
 export const NIVEAUX = [10, 14, 18] as const;
