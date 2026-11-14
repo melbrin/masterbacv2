@@ -8,9 +8,14 @@
 
 /* les documents du sujet */
 .tp-documents { display: grid; gap: 10px; }
-.tp-document { padding: 12px 14px; border: 1px solid var(--filet); border-left: 4px solid var(--cuivre); border-radius: 12px; background: var(--carte); }
-.tp-document h3 { margin: 0 0 6px; font-size: .95rem; }
-.tp-document ul { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; font-size: .92rem; }
+/* un document se présente comme une feuille de sujet : un filet gras et un filet maigre en tête, son numéro en capitales
+   espacées, des lignes séparées par un pointillé. Pas de barre de couleur sur le côté. */
+.tp-document { position: relative; padding: 15px 14px 12px; border: 1px solid var(--filet); border-top: 3px solid var(--encre); border-radius: 3px; background: var(--carte); }
+.tp-document::before { content: ""; position: absolute; top: 2px; right: 0; left: 0; height: 1px; background: var(--encre); }
+.tp-document-rang { margin: 0; font-family: var(--display); font-size: .66rem; font-weight: 750; font-stretch: 115%; letter-spacing: .2em; text-transform: uppercase; color: var(--cuivre-texte); }
+.tp-document h3 { margin: 1px 0 8px; font-size: 1rem; font-stretch: 94%; }
+.tp-document ul { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: .92rem; }
+.tp-document li + li { padding-top: 6px; border-top: 1px dotted color-mix(in srgb, var(--encre) 26%, transparent); }
 .tp-rappels { display: grid; gap: 8px; justify-items: start; }
 .tp-rappels .tp-documents { justify-self: stretch; }
 

@@ -20,8 +20,9 @@ export function AvecIndices({ texte }: { texte: string }) {
 export function Documents({ documents }: { documents: DocumentTp[] }) {
   return (
     <div className="tp-documents">
-      {documents.map((d) => (
+      {documents.map((d, i) => (
         <section key={d.titre} className="tp-document">
+          <p className="tp-document-rang">Document {i + 1}</p>
           <h3>{d.titre}</h3>
           <ul>{d.lignes.map((l) => <li key={l}><AvecIndices texte={l} /></li>)}</ul>
         </section>
