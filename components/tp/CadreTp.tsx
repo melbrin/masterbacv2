@@ -11,6 +11,7 @@ import { Etapes } from "@/components/appli/Morceaux";
 import { COMPETENCES, type Bilan, type EtapePublique, type ReponseEtape, type RetourEtape } from "@/lib/commun/tp/types";
 import { repondreTp } from "@/lib/serveur/commandes/tp";
 import { AvecIndices, Choix, Correction, Documents, Lecture, Materiel, Ordre, Valeur } from "./Etapes";
+import PaillasseCircuit from "./PaillasseCircuit";
 import PaillasseTitrage from "./PaillasseTitrage";
 
 type Retour = { ok: true; valeur: unknown } | { ok: false; message: string };
@@ -117,6 +118,7 @@ export default function CadreTp({ essai, etapes, retours, bilan: bilanDepart, re
               <h2>À toi de manipuler</h2>
               <p>{etape.consigne}</p>
               {etape.paillasse.genre === "titrage" && <PaillasseTitrage reglages={etape.paillasse.reglages} attente={attente} fini={(gestes) => valide({ g: "paillasse", gestes })} />}
+              {etape.paillasse.genre === "circuit" && <PaillasseCircuit reglages={etape.paillasse.reglages} attente={attente} fini={(gestes) => valide({ g: "paillasse", gestes })} />}
             </div>
           )}
         </div>

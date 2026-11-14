@@ -53,10 +53,23 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
 .tp-verser { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
 .tp-verser button { min-height: 52px; padding: 6px 4px; border: 1.5px solid var(--filet); border-radius: 12px; background: var(--carte-2); color: var(--encre); font: inherit; font-weight: 700; cursor: pointer; touch-action: manipulation; }
 .tp-verser button:active { background: color-mix(in srgb, var(--cuivre) 22%, var(--carte)); }
-.tp-curseur { display: grid; gap: 6px; }
-.tp-curseur label { font-weight: 600; color: var(--encre); }
-.tp-curseur input { width: 100%; min-height: 44px; margin: 0; accent-color: var(--cuivre-texte); }
+.tp-lecture { display: grid; gap: 6px; }
+.tp-lecture label { font-weight: 600; color: var(--encre); font-size: .92rem; }
+.tp-lecture .labo-saisie input { min-height: 46px; font-size: 1.2rem; }
+/* le tableau des relevés : trois colonnes, qui défilent dans leur cadre */
+.tp-releves { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; max-height: 118px; margin: 0; padding: 0; overflow-y: auto; list-style: none; font-size: .8rem; font-variant-numeric: tabular-nums; }
+.tp-releves li { display: grid; padding: 3px 6px; border-radius: 8px; background: var(--carte-2); }
+.tp-releves b { color: var(--encre); }
 .tp-goutte { opacity: 0; }
+/* les bornes d'un montage : on en touche une, puis une autre, pour poser un fil */
+.tp-borne { cursor: pointer; outline: none; }
+.tp-borne:focus-visible > circle:last-of-type { stroke: var(--sable); stroke-width: 3.5; }
+.tp-fils { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; margin: 0; padding: 0; list-style: none; font-size: .78rem; line-height: 1.2; }
+.tp-fils li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 2px 4px 2px 10px; border-radius: 10px; background: var(--carte-2); }
+.tp-fils button { display: grid; flex: none; width: 40px; height: 36px; border: 0; border-radius: 8px; background: transparent; color: var(--brique); place-items: center; cursor: pointer; }
+.tp-fils button svg { width: 16px; height: 16px; }
+.tp-glissiere { width: 100%; min-height: 44px; margin: 0; accent-color: var(--cuivre-texte); }
+.tp-verser button[aria-pressed="true"] { border-color: var(--cuivre-texte); background: color-mix(in srgb, var(--cuivre) 22%, var(--carte)); }
 
 /* le bilan par compétence */
 .tp-bilan { justify-items: stretch; text-align: left; }

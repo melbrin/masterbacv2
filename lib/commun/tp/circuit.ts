@@ -183,6 +183,7 @@ export function bilanCircuit(r: ReglagesCircuit, etat: EtatCircuit): { mesures: 
     for (const a of etat.acquisitions) if (a.tau !== null) mesures[`tau${a.niveau}`] = a.tau;
     if (Object.keys(mesures).length < 3) faute("niveaux", false, "Il faut des mesures pour trois niveaux d'eau au moins.");
   }
-  const score = Math.max(0, 1 - fautes.reduce((s, f) => s + (f.grave ? 0.5 : 0.25), 0));
+  // sans aucune acquisition, la manipulation n'est pas faite
+  const score = derniere ? Math.max(0, 1 - fautes.reduce((s, f) => s + (f.grave ? 0.5 : 0.25), 0)) : 0;
   return { mesures, fautes, score };
 }

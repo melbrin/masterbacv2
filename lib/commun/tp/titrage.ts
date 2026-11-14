@@ -32,6 +32,8 @@ export interface EtatTitrage {
   verse: number;
   /** les relevés du pH-mètre : un point à chaque ajout, quand la sonde est dans la solution */
   releves: { V: number; pH: number }[];
+  /** l'ajout pendant lequel l'équivalence a été franchie : c'est la précision du volume trouvé ; vide tant qu'elle ne l'est pas */
+  saut: number | null;
   /** le volume que l'élève retient pour l'équivalence ; vide tant qu'il ne l'a pas noté */
   note: number | null;
   /** le nombre de fois où le titrage a été recommencé */
@@ -54,7 +56,7 @@ export const DECALAGE = 0.6;
 const KE = 1e-14;
 const arrondi = (x: number, pas: number) => Math.round(x / pas) * pas;
 
-export const TITRAGE_INITIAL: EtatTitrage = { rincee: false, remplie: false, zero: false, prise: false, indicateur: false, sonde: false, agitation: false, verse: 0, releves: [], note: null, essais: 0 };
+export const TITRAGE_INITIAL: EtatTitrage = { rincee: false, remplie: false, zero: false, prise: false, indicateur: false, sonde: false, agitation: false, verse: 0, releves: [], saut: null, note: null, essais: 0 };
 
 /** Le volume de soude à l'équivalence : n(acide) = n(soude versée). */
 export const volumeEquivalence = (r: ReglagesTitrage): number => (r.Ca * r.Va) / r.Cb;
@@ -96,7 +98,10 @@ export function geste(r: ReglagesTitrage, etat: EtatTitrage, g: GesteTitrage): E
     case "agiter": return { ...etat, agitation: true };
     case "verser": {
       if (!etat.remplie || !etat.prise || !AJOUTS.includes(g.v as (typeof AJOUTS)[number]) || etat.verse >= CAPACITE) return etat;
-      return avecReleve(r, { ...etat, verse: Math.min(CAPACITE, arrondi(etat.verse + g.v, 0.05)), note: null });
+      const verse = Math.min(CAPACITE, arrondi(etat.verse + g.v, 0.05));
+      const vrai = volumeEquivalence(r);
+      const saut = etat.verse < vrai && verse >= vrai ? arrondi(verse - etat.verse, 0.05) : etat.saut;
+      return avecReleve(r, { ...etat, verse, saut, note: null });
     }
     case "noter": {
       const v = r.suivi === "indicateur" ? volumeLu(etat) : g.v;
@@ -133,10 +138,15 @@ export function bilanTitrage(r: ReglagesTitrage, etat: EtatTitrage): { VE: numbe
   if (etat.note === null) {
     faute("note", true, "Tu n'as pas noté le volume à l'équivalence.");
   } else if (r.suivi === "indicateur") {
+    // deux façons de manquer l'équivalence : la franchir avec un ajout trop gros (le volume n'est connu qu'à cet ajout près),
+    // ou continuer à verser après le changement de couleur
     const depasse = etat.verse - vrai;
+    const saut = etat.saut ?? 0;
     if (depasse < -0.1) faute("avant", true, `Tu t'es arrêté ${ml(-depasse)} avant l'équivalence : la couleur n'avait pas encore changé pour de bon.`);
-    else if (depasse > 0.3) faute("apres", true, `Tu as dépassé l'équivalence de ${ml(depasse)} : près du changement de couleur, il faut verser goutte à goutte.`);
-    else if (depasse > 0.12) faute("apres", false, `Tu as dépassé l'équivalence de ${ml(depasse)} : finis goutte à goutte.`);
+    else if (saut > 0.5) faute("apres", true, `Tu as franchi l'équivalence avec un ajout de ${ml(saut)} : ton volume n'est connu qu'à ${ml(saut)} près. Près du changement de couleur, il faut verser goutte à goutte.`);
+    else if (depasse > 0.3) faute("apres", true, `Tu as dépassé l'équivalence de ${ml(depasse)} : dès que la couleur change, il faut arrêter de verser.`);
+    else if (depasse > 0.12) faute("apres", false, `Tu as dépassé l'équivalence de ${ml(depasse)} : dès que la couleur change, il faut arrêter de verser.`);
+    else if (saut > 0.1) faute("apres", false, `Tu as franchi l'équivalence avec un ajout de ${ml(saut)} : finis goutte à goutte, pour un volume à la goutte près.`);
   } else {
     const autour = etat.releves.map((p) => p.V).filter((V) => Math.abs(V - vrai) <= 1).sort((a, b) => a - b);
     const serre = autour.length >= 4 && autour.every((V, i) => i === 0 || V - autour[i - 1] <= 0.3);

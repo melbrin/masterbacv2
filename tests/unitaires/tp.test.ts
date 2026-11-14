@@ -81,13 +81,34 @@ describe("le bilan d'un titrage", () => {
     expect(b.fautes).toEqual([]);
     expect(b.score).toBe(1);
   });
-  it("dépasser l'équivalence, oublier le zéro ou l'indicateur coûte des points", () => {
+  it("dépasser l'équivalence coûte des points", () => {
     const depasse = bilanTitrage(fort, rejoueTitrage(fort, [...preparation, ...verser(1, 11), { g: "noter" }]));
     expect(depasse.fautes.map((f) => f.code)).toEqual(["apres"]);
     expect(depasse.fautes[0].grave).toBe(true);
     expect(depasse.score).toBe(0.5);
     const leger = bilanTitrage(fort, rejoueTitrage(fort, [...preparation, ...verser(1, 9), ...verser(0.2, 5), { g: "noter" }]));
     expect(leger.fautes.map((f) => [f.code, f.grave])).toEqual([["apres", false]]);
+  });
+
+  it("le volume n'est connu qu'à l'ajout près : c'est l'ajout qui franchit l'équivalence qui compte", () => {
+    const fautes = (gestes: GesteTitrage[]) => bilanTitrage(fort, rejoueTitrage(fort, [...preparation, ...gestes, { g: "noter" }])).fautes.map((f) => [f.code, f.grave]);
+    // deux filets de 5 mL tombent par chance tout près de l'équivalence : la faute est grave quand même
+    expect(rejoueTitrage(fort, [...preparation, ...verser(5, 2)]).saut).toBe(5);
+    expect(fautes(verser(5, 2))).toEqual([["apres", true]]);
+    expect(fautes([...verser(1, 10)])).toEqual([["apres", true]]);
+    // franchie par 0,2 mL : le volume est juste, mais pas à la goutte près
+    expect(fautes([...verser(1, 9), ...verser(0.2, 4)])).toEqual([["apres", false]]);
+    // franchie par une goutte : rien à dire
+    expect(rejoueTitrage(fort, [...preparation, ...verser(1, 9), ...verser(0.2, 3), ...verser(0.05, 4)]).saut).toBeCloseTo(0.05, 9);
+    expect(fautes([...verser(1, 9), ...verser(0.2, 3), ...verser(0.05, 4)])).toEqual([]);
+    // une goutte, puis encore des gouttes après le changement de couleur
+    expect(fautes([...verser(1, 9), ...verser(0.2, 3), ...verser(0.05, 8)])).toEqual([["apres", false]]);
+    // tant que l'équivalence n'est pas franchie, il n'y a pas de saut ; recommencer le titrage l'efface
+    expect(rejoueTitrage(fort, [...preparation, ...verser(1, 9)]).saut).toBeNull();
+    expect(rejoueTitrage(fort, [...preparation, ...verser(5, 2), { g: "recommencer" }]).saut).toBeNull();
+  });
+
+  it("oublier le zéro ou l'indicateur coûte des points", () => {
     const bacle = bilanTitrage(fort, rejoueTitrage(fort, [{ g: "remplir" }, { g: "prise" }, ...verser(1, 8), { g: "noter" }]));
     expect(bacle.fautes.map((f) => f.code).sort()).toEqual(["agitation", "avant", "indicateur", "rincage", "zero"]);
     expect(bacle.score).toBe(0);

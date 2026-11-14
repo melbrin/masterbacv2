@@ -7,7 +7,7 @@
 import { useState } from "react";
 import Icone from "@/components/appli/Icone";
 import { Becher, Ecran } from "@/components/simulations/scenes/verrerie";
-import { nombre } from "@/lib/commun/format";
+import { lisNombre, nombre } from "@/lib/commun/format";
 import { AJOUTS, CAPACITE, DECALAGE, TITRAGE_INITIAL, geste, pHActuel, volumeLu, type EtatTitrage, type GesteTitrage, type ReglagesTitrage } from "@/lib/commun/tp/titrage";
 import { INCOLORE, TEINTES_INDICATEUR, couleurIndicateur } from "./couleurs";
 
@@ -40,7 +40,7 @@ function echo(r_: ReglagesTitrage, etat: EtatTitrage, g: GesteTitrage): string {
     case "indicateur": return `Quelques gouttes de ${TEINTES_INDICATEUR[r_.indicateur].nom} sont ajoutées.`;
     case "sonde": return "La sonde du pH-mètre plonge dans la solution.";
     case "agiter": return "L'agitation est lancée.";
-    case "verser": return `Tu as versé ${g.v === 0.05 ? "une goutte" : ml(g.v)}. Lecture de la burette : ${ml(volumeLu(etat))}.`;
+    case "verser": return `Tu as versé ${g.v === 0.05 ? "une goutte" : ml(g.v)}. Burette : ${ml(volumeLu(etat))}.${r_.suivi === "phmetre" && etat.sonde ? ` pH ${nombre(pHActuel(r_, etat), 2)}.` : ""}`;
     case "noter": return `Volume noté pour l'équivalence : ${ml(etat.note ?? 0)}.`;
     case "recommencer": return "Nouveau titrage : la burette et le récipient sont vides.";
   }
@@ -49,7 +49,8 @@ function echo(r_: ReglagesTitrage, etat: EtatTitrage, g: GesteTitrage): string {
 export default function PaillasseTitrage({ reglages, fini, attente }: { reglages: ReglagesTitrage; fini: (gestes: GesteTitrage[]) => void; attente: boolean }) {
   const [{ etat, gestes }, setManip] = useState<{ etat: EtatTitrage; gestes: GesteTitrage[] }>({ etat: TITRAGE_INITIAL, gestes: [] });
   const [message, setMessage] = useState("Commence par préparer la burette et la prise d'essai.");
-  const [curseur, setCurseur] = useState(12.5);
+  /** le volume à l'équivalence que l'élève lit sur sa courbe, tel qu'il le saisit */
+  const [lecture, setLecture] = useState("");
   const [confirme, setConfirme] = useState(false);
   const indicateur = reglages.suivi === "indicateur";
   const teintes = TEINTES_INDICATEUR[reglages.indicateur];
@@ -73,7 +74,11 @@ export default function PaillasseTitrage({ reglages, fini, attente }: { reglages
   const surface = r(188 - (etat.verse / CAPACITE) * 10);
   // la paroi de l'erlenmeyer s'écarte du col jusqu'au fond
   const paroi = (y: number) => r(8 + ((y - COL) / (FOND - 4 - COL)) * 30);
-  const X = (V: number) => r(G.x0 + (V / CAPACITE) * (G.x1 - G.x0));
+  // la courbe s'étend sur ce qui a été versé, plus une marge : elle occupe toute sa place
+  const etendue = Math.min(CAPACITE, Math.max(10, Math.ceil(etat.verse + 3)));
+  const graduations = (etendue <= 12 ? [2, 4, 6, 8, 10, 12] : [5, 10, 15, 20, 25]).filter((V) => V <= etendue);
+  const curseur = lisNombre(lecture);
+  const X = (V: number) => r(G.x0 + (Math.min(V, etendue) / etendue) * (G.x1 - G.x0));
   const Y = (x: number) => r(G.y0 - (x / 14) * (G.y0 - G.y1));
   const etapes: { g: GesteTitrage; nom: string; fait: boolean }[] = [
     { g: { g: "rincer" }, nom: "Rincer la burette", fait: etat.rincee },
@@ -126,13 +131,13 @@ export default function PaillasseTitrage({ reglages, fini, attente }: { reglages
                 {/* la courbe : un point à chaque ajout */}
                 <path d={`M ${G.x0} ${G.y1 - 4} V ${G.y0} H ${G.x1 + 4}`} fill="none" stroke="var(--encre)" strokeWidth={1.2} />
                 {[7, 14].map((x) => <g key={x}><line x1={G.x0 - 3} x2={G.x0} y1={Y(x)} y2={Y(x)} stroke="var(--encre)" /><text x={G.x0 - 5} y={Y(x) + 3.5} textAnchor="end">{x}</text></g>)}
-                {[5, 10, 15, 20, 25].map((V) => <g key={V}><line x1={X(V)} x2={X(V)} y1={G.y0} y2={G.y0 + 3} stroke="var(--encre)" /><text x={X(V)} y={G.y0 + 13} textAnchor="middle">{V}</text></g>)}
+                {graduations.map((V) => <g key={V}><line x1={X(V)} x2={X(V)} y1={G.y0} y2={G.y0 + 3} stroke="var(--encre)" /><text x={X(V)} y={G.y0 + 13} textAnchor="middle">{V}</text></g>)}
                 <text x={G.x0 - 5} y={G.y1 - 8} textAnchor="end">pH</text>
                 <text x={G.x1 + 4} y={G.y0 + 26} textAnchor="end">volume versé (mL)</text>
                 {etat.releves.length > 1 && <polyline points={etat.releves.map((p) => `${X(p.V)},${Y(p.pH)}`).join(" ")} fill="none" stroke="var(--cuivre)" strokeWidth={1.4} />}
                 {etat.releves.map((p) => <circle key={p.V} cx={X(p.V)} cy={Y(p.pH)} r={2} fill="var(--cuivre)" />)}
-                {etat.releves.length > 2 && <g><line x1={X(curseur)} x2={X(curseur)} y1={G.y1} y2={G.y0} stroke="var(--bleu)" strokeDasharray="3 3" /><text x={X(curseur)} y={G.y1 - 5} textAnchor="middle" className="labo-fort">{nombre(curseur, 2)}</text></g>}
-                {etat.note !== null && <text x={G.x0} y={206} style={{ fill: "var(--cuivre)", fontWeight: 700 }}>Volume noté pour l&apos;équivalence : {ml(etat.note)}</text>}
+                {curseur !== null && curseur <= etendue && <g><line x1={X(curseur)} x2={X(curseur)} y1={G.y1} y2={G.y0} stroke="var(--bleu)" strokeDasharray="3 3" /><text x={X(curseur)} y={G.y1 - 5} textAnchor="middle" className="labo-fort">{nombre(curseur, 2)}</text></g>}
+                {etat.note !== null && <text x={G.x0} y={206} style={{ fill: "var(--cuivre)", fontWeight: 700 }}>Volume noté : {ml(etat.note)}</text>}
               </g>
             )}
           </svg>
@@ -151,13 +156,24 @@ export default function PaillasseTitrage({ reglages, fini, attente }: { reglages
         </div>
         <h3>Relever l&apos;équivalence</h3>
         {!indicateur && (
-          <div className="tp-curseur">
-            <label htmlFor="tp-curseur">Place le repère sur le saut de pH : {ml(curseur)}</label>
-            <input id="tp-curseur" type="range" min={0} max={CAPACITE} step={0.05} value={curseur} onChange={(e) => setCurseur(Number(e.target.value))} aria-valuetext={ml(curseur)} />
-          </div>
+          <>
+            {/* les relevés du pH-mètre, le plus récent d'abord : c'est le tableau de mesures de l'élève */}
+            {etat.releves.length > 0 && (
+              <ol className="tp-releves" aria-label="Relevés du pH-mètre, du plus récent au plus ancien">
+                {[...etat.releves].reverse().map((p) => <li key={p.V}><span>{nombre(p.V, 2)} mL</span><b>pH {nombre(p.pH, 2)}</b></li>)}
+              </ol>
+            )}
+            <div className="tp-lecture">
+              <label htmlFor="tp-lecture">Volume au milieu du saut de pH</label>
+              <div className="labo-saisie">
+                <input id="tp-lecture" type="text" inputMode="decimal" autoComplete="off" placeholder="Ta lecture" value={lecture} onChange={(e) => setLecture(e.target.value)} />
+                <span>mL</span>
+              </div>
+            </div>
+          </>
         )}
         <div className="tp-relever">
-          <button type="button" className="btn btn-ligne" onClick={() => fais(indicateur ? { g: "noter" } : { g: "noter", v: curseur })}>{indicateur ? "Noter le volume" : "Noter ce volume"}</button>
+          <button type="button" className="btn btn-ligne" onClick={() => fais(indicateur ? { g: "noter" } : { g: "noter", v: curseur ?? -1 })}>{indicateur ? "Noter le volume" : "Noter ce volume"}</button>
           <button type="button" className="btn btn-cuivre" disabled={attente} onClick={termine}>{confirme ? "Finir quand même" : "J'ai fini"}</button>
         </div>
         <button type="button" className="btn-texte tp-recommencer" onClick={() => fais({ g: "recommencer" })}>Recommencer le titrage</button>

@@ -14,7 +14,7 @@ export const metadata = { title: "TP" };
 export default async function PageTp() {
   const { session, catalogue } = await espaceEleve();
   const liste = tpVisibles(session.admin);
-  const { meilleurs, termines } = await bilansDesTp(session.userId);
+  const { meilleurs, termines, enCours } = await bilansDesTp(session.userId);
   return (
     <>
       <Entete surtitre="TP" titre="Entraîne-toi aux ECE"
@@ -31,6 +31,7 @@ export default async function PageTp() {
             <ul className="hub-liste">
               {tps.map((t) => {
                 const bilan = meilleurs.get(t.id);
+                const reprise = enCours.get(t.id);
                 const fiche = catalogue.fiches.find((f) => f.num === t.fiche);
                 const lancer = async () => { "use server"; return demarrerTp({ tp: t.id }); };
                 return (
@@ -42,7 +43,10 @@ export default async function PageTp() {
                       <p className="petit discret" style={{ margin: "0 0 6px" }}>{t.famille} · {t.minutes} min{fiche ? <> · <Link href={`/app/fiche/${p2(fiche.num)}`}>fiche {fiche.num}</Link></> : null}</p>
                       {bilan && <p className="petit" style={{ margin: 0 }}>Ton meilleur bilan : <span className="tp-lettres" role="img" aria-label={COMPETENCES.filter((c) => bilan[c.id]).map((c) => `${c.nom} ${bilan[c.id]}`).join(", ")}>{COMPETENCES.filter((c) => bilan[c.id]).map((c) => <span key={c.id} className={`tp-niveau tp-niveau-${bilan[c.id]}`}>{bilan[c.id]}</span>)}</span></p>}
                     </div>
-                    <div className="actions"><BoutonAction lancer={lancer}>{bilan ? "Refaire le TP" : "Commencer le TP"}</BoutonAction></div>
+                    <div className="actions">
+                      {reprise && <Link className="btn btn-cuivre" href={`/app/tp/essai/${reprise}`}>Reprendre le TP</Link>}
+                      <BoutonAction lancer={lancer} className={reprise ? "btn btn-ligne" : undefined}>{reprise ? "Recommencer" : bilan ? "Refaire le TP" : "Commencer le TP"}</BoutonAction>
+                    </div>
                   </li>
                 );
               })}

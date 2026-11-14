@@ -18,7 +18,7 @@ export function Becher({ x, y, l, h, niveau, couleur, children }: { x: number; y
   const surface = r(y + h * (1 - Math.max(0, Math.min(1, niveau))));
   return (
     <g>
-      <rect x={x + 1} y={surface} width={l - 2} height={r(y + h - surface - 1)} rx={3} fill={couleur} />
+      <rect x={x + 1} y={surface} width={l - 2} height={Math.max(0, r(y + h - surface - 1))} rx={3} fill={couleur} />
       {children}
       <path d={`M ${x - 3} ${y} H ${x} V ${y + h - 6} Q ${x} ${y + h} ${x + 6} ${y + h} H ${x + l - 6} Q ${x + l} ${y + h} ${x + l} ${y + h - 6} V ${y} H ${x + l + 3}`} fill="none" stroke="var(--encre)" strokeWidth={1.6} strokeLinejoin="round" />
     </g>

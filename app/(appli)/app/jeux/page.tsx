@@ -13,6 +13,7 @@ import { demarrerQuiz } from "@/lib/serveur/commandes/quiz";
 import { apercuDe, avancementDesDefis, bilanDesDefis, simulationsVisibles } from "@/lib/serveur/defis";
 import { recordsDe } from "@/lib/serveur/jeux";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
+import { tpVisibles } from "@/lib/serveur/tp";
 
 export const metadata = { title: "Jeux" };
 
@@ -34,6 +35,7 @@ export default async function Jeux({ searchParams }: { searchParams: Promise<{ f
   const { ctx, catalogue, session } = await espaceEleve();
   const { records, partiesSemaine } = await recordsDe(session.userId);
   const labo = simulationsVisibles(session.admin);
+  const tps = tpVisibles(session.admin);
   const avancement = labo.length ? await avancementDesDefis(session.userId) : new Map();
   const bilans = labo.map((x) => bilanDesDefis(x.defis, avancement));
   const nbDefis = labo.reduce((s, x) => s + x.defis.length, 0);
@@ -106,6 +108,17 @@ export default async function Jeux({ searchParams }: { searchParams: Promise<{ f
               </ul>
             </div>
           ))}
+        </section>
+      )}
+
+      {tps.length > 0 && (
+        <section aria-labelledby="titre-tp">
+          <div className="section-titre"><h2 id="titre-tp">Les TP</h2></div>
+          <Link className="carte carte-lien hub-porte" href="/app/tp">
+            <span className="hub-icone"><Icone nom="fiole" /></span>
+            <span><b>Entraîne-toi aux ECE</b><span className="discret">{pluriel(tps.length, "TP", "TP")} où tu prépares, tu manipules et tu exploites tes mesures, comme à l&apos;épreuve.</span></span>
+            <Icone nom="chevron" />
+          </Link>
         </section>
       )}
 

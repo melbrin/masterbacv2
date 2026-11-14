@@ -134,16 +134,34 @@ const POINTS: Record<string, number> = { A: 3, B: 2, C: 1, D: 0 };
 /** La valeur d'un bilan, pour garder le meilleur : la somme des niveaux. */
 const valeur = (b: Bilan): number => Object.values(b).reduce((s, n) => s + (POINTS[n] ?? 0), 0);
 
-/** Le meilleur bilan de l'élève à chaque TP terminé, et le nombre de TP terminés. Lu avec ses propres droits. */
-export async function bilansDesTp(userId: string): Promise<{ meilleurs: Map<string, Bilan>; termines: number }> {
+/**
+ * Pour chaque TP, l'essai laissé en route que la page propose de reprendre : le plus récent où l'élève a validé au moins
+ * une étape, sauf s'il a refait ce TP en entier depuis.
+ */
+export function essaisAReprendre(finis: { tp: string; cree_le: string }[], ouverts: { id: string; tp: string; cree_le: string }[]): Map<string, string> {
+  const dernierFini = new Map<string, number>();
+  for (const l of finis) dernierFini.set(l.tp, Math.max(dernierFini.get(l.tp) ?? 0, Date.parse(l.cree_le)));
+  const reprises = new Map<string, string>();
+  for (const l of [...ouverts].sort((a, b) => Date.parse(b.cree_le) - Date.parse(a.cree_le))) {
+    if (!reprises.has(l.tp) && Date.parse(l.cree_le) > (dernierFini.get(l.tp) ?? 0)) reprises.set(l.tp, l.id);
+  }
+  return reprises;
+}
+
+/** Le meilleur bilan de l'élève à chaque TP terminé, le nombre de TP terminés, et ses TP laissés en route. Lu avec ses propres droits. */
+export async function bilansDesTp(userId: string): Promise<{ meilleurs: Map<string, Bilan>; termines: number; enCours: Map<string, string> }> {
   const base = await clientUtilisateur();
-  const { data, error } = await base.from("tp_essais").select("tp, niveaux").eq("user_id", userId).not("termine_le", "is", null).limit(500);
-  if (error) throw new Error("La base ne répond pas.");
+  const [finis, ouverts] = await Promise.all([
+    base.from("tp_essais").select("tp, niveaux, cree_le").eq("user_id", userId).not("termine_le", "is", null).limit(500),
+    // un essai compte comme commencé dès sa première étape validée
+    base.from("tp_essais").select("id, tp, cree_le").eq("user_id", userId).is("termine_le", null).neq("etapes", "[]").order("cree_le", { ascending: false }).limit(50),
+  ]);
+  if (finis.error || ouverts.error) throw new Error("La base ne répond pas.");
   const meilleurs = new Map<string, Bilan>();
-  for (const l of data ?? []) {
+  for (const l of finis.data ?? []) {
     const b = l.niveaux as Bilan;
     const avant = meilleurs.get(l.tp);
     if (!avant || valeur(b) > valeur(avant)) meilleurs.set(l.tp, b);
   }
-  return { meilleurs, termines: (data ?? []).length };
+  return { meilleurs, termines: (finis.data ?? []).length, enCours: essaisAReprendre(finis.data ?? [], ouverts.data ?? []) };
 }
