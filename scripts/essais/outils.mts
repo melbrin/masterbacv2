@@ -241,3 +241,30 @@ export async function faisLeGeste(page: Page, scene: Locator, p: PasVu): Promise
       return false;
   }
 }
+
+// ---------- les gestes au doigt ----------
+// Les essais ci-dessus passent par la souris, que le navigateur n'interrompt jamais. Un doigt, lui, peut voir son geste
+// repris par le navigateur (défilement, zoom) si la scène le permet : ces deux gestes émulent un vrai toucher.
+
+/** Glisse d'un point de l'écran à un autre avec un doigt (toucher émulé), par petits pas. */
+export async function glisseAuDoigt(page: Page, de: Point, vers: Point, pas = 14, pause = 16): Promise<void> {
+  const cdp = await page.context().newCDPSession(page);
+  const point = (p: Point) => [{ x: Math.round(p.x), y: Math.round(p.y) }];
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: point(de) });
+  for (let i = 1; i <= pas; i++) {
+    await attends(pause);
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: point({ x: de.x + ((vers.x - de.x) * i) / pas, y: de.y + ((vers.y - de.y) * i) / pas }) });
+  }
+  await attends(pause);
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await cdp.detach();
+}
+
+/** Pose un doigt sur un point de l'écran et le garde appuyé pendant la durée donnée, en millisecondes (toucher émulé). */
+export async function maintiensAuDoigt(page: Page, p: Point, ms: number): Promise<void> {
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: Math.round(p.x), y: Math.round(p.y) }] });
+  await attends(ms);
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await cdp.detach();
+}

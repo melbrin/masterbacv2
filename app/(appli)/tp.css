@@ -136,7 +136,9 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
 .pl-bouton[aria-expanded="true"] { border-color: var(--cuivre); color: var(--cuivre); }
 .pl-bouton-guide[aria-pressed="true"] { border-color: var(--sable); background: rgba(232, 194, 122, .12); color: var(--sable); }
 .pl-plan { grid-row: 2; grid-column: 1; position: relative; display: grid; min-height: 0; padding: 0 6px; }
-.pl-scene { display: block; width: 100%; height: 100%; min-height: 0; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+/* la scène garde la main sur les gestes du doigt : sans cela, le navigateur reprend un glissement pour faire défiler la
+   page et l'objet est lâché en route (le réglage posé sur un élément à l'intérieur du dessin ne suffit pas) */
+.pl-scene { display: block; width: 100%; height: 100%; min-height: 0; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .pl-pied { grid-row: 3; grid-column: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 8px 12px 10px; border-top: 1px solid var(--filet); background: rgba(6, 20, 42, .72); }
 .pl-message { min-height: 2.5em; margin: 0; color: var(--encre); font-size: .9rem; line-height: 1.25; }
 /* le guide : ce qu'il faut faire maintenant. Ce qui vient de se passer se lit alors en plus petit, dessous. */
@@ -287,7 +289,8 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
   .pl-etabli > .pl-cote { grid-row: 2; grid-column: 2; display: block; align-self: stretch; max-height: none; border-top: 0; border-left: 1px solid var(--filet); background: transparent; box-shadow: none; }
   .pl-pied { grid-row: 3; grid-column: 2; border-left: 1px solid var(--filet); }
   .pl-bouton-protocole, .pl-cote-fermer { display: none; }
-  .pl-cote-actions { position: static; margin: 4px 0 0; padding: 0; background: none; }
+  /* sous un long protocole, « Tout recommencer » reste à portée, au bas de la colonne */
+  .pl-cote-actions { bottom: -16px; margin: 4px 0 -16px; padding: 8px 0 16px; background: #081A35; }
 }
 
 @media (min-width: 720px) {
