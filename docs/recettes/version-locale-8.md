@@ -7,6 +7,7 @@ Date : 14 novembre 2026, le soir. Durée : 45 minutes. Elle répond à tes remar
 1. Ouvre Docker Desktop.
 2. Dans le Terminal, place-toi dans `Documents/App Masterbac/app-masterbac`, puis lance `npm run db:demarrer`, `npm run db:migrer` (rien de nouveau dans la base), et `npm run dev -- --port 3457`.
 3. Ouvre http://localhost:3457. La boîte des e-mails locaux est à http://127.0.0.1:54324.
+4. Si l'application était déjà ouverte dans un onglet, recharge la page avant de commencer. Une page restée ouverte pendant que le programme change peut garder l'ancienne version en mémoire : c'est ce qui t'a montré l'ancienne paillasse à cases à cocher le 14 novembre.
 
 Fais ces essais sur ton téléphone si tu peux : les paillasses sont faites pour le doigt.
 
