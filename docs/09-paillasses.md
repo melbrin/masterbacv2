@@ -76,6 +76,7 @@ Elle reçoit `PropsPaillasse<Reglages>` : `reglages`, `protocole`, `attente`, `f
 - Le message du bas dit ce qui vient de se passer, jamais la valeur que l'élève doit lire.
 - Les crochets du kit qui convertissent le doigt en point du dessin (`useGlisse`, `Objet`, `Molette`) s'appellent dans un composant placé sous `Scene` (voir `TraceCourbe` dans `Titrage.tsx`).
 - Les règles de React de ce dépôt : pas de `setState` directement dans le corps d'un effet, pas de composant défini dans un composant.
+- L'établi met la scène à gauche et le protocole à droite dès que la fenêtre est assez large pour sa hauteur (680 de large au moins, et pas plus haute que large d'un quart) ; sinon la scène est en haut, et le protocole dans une feuille. Avec le guide, le protocole défile tout seul jusqu'à l'étape en cours.
 - Une scène fait 360 unités de large, en hauteur (portrait). Une zone de toucher fait au moins 44 unités. Les textes font au moins 9 unités. Les objets que l'élève déplace se dessinent en dernier.
 - Pendant une lecture, la vue peut se rapprocher de l'appareil : `Scene vue={...}` (voir `VUE_LOUPE`). La scène ne montre que sa vue : ce qui est dessiné en dehors ne se voit pas.
 - Chaque objet porte son nom, sur lui ou dessous. Un geste refusé s'explique (`rate` de `Manipulation`). Un appui bref sur un poussoir fait quelque chose (`useVersement`). Un geste continu ralentit près du repère à atteindre.

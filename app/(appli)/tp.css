@@ -263,12 +263,10 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
 .pl-pave svg { width: 20px; height: 20px; }
 
 /* sous la scène, le guide et le message gardent la même place d'une consigne à l'autre : la scène ne change pas de taille */
-@media (max-width: 899px) {
-  .pl-guide { min-height: 3.75em; }
-  /* sur un écran peu haut, deux lignes suffisent le plus souvent : la scène garde sa place */
-  @media (max-height: 700px) { .pl-guide { min-height: 2.5em; } }
-  .pl-message-second { display: -webkit-box; min-height: 2.5em; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
-}
+.pl-guide { min-height: 3.75em; }
+.pl-message-second { display: -webkit-box; min-height: 2.5em; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+/* sur un écran peu haut, deux lignes suffisent le plus souvent : la scène garde sa place */
+@media (max-height: 700px) { .pl-guide { min-height: 2.5em; } }
 /* sur un téléphone, le nom de la paillasse laisse sa place aux boutons : il reste lu par un lecteur d'écran */
 @media (max-width: 519px) {
   .pl-titre { position: absolute; width: 1px; height: 1px; flex: none; clip-path: inset(50%); white-space: nowrap; }
@@ -276,9 +274,13 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
   .pl-bouton-guide { margin-right: auto; }
 }
 
-/* sur un écran large : la scène à gauche, le protocole et l'appel à droite */
-@media (min-width: 900px) {
-  .pl-etabli { grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: auto minmax(0, 1fr) auto; }
+/* dès que la fenêtre est assez large pour sa hauteur (un ordinateur, une tablette couchée) : la scène, qui est en hauteur,
+   à gauche ; le protocole, le guide et l'appel à droite. La scène y gagne toute la hauteur de l'écran. */
+@media (min-width: 680px) and (min-aspect-ratio: 4/5) {
+  .pl-etabli { grid-template-columns: minmax(0, 1fr) clamp(260px, 34vw, 360px); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .pl-guide { min-height: 0; }
+  .pl-message-second { display: block; min-height: 1.25em; overflow: visible; -webkit-line-clamp: unset; line-clamp: unset; }
+  .pl-actions > * { flex: 1 1 96px; }
   .pl-barre { grid-column: 1 / -1; }
   .pl-plan { grid-row: 2 / 4; grid-column: 1; padding: 0 16px 16px; }
   .pl-etabli > .pl-cote { grid-row: 2; grid-column: 2; display: block; align-self: stretch; max-height: none; border-top: 0; border-left: 1px solid var(--filet); background: transparent; box-shadow: none; }

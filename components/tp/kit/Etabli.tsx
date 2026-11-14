@@ -57,8 +57,16 @@ export function Etabli({ titre, protocole, message, attente, fini, recommence, o
   const guide = useGuide();
   const temoin = useTemoinDuGuide();
   const tete = useRef<HTMLHeadingElement>(null);
+  const liste = useRef<HTMLOListElement>(null);
   const idProtocole = useId();
   const avecGuide = indication !== undefined;
+  const etape = indication?.etape;
+
+  // avec le guide, l'étape en cours du protocole reste sous les yeux, même quand le protocole est long
+  useEffect(() => {
+    if (etape === undefined) return;
+    liste.current?.querySelector("[aria-current]")?.scrollIntoView({ block: "nearest" });
+  }, [etape, ouvert]);
 
   // la page derrière ne défile pas pendant la manipulation
   useEffect(() => {
@@ -139,7 +147,7 @@ export function Etabli({ titre, protocole, message, attente, fini, recommence, o
       <div className="pl-plan" onPointerDownCapture={geste} onKeyDownCapture={geste}>{children}</div>
       <aside id={idProtocole} className={`pl-cote${aide ? " est-ouvert" : ""}`} aria-label="Le protocole">
         <h3>Le protocole</h3>
-        <ol>{protocole.map((ligne, i) => <li key={ligne} aria-current={indication && indication.etape === i ? "step" : undefined}>{ligne}</li>)}</ol>
+        <ol ref={liste}>{protocole.map((ligne, i) => <li key={ligne} aria-current={etape === i ? "step" : undefined}>{ligne}</li>)}</ol>
         <div className="pl-cote-actions">
           {recommence && <button type="button" className="pl-bouton" onClick={toutRecommence}>Tout recommencer</button>}
           <button type="button" className="pl-bouton pl-cote-fermer" onClick={() => setAide(false)}>Fermer</button>
