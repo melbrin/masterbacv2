@@ -45,6 +45,24 @@ const REPONSES: Record<string, Valeurs> = {
   "radio-1": { date: 2 * 8 },
   "radio-2": { date: (5730 * Math.log(1 / 0.6)) / Math.LN2 },
   "radio-3": { demiVie: (24 * Math.LN2) / Math.log(10) },
+  "dilution-1": { V: (0.1 * 100) / 0.5 },
+  "dilution-2": { Vfille: (20 * 5) / 2 },
+  "dilution-3": { m: 0.1 * 0.1 * 249.7 },
+  "ph-1": { C: 10 ** -2 * 1000 },
+  "ph-2": { rapport: 10 ** (5.2 - 4.8) },
+  "ph-3": { F: 10 ** (3.5 - 2) },
+  "beer-1": { C: (0.8 * 2) / 0.5 },
+  "beer-2": { Cmere: (0.45 / 0.15) * 10 },
+  "beer-3": { V: ((0.6 / 0.15) * 50) / 20 },
+  "cinetique-1": { date: Math.LN2 / 0.023 },
+  "cinetique-2": { date: Math.log(10) / 0.05 },
+  "cinetique-3": { k: Math.log(10) / 5 },
+  "pile-1": { I: 2 / 10 },
+  "pile-2": { m: ((0.5 * 3600) / 96500 / 2) * 65.4 },
+  "pile-3": { dureeMin: ((0.5 / 63.5) * 2 * 96500) / 0.8 / 60 },
+  "synthese-1": { n: 9 / 180 },
+  "synthese-2": { m: (5 / 180 / 0.8) * 138 },
+  "synthese-3": { n: 0.024 / (0.8 * 0.6) },
 };
 // les textes portent des espaces insécables (entre un nombre et son unité, entre les milliers) : ici on compare avec des espaces simples
 const net = (texte: string) => texte.replace(/[\u00a0\u202f]/g, " ");
@@ -59,10 +77,10 @@ const issue = (id: string, saisies: Valeurs) => {
 };
 
 describe("registre du labo", () => {
-  it("huit simulations, trois défis chacune, un par objectif, tous à l'état de brouillon", () => {
-    expect(SIMULATIONS.map((s) => s.id)).toEqual(["basket", "largage", "satellite", "temperature", "doppler", "rc", "titrage", "radio"]);
-    // dans l'ordre des fiches
-    expect(SIMULATIONS.map((s) => s.fiche)).toEqual([1, 1, 3, 5, 6, 8, 10, 11]);
+  it("quatorze simulations, trois défis chacune, un par objectif, tous à l'état de brouillon", () => {
+    expect(SIMULATIONS.map((s) => s.id)).toEqual(["basket", "largage", "satellite", "temperature", "doppler", "rc", "dilution", "ph", "titrage", "beer", "cinetique", "radio", "pile", "synthese"]);
+    // dans l'ordre des fiches : la physique d'abord, la chimie ensuite
+    expect(SIMULATIONS.map((s) => s.fiche)).toEqual([1, 1, 3, 5, 6, 8, 9, 9, 10, 10, 11, 11, 12, 13]);
     // chaque simulation a ses règles, et il n'y a pas de règles sans simulation
     expect(ID_SIMULATIONS).toEqual(SIMULATIONS.map((s) => s.id));
     expect(regles("inconnue")).toBeNull();
@@ -72,7 +90,7 @@ describe("registre du labo", () => {
       expect(s.defis.map((d) => d.id), s.id).toEqual([1, 2, 3].map((n) => `${s.id}-${n}`));
       expect(s.defis.every((d) => d.etat === "brouillon"), s.id).toBe(true);
     }
-    expect(new Set(tous.map((x) => x.d.id)).size).toBe(24);
+    expect(new Set(tous.map((x) => x.d.id)).size).toBe(42);
     expect(Object.keys(REPONSES).sort()).toEqual(tous.map((x) => x.d.id).sort());
   });
   it("chaque défi a un énoncé, des données, un rappel du cours et des champs bien bornés", () => {

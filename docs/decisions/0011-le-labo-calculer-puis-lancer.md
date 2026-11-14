@@ -17,7 +17,9 @@ Date : 2026-11-14
 - Les relations du cours sont à un appui : ce sont les lignes du tableau « À connaître par cœur » de la fiche. Elles s'ouvrent seules au deuxième essai raté.
 - Rejouer un défi réussi ne change pas ses étoiles. La même valeur ratée ne se relance pas deux fois de suite.
 
-## Les huit simulations
+## Les quatorze simulations
+
+En physique :
 
 | Simulation | Fiche | Défi objectif 10 | Défi objectif 14 | Défi objectif 18 |
 | --- | --- | --- | --- | --- |
@@ -27,10 +29,21 @@ Date : 2026-11-14
 | Le thé | 5 | durée de chauffe de l'eau | temps d'attente avant de boire | même question, avec le temps caractéristique à calculer |
 | L'effet Doppler | 6 | vitesse du véhicule | fréquence émise | vitesse en km/h à partir d'une mesure |
 | Le circuit RC | 8 | résistance pour 63 % de E à 2,0 s | résistance pour un seuil à 10 s | capacité pour une décharge de 0,50 s |
-| Le titrage | 10 | volume équivalent, acide et soude | concentration de la soude pour une équivalence à 12,0 mL | volume équivalent avec le permanganate (5 pour 1) |
-| La décroissance radioactive | 11 | durée pour qu'il reste un quart des noyaux | âge d'un os au carbone 14 | demi-vie d'un traceur |
 
-Les cinq premières ont été écrites d'abord. Le satellite, le titrage et la décroissance radioactive ont suivi le même jour, sur le même cadre : une nouvelle simulation demande ses règles de calcul, sa scène, ses trois énoncés et ses réponses dans les tests.
+En chimie :
+
+| Simulation | Fiche | Défi objectif 10 | Défi objectif 14 | Défi objectif 18 |
+| --- | --- | --- | --- | --- |
+| Préparer une solution | 9 | volume de solution mère à prélever | volume de la fiole jaugée | masse de solide à peser |
+| Le pH | 9 | concentration d'un acide fort pour un pH de 2,0 | rapport base sur acide pour un pH de 5,2 | facteur de dilution pour passer de pH 2,0 à 3,5 |
+| Le titrage | 10 | volume équivalent, acide et soude | concentration de la soude pour une équivalence à 12,0 mL | volume équivalent avec le permanganate (5 pour 1) |
+| Le spectrophotomètre | 10 | concentration pour une absorbance de 0,80 | concentration d'une solution diluée dix fois | volume à prélever pour une absorbance de 0,60 |
+| La cinétique | 11 | temps de demi-réaction | durée pour qu'il reste 10 % du réactif | constante de vitesse |
+| La décroissance radioactive | 11 | durée pour qu'il reste un quart des noyaux | âge d'un os au carbone 14 | demi-vie d'un traceur |
+| La pile et l'électrolyse | 12 | intensité pour qu'une pile tienne 10 h | masse de zinc pour débiter 1,0 h | durée pour déposer 0,50 g de cuivre |
+| La synthèse | 13 | quantité de réactif pour 9,0 g d'aspirine | masse de réactif avec un rendement de 80 % | deux étapes, rendements multipliés |
+
+Les cinq premières ont été écrites d'abord. Les autres ont suivi le même jour, sur le même cadre : une nouvelle simulation demande ses règles de calcul, sa scène, ses trois énoncés et ses réponses dans les tests. La chimie a été demandée en entier par Yane le 14 novembre. Il reste, en chimie, ce qui se prête mal à un calcul suivi d'une simulation : le quotient de réaction, la nomenclature, les spectres. Les titrages suivis au pH-mètre et au conductimètre iront dans les TP (décision 0012).
 
 La simulation libre du basketteur (décision 0010) reste, sous « Aller plus loin » et depuis la page du basketteur.
 
@@ -51,8 +64,8 @@ La simulation libre du basketteur (décision 0010) reste, sous « Aller plus loi
 
 - Le labo est ouvert à tous les comptes, offre gratuite comprise, comme les autres jeux. Il est en tête de la page des jeux.
 - La règle des étoiles (3, 2, 2, puis 1).
-- Les tolérances : 0,15 m autour du centre du cercle, 3 cm sur la hauteur du saut, 1 m autour de la cible du largage, 1 °C sur la température, 1,5 % à 2,5 % sur la date du circuit RC, 2 Hz à 0,5 Hz sur la fréquence, 0,015 km/s sur la vitesse du satellite, 0,3 min sur la durée d'un tour, 2° de décalage par jour pour le géostationnaire, 0,15 mL sur le volume équivalent, un demi-point de pourcentage sur la part de noyaux restants.
-- Les valeurs des énoncés : panier à 4,60 m et 3,05 m, g = 9,81 m·s⁻², c = 340 m/s pour le son, 4 180 J·kg⁻¹·K⁻¹ pour l'eau, G = 6,67 × 10⁻¹¹ N·m²·kg⁻², masse de la Terre 5,97 × 10²⁴ kg, rayon de la Terre 6 371 km, jour sidéral 86 164 s, demi-vies de l'iode 131 (8,0 jours) et du carbone 14 (5 730 ans).
+- Les tolérances : 0,15 m autour du centre du cercle, 3 cm sur la hauteur du saut, 1 m autour de la cible du largage, 1 °C sur la température, 1,5 % à 2,5 % sur la date du circuit RC, 2 Hz à 0,5 Hz sur la fréquence, 0,015 km/s sur la vitesse du satellite, 0,3 min sur la durée d'un tour, 2° de décalage par jour pour le géostationnaire, 0,15 mL sur le volume équivalent, un demi-point de pourcentage sur la part de noyaux restants, 2 % sur une concentration, une masse ou une durée de pile, 0,03 unité de pH, 0,015 à 0,02 sur une absorbance.
+- Les valeurs des énoncés : panier à 4,60 m et 3,05 m, g = 9,81 m·s⁻², c = 340 m/s pour le son, 4 180 J·kg⁻¹·K⁻¹ pour l'eau, G = 6,67 × 10⁻¹¹ N·m²·kg⁻², masse de la Terre 5,97 × 10²⁴ kg, rayon de la Terre 6 371 km, jour sidéral 86 164 s, demi-vies de l'iode 131 (8,0 jours) et du carbone 14 (5 730 ans), constante de Faraday 96 500 C/mol, masses molaires du zinc (65,4), du cuivre (63,5), de l'aspirine (180), de l'acide salicylique (138) et du sulfate de cuivre pentahydraté (249,7 g/mol).
 - Les modèles simplifiés : sous 120 km d'altitude, le satellite est dit freiné par l'atmosphère et retombe ; la burette coule d'un trait jusqu'au volume choisi ; les cent noyaux dessinés suivent exactement la loi de décroissance, sans hasard.
 - Les équations des trois titrages (acide chlorhydrique et soude, acide éthanoïque et soude, ions fer(II) et permanganate) sont écrites dans les énoncés : à relire comme le reste.
 - La scène de nuit, dans le thème clair comme dans le thème sombre.

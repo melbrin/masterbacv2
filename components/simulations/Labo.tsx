@@ -10,8 +10,8 @@ import { useId, useRef, useState, type FormEvent } from "react";
 import Confettis from "@/components/appli/Confettis";
 import Icone from "@/components/appli/Icone";
 import ContenuHtml from "@/components/socle/ContenuHtml";
-import { nombre, points } from "@/lib/commun/format";
-import { grandeurs, regles, type Champ, type Issue, type Mesure, type Valeurs } from "@/lib/commun/simulations";
+import { nombre } from "@/lib/commun/format";
+import { decimalesDuPas, grandeurs, regles, type Champ, type Issue, type Mesure, type Valeurs } from "@/lib/commun/simulations";
 import { validerDefi } from "@/lib/serveur/commandes/defis";
 import Etoiles from "./Etoiles";
 import { useHorloge } from "./horloge";
@@ -70,7 +70,12 @@ function lis(texte: string): number | null {
 }
 
 const precision = (pas: number): string => (pas >= 1 ? "à l'unité" : pas >= 0.1 ? "au dixième" : pas >= 0.01 ? "au centième" : "au millième");
-const bornes = (c: Champ): string => `Entre ${points(c.min)} et ${points(c.max)} ${c.unite}. Arrondis ${precision(c.pas)}.`;
+/** Une borne écrite avec juste ce qu'il faut de décimales : « 2 », « 0,1 », « 0,05 ». */
+function borne(x: number): string {
+  for (let d = 0; d < 4; d++) if (Math.abs(x * 10 ** d - Math.round(x * 10 ** d)) < 1e-9) return nombre(x, d);
+  return nombre(x, 4);
+}
+const bornes = (c: Champ): string => `Entre ${borne(c.min)} et ${borne(c.max)}${c.unite ? ` ${c.unite}` : ""}. Arrondis ${precision(c.pas)}.`;
 const fois = (x: number): string => nombre(x, x >= 10 || Math.abs(x - Math.round(x)) < 0.05 ? 0 : 1);
 /** L'allure de l'animation : « Temps réel », « Ralenti 10 fois », « Accéléré 93 fois ». Au-delà de 100 000 fois, le nombre ne dit plus rien. */
 function allure(cadence: number | null): string {
@@ -150,7 +155,7 @@ export default function Labo({ simulation, theme, defi, relations, cours, depart
     if (horloge.phase === "marche") return;
     if (!lu.ok) {
       const c = defi.champs.find((x) => x.id === lu.champ)!;
-      setErreur(Number.isNaN(saisies[c.id]) ? `${c.nom} : entre un nombre, par exemple ${points((c.min + c.max) / 2)}.` : `${c.nom} : ta valeur sort des bornes. ${bornes(c)}`);
+      setErreur(Number.isNaN(saisies[c.id]) ? `${c.nom} : entre un nombre, par exemple ${nombre((c.min + c.max) / 2, decimalesDuPas(c.pas))}.` : `${c.nom} : ta valeur sort des bornes. ${bornes(c)}`);
       return;
     }
     const cle = defi.champs.map((c) => saisies[c.id]).join(";");
@@ -253,7 +258,7 @@ export default function Labo({ simulation, theme, defi, relations, cours, depart
               <div className="labo-saisie">
                 <input id={`${id}-${c.id}`} name={c.id} type="text" inputMode="decimal" autoComplete="off" enterKeyHint="go" placeholder="Ta valeur"
                   value={textes[c.id] ?? ""} onChange={(e) => change(c.id, e.target.value)} aria-describedby={`${id}-${c.id}-aide`} aria-invalid={erreur ? true : undefined} />
-                <span>{c.unite}</span>
+                {c.unite && <span>{c.unite}</span>}
               </div>
               <p className="aide" id={`${id}-${c.id}-aide`}>{bornes(c)}</p>
             </div>

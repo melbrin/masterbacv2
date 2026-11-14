@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { etiquetteBac, etiquetteDapres, majusculeInitiale, nombreRelatif, rangFeminin } from "@/lib/commun/format";
+import { etiquetteBac, etiquetteDapres, majusculeInitiale, nombreRelatif, puissanceDeDix, rangFeminin } from "@/lib/commun/format";
 
 describe("étiquettes du bac", () => {
   it("reprend les années données par la fiche", () => {
@@ -56,5 +56,20 @@ describe("nombre qui peut être négatif", () => {
     expect(nombreRelatif(-0.004, 2)).toBe("0,00");
     expect(nombreRelatif(-0, 1)).toBe("0,0");
     expect(nombreRelatif(-19.81)).toBe("−19,8");
+  });
+});
+
+describe("écriture scientifique", () => {
+  const net = (texte: string) => texte.replace(/\u00a0/g, " ");
+  it("écrit deux chiffres et une puissance de dix", () => {
+    expect(net(puissanceDeDix(0.01))).toBe("1,0 × 10⁻²");
+    expect(net(puissanceDeDix(2.5e-4))).toBe("2,5 × 10⁻⁴");
+    expect(net(puissanceDeDix(6.02e23, 3))).toBe("6,02 × 10²³");
+    expect(net(puissanceDeDix(340))).toBe("3,4 × 10²");
+  });
+  it("n'écrit pas la puissance entre 1 et 10, et remonte d'un cran quand l'arrondi donne 10", () => {
+    expect(puissanceDeDix(3.16)).toBe("3,2");
+    expect(net(puissanceDeDix(9.96e-3))).toBe("1,0 × 10⁻²");
+    expect(puissanceDeDix(0)).toBe("0,0");
   });
 });

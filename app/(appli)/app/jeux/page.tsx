@@ -76,30 +76,35 @@ export default async function Jeux({ searchParams }: { searchParams: Promise<{ f
             <span><b>{bilans.reduce((s, b) => s + b.reussis, 0)}</b> sur {pluriel(nbDefis, "défi réussi", "défis réussis")}</span>
             <span><Etoiles gagnees={1} total={1} /> <b>{bilans.reduce((s, b) => s + b.etoiles, 0)}</b> sur {3 * nbDefis}</span>
           </p>
-          <ul className="labo-rayon">
-            {labo.map(({ simulation, defis }, i) => {
-              const b = bilans[i];
-              const jouer = `/app/jeux/labo/${simulation.id}/${b.prochain + 1}`;
-              return (
-                <li key={simulation.id}>
-                  <article className="labo-fiche">
-                    <Vignette simulation={simulation.id} {...apercuDe(simulation, defis[0])} />
-                    <div className="labo-fiche-corps">
-                      <span className="labo-theme">{simulation.theme}</span>
-                      <h3>{simulation.nom}</h3>
-                      <p>{simulation.accroche}</p>
-                      <p><Etoiles gagnees={1} total={1} /> {b.etoiles} sur {3 * defis.length} · {b.reussis} sur {pluriel(defis.length, "défi réussi", "défis réussis")}</p>
-                      {vus.length > 0 && !vus.includes(simulation.fiche) && <span className="puce puce-bleu" style={{ justifySelf: "start" }}>Chapitre pas encore vu en classe</span>}
-                      <div className="actions">
-                        <Link className="btn btn-cuivre" href={jouer}>{b.reussis === 0 ? "Jouer" : b.reussis === defis.length ? "Rejouer" : "Continuer"}</Link>
-                        <Link className="btn-texte" href={`/app/jeux/labo/${simulation.id}`}>Les {defis.length} défis</Link>
-                      </div>
-                    </div>
-                  </article>
-                </li>
-              );
-            })}
-          </ul>
+          {[{ titre: "En physique", rayon: labo.filter((x) => x.simulation.fiche <= 8) }, { titre: "En chimie", rayon: labo.filter((x) => x.simulation.fiche > 8) }].filter((r) => r.rayon.length > 0).map((r) => (
+            <div key={r.titre}>
+              <p className="labo-rayon-titre">{r.titre} <span>{pluriel(r.rayon.length, "simulation", "simulations")}</span></p>
+              <ul className="labo-rayon">
+                {r.rayon.map(({ simulation, defis }) => {
+                  const b = bilans[labo.findIndex((x) => x.simulation.id === simulation.id)];
+                  const jouer = `/app/jeux/labo/${simulation.id}/${b.prochain + 1}`;
+                  return (
+                    <li key={simulation.id}>
+                      <article className="labo-fiche">
+                        <Vignette simulation={simulation.id} {...apercuDe(simulation, defis[0])} />
+                        <div className="labo-fiche-corps">
+                          <span className="labo-theme">{simulation.theme}</span>
+                          <h3>{simulation.nom}</h3>
+                          <p>{simulation.accroche}</p>
+                          <p><Etoiles gagnees={1} total={1} /> {b.etoiles} sur {3 * defis.length} · {b.reussis} sur {pluriel(defis.length, "défi réussi", "défis réussis")}</p>
+                          {vus.length > 0 && !vus.includes(simulation.fiche) && <span className="puce puce-bleu" style={{ justifySelf: "start" }}>Chapitre pas encore vu en classe</span>}
+                          <div className="actions">
+                            <Link className="btn btn-cuivre" href={jouer}>{b.reussis === 0 ? "Jouer" : b.reussis === defis.length ? "Rejouer" : "Continuer"}</Link>
+                            <Link className="btn-texte" href={`/app/jeux/labo/${simulation.id}`}>Les {defis.length} défis</Link>
+                          </div>
+                        </div>
+                      </article>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </section>
       )}
 

@@ -29,6 +29,18 @@ export function nombreRelatif(x: number, decimales = 1): string {
   const texte = nombre(Math.abs(x), decimales);
   return x < 0 && /[1-9]/.test(texte) ? `−${texte}` : texte;
 }
+const EXPOSANTS = "⁰¹²³⁴⁵⁶⁷⁸⁹";
+/** Un nombre en écriture scientifique, avec deux chiffres : « 1,0 × 10⁻² », « 2,5 × 10⁻⁴ ». Entre 1 et 10, la puissance ne s'écrit pas. */
+export function puissanceDeDix(x: number, chiffres = 2): string {
+  if (!(x > 0) || !Number.isFinite(x)) return nombre(0, chiffres - 1);
+  let exposant = Math.floor(Math.log10(x));
+  let mantisse = x / 10 ** exposant;
+  // 9,96 s'arrondit à 10,0 : la puissance monte d'un cran
+  if (Number(mantisse.toFixed(chiffres - 1)) >= 10) { mantisse /= 10; exposant += 1; }
+  if (exposant === 0) return nombre(mantisse, chiffres - 1);
+  const haut = `${exposant < 0 ? "⁻" : ""}${[...String(Math.abs(exposant))].map((c) => EXPOSANTS[Number(c)]).join("")}`;
+  return `${nombre(mantisse, chiffres - 1)}\u00a0×\u00a010${haut}`;
+}
 /** « 5 » ou « 5,5 » */
 export const points = (x: number) => nombre(x, Number.isInteger(x) ? 0 : 1);
 /** « 30 min », « 2 h », « 1 h 30 » */

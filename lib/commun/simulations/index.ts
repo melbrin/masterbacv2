@@ -1,11 +1,17 @@
 // Le registre des règles du labo. Les scènes dessinées sont dans components/simulations/scenes/,
 // les simulations et leurs défis dans lib/serveur/contenu/defis.ts.
 import { reglesBasket } from "./basket";
+import { reglesBeer } from "./beer";
+import { reglesCinetique } from "./cinetique";
+import { reglesDilution } from "./dilution";
 import { reglesDoppler } from "./doppler";
 import { reglesLargage } from "./largage";
+import { reglesPh } from "./ph";
+import { reglesPile } from "./pile";
 import { reglesRadio } from "./radio";
 import { reglesRc } from "./rc";
 import { reglesSatellite } from "./satellite";
+import { reglesSynthese } from "./synthese";
 import { reglesTemperature } from "./temperature";
 import { reglesTitrage } from "./titrage";
 import type { Defi, Regles, Valeurs } from "./types";
@@ -15,7 +21,8 @@ export * from "./types";
 /** Les règles de chaque simulation, par identifiant. */
 const REGLES: Record<string, Regles> = {
   basket: reglesBasket, largage: reglesLargage, satellite: reglesSatellite, temperature: reglesTemperature,
-  doppler: reglesDoppler, rc: reglesRc, titrage: reglesTitrage, radio: reglesRadio,
+  doppler: reglesDoppler, rc: reglesRc, dilution: reglesDilution, ph: reglesPh, titrage: reglesTitrage, beer: reglesBeer,
+  cinetique: reglesCinetique, radio: reglesRadio, pile: reglesPile, synthese: reglesSynthese,
 };
 export const ID_SIMULATIONS = Object.keys(REGLES);
 export const regles = (id: string): Regles | null => (Object.hasOwn(REGLES, id) ? REGLES[id] : null);
