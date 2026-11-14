@@ -9,7 +9,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - **Branche de travail** : `lot/0.2-outillage`, empilée sur `lot/0.1-installation-du-kit`. Rien n'est poussé sur GitHub.
 - **Dossier de travail** : `Documents/App Masterbac/app-masterbac/`. L'ancien dossier `masterbac-simulator/` (juillet 2026) est intact à côté et n'est pas repris.
 - **Lancer en local** : voir `docs/recettes/version-locale-1.md`. Port 3457 ; le port 3456 est celui de l'ancien dossier.
-- **Version locale** : essayée par Yane le 14 novembre. Ses remarques sont traitées dans la deuxième version (décisions 0005 à 0007), puis ses demandes du même jour dans la troisième (décisions 0008 à 0010 : calibrage, parcours, jeux, simulation, quiz mélangé, plan de DS par chapitre). Recette : `docs/recettes/version-locale-3.md`. En attente de son essai.
+- **Version locale** : essayée par Yane le 14 novembre. Ses remarques sont traitées dans la deuxième version (décisions 0005 à 0007), puis ses demandes du même jour dans la troisième (décisions 0008 à 0010 : calibrage, parcours, jeux, simulation, quiz mélangé, plan de DS par chapitre) et dans la quatrième (décision 0011 : le labo). Recettes : `docs/recettes/version-locale-3.md` et `version-locale-4.md`. En attente de son essai.
 
 ## Fait et vérifié
 
@@ -24,7 +24,9 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - Défauts trouvés à l'essai et corrigés : la correction de la dernière question d'un quiz disparaissait ; le terminal de développement écrivait l'adresse e-mail et le code de connexion (coupé dans `next.config.ts`).
 - Troisième version locale (14 novembre) : test de calibrage à la première connexion et refaisable, parcours recalculé à chaque affichage (paliers, étapes, signaux), dix jeux (sept dans le navigateur, trois corrigés par le serveur), quiz mélangé, simulation du basketteur, plan de DS réparti entre les chapitres, table `parties` (records), menu avec « Jeux » en bas et « Parcours » en haut.
 - Essais de la troisième version : calibrage, parcours, quiz mélangé, trois jeux du serveur et plan de DS sur trois chapitres dans le navigateur intégré ; les sept jeux du navigateur et la simulation avec Playwright (`scripts/essais/jeux.mts`), parce que le navigateur intégré met les animations en pause.
-- `npm run tout` : lint, types, 232 tests avec couverture (moteur : 100 % des lignes), 24 contrôles de contenu, 42 tests de base, compilation. Vert le 14 novembre.
+- Quatrième version locale (14 novembre), le labo : quinze défis en cinq simulations (basketteur, largage, circuit RC, thé, effet Doppler), un défi par objectif. L'élève calcule, entre sa valeur, lance la simulation ; le serveur juge l'essai avec les mêmes règles que le navigateur, compte les essais et donne les étoiles (table `defis`). Les énoncés sont des brouillons, gardés sur le serveur, visibles seulement en local ou par l'administrateur.
+- Essais du labo avec Playwright (`scripts/essais/labo.mts`), en largeur téléphone puis sur grand écran et en thème sombre : les quinze défis joués avec une valeur fausse puis la bonne, les étoiles, le défi fermé, le défi rejoué, sans défilement horizontal ni erreur de page.
+- `npm run tout` : lint, types, 270 tests avec couverture (moteur et règles du labo : 100 % des lignes), 25 contrôles de contenu, 49 tests de base, compilation. Vert le 14 novembre.
 
 ## Film de présentation
 
@@ -45,7 +47,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 8. Application installable : manifeste, service worker, page hors ligne.
 9. Tests : intégration des commandes contre la base locale, parcours Playwright, 28 cas d'abus, matrice des accès depuis le registre. Relectures par `relecteur-securite` et `relecteur-conformite`.
 10. Format des sources de quiz, d'indices et de barèmes (décision à écrire), puis préparation du contenu en brouillon.
-11. Suites des demandes du 14 novembre : écrire de nouvelles questions de quiz, en brouillon, pour avoir plusieurs quiz par chapitre (il y en a 5 à 21 par chapitre, aucune pour la fiche 14) ; d'autres simulations (satellite, circuit RC, décroissance radioactive) si Yane valide celle du basketteur ; faire entrer les jeux et le calibrage dans la page des parents et le bilan.
+11. Suites des demandes du 14 novembre : écrire de nouvelles questions de quiz, en brouillon, pour avoir plusieurs quiz par chapitre (il y en a 5 à 21 par chapitre, aucune pour la fiche 14) ; d'autres simulations pour le labo (satellite, titrage, décroissance radioactive, lentille, poussée d'Archimède, énergie mécanique) ; faire entrer les jeux, le labo et le calibrage dans le parcours, les progrès, la page des parents et le bilan.
 12. Relire dans la langue de la décision 0005 les pages du test de niveau et de l'administration.
 
 ## Remis à la mise en ligne
@@ -60,8 +62,9 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - Le plan d'un DS est gardé en JSON dans la table `ds`, pas dans une table `ds_seances`. Les étapes de lecture cochées y sont aussi (champ `lues`), écrites en lecture puis écriture, sans verrou.
 - Le droit « fiches » ouvre les corrigés de toutes les fiches, pas seulement de celles achetées.
 - Le score d'un jeu qui tourne dans le navigateur est annoncé par le navigateur (`verifiee` à faux dans `parties`). Il ne sert qu'au record personnel.
-- Les nouvelles commandes (calibrage, jeux) n'ont pas encore leurs cas dans la matrice des accès, qui reste à écrire (point 9).
-- `scripts/essais/jeux.mts` joue les sept jeux et la simulation avec le compte local `theo.essai@exemple.fr`. C'est un essai à la main, à transformer en parcours Playwright (point 9).
+- Les nouvelles commandes (calibrage, jeux, défis du labo) n'ont pas encore leurs cas dans la matrice des accès, qui reste à écrire (point 9).
+- Les règles de calcul du labo sont dans le code envoyé au navigateur, puisqu'il anime la simulation : un élève qui lit ce code peut retrouver une réponse. Il n'y a ni classement ni contenu payant derrière.
+- `scripts/essais/jeux.mts` (sept jeux et simulation libre) et `scripts/essais/labo.mts` (quinze défis) jouent avec le compte local `theo.essai@exemple.fr`. Ce sont des essais à la main, à transformer en parcours Playwright (point 9). Celui du labo veut un compte sans ligne dans la table `defis`.
 - Les pages du test d'avant le kit gardent 13 avertissements de lint et des émojis. Elles seront réécrites avec la charte commune.
 - `npm audit` : 9 failles modérées, toutes dans les outils de développement. TypeScript reste en 5.8.3.
 
@@ -73,6 +76,8 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 | Confirmer les décisions 0004 à 0007 | séries de jours et de semaines, liste des questions ouverte sur la note visée | lire la partie « À confirmer » de chaque décision | 16 novembre |
 | Essayer la troisième version locale | calibrage, parcours, dix jeux, simulation, plan de DS par chapitre | `docs/recettes/version-locale-3.md` | 16 novembre |
 | Confirmer les décisions 0008 à 0010 | plan de DS par chapitre, règles du calibrage et du parcours, liste des jeux, place des jeux dans le menu, valeurs de la simulation | lire la partie « à confirmer » de chaque décision | 16 novembre |
+| Essayer la quatrième version locale, le labo | calculer, entrer sa valeur, lancer la simulation | `docs/recettes/version-locale-4.md` | 16 novembre |
+| Valider ou corriger les quinze énoncés du labo, et confirmer la décision 0011 | ce sont des brouillons : ils ne se montrent qu'en local tant qu'ils ne sont pas validés | la partie « Ce que tu dois me dire » de la recette, puis la partie « à confirmer » de la décision | 18 novembre |
 | Valider l'architecture de départ | décision 0001 | lire `docs/02-architecture.md`, section 2, et répondre | 15 novembre |
 | Confirmer ou retirer les cinq ajustements, et répondre aux points de la section 7 du cahier des charges | ils fixent le périmètre de la bêta | `docs/01-cahier-des-charges.md`, sections 4 et 7 | 15 novembre |
 | Ouvrir Resend et ajouter les enregistrements du domaine d'envoi | les e-mails de connexion en dépendent | section 3.4 | tout de suite |
@@ -88,6 +93,7 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - 0008, plan de DS réparti entre les chapitres : choisie par Claude Code à la demande de Yane, à confirmer.
 - 0009, test de calibrage et parcours suivi en continu : demandée par Yane, règles de détail à confirmer.
 - 0010, dix jeux, quiz mélangé, simulation du basketteur : demandée par Yane, liste des jeux à confirmer.
+- 0011, le labo, calculer d'abord puis lancer la simulation : demandée par Yane le 14 novembre ; énoncés en brouillon, règle des étoiles et tolérances à confirmer.
 - 0005, textes de l'interface en langue simple, année sur « Tombé au BAC », questions cumulées par note visée : demandée par Yane le 14 novembre.
 - 0006, séance du jour guidée, fin de séance fêtée, séries de jours et de semaines : demandée par Yane ; les règles des séries sont à confirmer.
 - 0007, mode DS étape par étape : demandée par Yane le 14 novembre.
@@ -102,4 +108,5 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - Les écarts entre le kit et les sources officielles sont dans `docs/audit-de-l-existant.md`, section 7. Les relire avant d'installer un outil.
 - L'ordinateur a Docker Desktop, ffmpeg et Node 24 ; il n'a pas `gh`.
 - En développement, une commande du serveur modifiée n'est parfois rechargée qu'à la modification suivante : en cas de doute pendant un essai, relancer le serveur.
+- Une règle `@container` ne s'applique pas à l'élément qui porte `container-type`, seulement à ce qu'il contient : la grille à deux colonnes se met sur un élément intérieur (`.labo-colonnes`, `.simu-panneau`).
 - Une action qui écrit recharge la page en cours (c'est ainsi que Next.js fonctionne). Un écran qui doit garder un retour à l'écran après l'action (verdict, correction) a donc une adresse qui ne dépend pas de l'avancement, ou un composant qui reste monté.

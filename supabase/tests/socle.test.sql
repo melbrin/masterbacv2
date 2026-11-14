@@ -2,7 +2,7 @@
 -- chacun ne lit que ses lignes, le contenu n'est lisible que par le serveur.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(42);
+select plan(49);
 
 -- ---------- catalogue : rien n'échappe aux règles d'accès ----------
 select is(
@@ -48,12 +48,14 @@ insert into public.signalements (user_id, reference, ou, message) values ('00000
 insert into public.droits_en_attente (adresse, offre) values ('futur@exemple.fr', 'pass');
 insert into public.journal_audit (action) values ('essai');
 insert into public.parties (user_id, jeu, fiches, score, secondes) values ('00000000-0000-4000-8000-00000000000a', 'paires', '{1}', 88, 95);
+insert into public.defis (user_id, defi, essais, etoiles, reussi_le) values ('00000000-0000-4000-8000-00000000000a', 'basket-1', 2, 2, now());
 
 -- ---------- visiteur ----------
 set local role anon;
 select throws_ok('select * from public.profils', '42501', null, 'le visiteur ne lit pas les profils');
 select throws_ok('select * from public.tentatives', '42501', null, 'le visiteur ne lit pas les tentatives');
 select throws_ok('select * from public.parties', '42501', null, 'le visiteur ne lit pas les parties de jeu');
+select throws_ok('select * from public.defis', '42501', null, 'le visiteur ne lit pas les défis');
 select throws_ok('select * from contenu.items', '42501', null, 'le visiteur ne lit pas le contenu');
 select throws_ok('select public.contenu_sommaire()', '42501', null, 'le visiteur n''appelle pas les fonctions de contenu');
 reset role;
@@ -70,6 +72,7 @@ select is((select count(*)::int from public.ds), 0, 'B ne voit pas les DS de A')
 select is((select count(*)::int from public.signalements), 0, 'B ne voit pas les signalements de A');
 select is((select count(*)::int from public.quiz_sessions), 0, 'B ne voit pas les sessions de quiz de A');
 select is((select count(*)::int from public.parties), 0, 'B ne voit pas les parties de jeu de A');
+select is((select count(*)::int from public.defis), 0, 'B ne voit pas les défis de A');
 select throws_ok('select * from public.droits_en_attente', '42501', null, 'un élève ne lit pas les accès en attente');
 select throws_ok('select * from public.journal_audit', '42501', null, 'un élève ne lit pas le journal d''audit');
 select throws_ok('select * from public.limites', '42501', null, 'un élève ne lit pas les compteurs de limite');
@@ -83,6 +86,9 @@ select is((select count(*)::int from public.tentatives), 1, 'A voit ses tentativ
 select is((select score::int from public.parties), 88, 'A voit ses parties de jeu');
 select throws_ok($$insert into public.parties (user_id, jeu, fiches, score, secondes) values ('00000000-0000-4000-8000-00000000000a', 'paires', '{1}', 100, 10)$$, '42501', null, 'A ne peut pas écrire lui-même une partie');
 select throws_ok($$update public.parties set score = 1000$$, '42501', null, 'A ne peut pas changer le score d''une partie');
+select is((select etoiles::int from public.defis), 2, 'A voit ses défis');
+select throws_ok($$insert into public.defis (user_id, defi, essais, etoiles, reussi_le) values ('00000000-0000-4000-8000-00000000000a', 'rc-1', 1, 3, now())$$, '42501', null, 'A ne peut pas se déclarer un défi réussi');
+select throws_ok($$update public.defis set etoiles = 3, essais = 1$$, '42501', null, 'A ne peut pas se donner trois étoiles');
 select throws_ok('select secret from public.quiz_sessions', '42501', null, 'A ne peut pas lire la partie secrète de sa session de quiz');
 select throws_ok($$insert into public.droits (user_id, offre, origine) values ('00000000-0000-4000-8000-00000000000a', 'pass', 'administration')$$, '42501', null, 'A ne peut pas s''ouvrir un droit');
 select throws_ok($$update public.profils set ds_offertes = 5 where user_id = '00000000-0000-4000-8000-00000000000a'$$, '42501', null, 'A ne peut pas se rendre sa préparation offerte');
@@ -97,6 +103,10 @@ select lives_ok($$insert into public.quiz_sessions (user_id, genre, questions) v
 select throws_ok($$insert into public.quiz_sessions (user_id, genre, questions) values ('00000000-0000-4000-8000-00000000000a', 'autre', '{CS-B01}')$$, '23514', null, 'un genre de quiz inconnu est refusé');
 select lives_ok($$insert into public.tentatives (user_id, cle, resultat, score, contexte) values ('00000000-0000-4000-8000-00000000000a', 'quiz:CS-B01', 'ok', 1, 'calibrage'), ('00000000-0000-4000-8000-00000000000a', 'quiz:CS-B01', 'ko', 0, 'jeu')$$, 'une réponse de calibrage ou de jeu s''enregistre');
 select throws_ok($$insert into public.parties (user_id, jeu, fiches, score, secondes) values ('00000000-0000-4000-8000-00000000000a', 'inconnu', '{1}', 10, 10)$$, '23514', null, 'un jeu inconnu est refusé');
+
+-- ---------- défis : un défi réussi a ses étoiles, un défi non réussi n'en a pas ----------
+select throws_ok($$insert into public.defis (user_id, defi, essais, etoiles) values ('00000000-0000-4000-8000-00000000000a', 'rc-2', 1, 3)$$, '23514', null, 'des étoiles sans réussite sont refusées');
+select throws_ok($$insert into public.defis (user_id, defi, essais) values ('00000000-0000-4000-8000-00000000000a', 'Pas un défi', 1)$$, '23514', null, 'un identifiant de défi mal formé est refusé');
 
 select * from finish();
 rollback;

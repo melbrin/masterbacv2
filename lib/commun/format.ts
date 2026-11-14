@@ -24,6 +24,11 @@ export function quand(aujourdhui: string, jour: string): string {
 
 /** « 13,5 » */
 export const nombre = (x: number, decimales = 1) => x.toLocaleString("fr-FR", { minimumFractionDigits: decimales, maximumFractionDigits: decimales });
+/** Un nombre qui peut être négatif, avec le vrai signe moins : « −3,43 ». Un zéro ne porte jamais de signe : « 0,00 ». */
+export function nombreRelatif(x: number, decimales = 1): string {
+  const texte = nombre(Math.abs(x), decimales);
+  return x < 0 && /[1-9]/.test(texte) ? `−${texte}` : texte;
+}
 /** « 5 » ou « 5,5 » */
 export const points = (x: number) => nombre(x, Number.isInteger(x) ? 0 : 1);
 /** « 30 min », « 2 h », « 1 h 30 » */

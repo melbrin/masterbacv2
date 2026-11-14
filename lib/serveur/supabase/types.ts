@@ -19,6 +19,20 @@ export type Database = {
                   Relationships: [
                     
                   ]
+                },"defis": {
+                  Row: {
+                    "defi": string,"essais": number,"etoiles": number | null,"maj_le": string,"reussi_le": string | null,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "defi": string,"essais"?: number,"etoiles"?: number | null,"maj_le"?: string,"reussi_le"?: string | null,"user_id": string
+                  }
+                  Update: {
+                    "defi"?: string,"essais"?: number,"etoiles"?: number | null,"maj_le"?: string,"reussi_le"?: string | null,"user_id"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"droits": {
                   Row: {
                     "cree_par": string | null,"debut": string,"fin": string | null,"id": string,"motif": string | null,"offre": string,"origine": string,"reference": string | null,"retire_le": string | null,"retire_motif": string | null,"user_id": string

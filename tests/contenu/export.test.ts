@@ -5,6 +5,8 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { nettoie } from "@/lib/commun/html/nettoie";
 import { aUneFormule, lignesEssentiel } from "@/lib/commun/jeux";
+import { cleNotion } from "@/lib/commun/simulations";
+import { SIMULATIONS } from "@/lib/serveur/contenu/defis";
 
 const RACINE = join(process.cwd(), "contenu", "export");
 const lis = (nom: string) => JSON.parse(readFileSync(join(RACINE, "data", nom), "utf8"));
@@ -157,5 +159,18 @@ describe("matière des jeux", () => {
     }
     // lignes et lignes avec formule, par fiche : utile pour régler les jeux
     console.info(`lignes de jeu par fiche (lignes/formules) : ${compte.join(" ")}`);
+  });
+});
+
+describe("défis du labo", () => {
+  it("chaque simulation renvoie à une fiche qui existe, et chaque relation rappelée dans un défi est une ligne du tableau de cette fiche", () => {
+    const manques: string[] = [];
+    for (const sim of SIMULATIONS) {
+      const f = fiches.find((x) => x.num === sim.fiche);
+      expect(f, `${sim.id} : fiche ${sim.fiche}`).toBeDefined();
+      const cles = new Set(lignesEssentiel(nettoie(f!.essentiel).html, sim.fiche).map((l) => cleNotion(l.notion)));
+      for (const d of sim.defis) for (const nom of d.rappel) if (!cles.has(cleNotion(nom))) manques.push(`${d.id} : « ${nom} » n'est pas dans le tableau de la fiche ${sim.fiche}`);
+    }
+    expect(manques).toEqual([]);
   });
 });

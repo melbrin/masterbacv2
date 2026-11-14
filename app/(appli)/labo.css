@@ -1,0 +1,159 @@
+/* Le labo (décision 0011) : des défis où l'élève calcule, entre sa valeur, puis lance une simulation.
+   Toutes les classes commencent par « labo- ». */
+
+/* ---------- l'écran de la simulation ----------
+   Une scène de nuit, dans le thème clair comme dans le thème sombre. Les couleurs de la charte y prennent leurs
+   versions claires : les dessins communs (terrain, joueur, graduations) restent lisibles sans rien changer. */
+.labo-ecran, .labo-vignette {
+  --encre: #F3ECE6; --texte: #E2DCD6; --discret: #9DB0C9; --filet: rgba(243, 236, 230, .16);
+  --carte: #0B2140; --carte-2: #08182F; --cuivre: #E0A77A; --cuivre-texte: #E8B48C;
+  --vert: #7CC4A0; --brique: #F0948A; --bleu: #8DB6E0; --sable: #E8C27A;
+  color: var(--texte);
+  background: radial-gradient(120% 85% at 50% 0%, #153766 0%, #0B2140 50%, #06142A 100%);
+}
+/* le cadre mesure sa propre largeur ; ses colonnes s'adaptent à l'intérieur */
+.labo { min-width: 0; container-type: inline-size; }
+.labo-colonnes { display: grid; gap: 14px; min-width: 0; }
+.labo-ecran { display: grid; min-width: 0; overflow: hidden; border: 1px solid rgba(141, 182, 224, .26); border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 17, 40, .28); scroll-margin-top: 68px; }
+.labo-ecran.est-reussi { border-color: var(--vert); }
+.labo-ecran.est-rate { border-color: color-mix(in srgb, var(--brique) 70%, transparent); }
+.labo-barre { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px 2px; font-size: .7rem; }
+.labo-barre span:first-child { font-family: var(--display); font-weight: 750; font-stretch: 112%; letter-spacing: .2em; text-transform: uppercase; color: var(--cuivre); }
+.labo-barre span:last-child { color: var(--discret); font-weight: 600; font-size: .76rem; }
+.labo-scene { padding: 2px 8px 0; }
+.labo-scene svg, .labo-vignette svg { display: block; width: 100%; height: auto; max-height: 56vh; }
+/* les textes des dessins : petits et discrets par défaut ; une classe de la scène ou du terrain l'emporte */
+:where(.labo-scene, .labo-vignette) text { fill: var(--discret); font-family: var(--corps); font-size: 10px; font-variant-numeric: tabular-nums; }
+.labo-fort { fill: var(--encre); font-size: 11px; font-weight: 700; }
+.labo-grand { fill: #06142A; font-family: var(--display); font-size: 15px; font-weight: 800; }
+
+/* les mesures, mises à jour pendant le mouvement */
+.labo-mesures { display: grid; gap: 6px; margin: 0; padding: 8px 10px 10px; }
+.labo-mesures > div { display: grid; gap: 0; min-width: 0; padding: 4px 8px 5px; border: 1px solid rgba(255, 255, 255, .07); border-radius: 10px; background: rgba(255, 255, 255, .055); }
+.labo-mesures dt { overflow: hidden; color: var(--discret); font-size: .74rem; text-overflow: ellipsis; white-space: nowrap; }
+.labo-mesures dd { margin: 0; color: var(--encre); font-size: .9rem; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.labo-mesures sub, .labo-mission sub { font-size: .72em; line-height: 0; }
+
+/* le verdict, sous les mesures : sa place est gardée, rien ne bouge quand il arrive */
+.labo-verdict { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 8px 14px; border-top: 1px solid var(--filet); font-size: .95rem; }
+.labo-verdict p { flex: 1; margin: 0; color: var(--encre); }
+.labo-verdict .labo-attente { color: var(--discret); font-size: .88rem; }
+.labo-verdict-ok { background: rgba(124, 196, 160, .17); }
+.labo-verdict-ko { background: rgba(240, 148, 138, .15); }
+.labo-pastille { display: grid; flex: none; width: 32px; height: 32px; border-radius: 50%; place-items: center; color: #06142A; }
+.labo-pastille svg { width: 18px; height: 18px; stroke-width: 2.6; }
+.labo-verdict-ok .labo-pastille { background: var(--vert); }
+.labo-verdict-ko .labo-pastille { background: var(--brique); }
+.labo-verdict .btn-texte { flex: none; min-height: 44px; padding: 8px 10px; border: 1px solid var(--filet); border-radius: 10px; color: var(--encre); }
+.labo-refus { display: block; color: var(--sable); font-size: .86rem; }
+
+/* ---------- la mission, la saisie, la réussite ---------- */
+.labo-cote { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.labo-mission { display: grid; gap: 10px; }
+.labo-mission > h2 { margin: 0; font-size: 1.05rem; }
+.labo-mission > p { margin: 0; }
+.labo-donnees { display: grid; gap: 6px; margin: 0; }
+.labo-donnees > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 10px; border-radius: 10px; background: var(--carte-2); }
+.labo-donnees dt { color: var(--discret); font-size: .9rem; }
+.labo-donnees dd { margin: 0; color: var(--encre); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.labo-aide { display: inline-flex; align-items: center; justify-self: start; gap: 6px; min-height: 44px; }
+.labo-aide svg { width: 18px; height: 18px; }
+.labo-relations { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.labo-relations[hidden] { display: none; }
+.labo-relations li { display: grid; gap: 4px; min-width: 0; padding: 10px 12px; border: 1px solid var(--filet); border-radius: 12px; }
+.labo-relations b { color: var(--encre); }
+.labo-formule { overflow-x: auto; overflow-y: hidden; padding: 4px 0; color: var(--encre); }
+.labo-relations .labo-cours { padding: 0; border: 0; font-size: .9rem; font-weight: 600; }
+
+.labo-console { display: grid; gap: 12px; }
+.labo-champ { display: grid; gap: 6px; }
+.labo-champ label { color: var(--encre); font-weight: 700; }
+.labo-champ .aide { margin: 0; font-size: .82rem; }
+.labo-saisie { display: flex; align-items: stretch; overflow: hidden; border: 2px solid var(--filet); border-radius: 12px; background: var(--carte); }
+.labo-saisie:focus-within { border-color: var(--cuivre); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cuivre) 30%, transparent); }
+.labo-saisie input { flex: 1; min-width: 0; min-height: 54px; padding: 8px 14px; border: 0; outline: none; background: transparent; color: var(--encre);
+  font-family: var(--display); font-size: 1.45rem; font-weight: 750; font-variant-numeric: tabular-nums; }
+.labo-saisie input::placeholder { color: var(--discret); font-family: var(--corps); font-size: 1rem; font-weight: 400; opacity: .8; }
+.labo-saisie span { display: grid; flex: none; padding: 0 14px; place-items: center; background: var(--carte-2); color: var(--discret); font-weight: 700; }
+.labo-erreur { margin: 0; padding: 8px 12px; border-radius: 10px; background: var(--brique-fond); color: var(--brique); font-size: .9rem; font-weight: 600; }
+.labo-lancer { min-height: 54px; font-size: 1.05rem; touch-action: manipulation; }
+.labo-regle { margin: 0; }
+.labo-reussite { border-color: color-mix(in srgb, var(--vert) 50%, var(--filet)); }
+
+/* ---------- les étoiles ---------- */
+.labo-etoiles { display: inline-flex; gap: 2px; vertical-align: -0.18em; }
+.labo-etoiles svg { width: 1.15em; height: 1.15em; fill: none; stroke: var(--discret); stroke-width: 1.6; stroke-linejoin: round; opacity: .55; }
+.labo-etoiles svg.est-gagnee { fill: var(--cuivre); stroke: var(--cuivre); opacity: 1; }
+.labo-etoiles-grandes { gap: 8px; font-size: 2.6rem; }
+
+/* ---------- les pages du labo ---------- */
+/* le rayon des simulations, en tête de la page des jeux : il se fait défiler au doigt ; sur un grand écran, c'est une grille */
+.labo-rayon { display: flex; gap: 12px; margin: 0 -16px; padding: 2px 16px 12px; overflow-x: auto; list-style: none; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.labo-rayon::-webkit-scrollbar { display: none; }
+.labo-rayon > li { flex: 0 0 min(80%, 300px); min-width: 0; scroll-snap-align: center; }
+.labo-fiche { display: grid; grid-template-rows: auto 1fr; height: 100%; overflow: hidden; border: 1px solid var(--filet); border-radius: 18px; background: var(--carte); box-shadow: var(--ombre); }
+.labo-vignette { display: grid; height: 148px; padding: 8px; place-items: center; overflow: hidden; }
+.labo-vignette svg { width: 100%; height: 132px; max-height: none; }
+.labo-fiche-corps { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 12px 14px 14px; }
+.labo-fiche-corps h3 { margin: 0; font-size: 1.1rem; }
+.labo-fiche-corps p { margin: 0; color: var(--discret); font-size: .9rem; }
+.labo-fiche-corps .actions { margin-top: auto; padding-top: 6px; }
+.labo-theme { font-family: var(--display); font-size: .7rem; font-weight: 750; font-stretch: 112%; letter-spacing: .2em; text-transform: uppercase; color: var(--cuivre-texte); }
+.labo-bilan { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 0 0 12px; color: var(--discret); font-size: .9rem; }
+.labo-bilan b { color: var(--encre); }
+
+/* la page d'une simulation : son aperçu, puis ses défis */
+.labo-apercu { margin-bottom: 14px; border-radius: 18px; }
+.labo-apercu.labo-vignette { height: auto; padding: 10px; }
+.labo-apercu.labo-vignette svg { height: auto; max-height: 240px; }
+.labo-liste { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.labo-defi { display: grid; grid-template-columns: 44px 1fr; gap: 4px 12px; align-items: start; }
+.labo-defi h3 { margin: 0; font-size: 1.05rem; }
+.labo-defi p { margin: 0; color: var(--discret); font-size: .9rem; }
+.labo-defi .actions { grid-column: 2; margin-top: 6px; }
+.labo-rang { display: grid; width: 44px; height: 44px; border-radius: 12px; place-items: center; background: var(--nuit-2); color: var(--sur-nuit);
+  font-family: var(--display); font-size: 1.3rem; font-weight: 800; }
+.labo-rang svg { width: 20px; height: 20px; }
+.labo-defi.est-ferme .labo-rang { background: var(--carte-2); color: var(--discret); }
+.labo-defi.est-reussi .labo-rang { background: var(--vert); color: #FFFFFF; }
+.labo-tete { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+
+/* sur un écran large, la scène reste à gauche pendant que la mission et la saisie défilent à droite */
+@container (min-width: 720px) {
+  .labo-colonnes { grid-template-columns: minmax(0, 11fr) minmax(0, 9fr); column-gap: 20px; align-items: start; }
+  .labo-ecran { position: sticky; top: 72px; }
+}
+@media (min-width: 960px) {
+  .labo-ecran { top: 16px; }
+  .labo-rayon { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0 0 4px; overflow: visible; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .labo-helice { transform-box: fill-box; transform-origin: center; animation: labo-helice .13s linear infinite alternate; }
+  .labo-impact { transform-box: fill-box; transform-origin: center; animation: labo-impact .5s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .labo-halo { transform-box: fill-box; transform-origin: center; animation: labo-halo 1.1s ease-in-out infinite alternate; }
+  .labo-vapeur path { animation: labo-vapeur 2.2s ease-in-out infinite alternate; }
+  .labo-vapeur path:nth-child(2) { animation-delay: -.7s; }
+  .labo-vapeur path:nth-child(3) { animation-delay: -1.4s; }
+  .labo-chauffe { animation: labo-chauffe .6s ease-in-out infinite alternate; }
+  /* avant le lancement, ce qu'il faut atteindre bat doucement */
+  .labo-appel { transform-box: fill-box; transform-origin: center; animation: labo-appel 1.6s ease-out infinite; }
+  .labo-appel-doux { animation: labo-chauffe 1s ease-in-out infinite alternate; }
+  .labo-verdict-ok > *, .labo-verdict-ko > * { animation: apparait .3s ease-out both; }
+  .labo-verdict-ok .labo-pastille { animation: saute .5s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .labo-verdict-ko .labo-pastille { animation: labo-secousse .45s ease-out both; }
+  .labo-ecran.est-reussi { animation: labo-eclat 1.2s ease-out both; }
+  .labo-reussite .labo-etoiles svg.est-gagnee { animation: saute .55s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .labo-reussite .labo-etoiles svg:nth-child(1) { animation-delay: .15s; }
+  .labo-reussite .labo-etoiles svg:nth-child(2) { animation-delay: .4s; }
+  .labo-reussite .labo-etoiles svg:nth-child(3) { animation-delay: .65s; }
+  @keyframes labo-helice { from { transform: scaleX(1); } to { transform: scaleX(.25); } }
+  @keyframes labo-impact { from { transform: scale(.2); opacity: .001; } to { transform: none; opacity: 1; } }
+  @keyframes labo-halo { from { transform: scale(.85); opacity: .25; } to { transform: scale(1.15); opacity: .5; } }
+  @keyframes labo-vapeur { from { transform: translateY(4px); stroke-opacity: .35; } to { transform: translateY(-5px); stroke-opacity: 1; } }
+  @keyframes labo-appel { from { transform: scale(.75); opacity: .95; } to { transform: scale(1.5); opacity: 0; } }
+  @keyframes labo-chauffe { from { opacity: .65; } to { opacity: 1; } }
+  @keyframes labo-secousse { 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+  @keyframes labo-eclat { 0% { box-shadow: 0 0 0 0 rgba(124, 196, 160, .7), 0 12px 32px rgba(0, 17, 40, .28); } 100% { box-shadow: 0 0 0 16px rgba(124, 196, 160, 0), 0 12px 32px rgba(0, 17, 40, .28); } }
+}

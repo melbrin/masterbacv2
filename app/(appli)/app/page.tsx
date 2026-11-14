@@ -142,7 +142,7 @@ export default async function Aujourdhui() {
         })() : (
           <Link className="carte carte-lien" href="/app/ds/nouveau"><h2>Tu as un DS bientôt ?</h2><p className="discret" style={{ margin: 0 }}>Saisis la date et les chapitres. Ton plan de révision est généré automatiquement.</p></Link>
         )}
-        <Link className="carte carte-lien" href="/app/jeux"><h2>Jeux</h2><p className="discret" style={{ margin: 0 }}>Revois ton cours en jouant : dix jeux et une simulation.</p></Link>
+        <Link className="carte carte-lien" href="/app/jeux"><h2>Jeux</h2><p className="discret" style={{ margin: 0 }}>Le labo : calcule, puis lance la simulation. Et dix jeux pour revoir ton cours.</p></Link>
         <Link className="carte carte-lien" href="/app/carnet">
           <div className="tete"><h2>Carnet d&apos;erreurs</h2><span className={`puce ${aRevoir.length ? "puce-ko" : "puce-ok"}`}>{aRevoir.length} à revoir</span></div>
           <p className="discret" style={{ margin: 0 }}>Tu revois chaque question ratée 2 jours plus tard, puis une semaine après, puis trois semaines après.</p>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { etiquetteBac, etiquetteDapres, majusculeInitiale, rangFeminin } from "@/lib/commun/format";
+import { etiquetteBac, etiquetteDapres, majusculeInitiale, nombreRelatif, rangFeminin } from "@/lib/commun/format";
 
 describe("étiquettes du bac", () => {
   it("reprend les années données par la fiche", () => {
@@ -46,5 +46,15 @@ describe("rang d'une séance", () => {
     expect(rangFeminin(1)).toBe("première");
     expect(rangFeminin(2)).toBe("2e");
     expect(rangFeminin(30)).toBe("30e");
+  });
+});
+
+describe("nombre qui peut être négatif", () => {
+  it("écrit le vrai signe moins, et jamais de signe devant zéro", () => {
+    expect(nombreRelatif(-3.426, 2)).toBe("−3,43");
+    expect(nombreRelatif(3.426, 2)).toBe("3,43");
+    expect(nombreRelatif(-0.004, 2)).toBe("0,00");
+    expect(nombreRelatif(-0, 1)).toBe("0,0");
+    expect(nombreRelatif(-19.81)).toBe("−19,8");
   });
 });
