@@ -1,237 +1,337 @@
 "use client";
 
-// La paillasse Circuits : des composants posés sur la table, et des fils que l'élève pose entre deux bornes.
-// Deux montages : la charge d'un condensateur avec un générateur et un système d'acquisition, ou un capteur
-// branché sur un microcontrôleur. La paillasse lit le montage (lib/commun/tp/circuit.ts) et répond comme le vrai
-// matériel : une courbe, une mesure, ou rien si le circuit est mal fermé. La suite des gestes part au serveur.
+// La paillasse Circuits (décision 0012). L'élève y monte le circuit de ses mains : il prend les composants dans la boîte
+// et les pose sur la plaque, tourne la molette du générateur en lisant son afficheur, tire les fils d'une borne à l'autre,
+// décharge le condensateur avec un fil, règle la durée, lance l'acquisition et ferme l'interrupteur. La courbe se trace
+// alors en temps réel sur l'écran de la carte ; il l'ouvre en grand pour y placer son repère.
+// Chaque geste passe par les règles (lib/commun/tp/paillasses/circuit.ts) ; la liste des gestes part au serveur.
+// Le guide (lib/commun/tp/paillasses/circuit-guide.ts) dit le prochain geste ; ici, la main le montre à sa place dans le dessin.
 
-import { useState } from "react";
-import Icone from "@/components/appli/Icone";
-import { useHorloge } from "@/components/simulations/horloge";
+import { useEffect, useRef, useState } from "react";
 import { nombre } from "@/lib/commun/format";
-import { CIRCUIT_INITIAL, FILS_MAX, analyse, defautDuMontage, gesteCircuit, tension, type EtatCircuit, type GesteCircuit, type ReglagesCircuit } from "@/lib/commun/tp/paillasses/circuit";
+import {
+  CARTE, CRAN, DUREES, E_MAX, FILS_MAX, GENERATEUR, bornesDe, composant, finDe, pasDe, placeDe, regime, regles, tensionActuelle,
+  type EtatCircuit, type ReglagesCircuit,
+} from "@/lib/commun/tp/paillasses/circuit";
+import { entreBornes, nomBorne as nomDeBorne, nomComposant, pose, prochain, toucheDeLaCarte, type PasDuGuide } from "@/lib/commun/tp/paillasses/circuit-guide";
 import type { GesteBrut, PropsPaillasse } from "@/lib/commun/tp/types";
+import { Afficheur, Cible, Etabli, Main, Manipulation, Molette, Objet, Poussoir, Scene, Touche, son, useGuide, type Borne, type Indication, type Point, type Vue } from "../kit";
+import { Courbe, ecritInstant } from "./circuitCourbe";
+import { FilsCircuit, placesDuFil } from "./circuitFils";
+import { Boitier, DessinComposant, Graphe, majuscule, type Cadre } from "./circuitPieces";
+import "./circuit.css";
 
-/** Une borne : sa place sur le dessin, son nom dans une phrase, son nom dans la liste des fils, et ce qui s'écrit à côté d'elle. */
-interface Borne { id: string; x: number; y: number; nom: string; bref: string; court: string }
-const r = (x: number) => Math.round(x * 100) / 100;
+// ---------- la place de chaque chose dans le dessin (360 de large) ----------
+const VUE: Vue = { x: 0, y: -6, l: 360, h: 600 };
+const ECRAN = { x: 8, y: 0, l: 344, h: 142 };
+const GRAPHE: Cadre = { x: 38, y: 20, l: 304, h: 88 };
+const AVANCE = { x: 176, l: 166 };                 // la barre d'avancement de l'enregistrement, en bas de l'écran
+const BASCULE = 169;                               // le bouton de l'interrupteur, entre l'écran et la plaque
+const PLAQUE = { x: 8, y: 196, l: 344, h: 114 };
+const SUPPORTS = [68, 180, 292];                   // le milieu de chaque emplacement
+const POSE = 232;                                  // la hauteur des composants posés
+const RANGEE = 290;                                // la hauteur des bornes de la plaque
+const APPAREILS = 348;                             // la hauteur des bornes du générateur et de la carte
+const BOITIER = { y: 364, h: 128 };
+const BOITE = { x: 8, y: 498, l: 344, h: 90 };
+const PLACES: Record<string, { x: number; y: number }> = {
+  [GENERATEUR.plus]: { x: 46, y: APPAREILS }, [GENERATEUR.moins]: { x: 114, y: APPAREILS },
+  [CARTE.voie]: { x: 246, y: APPAREILS }, [CARTE.masse]: { x: 314, y: APPAREILS },
+  ...Object.fromEntries(SUPPORTS.flatMap((x, i) => [[bornesDe(i)[0], { x: x - 34, y: RANGEE }], [bornesDe(i)[1], { x: x + 34, y: RANGEE }]])),
+};
+const TEINTES: Record<string, Borne["teinte"]> = { [GENERATEUR.plus]: "rouge", [GENERATEUR.moins]: "noire", [CARTE.voie]: "rouge", [CARTE.masse]: "noire" };
+/** Les commandes des appareils : le dessin et la main du guide lisent les mêmes places. */
+const MOLETTES = { tension: { x: 136, y: BOITIER.y + 56 }, duree: { x: 318, y: BOITIER.y + 42 } };
+const TOUCHE_CARTE = { x: 270, y: BOITIER.y + 88 };
+/** L'angle d'une molette pour une valeur : les mêmes angles que `Molette`, de −135° à 135°. */
+const angleDe = (valeur: number, max: number) => -135 + (valeur / max) * 270;
 
-// les bornes du montage de charge : générateur, interrupteur, résistance, condensateur, voie de mesure et masse
-const BORNES_CHARGE: Borne[] = [
-  { id: "g+", x: 40, y: 50, nom: "la borne + du générateur", bref: "générateur +", court: "+" },
-  { id: "g-", x: 40, y: 150, nom: "la borne − du générateur", bref: "générateur −", court: "−" },
-  { id: "k1", x: 104, y: 28, nom: "l'interrupteur, à gauche", bref: "interrupteur gauche", court: "" },
-  { id: "k2", x: 158, y: 28, nom: "l'interrupteur, à droite", bref: "interrupteur droite", court: "" },
-  { id: "r1", x: 206, y: 28, nom: "la résistance, à gauche", bref: "résistance gauche", court: "" },
-  { id: "r2", x: 278, y: 28, nom: "la résistance, à droite", bref: "résistance droite", court: "" },
-  { id: "c1", x: 320, y: 70, nom: "le condensateur, en haut", bref: "condensateur haut", court: "" },
-  { id: "c2", x: 320, y: 136, nom: "le condensateur, en bas", bref: "condensateur bas", court: "" },
-  { id: "voie", x: 166, y: 150, nom: "la voie de mesure", bref: "voie", court: "voie" },
-  { id: "masse", x: 232, y: 150, nom: "la masse", bref: "masse", court: "masse" },
-];
-// les bornes du montage sur microcontrôleur : trois broches, la résistance, les deux plaques du capteur
-const BORNES_CAPTEUR: Borne[] = [
-  { id: "d2", x: 108, y: 56, nom: "la broche D2", bref: "D2", court: "D2" },
-  { id: "a0", x: 108, y: 100, nom: "la broche A0", bref: "A0", court: "A0" },
-  { id: "gnd", x: 108, y: 144, nom: "la broche GND", bref: "GND", court: "GND" },
-  { id: "r1", x: 158, y: 28, nom: "la résistance, à gauche", bref: "résistance gauche", court: "" },
-  { id: "r2", x: 230, y: 28, nom: "la résistance, à droite", bref: "résistance droite", court: "" },
-  { id: "c1", x: 288, y: 62, nom: "la plaque gauche du capteur", bref: "plaque gauche", court: "" },
-  { id: "c2", x: 322, y: 62, nom: "la plaque droite du capteur", bref: "plaque droite", court: "" },
-];
-const G = { x0: 46, x1: 344, y0: 162, y1: 28 }; // le cadre de la courbe
+interface Partie { etat: EtatCircuit; gestes: GesteBrut[] }
+/** La ligne sous la scène : ce qui vient de se passer ; et le geste que ça permet, qui ne s'ajoute que guide coupé. */
+interface Message { fait: string; conseil?: string }
+const FIN: Message = { fait: "L'acquisition est terminée.", conseil: "Ouvre la courbe pour la lire." };
 
-/** Le décor du montage de charge : les composants, sans les fils. */
-function DecorCharge({ reglages, ferme }: { reglages: ReglagesCircuit; ferme: boolean }) {
-  return (
-    <g fill="none" stroke="var(--encre)" strokeWidth={1.5} strokeLinecap="round">
-      <path d="M 40 50 V 76 M 40 124 V 150" />
-      <circle cx={40} cy={100} r={24} fill="var(--carte)" />
-      <text x={40} y={104} textAnchor="middle" className="labo-fort" stroke="none">{nombre(reglages.generateur.E, 1)} V</text>
-      <text x={70} y={104} stroke="none">générateur</text>
-      <path d={`M 104 28 H 114 M 148 28 H 158 M 114 28 L ${ferme ? "148 28" : "144 12"}`} />
-      <text x={131} y={46} textAnchor="middle" stroke="none">interrupteur</text>
-      <path d="M 206 28 H 222 M 262 28 H 278" />
-      <rect x={222} y={19} width={40} height={18} rx={3} fill="var(--carte)" />
-      <text x={242} y={52} textAnchor="middle" stroke="none"><tspan fontStyle="italic">R</tspan> = {nombre(reglages.R / 1000, 0)} kΩ</text>
-      <path d="M 320 70 V 98 M 320 108 V 136 M 304 98 H 336 M 304 108 H 336" strokeWidth={2} />
-      <text x={320} y={158} textAnchor="middle" stroke="none">condensateur</text>
-      <rect x={140} y={150} width={118} height={26} rx={6} fill="var(--carte)" />
-      <text x={199} y={190} textAnchor="middle" stroke="none">système d&apos;acquisition</text>
-    </g>
-  );
-}
+export default function Circuit({ reglages: r, protocole, attente, fini }: PropsPaillasse<ReglagesCircuit>) {
+  const [partie, setPartie] = useState<Partie>(() => ({ etat: regles.depart(r), gestes: [] }));
+  const [message, setMessage] = useState<Message>({ fait: "Prends un composant dans la boîte en le glissant, ou touche-le puis touche l'endroit où le poser." });
+  const dis = (fait: string, conseil?: string) => setMessage({ fait, conseil });
+  /** l'instant où en est l'enregistrement à l'écran, en secondes */
+  const [instant, setInstant] = useState(0);
+  const [courbe, setCourbe] = useState(false);
+  const [repere, setRepere] = useState(0);
+  const [tangente, setTangente] = useState(false);
+  /** l'étincelle d'un condensateur chargé dont on relie les deux bornes : où elle claque, et son rang, pour la rejouer */
+  const [etincelle, setEtincelle] = useState<{ x: number; y: number; rang: number } | null>(null);
+  /** le fil que l'élève vient de toucher : sa croix est affichée */
+  const [filChoisi, setFilChoisi] = useState<string | null>(null);
+  const guide = useGuide();
+  const { etat, gestes } = partie;
+  const acq = etat.acquisition;
+  /** vrai tant que la courbe se trace : un geste fait à ce moment-là porte son instant */
+  const enregistre = etat.carte === "enregistre" && acq !== null;
+  const vivant = enregistre && instant < acq.duree;
+  const jusque = !acq ? 0 : enregistre ? instant : finDe(acq);
 
-/** Le décor du montage sur microcontrôleur : la carte et ses broches, la résistance, la cuve et son capteur. */
-function DecorCapteur({ reglages, niveau }: { reglages: ReglagesCircuit; niveau: number }) {
-  const haut = Math.max(...reglages.niveaux, 1);
-  const eau = r(172 - (niveau / haut) * 78);
-  return (
-    <g fill="none" stroke="var(--encre)" strokeWidth={1.5} strokeLinecap="round">
-      <rect x={14} y={36} width={86} height={128} rx={8} fill="var(--carte)" />
-      <text x={57} y={94} textAnchor="middle" className="labo-fort" stroke="none">micro-</text>
-      <text x={57} y={108} textAnchor="middle" className="labo-fort" stroke="none">contrôleur</text>
-      <path d="M 100 56 H 108 M 100 100 H 108 M 100 144 H 108" />
-      <path d="M 158 28 H 174 M 214 28 H 230" />
-      <rect x={174} y={19} width={40} height={18} rx={3} fill="var(--carte)" />
-      <text x={194} y={52} textAnchor="middle" stroke="none"><tspan fontStyle="italic">R</tspan> = {nombre(reglages.R / 1e6, 1)} MΩ</text>
-      {/* la cuve, l'eau, et les deux plaques du capteur */}
-      <rect x={268} y={eau} width={74} height={r(172 - eau)} fill="rgba(64, 150, 240, 0.55)" stroke="none" />
-      <path d="M 266 84 V 174 H 344 V 84" />
-      <path d="M 288 62 V 166 M 322 62 V 166" strokeWidth={3} />
-      <text x={305} y={190} textAnchor="middle" stroke="none">cuve : {niveau === 0 ? "vide" : `${nombre(niveau, 0)} cm d'eau`}</text>
-    </g>
-  );
-}
+  // ----- l'horloge de l'enregistrement : elle avance en temps réel, et s'arrête au bout de la durée -----
+  const horloge = useRef(0);
+  const dureeEnCours = enregistre ? acq.duree : 0;
+  useEffect(() => {
+    if (dureeEnCours <= 0) return;
+    let image = 0;
+    let avant = performance.now();
+    const tourne = (maintenant: number) => {
+      // l'heure d'une image peut précéder celle où l'horloge est partie : le temps ne recule pas
+      const dt = Math.max(0, Math.min(0.1, (maintenant - avant) / 1000));
+      avant = maintenant;
+      // au bout de la durée, l'horloge s'arrête ; un pas fait au clavier a pu l'y amener avant elle
+      if (horloge.current >= dureeEnCours) return;
+      horloge.current = Math.min(dureeEnCours, horloge.current + dt);
+      setInstant(horloge.current);
+      if (horloge.current >= dureeEnCours) { setMessage(FIN); son("bip"); return; }
+      image = requestAnimationFrame(tourne);
+    };
+    image = requestAnimationFrame(tourne);
+    return () => cancelAnimationFrame(image);
+  }, [dureeEnCours, etat.lancees]);
+  /** Au clavier, l'enregistrement s'avance d'un pas fixe : la courbe est la même, on ne fait que l'attendre moins longtemps. */
+  const avance = (pas: number) => {
+    horloge.current = Math.min(dureeEnCours, horloge.current + pas);
+    setInstant(horloge.current);
+    if (horloge.current >= dureeEnCours) setMessage(FIN);
+  };
 
-export default function PaillasseCircuit({ reglages, fini, attente }: PropsPaillasse<ReglagesCircuit>) {
-  const [{ etat, gestes }, setManip] = useState<{ etat: EtatCircuit; gestes: GesteCircuit[] }>({ etat: CIRCUIT_INITIAL, gestes: [] });
-  const [choisie, setChoisie] = useState<string | null>(null);
-  const [message, setMessage] = useState("Touche une borne, puis une autre : un fil les relie.");
-  const [vue, setVue] = useState<"montage" | "courbe">("montage");
-  const [curseur, setCurseur] = useState(0);
-  const [confirme, setConfirme] = useState(false);
-  const horloge = useHorloge();
-  const charge = reglages.lecture;
-  const lesBornes = charge ? BORNES_CHARGE : BORNES_CAPTEUR;
-  const borne = (id: string) => lesBornes.find((b) => b.id === id)!;
-  const derniere = etat.acquisitions[etat.acquisitions.length - 1];
-  const E = reglages.generateur.E;
-
-  const fais = (g: GesteCircuit): EtatCircuit => {
-    const suite = gesteCircuit(reglages, etat, g);
-    setConfirme(false);
-    if (suite !== etat) setManip({ etat: suite, gestes: [...gestes, g] });
+  // ----- les gestes -----
+  /** Applique un geste et dit ce qu'il a changé. Pendant un enregistrement, le geste porte son instant. */
+  const agit = (g: GesteBrut): EtatCircuit => {
+    const complet = vivant ? { ...g, t: Math.round(instant * 1000) / 1000 } : g;
+    const suite = regles.geste(r, etat, complet);
+    if (suite === etat) return etat;
+    setPartie({ etat: suite, gestes: [...gestes, complet] });
+    if (suite.carte === "enregistre" && etat.carte !== "enregistre") { horloge.current = 0; setInstant(0); son("bip"); }
+    if (suite.securite && !etat.securite) son("faux");
     return suite;
   };
-  const touche = (id: string) => {
-    if (choisie === null) { setChoisie(id); setMessage(`Fil en main, depuis ${borne(id).nom}. Touche la borne où le brancher.`); return; }
-    setChoisie(null);
-    if (choisie === id) { setMessage("Fil reposé."); return; }
-    const suite = fais({ g: "relier", a: choisie, b: id });
-    setMessage(suite === etat ? (etat.fils.length >= FILS_MAX ? "Il n'y a plus de fil disponible." : "Ces deux bornes sont déjà reliées.") : `Fil posé entre ${borne(choisie).nom} et ${borne(id).nom}.`);
+  /** Ce que le geste a entraîné sur les appareils : le voyant du générateur, la carte qui se déclenche ou qui attend. */
+  const suites = (suite: EtatCircuit): string => {
+    if (suite.securite && !etat.securite) return " Le voyant rouge du générateur s'allume : il s'est mis en sécurité et ne fournit plus rien.";
+    if (!suite.securite && etat.securite) return " Le voyant rouge s'éteint : le générateur repart.";
+    if (suite.carte === "enregistre" && etat.carte === "prete") return " La carte se déclenche : la courbe se trace.";
+    if (suite.carte === "prete") return " La carte attend toujours : la tension qu'elle mesure n'a pas bougé.";
+    return "";
   };
-  const retire = (a: string, b: string) => { fais({ g: "retirer", a, b }); setMessage("Fil retiré."); };
-  const acquiert = () => {
-    const suite = fais({ g: "acquerir" });
-    const faite = suite.acquisitions[suite.acquisitions.length - 1];
-    if (suite === etat || !faite) return;
-    const defaut = defautDuMontage(faite.montage);
-    if (charge) {
-      setVue("courbe");
-      setCurseur(0);
-      horloge.lance(reglages.duree, undefined, reglages.duree / 3);
-      setMessage(defaut ?? "L'interrupteur est fermé : la tension du condensateur s'enregistre.");
-    } else {
-      setMessage(defaut ?? `Mesure faite : τ = ${nombre((faite.tau ?? 0) * 1e6, 0)} µs pour ${faite.niveau === 0 ? "la cuve vide" : `${nombre(faite.niveau, 0)} cm d'eau`}.`);
+  const nomBorne = (id: string): string => nomDeBorne(r, etat, id);
+
+  const poser = (objet: string, cible: string) => {
+    const c = composant(r, objet);
+    if (!c) return;
+    const suite = agit(pose(objet, cible));
+    if (suite === etat) return;
+    dis(`${majuscule(nomComposant(c))} est ${cible.startsWith("place") ? `sur la plaque${c.genre === "interrupteur" ? (suite.ferme ? ", fermé" : ", ouvert") : ""}` : "revenu dans la boîte"}.${suites(suite)}`);
+  };
+  /** L'élève vient de prendre un composant : où peut-il le poser ? */
+  const prise = (objet: string, cibles: string[]) => {
+    const c = composant(r, objet);
+    if (!c) return;
+    dis(cibles.length > 0 ? `Tu tiens ${nomComposant(c)}. Un anneau vert montre où le poser.` : `Tu tiens ${nomComposant(c)}, mais la plaque est pleine : range d'abord un composant dans la boîte.`);
+  };
+  /** Un composant lâché là où rien ne l'accepte : il retourne à sa place. */
+  const rate = (objet: string, p: Point) => {
+    const pris = SUPPORTS.findIndex((x, i) => Math.hypot(p.x - x, p.y - POSE) < 44 && etat.plaque[i] !== null && etat.plaque[i] !== objet);
+    dis(pris >= 0 ? `L'emplacement ${pris + 1} est déjà pris : range d'abord le composant qui s'y trouve.` : "Rien ne se pose à cet endroit. Reprends le composant : un anneau vert montre où il va.");
+  };
+  const relie = (a: string, b: string) => {
+    const avant = tensionActuelle(etat, vivant ? instant : null);
+    const suite = agit({ g: "relier", a, b });
+    // un condensateur chargé dont un fil relie les deux bornes se décharge d'un coup : une étincelle claque sur la borne
+    const claque = suite !== etat && Math.abs(avant) > 0.3 && regime(r, suite).condensateur === "shunte";
+    if (claque) { setEtincelle((e) => ({ ...PLACES[b], rang: (e?.rang ?? 0) + 1 })); son("clic"); }
+    dis(suite === etat ? (etat.fils.length >= FILS_MAX ? "Il n'y a plus de fil. Touche un fil posé pour le retirer." : "Ces deux bornes sont déjà reliées.")
+      : `Fil posé ${entreBornes(r, etat, a, b)}.${claque ? " Une étincelle claque : il vient de se décharger." : ""}${suites(suite)}`);
+  };
+  const retire = (a: string, b: string) => {
+    const suite = agit({ g: "retirer", a, b });
+    if (suite !== etat) dis(`Fil retiré ${entreBornes(r, etat, a, b)}.${suites(suite)}`);
+  };
+  const bascule = () => {
+    const suite = agit({ g: "basculer" });
+    if (suite !== etat) dis(`L'interrupteur est ${suite.ferme ? "fermé" : "ouvert"}.${suites(suite)}`);
+  };
+  const regleTension = (v: number) => {
+    const suite = agit({ g: "tension", v });
+    if (suite === etat) return;
+    if (suite.securite && etat.securite) dis("Tu tournes la molette du générateur, mais son voyant rouge reste allumé : il est en sécurité et ne fournit plus rien.");
+    else dis(`Tu tournes la molette du générateur.${suites(suite)}`, suites(suite) ? undefined : "Lis la tension sur son afficheur.");
+  };
+  const regleDuree = (rang: number) => {
+    const suite = agit({ g: "duree", v: DUREES[rang] });
+    if (suite !== etat) dis(vivant ? "Tu tournes la molette de la carte : la nouvelle durée vaudra pour la prochaine acquisition." : "Tu tournes la molette de la carte.", vivant ? undefined : "Lis la durée sur son afficheur.");
+  };
+  const lance = () => {
+    if (toucheDeLaCarte(etat, vivant) === "lancer") {
+      const suite = agit({ g: "lancer" });
+      if (suite !== etat) { setCourbe(false); dis("La carte est prête : elle commencera à enregistrer dès que la tension qu'elle mesure bougera."); }
+      return;
+    }
+    const suite = agit({ g: "arreter" });
+    if (suite !== etat) dis(etat.carte === "prete" ? "La carte n'attend plus." : "Acquisition arrêtée.");
+  };
+  const toutRecommencer = () => {
+    setPartie({ etat: regles.depart(r), gestes: [] });
+    horloge.current = 0;
+    setInstant(0);
+    setCourbe(false);
+    setRepere(0);
+    setTangente(false);
+    setEtincelle(null);
+    setFilChoisi(null);
+    dis("La paillasse est remise comme au début.");
+  };
+  /** L'appel au professeur. S'il arrive pendant que la courbe se trace, l'acquisition s'arrête là. */
+  const appelle = () => fini(vivant ? [...gestes, { g: "arreter", t: Math.round(instant * 1000) / 1000 }] : gestes);
+
+  // ----- ce qui se dessine -----
+  const bornes: Borne[] = Object.entries(PLACES).map(([id, p]) => ({ id, x: p.x, y: p.y, nom: nomBorne(id), teinte: TEINTES[id] }));
+  const caseDe = (rang: number) => BOITE.x + ((rang + 0.5) * BOITE.l) / r.boite.length;
+  const interrupteur = r.boite.find((c) => c.genre === "interrupteur");
+  const placeInterrupteur = interrupteur ? placeDe(etat, interrupteur.id) : -1;
+  const libres = r.boite.map((c) => c.id);
+  const attendPrete = etat.carte === "prete";
+  const pas = acq ? pasDe(acq) : 1;
+  /** où se trouve chaque composant : dans sa case, ou sur la plaque */
+  const placeDuComposant = (id: string): Point => {
+    const place = placeDe(etat, id);
+    return place >= 0 ? { x: SUPPORTS[place], y: POSE } : { x: caseDe(r.boite.findIndex((c) => c.id === id)), y: BOITE.y + 51 };
+  };
+
+  // ----- le guide : le prochain geste, et où la main le montre -----
+  const prochainPas: PasDuGuide | null = guide.actif ? prochain(r, etat, { courbe: courbe && acq !== null, filChoisi, trace: vivant }) : null;
+  const laMain = (p: PasDuGuide): Indication["main"] => {
+    switch (p.geste) {
+      case "glisser": return { geste: "glisser", de: placeDuComposant(p.objet), vers: p.cible.startsWith("place") ? { x: SUPPORTS[Number(p.cible.slice(5))], y: POSE } : { x: caseDe(r.boite.findIndex((c) => c.id === p.objet)), y: BOITE.y + 51 } };
+      case "relier": return { geste: "glisser", de: PLACES[p.de], vers: PLACES[p.vers] };
+      case "toucher": {
+        if (p.quoi === "fil" || p.quoi === "croix") {
+          const fil = placesDuFil(p.a, p.b, bornes);
+          return fil ? { geste: "toucher", ou: p.quoi === "fil" ? fil.prise : fil.croix } : undefined;
+        }
+        // la main se pose sur le bord de la touche : sa paume ne couvre ni le nom de la carte, ni celui de la plaque
+        if (p.quoi === "carte") return { geste: "toucher", ou: { x: TOUCHE_CARTE.x + 50, y: TOUCHE_CARTE.y - 4 } };
+        return placeInterrupteur >= 0 ? { geste: "toucher", ou: { x: SUPPORTS[placeInterrupteur] + 6, y: BASCULE - 10 } } : undefined;
+      }
+      case "tourner": return p.molette === "tension"
+        ? { geste: "tourner", ou: MOLETTES.tension, de: angleDe(etat.E, E_MAX), a: angleDe(p.vers, E_MAX), r: 30 }
+        : { geste: "tourner", ou: MOLETTES.duree, de: angleDe(DUREES.indexOf(etat.duree), DUREES.length - 1), a: angleDe(DUREES.indexOf(p.vers), DUREES.length - 1), r: 30 };
+      // le repère se montre dans le dessin de la courbe ; une touche du bas se met en avant d'elle-même
+      default: return undefined;
     }
   };
-  const termine = () => {
-    const incomplet = charge ? etat.lu === null : etat.acquisitions.every((a) => a.tau === null);
-    if (incomplet && !confirme) { setConfirme(true); setMessage(charge ? "Tu n'as pas noté de temps caractéristique. Touche encore le bouton pour finir quand même." : "Aucune mesure n'a réussi. Touche encore le bouton pour finir quand même."); return; }
-    fini(gestes as GesteBrut[]);
-  };
+  const indication: Indication | null = prochainPas && { cle: prochainPas.cle, texte: prochainPas.texte, etape: prochainPas.etape, main: laMain(prochainPas), appel: prochainPas.geste === "bouton" && prochainPas.bouton === "fini" };
+  /** la touche du bas que le guide met en avant */
+  const vise = (bouton: string) => (prochainPas?.geste === "bouton" && prochainPas.bouton === bouton ? " pl-vise" : "");
 
-  // la courbe de la dernière acquisition, tracée jusqu'à l'instant de l'horloge
-  const jusque = horloge.phase === "pret" ? 0 : horloge.t;
-  const tracee = derniere && derniere.montage.etat === "serie" && derniere.montage.mesure !== "absente";
-  const u = (t: number) => (derniere ? tension(reglages, derniere.montage, derniere.niveau, t) : 0);
-  const X = (t: number) => r(G.x0 + (t / reglages.duree) * (G.x1 - G.x0));
-  const Y = (v: number) => r(G.y0 - ((v + 0.1 * E) / (1.25 * E)) * (G.y0 - G.y1));
-  const courbe = Array.from({ length: 81 }, (_, i) => (i / 80) * jusque).map((t, i) => `${i ? "L" : "M"}${X(t)},${Y(u(t))}`).join(" ");
-  const finie = horloge.phase === "fini";
+  const outils = courbe && acq ? (
+    <>
+      <button type="button" className={`btn btn-ligne${vise("revenir")}`} onClick={() => setCourbe(false)}>Revenir à la paillasse</button>
+      <button type="button" className="btn btn-cuivre" onClick={() => {
+        if (repere <= 0) { dis("Le repère est encore au départ de la courbe : glisse-le d'abord jusqu'au point que tu veux lire."); return; }
+        const suite = agit({ g: "noter", v: repere });
+        if (suite !== etat) { setCourbe(false); dis(`Temps noté : ${ecritInstant(repere, pas)}.`); son("bip"); }
+      }}>Noter ce temps</button>
+    </>
+  ) : (
+    <button type="button" className={`btn btn-ligne${vise("courbe")}`} onClick={() => {
+      if (!acq) { dis(attendPrete ? "Il n'y a pas encore de courbe : la carte attend que la tension bouge." : "Il n'y a pas encore de courbe.", attendPrete ? undefined : "Lance l'acquisition, puis ferme l'interrupteur."); return; }
+      setRepere(etat.note ?? 0);
+      setCourbe(true);
+      dis("La courbe est ouverte en grand.", "Glisse le repère : il lit l'instant et la tension du point où il se trouve.");
+    }}>Ouvrir la courbe</button>
+  );
 
   return (
-    <div className="tp-paillasse">
-      <div className="labo-ecran">
-        <div className="labo-scene">
-          {vue === "montage" ? (
-            <svg viewBox="0 0 360 196" role="group" aria-label={`La paillasse : ${etat.fils.length} ${etat.fils.length > 1 ? "fils posés" : "fil posé"}.`}>
-              {charge ? <DecorCharge reglages={reglages} ferme={horloge.phase !== "pret"} /> : <DecorCapteur reglages={reglages} niveau={etat.niveau} />}
-              {/* les fils : une courbe entre les deux bornes */}
-              {etat.fils.map(([a, b], i) => {
-                const p = borne(a), q = borne(b);
-                const long = Math.hypot(q.x - p.x, q.y - p.y) || 1;
-                const bombe = (i % 2 ? -1 : 1) * Math.min(26, 8 + long / 8);
-                return <path key={`${a}-${b}`} d={`M ${p.x} ${p.y} Q ${r((p.x + q.x) / 2 - ((q.y - p.y) / long) * bombe)} ${r((p.y + q.y) / 2 + ((q.x - p.x) / long) * bombe)} ${q.x} ${q.y}`} fill="none" stroke="var(--cuivre)" strokeWidth={2.6} strokeLinecap="round" />;
-              })}
-              {/* les bornes : on en touche une, puis une autre */}
-              {lesBornes.map((b) => (
-                <g key={b.id} className="tp-borne" role="button" tabIndex={0} aria-label={`Borne : ${b.nom}`} aria-pressed={choisie === b.id}
-                  onClick={() => touche(b.id)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); touche(b.id); } }}>
-                  <circle cx={b.x} cy={b.y} r={19} fill="transparent" />
-                  {choisie === b.id && <circle className="labo-appel" cx={b.x} cy={b.y} r={12} fill="none" stroke="var(--sable)" strokeWidth={2} />}
-                  <circle cx={b.x} cy={b.y} r={6.5} fill={choisie === b.id ? "var(--sable)" : "var(--carte)"} stroke="var(--cuivre)" strokeWidth={2} />
-                  {b.court && <text x={b.x} y={b.y - (b.id === "g-" || b.id === "voie" || b.id === "masse" ? -20 : 12)} textAnchor="middle" className="labo-fort">{b.court}</text>}
-                </g>
-              ))}
-            </svg>
-          ) : (
-            <svg viewBox="0 0 360 196" role="img" aria-label="La tension mesurée au cours du temps.">
-              <path d={`M ${G.x0} ${G.y1 - 6} V ${Y(-0.1 * E)} M ${G.x0} ${Y(0)} H ${G.x1 + 4}`} fill="none" stroke="var(--encre)" strokeWidth={1.2} />
-              {[0, E / 2, E].map((v) => <g key={v}><line x1={G.x0 - 3} x2={G.x0} y1={Y(v)} y2={Y(v)} stroke="var(--encre)" /><text x={G.x0 - 6} y={Y(v) + 3.5} textAnchor="end">{nombre(v, 1)}</text></g>)}
-              {[0.25, 0.5, 0.75, 1].map((k) => <g key={k}><line x1={X(k * reglages.duree)} x2={X(k * reglages.duree)} y1={Y(0)} y2={Y(0) + 3} stroke="var(--encre)" /><text x={X(k * reglages.duree)} y={Y(0) + 14} textAnchor="middle">{nombre(k * reglages.duree, 0)}</text></g>)}
-              <text x={G.x0 - 6} y={G.y1 - 10} textAnchor="end">u (V)</text>
-              <text x={G.x1 + 4} y={Y(0) + 28} textAnchor="end">t (s)</text>
-              {tracee ? <path d={courbe} fill="none" stroke="var(--cuivre)" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" /> : <text x={(G.x0 + G.x1) / 2} y={(G.y0 + G.y1) / 2} textAnchor="middle" className="labo-fort">aucun signal</text>}
-              {tracee && finie && (
-                <g>
-                  <line x1={X(curseur)} x2={X(curseur)} y1={G.y1} y2={Y(-0.1 * E)} stroke="var(--bleu)" strokeDasharray="3 3" />
-                  <circle cx={X(curseur)} cy={Y(u(curseur))} r={4} fill="var(--bleu)" />
-                  <text x={X(curseur) + (curseur > reglages.duree * 0.6 ? -8 : 8)} y={G.y1 + 4} textAnchor={curseur > reglages.duree * 0.6 ? "end" : "start"} className="labo-fort">t = {nombre(curseur, 2)} s ; u = {nombre(u(curseur), 2)} V</text>
-                </g>
-              )}
-              {etat.lu !== null && <text x={G.x1} y={Y(0) - 14} textAnchor="end" style={{ fill: "var(--cuivre)", fontWeight: 700 }}>temps noté : {nombre(etat.lu, 2)} s</text>}
-            </svg>
+    <Etabli titre="Circuits" protocole={protocole} message={message.conseil && !guide.actif ? `${message.fait} ${message.conseil}` : message.fait} attente={attente} fini={appelle} recommence={toutRecommencer} outils={outils} indication={indication}>
+      {courbe && acq ? <Courbe acq={acq} jusque={jusque} repere={repere} place={setRepere} tangente={tangente} basculeTangente={() => setTangente((x) => !x)} guide={prochainPas?.geste === "montrer" ? indication : null} /> : (
+        <Scene vue={VUE} className="pl-circuit-scene" nom="La paillasse : l'écran de la carte d'acquisition, la plaque de montage, le générateur, la carte et la boîte de composants">
+          {/* l'écran de la carte : la courbe s'y trace pendant l'enregistrement */}
+          <g role="img" aria-label={!acq ? (attendPrete ? "Écran de la carte : elle attend que la tension bouge" : "Écran de la carte : aucune courbe") : vivant ? "Écran de la carte : la courbe se trace" : "Écran de la carte : une courbe est enregistrée"}>
+            <rect className="pl-circuit-ecran" x={ECRAN.x} y={ECRAN.y} width={ECRAN.l} height={ECRAN.h} rx={8} />
+            <Graphe cadre={GRAPHE} acq={acq} duree={acq?.duree ?? etat.duree} jusque={jusque} detail={false} />
+            <text x={GRAPHE.x} y={GRAPHE.y - 7}>u (V)</text>
+            <text x={GRAPHE.x + GRAPHE.l / 2 + 40} y={GRAPHE.y + GRAPHE.h + 12} textAnchor="middle">t (s)</text>
+            <text className="pl-circuit-etat" x={GRAPHE.x + GRAPHE.l} y={GRAPHE.y - 7} textAnchor="end">
+              {attendPrete ? "prête : elle attend que la tension bouge" : vivant ? "enregistre" : acq ? (acq.arret === null ? "courbe enregistrée" : "acquisition arrêtée") : "aucune courbe"}
+            </text>
+            <text x={ECRAN.x + 10} y={ECRAN.y + ECRAN.h - 6}>écran de la carte d&apos;acquisition</text>
+          </g>
+          {vivant && (
+            <g className="pl-circuit-avance" role="slider" tabIndex={0} aria-label="Avancement de l'acquisition" aria-valuemin={0} aria-valuemax={acq.duree} aria-valuenow={Math.round(instant * 100) / 100}
+              aria-valuetext={`${nombre(instant, 1)} s sur ${nombre(acq.duree, 0)} s`}
+              onKeyDown={(e) => { if (e.key === "ArrowRight" || e.key === "ArrowUp") { e.preventDefault(); avance(acq.duree / 20); } if (e.key === "End") { e.preventDefault(); avance(acq.duree); } }}>
+              <rect x={AVANCE.x} y={ECRAN.y + ECRAN.h - 10} width={AVANCE.l} height={3} rx={1.5} />
+              <rect x={AVANCE.x} y={ECRAN.y + ECRAN.h - 10} width={Math.round((AVANCE.l * instant * 100) / acq.duree) / 100} height={3} rx={1.5} />
+            </g>
           )}
-        </div>
-        <div className="labo-verdict" role="status"><p className="labo-attente">{message}</p></div>
-      </div>
 
-      <section className="carte tp-gestes" aria-label="Gestes de la manipulation">
-        {charge && derniere && (
-          <div className="simu-onglets" role="group" aria-label="Ce que montre la paillasse">
-            <button type="button" aria-pressed={vue === "montage"} onClick={() => setVue("montage")}>Le montage</button>
-            <button type="button" aria-pressed={vue === "courbe"} onClick={() => setVue("courbe")}>La courbe</button>
-          </div>
-        )}
-        {vue === "montage" && (
-          <>
-            <h3>Les fils posés</h3>
-            {etat.fils.length === 0 ? <p className="petit discret" style={{ margin: 0 }}>Aucun fil pour le moment.</p> : (
-              <ul className="tp-fils">
-                {etat.fils.map(([a, b]) => <li key={`${a}-${b}`}><span>{borne(a).bref} et {borne(b).bref}</span><button type="button" aria-label={`Retirer le fil entre ${borne(a).nom} et ${borne(b).nom}`} onClick={() => retire(a, b)}><Icone nom="croix" /></button></li>)}
-              </ul>
-            )}
-          </>
-        )}
-        {!charge && (
-          <>
-            <h3>Le niveau d&apos;eau</h3>
-            <div className="tp-verser" role="group" aria-label="Niveau d'eau dans la cuve" style={{ gridTemplateColumns: `repeat(${reglages.niveaux.length}, minmax(0, 1fr))` }}>
-              {reglages.niveaux.map((h) => <button key={h} type="button" aria-pressed={etat.niveau === h} onClick={() => { fais({ g: "niveau", h }); setMessage(h === 0 ? "La cuve est vide." : `La cuve contient ${nombre(h, 0)} cm d'eau.`); }}>{h === 0 ? "vide" : `${nombre(h, 0)} cm`}</button>)}
-            </div>
-            {etat.acquisitions.some((a) => a.tau !== null) && (
-              <ol className="tp-releves" aria-label="Mesures affichées par le microcontrôleur">
-                {etat.acquisitions.filter((a) => a.tau !== null).map((a, i) => <li key={i}><span>{a.niveau === 0 ? "cuve vide" : `${nombre(a.niveau, 0)} cm`}</span><b>τ = {nombre((a.tau ?? 0) * 1e6, 0)} µs</b></li>)}
-              </ol>
-            )}
-          </>
-        )}
-        {charge && vue === "courbe" && tracee && finie && (
-          <div className="tp-lecture">
-            <label htmlFor="tp-curseur">Déplace le repère sur la courbe : t = {nombre(curseur, 2)} s</label>
-            <input id="tp-curseur" className="tp-glissiere" type="range" min={0} max={reglages.duree} step={reglages.duree / 400} value={curseur} onChange={(e) => setCurseur(Number(e.target.value))} aria-valuetext={`t = ${nombre(curseur, 2)} s, u = ${nombre(u(curseur), 2)} V`} />
-          </div>
-        )}
-        <div className="tp-relever">
-          {charge && vue === "courbe" && tracee && finie
-            ? <button type="button" className="btn btn-ligne" onClick={() => { fais({ g: "lire", tau: curseur }); setMessage(`Temps caractéristique noté : ${nombre(curseur, 2)} s.`); }}>Noter ce temps</button>
-            : <button type="button" className="btn btn-ligne" onClick={acquiert}>{charge ? "Lancer l'acquisition" : "Lancer la mesure"}</button>}
-          <button type="button" className="btn btn-cuivre" disabled={attente} onClick={termine}>{confirme ? "Finir quand même" : "J'ai fini"}</button>
-        </div>
-        {charge && vue === "courbe" && tracee && finie && <button type="button" className="btn-texte tp-recommencer" onClick={acquiert}>Refaire une acquisition</button>}
-      </section>
-    </div>
+          {/* la plaque de montage : trois supports, chacun avec ses deux bornes */}
+          <rect className="pl-circuit-plaque" x={PLAQUE.x} y={PLAQUE.y} width={PLAQUE.l} height={PLAQUE.h} rx={8} />
+          {SUPPORTS.map((x, i) => (
+            <g key={x}>
+              <path className="pl-circuit-piste" d={`M ${x - 34} ${RANGEE} V ${POSE} H ${x - 28} M ${x + 34} ${RANGEE} V ${POSE} H ${x + 28}`} />
+              {etat.plaque[i] === null && <rect className="pl-circuit-vide" x={x - 26} y={POSE - 12} width={52} height={24} rx={5} />}
+              <text x={x} y={RANGEE + 4} textAnchor="middle">{i + 1}</text>
+            </g>
+          ))}
+          <text x={PLAQUE.x + 8} y={PLAQUE.y + 13}>plaque de montage</text>
+
+          {/* le générateur : son afficheur, sa molette, son voyant de sécurité */}
+          <Boitier x={8} y={BOITIER.y} l={164} h={BOITIER.h} nom="générateur" hauteur={APPAREILS} tiges={[{ x: PLACES[GENERATEUR.plus].x, texte: "+" }, { x: PLACES[GENERATEUR.moins].x, texte: "−" }]}>
+            <Afficheur x={18} y={BOITIER.y + 24} l={82} h={30} nom="Afficheur du générateur" unite="V" valeur={nombre(etat.securite ? 0 : etat.E, 1)} />
+            <circle className={`pl-circuit-voyant${etat.securite ? " pl-circuit-voyant-rouge" : ""}`} cx={24} cy={BOITIER.y + 70} r={4} />
+            <text x={33} y={BOITIER.y + 73} className={etat.securite ? "pl-fort" : undefined} style={etat.securite ? { fill: "var(--brique)" } : undefined}>{etat.securite ? "en sécurité" : "sécurité"}</text>
+          </Boitier>
+          <Molette x={MOLETTES.tension.x} y={MOLETTES.tension.y} r={26} valeur={etat.E} min={0} max={E_MAX} pas={CRAN} change={regleTension} nom="Tension du générateur" texte={`${nombre(etat.E, 1)} volts`} />
+
+          {/* la carte d'acquisition : la durée, le lancement */}
+          <Boitier x={188} y={BOITIER.y} l={164} h={BOITIER.h} nom="carte d'acquisition" hauteur={APPAREILS} tiges={[{ x: PLACES[CARTE.voie].x, texte: "voie" }, { x: PLACES[CARTE.masse].x, texte: "masse" }]}>
+            <circle className={`pl-circuit-voyant${attendPrete ? " pl-circuit-voyant-attente" : vivant ? " pl-circuit-voyant-vert" : ""}`} cx={280} cy={BOITIER.y + 10} r={3.5} />
+            <Afficheur x={196} y={BOITIER.y + 24} l={54} h={30} nom="Durée de l'acquisition, sur la carte" unite="s" valeur={nombre(etat.duree, 0)} />
+            <text x={196} y={BOITIER.y + 20}>durée</text>
+          </Boitier>
+          <Molette x={MOLETTES.duree.x} y={MOLETTES.duree.y} r={22} valeur={DUREES.indexOf(etat.duree)} min={0} max={DUREES.length - 1} pas={1} change={regleDuree} nom="Durée de l'acquisition" texte={`${nombre(etat.duree, 0)} secondes`} />
+          <Touche x={TOUCHE_CARTE.x} y={TOUCHE_CARTE.y} l={150} h={44} nom={toucheDeLaCarte(etat, vivant) === "lancer" ? "Lancer l'acquisition" : "Arrêter l'acquisition"} texte={toucheDeLaCarte(etat, vivant) === "lancer" ? "Lancer l'acquisition" : "Arrêter"} appuie={lance} enfonce={attendPrete || vivant} />
+
+          {/* la boîte de composants : chaque composant a sa case */}
+          <rect className="pl-circuit-boite" x={BOITE.x} y={BOITE.y} width={BOITE.l} height={BOITE.h} rx={8} />
+          <text x={BOITE.x + 8} y={BOITE.y + 13}>boîte de composants</text>
+          {r.boite.map((c, i) => placeDe(etat, c.id) >= 0 && <rect key={c.id} className="pl-circuit-case" x={caseDe(i) - 28} y={BOITE.y + 26} width={56} height={50} rx={6} />)}
+
+          <Manipulation pose={poser} prise={prise} rate={rate}>
+            {/* les cibles : un emplacement libre de la plaque, ou la case du composant dans la boîte */}
+            {SUPPORTS.map((x, i) => <Cible key={x} id={`place${i}`} nom={`l'emplacement ${i + 1} de la plaque`} x={x} y={POSE} r={26} accepte={etat.plaque[i] === null ? libres : []} />)}
+            {r.boite.map((c, i) => <Cible key={c.id} id={`boite-${c.id}`} nom="sa case, dans la boîte" x={caseDe(i)} y={BOITE.y + 51} r={24} accepte={placeDe(etat, c.id) >= 0 ? [c.id] : []} />)}
+
+            {/* les bornes et les fils */}
+            <FilsCircuit bornes={bornes} fils={etat.fils} relie={relie} retire={retire} choisi={filChoisi} choisit={setFilChoisi} />
+
+            {/* les composants : dans la boîte, ou sur la plaque */}
+            {r.boite.map((c, i) => {
+              const place = placeDe(etat, c.id);
+              return (
+                <Objet key={c.id} id={c.id} nom={`${majuscule(nomComposant(c))}, ${place >= 0 ? `sur l'emplacement ${place + 1} de la plaque` : "dans la boîte"}`} x={place >= 0 ? SUPPORTS[place] : caseDe(i)} y={place >= 0 ? POSE : BOITE.y + 51} l={60} h={52}>
+                  <DessinComposant c={c} ferme={etat.ferme} />
+                </Objet>
+              );
+            })}
+          </Manipulation>
+          {/* l'étincelle grandit autour de son centre : sa place se donne sur le groupe, pas sur la forme animée */}
+          {etincelle && <g transform={`translate(${etincelle.x} ${etincelle.y})`} aria-hidden="true"><path key={etincelle.rang} className="pl-circuit-etincelle" d="M 0 -13 L 3 -3 L 13 0 L 3 3 L 0 13 L -3 3 L -13 0 L -3 -3 Z" /></g>}
+          {/* le geste de l'interrupteur : un bouton à côté de lui, une fois posé sur la plaque */}
+          {placeInterrupteur >= 0 && <Poussoir x={SUPPORTS[placeInterrupteur]} y={BASCULE} nom={etat.ferme ? "Ouvrir l'interrupteur" : "Fermer l'interrupteur"} texte={etat.ferme ? "Ouvrir" : "Fermer"} appuie={bascule} />}
+
+          {/* le temps noté s'écrit du côté où le bouton de l'interrupteur n'est pas */}
+          <text x={placeInterrupteur === 2 ? 8 : 352} y={BASCULE + 4} textAnchor={placeInterrupteur === 2 ? "start" : "end"} className="pl-fort">{etat.note !== null && acq ? `Temps noté : ${ecritInstant(etat.note, pas)}` : ""}</text>
+          <Main indication={indication} />
+        </Scene>
+      )}
+    </Etabli>
   );
 }

@@ -25,6 +25,8 @@ const VUES: Record<string, Vue> = {
   titrage: vue(() => import("./Titrage")),
   reflux: vue(() => import("./Reflux")),
   ccm: vue(() => import("./Ccm")),
+  circuit: vue(() => import("./Circuit")),
+  microcontroleur: vue(() => import("./Microcontroleur")),
 };
 
 /** La paillasse d'une étape de manipulation. */

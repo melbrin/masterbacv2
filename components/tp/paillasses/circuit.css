@@ -1,0 +1,66 @@
+/* Les paillasses « circuit » et « microcontroleur » : l'écran de la carte, les appareils, la plaque et la boîte de composants. */
+
+/* Au doigt, un glissement ne doit pas faire défiler la page : le navigateur annulerait le geste en cours. Le kit le
+   demande sur chaque objet, mais Chromium ne lit ce réglage que sur la scène elle-même. Deux doigts agrandissent toujours. */
+.pl-scene.pl-circuit-scene { touch-action: none; touch-action: pinch-zoom; }
+
+/* les appareils : un boîtier, des bornes au bout de leurs tiges, un voyant */
+.pl-circuit-boitier { fill: var(--carte); stroke: var(--encre); stroke-width: 1.4; }
+.pl-circuit-tige { fill: none; stroke: var(--encre); stroke-width: 1.4; stroke-linecap: round; }
+.pl-circuit-voyant { fill: rgba(243, 236, 230, .16); stroke: var(--discret); stroke-width: .8; }
+.pl-circuit-voyant-rouge { fill: var(--brique); stroke: none; }
+.pl-circuit-voyant-vert { fill: #9BE7C4; stroke: none; }
+.pl-circuit-voyant-attente { fill: var(--sable); stroke: none; }
+
+/* l'écran de la carte : une grille, la courbe qui se trace, le repère */
+.pl-circuit-ecran { fill: #04101F; stroke: var(--discret); stroke-width: 1; }
+.pl-circuit-grille line { stroke: rgba(243, 236, 230, .13); stroke-width: .7; }
+.pl-circuit-grille .pl-circuit-axe { stroke: rgba(243, 236, 230, .55); stroke-width: 1; }
+.pl-circuit-trace { fill: none; stroke: #9BE7C4; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; }
+.pl-circuit-pointe { fill: #9BE7C4; }
+.pl-scene .pl-circuit-etat { fill: #9BE7C4; font-size: 9px; font-weight: 700; }
+.pl-circuit-avance rect:first-of-type { fill: rgba(243, 236, 230, .14); }
+.pl-circuit-avance rect:last-of-type { fill: var(--cuivre); }
+.pl-circuit-repere { cursor: ew-resize; }
+.pl-circuit-repere line { stroke: var(--sable); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.pl-circuit-repere .pl-circuit-poignee { fill: var(--sable); }
+.pl-circuit-repere circle { fill: var(--sable); stroke: #04101F; stroke-width: 1.2; }
+.pl-circuit-construction { fill: none; stroke: var(--cuivre); stroke-width: 1.2; stroke-dasharray: 2 3; }
+.pl-circuit-tangente { fill: none; stroke: var(--cuivre); stroke-width: 1.4; }
+.pl-scene .pl-circuit-lecture { fill: var(--encre); font-size: 13px; font-weight: 700; }
+
+/* la plaque de montage : trois supports, chacun avec ses deux bornes */
+.pl-circuit-plaque { fill: rgba(8, 24, 47, .7); stroke: rgba(243, 236, 230, .32); stroke-width: 1.2; }
+.pl-circuit-piste { fill: none; stroke: var(--discret); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.pl-circuit-vide { fill: none; stroke: rgba(243, 236, 230, .3); stroke-width: 1; stroke-dasharray: 3 3; }
+
+/* la boîte de composants, et les composants */
+.pl-circuit-boite { fill: rgba(8, 24, 47, .5); stroke: var(--cuivre); stroke-width: 1.2; }
+.pl-circuit-case { fill: none; stroke: rgba(243, 236, 230, .22); stroke-width: 1; stroke-dasharray: 3 3; }
+.pl-circuit-patte { fill: none; stroke: var(--encre); stroke-width: 1.6; stroke-linecap: round; }
+.pl-circuit-corps { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.4; }
+.pl-circuit-anneaux { fill: none; stroke: var(--cuivre); stroke-width: 2.4; }
+.pl-circuit-armature { fill: none; stroke: var(--encre); stroke-width: 3; stroke-linecap: round; }
+.pl-circuit-levier { stroke: var(--cuivre); stroke-width: 2.8; stroke-linecap: round; }
+.pl-scene .pl-circuit-valeur { fill: var(--encre); font-size: 10px; font-weight: 700; }
+
+/* l'étincelle d'un condensateur chargé qu'on met en court-circuit : sans animation, elle ne se dessine pas, le message la dit */
+.pl-circuit-etincelle { fill: var(--sable); opacity: 0; pointer-events: none; }
+
+/* la cuve, l'eau, la carte du microcontrôleur et sa plaque d'essai */
+.pl-circuit-eau { fill: rgba(96, 164, 236, .5); }
+.pl-circuit-lame { fill: none; stroke: var(--sable); stroke-width: 3; stroke-linecap: round; }
+.pl-circuit-broche { fill: #0A0F18; stroke: var(--encre); stroke-width: 1; }
+.pl-circuit-rangee { fill: none; stroke: rgba(243, 236, 230, .4); stroke-width: 6; stroke-linecap: round; }
+.pl-circuit-trou { fill: #04101F; }
+.pl-scene .pl-circuit-moniteur { fill: #9BE7C4; font-family: var(--display); font-size: 11px; font-weight: 700; }
+.pl-scene .pl-circuit-moniteur-ancien { fill: #6FB69A; font-size: 9px; font-weight: 600; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* la carte prête : son voyant bat tant qu'elle attend */
+  .pl-circuit-voyant-attente { animation: pl-circuit-bat 1s ease-in-out infinite; }
+  @keyframes pl-circuit-bat { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+  .pl-circuit-voyant-rouge { animation: pl-circuit-bat .5s ease-in-out infinite; }
+  .pl-circuit-etincelle { animation: pl-circuit-claque .55s ease-out both; transform-box: fill-box; transform-origin: center; }
+  @keyframes pl-circuit-claque { 0% { opacity: 1; scale: .3; } 35% { opacity: 1; scale: 1.25; } 100% { opacity: 0; scale: .8; } }
+}
