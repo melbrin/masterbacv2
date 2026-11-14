@@ -31,6 +31,9 @@ const VUES: Record<string, Vue> = {
   microcontroleur: vue(() => import("./Microcontroleur")),
   optique: vue(() => import("./Optique")),
   diffraction: vue(() => import("./Diffraction")),
+  ultrasons: vue(() => import("./Ultrasons")),
+  pointage: vue(() => import("./Pointage")),
+  doppler: vue(() => import("./Doppler")),
 };
 
 /** La paillasse d'une étape de manipulation. */

@@ -1,0 +1,9 @@
+/* Le carnet de mesures des paillasses des ondes et de la mécanique : des lignes de cahier, que l'élève touche pour écrire. */
+.pl-ultrasons-carnet { display: grid; gap: 8px; }
+.pl-ultrasons-carnet p { margin: 0; color: var(--discret); font-size: .86rem; }
+.pl-ultrasons-carnet ul { display: grid; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--filet); }
+.pl-ultrasons-carnet li button { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 46px; padding: 6px 2px; border: 0;
+  border-bottom: 1px solid var(--filet); background: none; color: var(--encre); font: inherit; font-size: .92rem; text-align: left; cursor: pointer; }
+.pl-ultrasons-carnet li button:hover { background: rgba(255, 255, 255, .05); }
+.pl-ultrasons-carnet li b { flex: none; color: #9BE7C4; font-family: var(--display); font-variant-numeric: tabular-nums; }
+.pl-ultrasons-carnet li b.pl-ultrasons-vide { color: var(--cuivre); font-family: inherit; font-weight: 600; }

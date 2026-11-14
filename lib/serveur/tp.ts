@@ -27,6 +27,9 @@ const REGLES: Record<string, () => Promise<{ regles: Regles }>> = {
   microcontroleur: () => import("@/lib/commun/tp/paillasses/microcontroleur"),
   optique: () => import("@/lib/commun/tp/paillasses/optique"),
   diffraction: () => import("@/lib/commun/tp/paillasses/diffraction"),
+  ultrasons: () => import("@/lib/commun/tp/paillasses/ultrasons"),
+  pointage: () => import("@/lib/commun/tp/paillasses/pointage"),
+  doppler: () => import("@/lib/commun/tp/paillasses/doppler"),
 };
 export const GENRES_DE_PAILLASSE = Object.keys(REGLES);
 /** Les règles d'une paillasse ; null si ce genre n'existe pas. */

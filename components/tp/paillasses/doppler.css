@@ -1,0 +1,39 @@
+/* La paillasse « doppler » : le rail et son mobile, l'enregistreur, l'analyseur de spectre. */
+
+/* le banc : les boîtiers, le rail gradué, le mobile, le micro, les fourches */
+.pl-doppler-boitier { fill: var(--carte); stroke: var(--encre); stroke-width: 1.3; }
+.pl-doppler-rail { fill: var(--discret); }
+.pl-doppler-regle { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1; }
+.pl-doppler-traits line { stroke: var(--encre); }
+.pl-scene .pl-doppler-traits text { fill: var(--discret); font-size: 9px; }
+.pl-doppler-mobile rect { fill: var(--cuivre); stroke: #06142A; stroke-width: .8; }
+.pl-doppler-mobile circle { fill: #06142A; stroke: var(--encre); stroke-width: 1; }
+.pl-doppler-mobile .pl-doppler-emetteur { fill: var(--sable); }
+.pl-doppler-onde { fill: none; stroke: var(--sable); stroke-width: 1.2; stroke-linecap: round; opacity: .7; }
+.pl-doppler-micro { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.2; }
+.pl-doppler-cable { fill: none; stroke: var(--discret); stroke-width: 1.2; }
+.pl-doppler-fourche { cursor: ew-resize; }
+.pl-doppler-fourche path { fill: none; stroke: var(--bleu); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.pl-doppler-fourche .pl-doppler-index { fill: var(--cuivre); stroke: none; }
+.pl-doppler-fourche.est-choisie path { stroke: var(--encre); }
+.pl-doppler-fourche.est-choisie .pl-doppler-index { fill: var(--cuivre); }
+.pl-doppler-temoin { fill: #3A1F24; stroke: var(--encre); stroke-width: 1; }
+.pl-doppler-temoin.est-allume { fill: var(--brique); }
+
+/* l'analyseur de spectre */
+.pl-doppler-ecran { fill: #04101F; stroke: var(--discret); stroke-width: 1; }
+.pl-doppler-grille line { stroke: rgba(243, 236, 230, .15); stroke-width: .7; }
+.pl-doppler-courbe { fill: none; stroke: #9BE7C4; stroke-width: 1.3; stroke-linejoin: round; }
+.pl-doppler-aire { fill: rgba(155, 231, 196, .16); stroke: none; }
+.pl-doppler-repere { cursor: ew-resize; }
+.pl-doppler-repere line { stroke: var(--sable); stroke-width: 1.3; stroke-dasharray: 5 4; }
+.pl-doppler-repere path { fill: var(--sable); }
+.pl-scene .pl-doppler-lecture { fill: #9BE7C4; font-size: 13px; font-weight: 700; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pl-doppler-onde { animation: pl-doppler-onde .9s ease-out infinite; }
+  .pl-doppler-onde:nth-of-type(2) { animation-delay: .3s; }
+  @keyframes pl-doppler-onde { from { opacity: .95; } to { opacity: .1; } }
+  .pl-doppler-temoin.est-allume { animation: pl-doppler-temoin 1s steps(2, jump-none) infinite; }
+  @keyframes pl-doppler-temoin { from { opacity: 1; } to { opacity: .35; } }
+}

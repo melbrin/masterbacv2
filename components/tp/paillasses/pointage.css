@@ -1,0 +1,43 @@
+/* La paillasse « pointage » : l'image du film, ses repères, les courbes du logiciel. */
+
+/* le film : un mur, un sol, un étalon, une balle */
+.pl-pointage-mur { fill: #17355F; }
+.pl-pointage-joints { fill: none; stroke: rgba(243, 236, 230, .07); stroke-width: .8; }
+.pl-pointage-plinthe { fill: #1E4274; }
+.pl-pointage-sol { fill: #0A1A31; }
+.pl-pointage-cadre { fill: none; stroke: var(--encre); stroke-width: 1.4; }
+.pl-pointage-balle { stroke: rgba(6, 20, 42, .55); stroke-width: .8; }
+.pl-scene .pl-pointage-film text { fill: #C9D6E8; font-size: 9px; }
+
+/* ce que l'élève pose sur l'image : les repères de l'échelle, l'origine, ses pointés */
+.pl-pointage-echelle { fill: none; stroke: var(--bleu); stroke-width: 1.3; }
+.pl-pointage-echelle line { stroke-dasharray: 5 3; }
+.pl-scene .pl-pointage-echelle text { fill: var(--bleu); stroke: none; font-size: 10px; font-weight: 700; }
+.pl-pointage-origine { fill: none; stroke: var(--vert); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.pl-scene .pl-pointage-origine text { fill: var(--vert); stroke: none; font-size: 10px; font-weight: 700; }
+.pl-pointage-croix { fill: none; stroke: var(--sable); stroke-width: 1; stroke-linecap: round; }
+.pl-pointage-croix.est-ici { stroke-width: 1.6; }
+/* dans la loupe, le film est grossi : les croix gardent un trait fin */
+.pl-pointage-grossi .pl-pointage-croix { stroke-width: .5; }
+.pl-pointage-repos { opacity: .5; }
+.pl-pointage-poignee { cursor: grab; }
+.pl-pointage-poignee circle:last-of-type { fill: rgba(232, 194, 122, .1); stroke: var(--sable); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.pl-pointage-viser { cursor: crosshair; }
+.pl-pointage-reticule { fill: none; stroke: var(--cuivre); stroke-width: 1.1; }
+.pl-pointage-viseur { fill: none; stroke: var(--cuivre); stroke-width: .9; stroke-dasharray: 3 3; pointer-events: none; }
+
+/* les commandes sous l'image */
+.pl-pointage-fleche path { fill: none; stroke: var(--encre); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.pl-scene .pl-pointage-lecture { fill: #9BE7C4; font-size: 11px; font-weight: 700; }
+
+/* les courbes */
+.pl-pointage-axes line { stroke: var(--filet); stroke-width: .8; }
+.pl-pointage-axes .pl-pointage-zero { stroke: var(--discret); stroke-width: 1; }
+.pl-pointage-axes rect { fill: rgba(4, 16, 31, .55); stroke: var(--discret); stroke-width: 1; }
+.pl-pointage-droite { stroke: var(--cuivre); stroke-width: 1.8; stroke-linecap: round; }
+.pl-pointage-bout { cursor: ns-resize; }
+.pl-pointage-bout circle:last-of-type { fill: var(--cuivre); stroke: #06142A; stroke-width: 1.4; }
+.pl-pointage-courbe { fill: none; stroke-width: 1.5; stroke-linejoin: round; }
+.pl-pointage-repere { cursor: ew-resize; }
+.pl-pointage-repere line { stroke: var(--encre); stroke-width: 1.2; stroke-dasharray: 5 4; }
+.pl-pointage-repere path { fill: var(--encre); }
