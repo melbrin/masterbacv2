@@ -19,6 +19,23 @@
 .tp-rappels { display: grid; gap: 8px; justify-items: start; }
 .tp-rappels .tp-documents { justify-self: stretch; }
 
+/* la page des TP : un sommaire par matière, comme le cahier de TP d'un élève. Même feuille que les documents :
+   un filet gras et un filet maigre en tête, des lignes séparées par un pointillé. */
+.tp-sommaire { position: relative; margin: 0; padding: 3px 0 0; border: 1px solid var(--filet); border-top: 3px solid var(--encre); border-radius: 3px; background: var(--carte); list-style: none; }
+.tp-sommaire::before { content: ""; position: absolute; top: 2px; right: 0; left: 0; height: 1px; background: var(--encre); }
+.tp-sommaire > li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 2px 10px; padding: 14px 14px 14px 12px; }
+.tp-sommaire > li + li { border-top: 1px dotted color-mix(in srgb, var(--encre) 26%, transparent); }
+.tp-sommaire-rang { padding-top: 1px; font-family: var(--display); font-size: 1.55rem; font-weight: 800; font-stretch: 72%; font-variant-numeric: tabular-nums; line-height: 1; color: var(--cuivre-texte); }
+.tp-sommaire-famille { margin: 0; font-family: var(--display); font-size: .64rem; font-weight: 750; font-stretch: 115%; letter-spacing: .18em; text-transform: uppercase; color: var(--cuivre-texte); }
+.tp-sommaire h3 { margin: 2px 0 4px; font-size: 1.05rem; }
+.tp-sommaire-accroche { margin: 0 0 6px; color: var(--discret); font-size: .93rem; }
+.tp-sommaire-suite { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin: 0; }
+.tp-sommaire .actions { grid-column: 2; margin-top: 8px; }
+@media (min-width: 720px) {
+  .tp-sommaire > li { grid-template-columns: 52px minmax(0, 1fr) auto; align-items: center; padding: 16px 18px; }
+  .tp-sommaire .actions { grid-column: 3; margin-top: 0; justify-content: flex-end; }
+}
+
 /* le tiroir du matériel et les réponses à choisir : de grandes touches, cochées quand elles sont prises */
 .tp-tiroir, .tp-options, .tp-preparer { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .tp-tiroir button, .tp-options button, .tp-preparer button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 8px 12px;
@@ -84,7 +101,7 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
 .tp-niveaux li { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--carte-2); }
 .tp-niveaux li > span:last-child { display: grid; }
 .tp-niveaux b { color: var(--encre); }
-.tp-niveau { display: grid; width: 44px; height: 44px; border-radius: 12px; place-items: center; font-family: var(--display); font-size: 1.4rem; font-weight: 800; color: #FFFFFF; }
+.tp-niveau { display: grid; width: 44px; height: 44px; border-radius: 12px; place-items: center; font-family: var(--display); font-size: 1.4rem; font-weight: 800; color: var(--carte); }
 .tp-niveau-A { background: var(--vert); }
 .tp-niveau-B { background: color-mix(in srgb, var(--vert) 60%, var(--sable)); }
 .tp-niveau-C { background: var(--sable); }
