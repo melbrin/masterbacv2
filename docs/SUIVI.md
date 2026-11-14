@@ -9,7 +9,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - **Branche de travail** : `lot/0.2-outillage`, empilée sur `lot/0.1-installation-du-kit`. Rien n'est poussé sur GitHub.
 - **Dossier de travail** : `Documents/App Masterbac/app-masterbac/`. L'ancien dossier `masterbac-simulator/` (juillet 2026) est intact à côté et n'est pas repris.
 - **Lancer en local** : voir `docs/recettes/version-locale-1.md`. Port 3457 ; le port 3456 est celui de l'ancien dossier.
-- **Version locale** : essayée par Yane le 14 novembre. Ses remarques sont traitées dans la deuxième version (décisions 0005 à 0007), puis ses demandes du même jour dans la troisième (décisions 0008 à 0010 : calibrage, parcours, jeux, simulation, quiz mélangé, plan de DS par chapitre) dans la quatrième (décision 0011 : le labo), dans la cinquième (toute la chimie du labo), puis dans la sixième (TP façon ECE, lot A, accepté par Yane ; section Mémoire en construction). Recettes : `docs/recettes/version-locale-3.md` à `version-locale-6.md`. En attente de son essai.
+- **Version locale** : essayée par Yane le 14 novembre, plusieurs fois. Ses demandes du jour sont dans les décisions 0005 à 0014. Dernières en date (soir du 14 novembre) : des TP où l'on manipule vraiment, plus de TP dont l'optique, une section « S'entraîner » à la place de « Jeux », pas de mise en forme « typique des IA ». Recettes : `docs/recettes/version-locale-3.md` à `version-locale-8.md`. En attente de son essai.
 
 ## Fait et vérifié
 
@@ -26,9 +26,15 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - Essais de la troisième version : calibrage, parcours, quiz mélangé, trois jeux du serveur et plan de DS sur trois chapitres dans le navigateur intégré ; les sept jeux du navigateur et la simulation avec Playwright (`scripts/essais/jeux.mts`), parce que le navigateur intégré met les animations en pause.
 - Quatrième et cinquième versions locales (14 novembre), le labo : quarante-deux défis en quatorze simulations, un défi par objectif. En physique : basketteur, largage, satellite, thé, effet Doppler, circuit RC. En chimie : préparer une solution, pH, titrage, spectrophotomètre, cinétique, décroissance radioactive, pile et électrolyse, synthèse. L'élève calcule, entre sa valeur, lance la simulation ; le serveur juge l'essai avec les mêmes règles que le navigateur, compte les essais et donne les étoiles (table `defis`). Les énoncés sont des brouillons, gardés sur le serveur, visibles seulement en local ou par l'administrateur.
 - Essais du labo avec Playwright (`scripts/essais/labo.mts`), en largeur téléphone puis sur grand écran et en thème sombre : les quarante-deux défis joués (le premier de chaque simulation avec une valeur fausse puis la bonne), les étoiles, le défi fermé, le défi rejoué, sans défilement horizontal ni erreur de page.
-- Sixième version locale (14 novembre), les TP façon ECE, lot A (décision 0012, acceptée par Yane) : quatre TP en brouillon (un détartrant à contrôler, le degré d'un vinaigre, un condensateur sans étiquette, une jauge de niveau d'eau) sur deux paillasses (Titrage, Circuits). Le serveur vérifie chaque étape, rejoue les gestes de l'élève pour juger la manipulation, calcule l'exploitation à partir de ses mesures et donne un bilan par compétence (table `tp_essais`).
-- Essais des TP avec Playwright (`scripts/essais/tp.mts`), en largeur téléphone : les quatre TP faits avec soin (A partout), trois refaits sans soin (fautes relevées, niveaux plus bas), la reprise d'un TP quitté (page rechargée, puis bouton « Reprendre le TP »), sans défilement horizontal ni erreur de page.
-- `npm run tout` : lint, types, 370 tests avec couverture (moteur et règles du labo : 100 % des lignes ; règles des TP : 98 %), 25 contrôles de contenu, 62 tests de base, compilation. Vert le 14 novembre.
+- Sixième version locale (14 novembre, après-midi), les TP façon ECE, lot A (décision 0012) : quatre TP sur deux paillasses à boutons. Yane les a essayés et a demandé une refonte : voir la huitième version.
+- Septième version locale (14 novembre), la section Mémoire (décision 0013) : vingt-deux jeux en cinq familles, un cadre commun (consigne, manches, deux vies, score sur 100, record), tirages à partir d'une graine, 54 tests. Essai Playwright des vingt-deux jeux en thème clair et sombre (`scripts/essais/memoire.mts`). Les listes de mots, de prénoms, les histoires et les dessins sont des brouillons.
+- Huitième version locale (14 novembre, soir) :
+  - La section « Jeux » devient « S'entraîner » (décision 0014) : une page d'accueil à quatre portes, et quatre pages (Labo à `/app/labo`, TP, Mémoire, Jeux) reliées par un sous-menu. Essai Playwright des dix pages, téléphone et ordinateur, clair et sombre (`scripts/essais/sections.mts`).
+  - Les TP refaits pour que l'élève manipule (décision 0012, partie « La refonte ») : chaque paillasse est un module (règles pures dans `lib/commun/tp/paillasses/`, vue dans `components/tp/paillasses/`, contenu dans `lib/serveur/contenu/tp/`), monté dans un établi en plein écran avec le kit `components/tp/kit/`. La graine de l'essai choisit les valeurs de la situation. Le guide est `docs/09-paillasses.md`.
+  - La paillasse Titrage refaite et ses deux TP (détartrant, vinaigre) : flacon à prendre pour rincer et remplir la burette, robinet à tourner (goutte à goutte, filet), pipette jusqu'au trait de jauge, loupe sur les graduations, lecture notée par l'élève, courbe du pH-mètre avec repère. Essayée dans un vrai navigateur sur le banc d'essai (`scripts/essais/titrage.mts`) : manipulation soignée jugée sans faute par le serveur, pour l'indicateur et pour le pH-mètre.
+  - Le cadre des TP essayé de bout en bout (`scripts/essais/tp.mts`) : chaque TP du début au bilan, paillasse en plein écran, reprise d'un TP laissé en route.
+  - Les documents d'un TP et la page des TP redessinés en feuilles de sujet (filet gras et filet maigre, numéro en capitales espacées) : plus de carte arrondie à barre cuivre.
+- `npm run tout` : à relancer à la fin de la huitième version. Dernier passage complet vert le 14 novembre avant la refonte (370 tests, 62 tests de base, compilation). Depuis : 439 tests unitaires verts, lint sans erreur.
 
 ## Film de présentation
 
@@ -49,8 +55,23 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 8. Application installable : manifeste, service worker, page hors ligne.
 9. Tests : intégration des commandes contre la base locale, parcours Playwright, 28 cas d'abus, matrice des accès depuis le registre. Relectures par `relecteur-securite` et `relecteur-conformite`.
 10. Format des sources de quiz, d'indices et de barèmes (décision à écrire), puis préparation du contenu en brouillon.
-11. Suites des demandes du 14 novembre : écrire de nouvelles questions de quiz, en brouillon, pour avoir plusieurs quiz par chapitre (il y en a 5 à 21 par chapitre, aucune pour la fiche 14) ; d'autres simulations de physique pour le labo (lentille et lunette, poussée d'Archimède, énergie mécanique, particule dans un champ électrique) ; les TP façon ECE : lots B et C de la décision 0012 (14 TP, 6 paillasses), valeurs variables d'un essai à l'autre ; la section Mémoire (socle posé : table `memoire`, commande, pages ; jeux en construction) ; faire entrer les jeux, le labo et le calibrage dans le parcours, les progrès, la page des parents et le bilan.
+11. Suites des demandes du 14 novembre : finir et intégrer les paillasses en construction (voir « En cours ») ; écrire de nouvelles questions de quiz, en brouillon, pour avoir plusieurs quiz par chapitre (il y en a 5 à 21 par chapitre, aucune pour la fiche 14) ; d'autres simulations de physique pour le labo (lentille et lunette, poussée d'Archimède, énergie mécanique, particule dans un champ électrique) ; faire entrer le labo, les TP, la mémoire et le calibrage dans le parcours, les progrès, la page des parents et le bilan.
 12. Relire dans la langue de la décision 0005 les pages du test de niveau et de l'administration.
+
+## En cours (soir du 14 novembre)
+
+Quinze TP et quatorze paillasses sont en construction, chacun dans ses fichiers, inscrits dans les registres avec `pret: false` (ils ne se montrent pas). À relire, essayer dans le navigateur et intégrer un par un :
+
+| Famille | Paillasses | TP |
+| --- | --- | --- |
+| Circuits (à refaire en immersif) | `circuit`, `microcontroleur` | `condensateur`, `jauge` |
+| Chimie des solutions | `solutions`, `spectro` | `dilution`, `etalonnage`, `cinetique` |
+| Optique | `optique`, `diffraction` | `focale`, `lunette`, `cheveu`, `young` |
+| Ondes et mécanique | `ultrasons`, `doppler`, `pointage` | `ultrasons`, `doppler`, `chute` |
+| Thermique, électrochimie, fluides | `archimede`, `calorimetre`, `pile`, `electrolyse` | `archimede`, `calorimetrie`, `pile`, `electrolyse` |
+| Synthèse organique | `reflux`, `ccm` | `synthese` |
+
+Tant que la paillasse Circuits n'est pas refaite, ses deux TP gardent l'ancienne vue à boutons.
 
 ## Remis à la mise en ligne
 
@@ -67,8 +88,10 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - Les nouvelles commandes (calibrage, jeux, défis du labo, mémoire, TP) n'ont pas encore leurs cas dans la matrice des accès, qui reste à écrire (point 9).
 - `tp.repondre` lit l'essai, puis l'écrit, sans verrou : deux validations envoyées en même temps pour la même étape pourraient s'écrire l'une sur l'autre. Le navigateur bloque le bouton pendant l'envoi. À regrouper dans une fonction de base.
 - Les réglages d'une paillasse de TP (dont la valeur à trouver) sont dans le code envoyé au navigateur, qui dessine la paillasse. Le jugement reste au serveur, qui rejoue les gestes.
+- Les vingt-deux plateaux des jeux de mémoire partent ensemble dans la page d'un jeu. À charger à la demande, comme les paillasses.
+- La commande `tp.essayerPaillasse` (banc d'essai) ne répond qu'en local ; elle n'a pas de cas dans la matrice des accès.
 - Les règles de calcul du labo sont dans le code envoyé au navigateur, puisqu'il anime la simulation : un élève qui lit ce code peut retrouver une réponse. Il n'y a ni classement ni contenu payant derrière.
-- `scripts/essais/jeux.mts` (sept jeux et simulation libre) et `scripts/essais/labo.mts` (quarante-deux défis) et `scripts/essais/tp.mts` (quatre TP) jouent avec le compte local `theo.essai@exemple.fr`. Ce sont des essais à la main, à transformer en parcours Playwright (point 9). Celui du labo veut un compte sans ligne dans la table `defis`.
+- Les essais de `scripts/essais/` (`jeux.mts`, `labo.mts`, `tp.mts`, `titrage.mts`, `sections.mts`, `memoire.mts`) jouent avec des comptes locaux inventés (`theo.essai@exemple.fr`, `nina.essai@exemple.fr`, `lea.*@exemple.fr`). `jeux.mts` et `labo.mts` ont reçu leurs nouvelles adresses mais n'ont pas été relancés depuis. Ce sont des essais à la main, à transformer en parcours Playwright (point 9). Celui du labo veut un compte sans ligne dans la table `defis`.
 - Les pages du test d'avant le kit gardent 13 avertissements de lint et des émojis. Elles seront réécrites avec la charte commune.
 - `npm audit` : 9 failles modérées, toutes dans les outils de développement. TypeScript reste en 5.8.3.
 
@@ -81,7 +104,9 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 | Essayer la troisième version locale | calibrage, parcours, dix jeux, simulation, plan de DS par chapitre | `docs/recettes/version-locale-3.md` | 16 novembre |
 | Confirmer les décisions 0008 à 0010 | plan de DS par chapitre, règles du calibrage et du parcours, liste des jeux, place des jeux dans le menu, valeurs de la simulation | lire la partie « à confirmer » de chaque décision | 16 novembre |
 | Essayer la quatrième et la cinquième version locale, le labo | calculer, entrer sa valeur, lancer la simulation, en physique puis en chimie | `docs/recettes/version-locale-4.md`, puis `version-locale-5.md` | 16 novembre |
-| Essayer les TP façon ECE, lot A, et valider les quatre situations | ce sont des brouillons ; son retour décide du lot B | `docs/recettes/version-locale-6.md` | 18 novembre |
+| Essayer la section Mémoire | vingt-deux jeux ; listes et histoires en brouillon | `docs/recettes/version-locale-7.md` | 18 novembre |
+| Essayer la huitième version : « S'entraîner », les TP où l'on manipule | ses remarques du 14 novembre au soir ; les situations sont des brouillons | `docs/recettes/version-locale-8.md` | 18 novembre |
+| Confirmer les décisions 0012 à 0014 | les choix de détail des TP, de la mémoire et de la nouvelle section | lire la partie « à confirmer » de chaque décision | 18 novembre |
 | Valider ou corriger les quarante-deux énoncés du labo, et confirmer la décision 0011 | ce sont des brouillons : ils ne se montrent qu'en local tant qu'ils ne sont pas validés | la partie « Ce que tu dois me dire » de la recette, puis la partie « à confirmer » de la décision | 18 novembre |
 | Valider l'architecture de départ | décision 0001 | lire `docs/02-architecture.md`, section 2, et répondre | 15 novembre |
 | Confirmer ou retirer les cinq ajustements, et répondre aux points de la section 7 du cahier des charges | ils fixent le périmètre de la bêta | `docs/01-cahier-des-charges.md`, sections 4 et 7 | 15 novembre |
@@ -99,7 +124,9 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - 0009, test de calibrage et parcours suivi en continu : demandée par Yane, règles de détail à confirmer.
 - 0010, dix jeux, quiz mélangé, simulation du basketteur : demandée par Yane, liste des jeux à confirmer.
 - 0011, le labo, calculer d'abord puis lancer la simulation : demandée par Yane le 14 novembre ; énoncés en brouillon, règle des étoiles et tolérances à confirmer. Étendue à toute la chimie le même jour.
-- 0012, des TP virtuels pour s'entraîner aux ECE : acceptée par Yane le 14 novembre ; lot A livré, situations en brouillon, choix de détail à confirmer.
+- 0012, des TP virtuels pour s'entraîner aux ECE : acceptée par Yane le 14 novembre ; refaite le soir même à sa demande pour que l'élève manipule vraiment ; situations en brouillon, choix de détail à confirmer.
+- 0013, la section Mémoire : demandée par Yane ; liste des jeux et règles à confirmer.
+- 0014, la section « Jeux » devient « S'entraîner » : demandée par Yane ; nom et découpage à confirmer.
 - 0005, textes de l'interface en langue simple, année sur « Tombé au BAC », questions cumulées par note visée : demandée par Yane le 14 novembre.
 - 0006, séance du jour guidée, fin de séance fêtée, séries de jours et de semaines : demandée par Yane ; les règles des séries sont à confirmer.
 - 0007, mode DS étape par étape : demandée par Yane le 14 novembre.
@@ -115,5 +142,8 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - L'ordinateur a Docker Desktop, ffmpeg et Node 24 ; il n'a pas `gh`.
 - En développement, une commande du serveur modifiée n'est parfois rechargée qu'à la modification suivante : en cas de doute pendant un essai, relancer le serveur.
 - Une règle `@container` ne s'applique pas à l'élément qui porte `container-type`, seulement à ce qu'il contient : la grille à deux colonnes se met sur un élément intérieur (`.labo-colonnes`, `.simu-panneau`).
-- La demande de code de connexion est limitée à cinq par heure et par adresse, et à dix par heure et par poste : des essais lancés à la suite se font refuser. Les scripts d'essai des TP et de la mémoire gardent donc la session du compte d'essai dans un fichier hors du dépôt (variables `ESSAI_SESSION` et `MEMOIRE_SESSION`, expliquées en tête des scripts). On ne vide pas la table des limites pour passer.
+- La demande de code de connexion est limitée à cinq par heure et par adresse, et à dix par heure et par poste : des essais lancés à la suite se font refuser. Les scripts d'essai gardent donc la session du compte d'essai dans un fichier hors du dépôt (`scripts/essais/outils.mts`, variable `ESSAI_SESSION` ; `MEMOIRE_SESSION` pour la mémoire). `scripts/essais/session.mts` prépare une session. On ne vide pas la table des limites pour passer.
+- Yane refuse les mises en forme « typiques des IA » : carte arrondie à barre de couleur sur un côté, rangées d'icônes dans des carrés. Les formes de la maison : feuille de sujet (filet gras et filet maigre), sommaire de cahier, affiche de nuit avec un vrai dessin.
+- Un élément en `position: fixed` placé sous un parent animé ou transformé ne prend pas tout l'écran : l'établi des paillasses se monte donc tout en haut de la page (`createPortal`).
+- Quand plusieurs agents travaillent dans le même dossier, chacun reçoit ses fichiers et sa session d'essai ; les registres partagés sont remplis à l'avance avec des fichiers d'attente.
 - Une action qui écrit recharge la page en cours (c'est ainsi que Next.js fonctionne). Un écran qui doit garder un retour à l'écran après l'action (verdict, correction) a donc une adresse qui ne dépend pas de l'avancement, ou un composant qui reste monté.

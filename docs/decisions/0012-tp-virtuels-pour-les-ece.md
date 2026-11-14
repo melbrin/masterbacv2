@@ -1,7 +1,7 @@
 # 0012. Des TP virtuels pour s'entraîner aux ECE
 
 Date : 2026-11-14
-État : acceptée par Yane le 14 novembre (« Oui, lance le lot A »). Le lot A est livré en local ; les quatre situations sont des brouillons, à valider.
+État : acceptée par Yane le 14 novembre. Après son essai du lot A, le même jour, les paillasses ont été refaites pour que l'élève manipule vraiment, et les lots B et C lancés (voir « La refonte du 14 novembre »). Les situations sont des brouillons, à valider.
 
 ## La demande
 
@@ -82,42 +82,51 @@ Tenir une burette ou régler un oscilloscope s'apprend avec les mains. L'applica
 
 ## Côté technique
 
-- `lib/commun/tp/` : les paillasses, en fonctions pures (un état, des gestes, ce que le matériel répond), avec leurs tests.
-- `lib/serveur/contenu/tp.ts` : les situations, à l'état de brouillon, gardées sur le serveur comme les énoncés du labo.
-- `components/tp/` : le cadre d'un TP et le dessin des paillasses.
-- Une table `tp` : pour chaque élève et chaque TP, le niveau obtenu par compétence. Le serveur recalcule le résultat attendu à partir des mesures de l'élève.
-- Dans l'application : une porte « Les TP » sur la page des jeux, à côté du labo et de la mémoire.
+Le détail est dans `docs/09-paillasses.md`.
 
-## Le lot A, livré le 14 novembre
+- `lib/commun/tp/paillasses/` : les règles de chaque paillasse, en fonctions pures (un état, des gestes, un bilan), avec leurs tests dans `tests/unitaires/tp/`.
+- `components/tp/kit/` : le kit des paillasses (établi en plein écran, scène, objets à prendre, molette, loupe, fils, verrerie).
+- `components/tp/paillasses/` : la vue de chaque paillasse, chargée à la demande.
+- `lib/serveur/contenu/tp/` : un fichier par TP, à l'état de brouillon, gardé sur le serveur comme les énoncés du labo.
+- La table `tp_essais` : pour chaque essai d'un élève, sa graine, ce que le serveur a répondu à chaque étape, ses mesures, son bilan.
+- Dans l'application : la page « TP » de la section « S'entraîner » (décision 0014).
 
-Quatre TP, deux en chimie et deux en physique, sur deux paillasses.
+## Le lot A, livré le 14 novembre dans l'après-midi
 
-| TP | Paillasse | Ce que l'élève fait |
-| --- | --- | --- |
-| Un détartrant à contrôler | Titrage, avec indicateur coloré | rince, remplit, ajuste le zéro, prélève, verse jusqu'à la goutte près, note le volume |
-| Le degré d'un vinaigre | Titrage, avec pH-mètre | verse par ajouts, regarde la courbe se tracer, lit le volume au milieu du saut |
-| Un condensateur sans étiquette | Circuits | pose les fils entre les bornes, lance l'acquisition, place un repère sur la courbe |
-| Une jauge de niveau d'eau | Circuits, avec microcontrôleur | câble un capteur sur trois broches, mesure pour plusieurs niveaux d'eau |
+Quatre TP sur deux paillasses : un détartrant à contrôler (titrage avec indicateur), le degré d'un vinaigre (titrage au pH-mètre), un condensateur sans étiquette (circuit RC), une jauge de niveau d'eau (capteur sur microcontrôleur). L'élève y agissait par des boutons : « Rincer la burette », « 1 mL », « Lancer l'acquisition ».
 
-Comment c'est fait :
+## La refonte du 14 novembre
+
+Yane, après son essai : « Pour les TP, l'élève ne manipule pas assez comme dans la vraie vie. Avec les outils en place, il fallait pousser l'expérience immersive au maximum. Et il n'y a pas assez de TP, pas d'optique, et plein d'autres TP. »
+
+Ce qui change :
+
+- **Une paillasse est un poste de travail.** Elle prend tout l'écran. L'élève prend les objets et les pose, verse en maintenant l'appui, tourne un robinet ou une molette, tire un fil d'une borne à l'autre. Plus de bouton qui fait le geste à sa place.
+- **Il lit lui-même.** Un appareil à graduations se lit à la loupe, et l'élève note ce qu'il lit. Le professeur compare sa lecture à ce que l'appareil montrait vraiment.
+- **Il est libre de mal faire, et ça se voit dans sa mesure.** Au titrage : une burette non rincée dilue la solution titrante et retarde l'équivalence ; une prise d'essai mal ajustée au trait de jauge la décale ; sans agitation, la couleur change en retard ; verser sans rien sous la burette renverse.
+- **La situation change d'un essai à l'autre.** La graine de l'essai choisit les valeurs cachées. Refaire un TP donne une autre inconnue, et parfois une autre conclusion.
+- **Le serveur juge toujours.** Il rejoue la liste des gestes avec les règles de la paillasse. Rien de ce que dit le navigateur n'est cru sur parole.
+- **Plus de TP.** Les lots B et C sont lancés ensemble : dilution, dosage par étalonnage, cinétique, pile, électrolyse, synthèse, distance focale, lunette, diffraction, interférences, ultrasons, effet Doppler, chute filmée, poussée d'Archimède, calorimétrie.
+- **Les documents** d'un TP ne sont plus des cartes arrondies à barre cuivre, que Yane jugeait « typiques des IA » : ce sont des feuilles de sujet, avec un filet gras et un filet maigre en tête.
+
+## Le bilan d'un TP
 
 - **Le serveur est le professeur.** Les réponses ne sont pas dans le navigateur. À chaque étape, le navigateur envoie ce que l'élève a fait ; le serveur répond par un score et la correction. Les étapes se valident dans l'ordre, une seule fois.
-- **La manipulation est rejouée.** Le navigateur envoie la suite des gestes de l'élève. Le serveur la rejoue avec les mêmes règles que la paillasse (`lib/commun/tp/`) et relève les fautes : burette non rincée, zéro non réglé, équivalence dépassée, voie branchée sur la résistance. Un élève ne peut pas déclarer une bonne manipulation.
-- **Les gestes ont des conséquences.** Sans réglage du zéro, toutes les lectures sont décalées de 0,6 mL. Sans indicateur, rien ne change de couleur. Un circuit ouvert ne donne aucun signal.
-- **L'exploitation part des mesures de l'élève.** Les valeurs attendues se calculent avec son volume ou son temps, même imprécis, comme un correcteur le ferait. S'il n'a rien mesuré, le professeur fournit la valeur pour qu'il puisse continuer.
-- **Le bilan.** Chaque étape vaut 1, 0,5 ou 0. Par compétence, la moyenne donne le niveau : A à partir de 0,9, B à partir de 0,6, C à partir de 0,3, D en dessous. Une faute légère de manipulation retire un quart, une faute importante la moitié.
+- **L'exploitation part des mesures de l'élève.** Les valeurs attendues se calculent avec sa mesure, même imprécise, comme un correcteur le ferait. S'il n'a rien mesuré, le professeur fournit la valeur pour qu'il puisse continuer.
+- **Les niveaux.** Chaque étape vaut de 0 à 1. Par compétence, la moyenne donne le niveau : A à partir de 0,9, B à partir de 0,6, C à partir de 0,3, D en dessous. Une faute légère de manipulation retire un quart, une faute importante la moitié.
 - **Reprendre.** Un TP quitté en route se reprend à l'étape où l'élève s'était arrêté : la page des TP propose « Reprendre le TP » tant qu'il n'a pas refait ce TP en entier.
 
-## Mes choix du lot A, à confirmer par Yane
+## Mes choix, à confirmer par Yane
 
 - Une seule réponse par étape, comme un appel à l'examen ; la correction s'affiche tout de suite.
 - Les seuils des niveaux (0,9, 0,6, 0,3) et le poids des fautes (un quart, la moitié).
-- Au titrage avec indicateur, c'est l'ajout qui franchit l'équivalence qui est jugé, parce que le volume n'est connu qu'à cet ajout près : une goutte, rien à dire ; 0,2 mL, faute légère ; 1 mL ou 5 mL, faute importante, même si le volume tombe juste par chance. Continuer à verser après le changement de couleur compte aussi. Au pH-mètre, il faut des ajouts serrés autour du saut et une lecture à 0,2 mL près.
-- Les valeurs des situations : détartrant à 2,44 mol/L pour 2,5 annoncés ; vinaigre à 1,31 mol/L, soit 7,8 degrés pour 8 annoncés ; condensateur de 330 µF avec 10 kΩ ; capteur de 100 pF à vide, 40 pF de plus par centimètre, avec 1,0 MΩ.
-- Après la manipulation, la valeur exacte est montrée à côté de celle de l'élève. Les valeurs sont les mêmes à chaque essai : un élève qui refait le TP les connaît. Faire varier les valeurs d'un essai à l'autre reste à faire.
-- Les réglages de la paillasse (dont la concentration à trouver) sont dans le code envoyé au navigateur, puisqu'il dessine la paillasse : un élève qui lit ce code peut les trouver. Le jugement, lui, reste au serveur.
+- Au titrage avec indicateur : franchir l'équivalence au filet est une faute importante, même si l'on s'arrête tout près ; goutte à goutte, on a droit à deux gouttes de trop.
+- Ce que coûte un geste oublié au titrage : burette non rincée, solution titrante diluée de 2,5 % ; mélange non agité, couleur en retard de 0,6 mL.
+- Les valeurs des situations. Le détartrant : 2,5 mol/L annoncés ; selon l'essai, 2,34, 2,44, 2,53 ou 2,59 mol/L. Le vinaigre : 8 degrés annoncés ; selon l'essai, 7,4, 7,8, 7,9 ou 8,2 degrés. Dans chaque TP, une des situations dément l'étiquette.
+- Après la manipulation, la valeur attendue est montrée à côté de celle de l'élève.
+- Les réglages de la paillasse (dont la valeur à trouver) sont dans le code envoyé au navigateur, puisqu'il dessine la paillasse : un élève qui lit ce code peut les trouver. Le jugement, lui, reste au serveur.
+- Les petits sons des gestes (une goutte, un objet posé) sont en marche par défaut, avec un bouton pour les couper.
 - Les TP sont ouverts à tous les comptes pendant la version locale. Le choix gratuit ou Pass se fera avant la mise en ligne.
-- Dans l'application : une porte « Les TP » sur la page des jeux et sur la page d'accueil, une entrée « TP » dans le menu de l'ordinateur. Sur téléphone, l'onglet « Jeux » reste allumé dans les TP.
 
 ## Les réponses de Yane à la proposition
 

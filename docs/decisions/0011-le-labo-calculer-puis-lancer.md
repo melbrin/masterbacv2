@@ -1,5 +1,7 @@
 # 0011. Le labo : calculer d'abord, puis lancer la simulation
 
+> Depuis la décision 0014 (14 novembre), l'onglet « Jeux » s'appelle « S'entraîner ». Le labo est à « S'entraîner », puis « Labo » ; les jeux de révision à « S'entraîner », puis « Jeux ».
+
 Date : 2026-11-14
 État : demandée par Yane le 14 novembre ; les énoncés des défis sont des brouillons, à valider
 

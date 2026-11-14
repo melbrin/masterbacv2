@@ -1,5 +1,7 @@
 # Recette : quatrième version locale, le labo
 
+> Depuis la décision 0014 (14 novembre), l'onglet « Jeux » s'appelle « S'entraîner ». Le labo est à « S'entraîner », puis « Labo » ; les jeux de révision à « S'entraîner », puis « Jeux ».
+
 Date : 14 novembre 2026. Durée : 30 minutes. Elle ajoute le labo : vingt-quatre défis en huit simulations, où l'élève calcule d'abord, puis entre sa valeur dans la simulation. Tout tourne sur ton ordinateur, avec des données inventées.
 
 ## Avant de commencer

@@ -1,5 +1,7 @@
 # Recette : cinquième version locale, la chimie du labo
 
+> Depuis la décision 0014 (14 novembre), l'onglet « Jeux » s'appelle « S'entraîner ». Le labo est à « S'entraîner », puis « Labo » ; les jeux de révision à « S'entraîner », puis « Jeux ».
+
 Date : 14 novembre 2026. Durée : 25 minutes. Elle ajoute au labo toute la chimie : six simulations de plus, donc quatorze en tout et quarante-deux défis. Tout tourne sur ton ordinateur, avec des données inventées.
 
 ## Avant de commencer

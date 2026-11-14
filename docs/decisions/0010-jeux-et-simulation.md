@@ -1,5 +1,7 @@
 # 0010. Dix jeux pour revoir le cours, un quiz mélangé et une simulation
 
+> Depuis la décision 0014 (14 novembre), l'onglet « Jeux » s'appelle « S'entraîner ». Le labo est à « S'entraîner », puis « Labo » ; les jeux de révision à « S'entraîner », puis « Jeux ».
+
 Date : 2026-11-14
 État : demandée par Yane le 14 novembre ; la liste des jeux est mon choix, à confirmer
 
