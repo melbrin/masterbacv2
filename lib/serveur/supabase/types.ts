@@ -103,6 +103,20 @@ export type Database = {
                   Relationships: [
                     
                   ]
+                },"memoire": {
+                  Row: {
+                    "cree_le": string,"id": string,"jeu": string,"score": number,"secondes": number,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cree_le"?: string,"id"?: string,"jeu": string,"score": number,"secondes": number,"user_id": string
+                  }
+                  Update: {
+                    "cree_le"?: string,"id"?: string,"jeu"?: string,"score"?: number,"secondes"?: number,"user_id"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"parties": {
                   Row: {
                     "cree_le": string,"fiches": (number)[],"id": string,"jeu": string,"score": number,"secondes": number,"user_id": string,"verifiee": boolean

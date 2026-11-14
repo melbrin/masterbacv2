@@ -5,6 +5,7 @@ import { Entete } from "@/components/appli/Morceaux";
 import Etoiles from "@/components/simulations/Etoiles";
 import Vignette from "@/components/simulations/Vignette";
 import { JEUX, type IdJeu } from "@/lib/commun/jeux";
+import { JEUX_MEMOIRE } from "@/lib/commun/memoire";
 import { pluriel } from "@/lib/commun/format";
 import * as m from "@/lib/moteur";
 import { demarrerJeu } from "@/lib/serveur/commandes/jeux";
@@ -105,6 +106,17 @@ export default async function Jeux({ searchParams }: { searchParams: Promise<{ f
               </ul>
             </div>
           ))}
+        </section>
+      )}
+
+      {JEUX_MEMOIRE.length > 0 && (
+        <section aria-labelledby="titre-memoire">
+          <div className="section-titre"><h2 id="titre-memoire">Mémoire</h2></div>
+          <Link className="carte carte-lien hub-porte" href="/app/memoire">
+            <span className="hub-icone"><Icone nom="ampoule" /></span>
+            <span><b>Entraîne ta mémoire</b><span className="discret">{pluriel(JEUX_MEMOIRE.length, "jeu", "jeux")} pour mieux retenir : des suites, des places, des images, des mots.</span></span>
+            <Icone nom="chevron" />
+          </Link>
         </section>
       )}
 

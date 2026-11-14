@@ -2,6 +2,12 @@
 // calculée ici à part avec la relation du cours.
 // Cette réponse doit faire réussir la simulation, y compris arrondie au pas de saisie ; une valeur fausse doit échouer.
 import { describe, expect, it } from "vitest";
+import { MESURE_SPECTRO, absorbance, absorbanceAffichee, concentrationCuve } from "@/lib/commun/simulations/beer";
+import { instantArret, partRestante, tempsEcrit } from "@/lib/commun/simulations/cinetique";
+import { concentrationEcrite, concentrationPreparee } from "@/lib/commun/simulations/dilution";
+import { pH, pHAffiche } from "@/lib/commun/simulations/ph";
+import { FARADAY, arret, autonomie, charge, depot } from "@/lib/commun/simulations/pile";
+import { SYNTHESE, obtenu, pese, quantiteEngagee, resultatEcrit } from "@/lib/commun/simulations/synthese";
 import { cleNotion, decimalesDuPas, etoilesPour, grandeurs, ID_SIMULATIONS, regles, type Defi, type Valeurs } from "@/lib/commun/simulations";
 import { arriveeDuSon, frequenceRecue, positionEmetteur } from "@/lib/commun/simulations/doppler";
 import { avancee, dureeChute, positionColis } from "@/lib/commun/simulations/largage";
@@ -386,5 +392,128 @@ describe("la décroissance radioactive", () => {
     expect(regles("radio")!.secondes!({ unite: 2 })).toBe(3600);
     expect(regles("titrage")!.secondes!({})).toBeNull();
     expect(regles("basket")!.secondes).toBeUndefined();
+  });
+});
+
+describe("préparer une solution", () => {
+  it("dilution : C_mère × V_mère = C_fille × V_fille ; dissolution : C = m / (M × V)", () => {
+    expect(concentrationPreparee({ mode: 0, Cmere: 0.5, V: 20, Vfille: 100 })).toBeCloseTo(0.1, 12);
+    expect(concentrationPreparee({ mode: 1, Cmere: 0.02, V: 5, Vfille: 50 })).toBeCloseTo(0.002, 12);
+    expect(concentrationPreparee({ mode: 2, m: 2.497, M: 249.7, Vfille: 100 })).toBeCloseTo(0.1, 12);
+    expect(net(concentrationEcrite({ milli: 1 }, 0.002))).toBe("2,00 mmol/L");
+    expect(net(concentrationEcrite({ milli: 0 }, 0.1))).toBe("0,100 mol/L");
+  });
+  it("dit si la solution est trop concentrée ou trop diluée", () => {
+    expect(issue("dilution-1", { V: 30 }).message).toBe("Ta solution est à 0,150 mol/L au lieu de 0,100 mol/L : elle est trop concentrée.");
+    expect(issue("dilution-2", { Vfille: 100 }).message).toBe("Ta solution est à 1,00 mmol/L au lieu de 2,00 mmol/L : elle est trop diluée.");
+    expect(issue("dilution-3", { m: 2.5 }).message).toBe("Ta solution est à 0,100 mol/L : c'est la concentration voulue.");
+  });
+});
+
+describe("le pH", () => {
+  it("pH = −log([H₃O⁺]), pH = pK_A quand il y a autant d'acide que de base, une unité de plus quand on dilue dix fois", () => {
+    expect(pH({ mode: 0, C: 10 })).toBeCloseTo(2, 12);
+    expect(pH({ mode: 1, pKA: 4.8, rapport: 1 })).toBeCloseTo(4.8, 12);
+    expect(pH({ mode: 2, pH0: 2, F: 10 })).toBeCloseTo(3, 12);
+  });
+  it("le pH-mètre part de 7 et rejoint le pH de la solution", () => {
+    expect(pHAffiche({ mode: 0, C: 10 }, 0)).toBe(7);
+    expect(pHAffiche({ mode: 0, C: 10 }, 1)).toBeLessThan(7);
+    expect(pHAffiche({ mode: 0, C: 10 }, 99)).toBeCloseTo(2, 12);
+  });
+  it("dit si la solution est trop acide ou pas assez", () => {
+    expect(issue("ph-1", { C: 5 }).message).toBe("Le pH-mètre affiche 2,30 au lieu de 2,00 : la solution n'est pas assez acide.");
+    expect(issue("ph-1", { C: 20 }).message).toBe("Le pH-mètre affiche 1,70 au lieu de 2,00 : la solution est trop acide.");
+  });
+});
+
+describe("le spectrophotomètre", () => {
+  it("A = k × C, pour la solution qui est dans la cuve", () => {
+    expect(absorbance({ mode: 0, k: 0.25, C: 3.2 })).toBeCloseTo(0.8, 12);
+    expect(concentrationCuve({ mode: 1, Cmere: 30, F: 10 })).toBeCloseTo(3, 12);
+    expect(concentrationCuve({ mode: 2, Cmere: 20, V: 10, Vfille: 50 })).toBeCloseTo(4, 12);
+  });
+  it("l'affichage reste à zéro tant que la lampe est éteinte, puis rejoint l'absorbance", () => {
+    const p = { mode: 0, k: 0.25, C: 3.2 };
+    expect(absorbanceAffichee(p, 0)).toBe(0);
+    expect(absorbanceAffichee(p, MESURE_SPECTRO.lampe)).toBe(0);
+    expect(absorbanceAffichee(p, MESURE_SPECTRO.fin)).toBeCloseTo(0.8, 12);
+  });
+  it("dit si la solution est trop concentrée ou trop diluée", () => {
+    expect(issue("beer-1", { C: 2 }).message).toBe("Le spectrophotomètre affiche A = 0,50 au lieu de 0,80 : la solution est trop diluée.");
+    expect(issue("beer-1", { C: 5 }).message).toMatch(/A = 1,25 au lieu de 0,80 : la solution est trop concentrée\.$/);
+  });
+});
+
+describe("la cinétique d'ordre 1", () => {
+  it("la moitié du réactif a disparu au bout de ln 2 / k", () => {
+    const p = { k: Math.LN2 / 30, date: 30, unite: 0 };
+    expect(partRestante(p, 0)).toBe(1);
+    expect(partRestante(p, 30)).toBeCloseTo(0.5, 12);
+    expect(partRestante(p, 60)).toBeCloseTo(0.25, 12);
+    expect(instantArret(p)).toBe(30);
+    expect(instantArret({ dateFixe: 5, k: 1 })).toBe(5);
+    expect(net(tempsEcrit(p, 30.1))).toBe("30,1 s");
+    expect(net(tempsEcrit({ unite: 1 }, 46.1))).toBe("46,1 min");
+  });
+  it("dit si c'est trop tôt, trop tard, trop lent ou trop rapide", () => {
+    expect(issue("cinetique-1", { date: 20 }).message).toBe("Après 20,0 s, il reste encore 63,1 % du réactif. Il en faut 50,0 % : c'est trop tôt.");
+    expect(issue("cinetique-1", { date: 60 }).message).toMatch(/il ne reste que 25,2 % du réactif\. Il en fallait 50,0 % : c'est trop tard\.$/);
+    expect(issue("cinetique-3", { k: 0.2 }).message).toBe("En 5,0 min, il reste 36,8 % du réactif au lieu de 10,0 % : la réaction est trop lente.");
+    expect(issue("cinetique-3", { k: 1 }).message).toMatch(/la réaction est trop rapide\.$/);
+  });
+});
+
+describe("la pile et l'électrolyse", () => {
+  it("Q = I × Δt = n(e⁻) × F", () => {
+    // une pile de 2,0 A·h qui débite 0,20 A tient 10 h
+    expect(autonomie({ mode: 0, Q: 2, I: 0.2 })).toBeCloseTo(36000, 6);
+    // une mole de zinc donne deux moles d'électrons
+    expect(autonomie({ mode: 1, m: 65.4, M: 65.4, z: 2, I: 1 })).toBeCloseTo(2 * FARADAY, 6);
+    const cuivrage = { mode: 2, I: 0.8, M: 63.5, z: 2, dureeMin: 31.7 };
+    expect(depot(cuivrage, 31.7 * 60)).toBeCloseTo(0.5006, 4);
+    expect(depot(cuivrage, 1e9)).toBeCloseTo(0.5006, 4);
+    expect(arret(cuivrage)).toBe(1902);
+    expect(charge(cuivrage, 100)).toBeCloseTo(80, 9);
+    expect(charge({ mode: 0, Q: 2, I: 0.2 }, 1e9)).toBeCloseTo(7200, 6);
+  });
+  it("dit pourquoi la pile ne tient pas la durée voulue, et pourquoi le dépôt n'a pas la bonne masse", () => {
+    expect(issue("pile-1", { I: 0.5 }).message).toBe("La pile est vide au bout de 4,00 h au lieu de 10,00 h : le courant est trop fort.");
+    expect(issue("pile-1", { I: 0.1 }).message).toBe("La pile tiendrait 20,00 h : la lampe pourrait recevoir plus de courant.");
+    expect(issue("pile-2", { m: 0.3 }).message).toBe("Le zinc est épuisé au bout de 0,49 h au lieu de 1,00 h : il en faut plus.");
+    expect(issue("pile-2", { m: 1 }).message).toMatch(/^La pile pourrait débiter 1,64 h : il y a plus de zinc qu'il n'en faut\.$/);
+    expect(issue("pile-3", { dureeMin: 20 }).message).toBe("Le dépôt ne pèse que 0,32 g au lieu de 0,50 g : l'électrolyse est trop courte.");
+    expect(issue("pile-3", { dureeMin: 45 }).message).toMatch(/au lieu de 0,50 g : l'électrolyse est trop longue\.$/);
+  });
+});
+
+describe("la synthèse", () => {
+  it("le rendement réduit ce qu'on récupère, et les rendements de deux étapes se multiplient", () => {
+    expect(obtenu({ mode: 0, n: 0.05, M: 180 })).toBeCloseTo(9, 12);
+    expect(obtenu({ mode: 1, m: 138, Mr: 138, Mp: 180, rendement: 0.8 })).toBeCloseTo(144, 9);
+    expect(obtenu({ mode: 2, n: 0.05, rendement: 0.8, rendement2: 0.6 })).toBeCloseTo(0.024, 12);
+    expect(quantiteEngagee({ mode: 1, m: 4.79, Mr: 138 })).toBeCloseTo(0.03471, 5);
+    expect(quantiteEngagee({ mode: 0, n: 0.05 })).toBe(0.05);
+    expect(net(resultatEcrit({ mode: 2 }, 0.024))).toBe("0,024 mol");
+    expect(net(resultatEcrit({ mode: 0 }, 9))).toBe("9,00 g");
+  });
+  it("la balance n'affiche rien pendant la réaction, puis monte jusqu'au résultat", () => {
+    const p = { mode: 0, n: 0.05, M: 180 };
+    expect(pese(p, 0)).toBe(0);
+    expect(pese(p, SYNTHESE.reaction)).toBe(0);
+    expect(pese(p, SYNTHESE.fin)).toBeCloseTo(9, 12);
+  });
+  it("dit s'il manque du réactif ou s'il y en a trop", () => {
+    expect(issue("synthese-1", { n: 0.03 }).message).toBe("On récupère 5,40 g de produit au lieu de 9,00 g : il manque du réactif.");
+    expect(issue("synthese-1", { n: 0.08 }).message).toMatch(/14,40 g de produit au lieu de 9,00 g : il y a trop de réactif\.$/);
+  });
+});
+
+describe("l'allure de l'animation des simulations de chimie", () => {
+  it("n'a pas de sens quand la manipulation est montrée en quelques secondes ; se compte en secondes ou en minutes pour la cinétique", () => {
+    for (const id of ["dilution", "ph", "beer", "synthese"]) expect(regles(id)!.secondes!({}), id).toBeNull();
+    expect(regles("cinetique")!.secondes!({ unite: 0 })).toBe(1);
+    expect(regles("cinetique")!.secondes!({ unite: 1 })).toBe(60);
+    expect(regles("pile")!.secondes).toBeUndefined();
   });
 });

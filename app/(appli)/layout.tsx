@@ -5,6 +5,7 @@ import "./complements.css";
 import "./jeux.css";
 import "./simulations.css";
 import "./labo.css";
+import "./memoire.css";
 
 export const metadata: Metadata = {
   title: { default: "MasterBac", template: "%s · MasterBac" },

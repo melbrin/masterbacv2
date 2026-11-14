@@ -5,6 +5,7 @@ import NoterDs from "@/components/appli/NoterDs";
 import ContenuHtml from "@/components/socle/ContenuHtml";
 import { ajouteJours, ecartEnJours } from "@/lib/commun/dates";
 import { dateLongue, dateSimple, duree, initialeJour, nombre, p2, pluriel } from "@/lib/commun/format";
+import { JEUX_MEMOIRE } from "@/lib/commun/memoire";
 import * as m from "@/lib/moteur";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
 import { calibragesDe, suiviPour } from "@/lib/serveur/suivi";
@@ -143,6 +144,7 @@ export default async function Aujourdhui() {
           <Link className="carte carte-lien" href="/app/ds/nouveau"><h2>Tu as un DS bientôt ?</h2><p className="discret" style={{ margin: 0 }}>Saisis la date et les chapitres. Ton plan de révision est généré automatiquement.</p></Link>
         )}
         <Link className="carte carte-lien" href="/app/jeux"><h2>Jeux</h2><p className="discret" style={{ margin: 0 }}>Le labo : calcule, puis lance la simulation. Et dix jeux pour revoir ton cours.</p></Link>
+        {JEUX_MEMOIRE.length > 0 && <Link className="carte carte-lien" href="/app/memoire"><h2>Mémoire</h2><p className="discret" style={{ margin: 0 }}>Quelques minutes par jour pour mieux retenir : {pluriel(JEUX_MEMOIRE.length, "jeu", "jeux")} de mémoire.</p></Link>}
         <Link className="carte carte-lien" href="/app/carnet">
           <div className="tete"><h2>Carnet d&apos;erreurs</h2><span className={`puce ${aRevoir.length ? "puce-ko" : "puce-ok"}`}>{aRevoir.length} à revoir</span></div>
           <p className="discret" style={{ margin: 0 }}>Tu revois chaque question ratée 2 jours plus tard, puis une semaine après, puis trois semaines après.</p>
