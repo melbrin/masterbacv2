@@ -4,7 +4,7 @@
 // le poser sur une cible. Chaque geste a son équivalent au clavier et au toucher simple : on peut toucher un objet
 // pour le prendre, puis toucher l'endroit où le poser.
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from "react";
 import { useDessin, type Point } from "./scene";
 import { son, vibre } from "./son";
 
@@ -268,15 +268,18 @@ export function Objet({ id, nom, x, y, l, h, actif = true, children }: { id: str
  */
 export function Cible({ id, nom, x, y, r, accepte }: { id: string; nom: string; x: number; y: number; r: number; accepte: readonly string[] }) {
   const etabli = useEtabli();
+  const versDessin = useDessin();
   const { inscrit } = etabli;
   const cle = accepte.join();
   useEffect(() => inscrit({ id, x, y, r, accepte: cle.split(",") }), [inscrit, id, x, y, r, cle]);
   const tenu = etabli.tenu;
   if (!tenu || !accepte.includes(tenu)) return null;
   const pose = () => etabli.pose(tenu, id);
+  // deux cibles voisines se recouvrent au toucher (leur zone fait au moins 22 de rayon) : l'objet va sur la plus proche du doigt
+  const touche = (e: MouseEvent<SVGGElement>) => etabli.pose(tenu, etabli.cibleSous(tenu, versDessin(e.clientX, e.clientY)) ?? id);
   return (
     <g className={`pl-cible${etabli.survol === id ? " pl-cible-ici" : ""}`} role="button" tabIndex={0} aria-label={`Poser sur ${nom}`}
-      onClick={pose} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pose(); } }}>
+      onClick={touche} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pose(); } }}>
       <circle cx={x} cy={y} r={Math.max(r, 22)} fill="transparent" />
       <circle className="pl-cible-anneau" cx={x} cy={y} r={r} />
       <circle className="pl-cible-onde" cx={x} cy={y} r={r} />

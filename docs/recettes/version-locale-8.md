@@ -1,6 +1,6 @@
 # Recette : huitième version locale, « S'entraîner » et les TP où l'on manipule
 
-Date : 14 novembre 2026, le soir. Durée : 45 minutes. Elle répond à tes remarques du 14 novembre : des TP où l'on manipule comme en vrai, un guide qui montre chaque geste, une section qui ne s'appelle plus « Jeux », pas de mise en forme « typique des IA ». Tout tourne sur ton ordinateur, avec des données inventées.
+Date : 14 novembre 2026, le soir. Durée : une heure. Elle répond à tes remarques du 14 novembre : des TP où l'on manipule comme en vrai, un guide qui montre chaque geste, une section qui ne s'appelle plus « Jeux », pas de mise en forme « typique des IA ». Tout tourne sur ton ordinateur, avec des données inventées.
 
 ## Avant de commencer
 
@@ -78,12 +78,25 @@ Les mêmes gestes, sans la main. Tu peux les faire dans le désordre ou mal : la
 | 37 | « Ouvrir la courbe », glisse le repère vers le creux de la courbe | une courbe en V, et deux droites en pointillés qui passent par les points voisins du repère |
 | 38 | Déplace le repère jusqu'à ce que les deux droites se croisent sur lui, puis « Noter ce volume » | c'est la rupture de pente ; avec trop peu de points d'un côté, le professeur le dit |
 
+## La synthèse organique : deux paillasses dans un TP
+
+| N° | Ce que tu fais | Ce que tu dois voir |
+| --- | --- | --- |
+| 39 | « Un parfum de jasmin », jusqu'à la première paillasse, guide en marche | le poste 1 : un personnage à équiper, les flacons, la pipette, l'éprouvette, le ballon |
+| 40 | Suis la main : blouse, lunettes, gants, alcool à la pipette, acide à l'éprouvette, pierre ponce, gouttes d'acide sulfurique | chaque objet va à sa place ; la loupe montre le trait de jauge |
+| 41 | « Aller au montage », puis suis la main | le support, le chauffe-ballon, le ballon pincé, le réfrigérant, deux tuyaux d'eau à tirer : l'arrivée en bas, la sortie en haut |
+| 42 | Ouvre l'eau, règle le thermostat, garde le doigt sur « Attendre » | le chronomètre avance en accéléré, le mélange bout, les vapeurs retombent |
+| 43 | « Aller à la séparation », puis suis la main | l'ampoule à décanter : agiter, dégazer, laisser reposer, deux phases ; le robinet goutte à goutte jusqu'à la limite ; la balance, la tare, la masse à lire |
+| 44 | Calcule le rendement avec ta masse, puis ouvre la seconde paillasse | la cuve, la plaque, le crayon et le stylo, les capillaires, la lampe UV |
+| 45 | Suis la main : l'éluant, la ligne au crayon, trois dépôts, la migration, le front marqué, la lampe | les taches apparaissent sous la lampe ; la règle et sa loupe pour lire trois distances, notées dans un carnet |
+| 46 | Finis le TP | pendant les calculs, tes mesures des deux paillasses restent affichées ; au bilan, B pour « Réaliser » avec le guide |
+
 ## Sur l'ordinateur
 
 | N° | Ce que tu fais | Ce que tu dois voir |
 | --- | --- | --- |
-| 39 | Ouvre une paillasse sur un grand écran | la scène à gauche, le protocole toujours affiché à droite |
-| 40 | Avec la touche Tab, va jusqu'au robinet ; flèches, puis « G » | les flèches ouvrent et ferment ; « G » fait tomber une goutte, « F » verse un millilitre |
+| 47 | Ouvre une paillasse sur un grand écran | la scène à gauche, le protocole toujours affiché à droite |
+| 48 | Avec la touche Tab, va jusqu'au robinet ; flèches, puis « G » | les flèches ouvrent et ferment ; « G » fait tomber une goutte, « F » verse un millilitre |
 
 ## Ce que tu dois me dire
 
@@ -97,7 +110,8 @@ Les mêmes gestes, sans la main. Tu peux les faire dans le désordre ou mal : la
 
 ## Ce qui n'est pas encore dans cette version
 
-- Quinze autres TP sont en construction sur le même principe : dilution, dosage par étalonnage, cinétique, pile, électrolyse, synthèse, distance focale, lunette, diffraction, interférences, ultrasons, effet Doppler, chute filmée, poussée d'Archimède, calorimétrie. Ils n'apparaissent pas tant qu'ils ne sont pas prêts.
+- Quatorze autres TP sont en construction sur le même principe : dilution, dosage par étalonnage, cinétique, pile, électrolyse, distance focale, lunette, diffraction, interférences, ultrasons, effet Doppler, chute filmée, poussée d'Archimède, calorimétrie. Ils n'apparaissent pas tant qu'ils ne sont pas prêts.
 - Les deux TP de circuits (« Un condensateur sans étiquette », « Une jauge de niveau d'eau ») ne se montrent plus tant que leur nouvelle paillasse n'est pas prête.
-- Le guide existe pour les trois TP de titrage. Il s'ajoute aux autres paillasses avant qu'elles arrivent.
+- Le guide existe pour les trois TP de titrage et pour la synthèse. Il s'ajoute aux autres paillasses avant qu'elles arrivent.
+- Les valeurs du modèle de la synthèse (constante d'équilibre, pertes par minute sans eau ou sans pierre ponce) sont plausibles, sans source : à valider.
 - Les TP n'entrent pas encore dans le parcours ni dans les progrès.

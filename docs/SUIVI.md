@@ -63,7 +63,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 
 ## En cours (soir du 14 novembre)
 
-Quinze TP et quatorze paillasses sont en construction, chacun dans ses fichiers. Ils ne sont pas inscrits dans l'application : chaque famille a son banc de chantier (`/app/tp/chantier/<famille>`, en local), qui ne charge que ses fichiers. Chacune doit recevoir son guide (un fichier `<genre>-guide.ts`, un test où l'élève suit le guide, un essai où un robot suit la main). À relire, essayer dans le navigateur, puis inscrire un par un dans les trois registres :
+Quatorze TP et douze paillasses sont en construction, chacun dans ses fichiers. Ils ne sont pas inscrits dans l'application : chaque famille a son banc de chantier (`/app/tp/chantier/<famille>`, en local), qui ne charge que ses fichiers. Chacune doit recevoir son guide (un fichier `<genre>-guide.ts`, un test où l'élève suit le guide, un essai où un robot suit la main). À relire, essayer dans le navigateur, puis inscrire un par un dans les trois registres :
 
 | Famille | Paillasses | TP |
 | --- | --- | --- |
@@ -72,18 +72,12 @@ Quinze TP et quatorze paillasses sont en construction, chacun dans ses fichiers.
 | Optique | `optique`, `diffraction` | `focale`, `lunette`, `cheveu`, `young` |
 | Ondes et mécanique | `ultrasons`, `doppler`, `pointage` | `ultrasons`, `doppler`, `chute` |
 | Thermique, électrochimie, fluides | `archimede`, `calorimetre`, `pile`, `electrolyse` | `archimede`, `calorimetrie`, `pile`, `electrolyse` |
-| Synthèse organique | `reflux`, `ccm` | `synthese` |
 
 Les deux TP de circuits ne se montrent plus tant que leur paillasse n'est pas refaite : l'application propose les trois TP de titrage.
 
-Arrivé le 14 novembre au soir, à relire et à inscrire : la synthèse organique (`reflux`, `ccm`, TP `synthese`), avec son guide. Les cinq autres familles ajoutent leur guide.
+Inscrite le 14 novembre au soir : la synthèse organique (« Un parfum de jasmin », paillasses `reflux` et `ccm`), relue et essayée avec et sans guide. L'application propose quatre TP. Les cinq autres familles ajoutent leur guide.
 
-Signalé pendant ce chantier, à traiter en inscrivant les TP :
-
-- `CadreTp.tsx` ne rappelle, pendant l'exploitation, que les mesures de la première paillasse d'un TP : un TP à deux paillasses (la synthèse) doit montrer les deux.
-- `Cible` : sa zone de toucher fait au moins 22 de rayon ; deux cibles à moins de 44 se recouvrent au toucher simple.
-- `LoupeNiveau` : un chiffre loin du centre est rogné par le bord de la loupe.
-- `faisLeGeste` (essais) attend 260 ms après un glisser, moins que le temps d'un rapprochement de la vue (360 ms).
+Reste signalé par ce chantier : dans `LoupeNiveau`, un chiffre loin du centre est rogné par le bord de la loupe (à corriger quand les paillasses qui s'en servent seront toutes arrivées : leurs essais lisent ces chiffres).
 
 Incident du 14 novembre au soir : un fichier de règles en cours de réécriture, encore inscrit dans les registres, a cassé toutes les pages de TP pendant un essai de Yane. Depuis, rien d'inachevé n'est inscrit (voir `docs/09-paillasses.md`, section 3).
 

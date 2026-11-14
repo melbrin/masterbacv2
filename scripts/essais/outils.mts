@@ -203,7 +203,8 @@ export async function faisLeGeste(page: Page, scene: Locator, p: PasVu): Promise
   switch (p.geste) {
     case "glisser":
       await glisse(page, await ici(p.x, p.y), await ici(p.versX, p.versY), 16, 14);
-      await attends(260);
+      // le temps que l'objet se pose, et que la vue finisse de se rapprocher si le geste la déplace
+      await attends(420);
       return true;
     case "maintenir": {
       const point = await ici(p.x, p.y);
