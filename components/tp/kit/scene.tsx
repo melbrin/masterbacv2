@@ -4,13 +4,13 @@
 // ou la souris. Elle donne à ses enfants de quoi convertir un point de l'écran en point du dessin, et elle sait se
 // rapprocher d'un endroit (la vue change en douceur, comme quand on se penche sur un appareil).
 
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
+import { createContext, useContext, useEffect, useId, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 
 export interface Point { x: number; y: number }
 /** La partie du dessin montrée : son coin en haut à gauche, sa largeur, sa hauteur. */
 export interface Vue { x: number; y: number; l: number; h: number }
 
-const Dessin = createContext<RefObject<SVGSVGElement | null> | null>(null);
+const Dessin = createContext<{ svg: RefObject<SVGSVGElement | null>; vue: Vue } | null>(null);
 
 /** Le point du dessin qui se trouve sous un point de l'écran. */
 export function pointDuDessin(svg: SVGSVGElement | null, clientX: number, clientY: number): Point {
@@ -22,8 +22,13 @@ export function pointDuDessin(svg: SVGSVGElement | null, clientX: number, client
 
 /** Pour un élément de la scène : de quoi convertir la position du doigt en point du dessin. */
 export function useDessin(): (clientX: number, clientY: number) => Point {
-  const svg = useContext(Dessin);
-  return (clientX, clientY) => pointDuDessin(svg?.current ?? null, clientX, clientY);
+  const dessin = useContext(Dessin);
+  return (clientX, clientY) => pointDuDessin(dessin?.svg.current ?? null, clientX, clientY);
+}
+
+/** Pour un élément de la scène : la partie du dessin que la scène montre (sa vue demandée, pas celle qui glisse). Null hors d'une scène. */
+export function useVueDeScene(): Vue | null {
+  return useContext(Dessin)?.vue ?? null;
 }
 
 const DUREE = 360;
@@ -61,12 +66,17 @@ const arrondi = (n: number) => Math.round(n * 100) / 100;
  */
 export function Scene({ vue, nom, children, className }: { vue: Vue; nom: string; children: ReactNode; className?: string }) {
   const svg = useRef<SVGSVGElement>(null);
+  const decoupe = useId();
   const v = useVueAnimee(vue);
+  const { x, y, l, h } = vue;
+  const dessin = useMemo(() => ({ svg, vue: { x, y, l, h } }), [x, y, l, h]);
   return (
-    <Dessin.Provider value={svg}>
+    <Dessin.Provider value={dessin}>
       <svg ref={svg} className={`pl-scene${className ? ` ${className}` : ""}`} viewBox={`${arrondi(v.x)} ${arrondi(v.y)} ${arrondi(v.l)} ${arrondi(v.h)}`}
         preserveAspectRatio="xMidYMid meet" role="group" aria-label={nom}>
-        {children}
+        {/* la scène ne montre que sa vue : quand le regard se rapproche, ce qui l'entoure ne déborde pas dans les marges */}
+        <defs><clipPath id={decoupe}><rect x={arrondi(v.x)} y={arrondi(v.y)} width={arrondi(v.l)} height={arrondi(v.h)} /></clipPath></defs>
+        <g clipPath={`url(#${decoupe})`}>{children}</g>
       </svg>
     </Dessin.Provider>
   );

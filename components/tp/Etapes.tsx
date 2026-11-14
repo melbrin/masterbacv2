@@ -133,11 +133,14 @@ export function Correction({ etape, retour, reponse }: { etape: EtapePublique; r
   const verdict = VERDICTS[retour.score >= 0.99 ? 2 : retour.score > 0 ? 1 : 0];
   const c = retour.correction;
   const paillasse = c.genre === "paillasse";
+  const guide = c.genre === "paillasse" && c.guide === true;
+  // une manipulation sans faute faite avec le guide est plafonnée : elle reste soignée
+  const soignee = c.genre === "paillasse" && c.fautes.length === 0 && retour.score > 0;
   return (
     <div className="tp-etape tp-correction" role="status">
       <p className={`verdict ${verdict.classe}`}>
         <span className="pastille"><Icone nom={verdict.icone} /></span>
-        <span><b>{paillasse ? (retour.score >= 0.99 ? "Manipulation soignée" : retour.score > 0 ? "Manipulation à améliorer" : "Manipulation à refaire") : verdict.titre}</b>
+        <span><b>{paillasse ? (soignee ? (guide ? "Manipulation soignée, avec le guide" : "Manipulation soignée") : retour.score > 0 ? "Manipulation à améliorer" : "Manipulation à refaire") : verdict.titre}</b>
           <span className="petit discret">{etape.genre === "materiel" || etape.genre === "ordre" ? "Le professeur te donne le bon protocole pour la suite." : paillasse ? "Le professeur a regardé tes gestes." : "Voici la correction."}</span></span>
       </p>
       {c.genre === "materiel" && etape.genre === "materiel" && (
@@ -161,6 +164,7 @@ export function Correction({ etape, retour, reponse }: { etape: EtapePublique; r
           {c.fautes.length === 0 ? <p>Aucune faute de manipulation.</p> : (
             <ul className="tp-liste-corrigee">{c.fautes.map((f) => <li key={f.code + f.texte} className={f.grave ? "est-faux" : ""}><b>{f.grave ? "Faute importante" : "Faute légère"}.</b> {f.texte}</li>)}</ul>
           )}
+          {guide && <p className="tp-avec-guide">Tu as manipulé avec le guide : pour « Réaliser », c&apos;est le niveau B au mieux. Quand tu connais les gestes, refais ce TP sans le guide pour viser le A.</p>}
           <ul className="tp-mesures">{c.mesures.map((m) => <li key={m}><AvecIndices texte={m} /></li>)}</ul>
         </>
       )}

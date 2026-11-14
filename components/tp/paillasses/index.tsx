@@ -6,6 +6,7 @@
 import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
 import type { GesteBrut, Paillasse, PropsPaillasse } from "@/lib/commun/tp/types";
+import { SuiviDuGuide } from "../kit/guide";
 
 type Vue = ComponentType<PropsPaillasse<unknown>>;
 
@@ -28,5 +29,6 @@ const VUES: Record<string, Vue> = {
 export default function VuePaillasse({ paillasse, protocole, attente, fini }: { paillasse: Paillasse; protocole: string[]; attente: boolean; fini: (gestes: GesteBrut[]) => void }) {
   const Vue = VUES[paillasse.genre];
   if (!Vue) return <p role="alert" className="labo-erreur">Cette paillasse n&apos;est pas encore installée.</p>;
-  return <Vue reglages={paillasse.reglages} protocole={protocole} attente={attente} fini={fini} />;
+  // si le guide sert pendant la manipulation, les gestes partent avec sa marque
+  return <SuiviDuGuide fini={fini}>{(envoie) => <Vue reglages={paillasse.reglages} protocole={protocole} attente={attente} fini={envoie} />}</SuiviDuGuide>;
 }

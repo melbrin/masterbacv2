@@ -1,7 +1,7 @@
 // La paillasse Titrage (lib/commun/tp/paillasses/titrage.ts) et ses deux TP : un détartrant à contrôler (indicateur coloré)
 // et le degré d'un vinaigre (pH-mètre). Les manipulations sont jouées ici sans le navigateur, geste par geste.
 import { describe, expect, it } from "vitest";
-import { DILUTION, agite, conductivite, equivalenceReelle, lecture, pHActuel, pHMelange, pHVu, regles, sondeTrempe, volumeEquivalence, type EtatTitrage, type ReglagesTitrage } from "@/lib/commun/tp/paillasses/titrage";
+import { DILUTION, agite, conductivite, droiteAjustee, droitesAutour, equivalenceReelle, lecture, pHActuel, pHMelange, pHVu, regles, sondeTrempe, volumeEquivalence, type EtatTitrage, type ReglagesTitrage } from "@/lib/commun/tp/paillasses/titrage";
 import { rejoue, type GesteBrut } from "@/lib/commun/tp/types";
 import { tp } from "@/lib/serveur/contenu/tp";
 import { GRAINES, joueJuste, type EtapeDePaillasse } from "../../outils/tp";
@@ -293,5 +293,37 @@ describe("les trois TP de titrage", () => {
       // selon la situation tirée, l'étiquette est confirmée ou démentie
       expect(conclusions, id).toEqual(new Set([0, 1]));
     }
+  });
+});
+
+describe("les deux droites d'une courbe de conductimétrie", () => {
+  it("une droite passe au mieux par ses points ; il en faut deux à des volumes différents", () => {
+    expect(droiteAjustee([{ V: 0, y: 1 }, { V: 2, y: 5 }, { V: 4, y: 9 }])).toEqual({ a: 2, b: 1 });
+    expect(droiteAjustee([{ V: 0, y: 0 }, { V: 1, y: 1 }, { V: 2, y: 4 }])?.a).toBeCloseTo(2, 9);
+    expect(droiteAjustee([{ V: 3, y: 1 }])).toBeNull();
+    expect(droiteAjustee([{ V: 3, y: 1 }, { V: 3, y: 2 }])).toBeNull();
+  });
+  it("posé sur la cassure, le repère voit les deux droites se croiser sur lui, à 0,15 mL près de l'équivalence", () => {
+    for (const Ca of [0.0154, 0.0149, 0.016, 0.0138]) {
+      for (const pas of [1, 1.2, 1.4]) {
+        const r = { ...chlorure, Ca };
+        const etat = joue(r, [...rincer, ...remplir, ...prelever, { g: "eau", v: 50 }, { g: "rincersonde" }, { g: "sonde", dans: true }, ...agiter, ...ajouts(Math.floor(22 / pas), pas)]);
+        const E = equivalenceReelle(r, etat);
+        const { avant, apres, croisement } = droitesAutour(etat.releves, E);
+        expect(avant && apres && avant.a < 0 && apres.a > 0, `Ca ${Ca}, pas ${pas}`).toBe(true);
+        expect(Math.abs((croisement ?? 0) - E), `Ca ${Ca}, pas ${pas}`).toBeLessThan(0.15);
+        // l'élève part du creux de la courbe, puis suit le croisement : il arrive au même endroit, dans la tolérance du professeur
+        let repere = [...etat.releves].sort((p, q) => p.y - q.y)[0].V;
+        for (let i = 0; i < 6; i++) repere = droitesAutour(etat.releves, repere).croisement ?? repere;
+        expect(Math.abs(repere - E), `Ca ${Ca}, pas ${pas} : ${repere}`).toBeLessThan(0.3);
+        expect(fautes(r, [...rincer, ...remplir, ...prelever, { g: "eau", v: 50 }, { g: "rincersonde" }, { g: "sonde", dans: true }, ...agiter, ...ajouts(Math.floor(22 / pas), pas), { g: "noter", v: Math.round(repere * 20) / 20 }])).toEqual([]);
+      }
+    }
+  });
+  it("sans assez de points d'un côté, il n'y a pas de croisement", () => {
+    expect(droitesAutour([{ V: 0, y: 3 }, { V: 1, y: 2 }], 5)).toEqual({ avant: { a: -1, b: 3 }, apres: null, croisement: null });
+    expect(droitesAutour([], 5).croisement).toBeNull();
+    // deux droites parallèles ne se croisent pas
+    expect(droitesAutour([{ V: 0, y: 0 }, { V: 1, y: 1 }, { V: 2, y: 2 }, { V: 3, y: 3 }], 1.5).croisement).toBeNull();
   });
 });

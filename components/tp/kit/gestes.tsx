@@ -116,6 +116,45 @@ export function useMaintien(m: Maintien, actif = true) {
   };
 }
 
+/** Ce que verse un poussoir : son débit, son plus petit morceau, son pas au clavier. */
+export interface Versement {
+  /** ce qui coule par seconde tant que l'appui dure, dans l'unité de la paillasse (des millilitres, en général) */
+  debit: number;
+  /** le plus petit morceau versé : 0,05 par défaut. Un appui bref en verse un. */
+  grain?: number;
+  /** ce que verse un pas au clavier (flèche droite ou haut) */
+  pas: number;
+  /** appelé à chaque morceau, avec sa quantité, arrondie au centième */
+  verse: (quantite: number) => void;
+  debut?: () => void;
+  fin?: () => void;
+}
+
+/**
+ * De quoi faire un poussoir qui verse (`Poussoir maintien={versement({...})}`) : il verse en continu tant que l'appui
+ * dure, par morceaux. Un appui bref verse quand même un grain : l'élève ajuste à petits coups, comme on tapote.
+ */
+export function useVersement(): (v: Versement) => Maintien {
+  const cours = useRef({ reserve: 0, verse: false });
+  return useCallback((v: Versement): Maintien => {
+    const grain = v.grain ?? 0.05;
+    return {
+      debut: () => { cours.current = { reserve: 0, verse: false }; v.debut?.(); },
+      tic: (dt) => {
+        const c = cours.current;
+        c.reserve += v.debit * dt;
+        if (c.reserve < grain) return;
+        const quantite = Math.floor(c.reserve * 100) / 100;
+        c.reserve -= quantite;
+        c.verse = true;
+        v.verse(quantite);
+      },
+      fin: () => { if (!cours.current.verse) v.verse(grain); v.fin?.(); },
+      pas: () => v.verse(v.pas),
+    };
+  }, []);
+}
+
 // ---------- prendre et poser ----------
 
 interface ZoneCible { id: string; x: number; y: number; r: number; accepte: readonly string[] }
@@ -127,6 +166,8 @@ interface Etabli {
   prend: (objet: string | null) => void;
   survole: (cible: string | null) => void;
   pose: (objet: string, cible: string) => void;
+  /** l'objet glissé est lâché là où rien ne l'accepte */
+  rate: (objet: string, p: Point) => void;
   inscrit: (zone: ZoneCible) => () => void;
   /** la cible la plus proche du point qui accepte l'objet, ou null */
   cibleSous: (objet: string, p: Point) => string | null;
@@ -138,21 +179,36 @@ function useEtabli(): Etabli {
   return e;
 }
 
+export interface PropsManipulation {
+  /** un objet est lâché sur une cible qui l'accepte, ou l'élève a touché l'objet puis la cible */
+  pose: (objet: string, cible: string) => void;
+  /** l'élève vient de prendre un objet ; `cibles` : les endroits qui l'acceptent. La paillasse peut dire où il va. */
+  prise?: (objet: string, cibles: string[]) => void;
+  /** un objet glissé est lâché, en `p`, là où rien ne l'accepte. La paillasse peut dire pourquoi. */
+  rate?: (objet: string, p: Point) => void;
+  children: ReactNode;
+}
+
 /**
  * Le cadre des objets à prendre et des cibles où les poser. `pose` est appelé quand un objet est lâché sur une cible
  * qui l'accepte, ou quand l'élève touche l'objet puis la cible. C'est la paillasse qui décide de ce que le geste change.
  */
-export function Manipulation({ pose, children }: { pose: (objet: string, cible: string) => void; children: ReactNode }) {
+export function Manipulation({ pose, prise, rate, children }: PropsManipulation) {
   const [tenu, setTenu] = useState<string | null>(null);
   const [survol, setSurvol] = useState<string | null>(null);
   const zones = useRef(new Map<string, ZoneCible>());
-  const derniere = useRef(pose);
-  useEffect(() => { derniere.current = pose; });
+  const derniers = useRef({ pose, prise, rate });
+  useEffect(() => { derniers.current = { pose, prise, rate }; });
   const etabli = useMemo<Etabli>(() => ({
     tenu, survol,
-    prend: (objet) => { setTenu(objet); setSurvol(null); },
+    prend: (objet) => {
+      setTenu(objet);
+      setSurvol(null);
+      if (objet !== null && objet !== tenu) derniers.current.prise?.(objet, [...zones.current.values()].filter((z) => z.accepte.includes(objet)).map((z) => z.id));
+    },
     survole: setSurvol,
-    pose: (objet, cible) => { setTenu(null); setSurvol(null); son("pose"); vibre(8); derniere.current(objet, cible); },
+    pose: (objet, cible) => { setTenu(null); setSurvol(null); son("pose"); vibre(8); derniers.current.pose(objet, cible); },
+    rate: (objet, p) => { setTenu(null); setSurvol(null); derniers.current.rate?.(objet, p); },
     inscrit: (zone) => { zones.current.set(zone.id, zone); return () => { zones.current.delete(zone.id); }; },
     cibleSous: (objet, p) => {
       let meilleure: string | null = null;
@@ -187,8 +243,9 @@ export function Objet({ id, nom, x, y, l, h, actif = true, children }: { id: str
     fin: (p, aBouge) => {
       setGlisse(null);
       if (!aBouge) { etabli.prend(etabli.tenu === id ? null : id); if (etabli.tenu !== id) { son("clic"); vibre(6); } return; }
-      const cible = etabli.cibleSous(id, { x: p.x - prise.current.x, y: p.y - prise.current.y });
-      if (cible) etabli.pose(id, cible); else etabli.prend(null);
+      const ici = { x: p.x - prise.current.x, y: p.y - prise.current.y };
+      const cible = etabli.cibleSous(id, ici);
+      if (cible) etabli.pose(id, cible); else etabli.rate(id, ici);
     },
   }, actif);
   const tenu = etabli.tenu === id;

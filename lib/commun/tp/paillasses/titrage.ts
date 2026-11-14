@@ -41,6 +41,8 @@ export interface EtatTitrage {
   dilue: boolean;
   /** ce que la burette a reçu depuis qu'elle a été vide pour la dernière fois */
   recu: number;
+  /** vrai si la burette a coulé depuis son dernier remplissage : son niveau a été descendu au robinet */
+  descendu: boolean;
   /** ce qui est posé sous la burette */
   dessous: "rien" | "poubelle" | "erlenmeyer";
   /** ce qui a coulé à côté : une burette qui déborde, de la solution versée sans rien dessous */
@@ -87,6 +89,8 @@ export interface EtatTitrage {
 /** La burette est graduée de 0 à 25 mL ; elle peut contenir un peu plus, au-dessus du zéro. */
 export const CAPACITE = 25;
 export const AU_DESSUS = 2;
+/** Ce que le récipient du titrage peut recevoir d'eau distillée, au plus. */
+export const EAU_MAX = 120;
 /** Le volume d'une goutte. */
 export const GOUTTE = 0.05;
 /** Ce que l'eau restée sur les parois enlève à la concentration de la solution titrante. */
@@ -98,7 +102,7 @@ const centieme = (x: number) => Math.round(x * 100) / 100;
 const ml = (x: number) => `${nombre(x, 2)} mL`;
 
 const DEPART: EtatTitrage = {
-  volume: 0, eauBurette: true, dilue: false, recu: 0, dessous: "rien", renverse: 0,
+  volume: 0, eauBurette: true, dilue: false, recu: 0, descendu: false, dessous: "rien", renverse: 0,
   pipette: "repos", dansPipette: 0, aspireTrop: false, prise: 0, eau: 0, gouttes: 0, barreau: false, agitation: 0, sondeRincee: false, sonde: false,
   depart: null, verse: 0, franchi: null, releves: [], filetEnCours: null, note: null, essais: 0,
 };
@@ -154,6 +158,30 @@ export function conductivite(r: ReglagesTitrage, etat: EtatTitrage): number {
   // des mS·m²/mol fois des mol/L donnent des S/m ; un S/m vaut 10 000 µS/cm
   return Math.round(((somme / total) * 10000) * 10) / 10;
 }
+/** Une droite y = a × V + b. */
+export interface Droite { a: number; b: number }
+/** La droite qui passe au mieux par des points (moindres carrés) ; null s'il n'y en a pas deux à des volumes différents. */
+export function droiteAjustee(points: readonly { V: number; y: number }[]): Droite | null {
+  const n = points.length;
+  const sx = points.reduce((s, p) => s + p.V, 0), sy = points.reduce((s, p) => s + p.y, 0);
+  const sxx = points.reduce((s, p) => s + p.V * p.V, 0), sxy = points.reduce((s, p) => s + p.V * p.y, 0);
+  const d = n * sxx - sx * sx;
+  if (n < 2 || Math.abs(d) < 1e-9) return null;
+  const a = (n * sxy - sx * sy) / d;
+  return { a, b: (sy - a * sx) / n };
+}
+/**
+ * Les deux droites d'une courbe de conductimétrie, pour un repère posé au volume donné : chacune passe au mieux par
+ * les cinq points les plus proches du repère, de son côté. C'est la méthode du cours : deux droites, et leur croisement
+ * à l'équivalence. Près de la cassure, les points voisins suffisent : plus loin, la dilution courbe un peu la courbe.
+ */
+export function droitesAutour(releves: readonly { V: number; y: number }[], repere: number): { avant: Droite | null; apres: Droite | null; croisement: number | null } {
+  const tries = [...releves].sort((p, q) => p.V - q.V);
+  const avant = droiteAjustee(tries.filter((p) => p.V < repere).slice(-5));
+  const apres = droiteAjustee(tries.filter((p) => p.V >= repere).slice(0, 5));
+  const croisement = avant && apres && Math.abs(avant.a - apres.a) > 1e-9 ? (apres.b - avant.b) / (avant.a - apres.a) : null;
+  return { avant, apres, croisement };
+}
 /** Vrai si la sonde trempe assez pour mesurer. */
 export const sondeTrempe = (r: ReglagesTitrage, etat: EtatTitrage): boolean => etat.sonde && etat.prise + etat.eau >= r.Va + r.eau - 5;
 
@@ -183,7 +211,7 @@ function applique(r: ReglagesTitrage, etat: EtatTitrage, g: GesteBrut): EtatTitr
       if (positif === null) return etat;
       const place = CAPACITE + AU_DESSUS - etat.volume;
       const entre = Math.min(positif, place);
-      return { ...etat, volume: centieme(etat.volume + entre), recu: centieme(etat.recu + entre), dilue: etat.dilue || etat.eauBurette, renverse: centieme(etat.renverse + positif - entre), note: null };
+      return { ...etat, volume: centieme(etat.volume + entre), recu: centieme(etat.recu + entre), descendu: false, dilue: etat.dilue || etat.eauBurette, renverse: centieme(etat.renverse + positif - entre), note: null };
     }
     // poser quelque chose sous la burette
     case "dessous": {
@@ -195,7 +223,7 @@ function applique(r: ReglagesTitrage, etat: EtatTitrage, g: GesteBrut): EtatTitr
       if (positif === null || etat.volume <= 0) return etat;
       const sort = Math.min(positif, etat.volume);
       const reste = centieme(etat.volume - sort);
-      const burette = { ...etat, volume: reste, note: null };
+      const burette = { ...etat, volume: reste, descendu: true, note: null };
       if (etat.dessous === "rien") return { ...burette, renverse: centieme(etat.renverse + sort) };
       if (etat.dessous === "poubelle") {
         // une burette vidée après avoir reçu assez de solution titrante est rincée : ses parois ne portent plus d'eau
@@ -229,7 +257,7 @@ function applique(r: ReglagesTitrage, etat: EtatTitrage, g: GesteBrut): EtatTitr
       return { ...pipette, renverse: centieme(etat.renverse + sort) };
     }
     // l'eau distillée de la pissette, dans l'erlenmeyer
-    case "eau": return v === null || v <= 0 || v > 120 ? etat : avecReleve(r, { ...etat, eau: centieme(Math.min(120, etat.eau + v)) });
+    case "eau": return v === null || v <= 0 || v > EAU_MAX ? etat : avecReleve(r, { ...etat, eau: centieme(Math.min(EAU_MAX, etat.eau + v)) });
     case "goutte": return { ...etat, gouttes: Math.min(30, etat.gouttes + 1) };
     case "barreau": return { ...etat, barreau: true };
     case "agiter": return v !== null && v >= 0 && v <= 5 ? { ...etat, agitation: Math.round(v) } : etat;
@@ -239,7 +267,7 @@ function applique(r: ReglagesTitrage, etat: EtatTitrage, g: GesteBrut): EtatTitr
     case "noter": return v !== null && v >= 0 && v <= CAPACITE + AU_DESSUS ? { ...etat, note: centieme(v) } : etat;
     // un nouveau titrage : l'erlenmeyer est lavé, la burette reste comme elle est
     case "recommencer":
-      return { ...DEPART, volume: etat.volume, eauBurette: etat.eauBurette, dilue: etat.dilue, recu: etat.recu, renverse: etat.renverse, dessous: etat.dessous === "erlenmeyer" ? "rien" : etat.dessous, essais: etat.essais + 1 };
+      return { ...DEPART, volume: etat.volume, eauBurette: etat.eauBurette, dilue: etat.dilue, recu: etat.recu, descendu: etat.descendu, renverse: etat.renverse, dessous: etat.dessous === "erlenmeyer" ? "rien" : etat.dessous, essais: etat.essais + 1 };
     default: return etat;
   }
 }
@@ -300,13 +328,18 @@ function bilan(r: ReglagesTitrage, etat: EtatTitrage): BilanPaillasse {
     if (etat.note === null) {
       faute("note", true, "Tu n'as pas noté le volume à l'équivalence.");
     } else if (r.suivi === "indicateur") {
-      // le volume versé vaut la lecture finale moins la lecture de départ : l'élève qui n'a pas réglé le zéro et lit la burette se trompe d'autant
-      const erreur = etat.note - etat.verse;
+      // Le volume versé vaut la lecture finale moins la lecture de départ. L'élève note ce qu'il lit sur la burette : sa
+      // valeur porte le décalage du zéro. Elle est juste si elle est proche du volume versé, ou proche de la graduation
+      // en face du ménisque quand le zéro était réglé à une goutte près : une bonne lecture n'est jamais une faute de lecture.
       const decalage = etat.depart ?? 0;
-      if (Math.abs(erreur) > 0.07 && Math.abs(decalage) > 0.07 && Math.abs(erreur - decalage) <= 0.07) {
-        faute("zero", Math.abs(decalage) > 0.2, `La burette n'était pas au zéro au départ : le niveau était ${decalage < 0 ? "au-dessus du zéro" : `à ${ml(decalage)}`}. Ton volume est décalé d'autant. Règle le zéro au robinet avant de commencer.`);
-      } else if (Math.abs(erreur) > 0.2) faute("lecture", true, `Tu as noté ${ml(etat.note)} ; la burette a versé ${ml(etat.verse)}. Lis la graduation en face du bas du ménisque.`);
-      else if (Math.abs(erreur) > 0.07) faute("lecture", false, `Tu as noté ${ml(etat.note)} ; la burette a versé ${ml(etat.verse)}. Lis la graduation en face du bas du ménisque.`);
+      const erreur = etat.note - etat.verse;
+      const lu = erreur - decalage;
+      if (Math.abs(erreur) > 0.07 && Math.abs(lu) <= 0.07) {
+        if (Math.abs(decalage) > 0.07) faute("zero", Math.abs(decalage) > 0.2, `La burette n'était pas au zéro au départ : le niveau était ${decalage < 0 ? "au-dessus du zéro" : `à ${ml(decalage)}`}. Ton volume est décalé d'autant. Règle le zéro au robinet avant de commencer.`);
+      } else if (Math.abs(erreur) > 0.07) {
+        const ecart = Math.min(Math.abs(erreur), Math.abs(lu));
+        faute("lecture", ecart > 0.2, `Tu as noté ${ml(etat.note)} ; le bas du ménisque est en face de ${ml(etat.verse + decalage)}. Lis la graduation en face du bas du ménisque.`);
+      }
     } else if (r.suivi === "phmetre") {
       const ecart = Math.abs(etat.note - reelle);
       if (ecart > 0.5) faute("lecture", true, `Ta lecture de l'équivalence sur la courbe est à ${ml(ecart)} du saut de pH.`);

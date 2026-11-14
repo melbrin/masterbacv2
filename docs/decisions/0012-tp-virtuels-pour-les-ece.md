@@ -109,6 +109,27 @@ Ce qui change :
 - **Plus de TP.** Un troisième titrage est ajouté (un sérum physiologique, suivi au conductimètre). Les lots B et C sont lancés ensemble : dilution, dosage par étalonnage, cinétique, pile, électrolyse, synthèse, distance focale, lunette, diffraction, interférences, ultrasons, effet Doppler, chute filmée, poussée d'Archimède, calorimétrie.
 - **Les documents** d'un TP ne sont plus des cartes arrondies à barre cuivre, que Yane jugeait « typiques des IA » : ce sont des feuilles de sujet, avec un filet gras et un filet maigre en tête.
 
+## Le guide, ajouté le 14 novembre au soir
+
+Yane, après avoir essayé la nouvelle paillasse du titrage : « C'est pas mal, mais c'est pas très compréhensible. Il faudrait donner des indications, avec par exemple une main près de ce qu'il faut faire, ou du moins on doit pouvoir activer le hint. J'ai l'impression que tout n'est pas nickel : teste toi-même de bout en bout, vérifie que chaque étape est OK du début à la fin, et corrige ce qui ne va pas. »
+
+Ce qui est fait :
+
+- **Une main montre le prochain geste.** Elle glisse de l'objet à sa place, appuie sur un poussoir, tourne un robinet. Une phrase le dit sous la scène (« Glisse le bécher poubelle sous la burette. »), et l'étape en cours ressort dans le protocole. Le guide suit ce que l'élève fait vraiment : s'il part mal, le guide le fait rattraper (vider une burette non rincée, recommencer un titrage dépassé).
+- **Un bouton « Guide »** le met en marche ou le coupe, en haut de la paillasse et sur la carte qui l'ouvre. Il est en marche à la première visite. Le choix est gardé sur l'appareil.
+- **Le guide ne donne jamais la mesure.** Il dit « lis la graduation en face du bas du ménisque », pas la valeur. Il dit quand s'arrêter, comme un professeur à côté de l'élève.
+- **Une manipulation faite avec le guide vaut B au mieux pour « Réaliser ».** À l'épreuve, le niveau A est celui d'un élève qui réussit sans aide. L'élève est prévenu avant (la carte de la paillasse, une confirmation s'il demande le guide en cours de route), pendant (au moment d'appeler le professeur) et après (la correction et le bilan). « Tout recommencer » remet le compteur à zéro.
+- **L'essai de bout en bout.** Un robot suit la main à la souris dans un vrai navigateur, lit la burette dans la loupe et pose le repère sur la courbe comme un élève : les trois TP de titrage passent du sommaire au bilan sans faute, sur téléphone et sur grand écran (`scripts/essais/tp-eleve.mts`, `titrage-guide.mts`). Un test fait la même chose sans navigateur, pour chaque graine (`tests/unitaires/tp/titrage-guide.test.ts`).
+
+Ce que l'essai a fait corriger au titrage :
+
+- Une lecture juste comptait parfois comme une faute : le zéro réglé à une goutte près et la lecture à une demi-graduation près s'ajoutaient. Le professeur accepte maintenant une valeur proche du volume versé, ou proche de la graduation en face du ménisque quand le zéro était réglé.
+- Le robinet passait au filet pour un mouvement de quelques millimètres : le goutte à goutte occupe maintenant plus de la moitié de sa course, et le filet est moins fort.
+- Remplir la burette et aspirer à la pipette ralentissent près du zéro et du trait de jauge, comme la main qui redresse le flacon. Un appui très bref sur un poussoir ne faisait rien : il verse maintenant le plus petit morceau, pour ajuster à petits coups.
+- Au filet, la tache de couleur s'étale quand l'équivalence approche : l'élève voit venir le moment de passer au goutte à goutte.
+- La courbe de conductimétrie se lisait mal (un axe écrasé, une cassure entre deux points) : son axe se resserre sur les mesures, et elle trace les deux droites qui passent par les points voisins du repère. L'élève cherche la place où elles se croisent sur le repère : c'est la méthode du cours.
+- Des objets sans nom (pipette, barreau, erlenmeyer), un bécher sans graduations pour doser l'eau, un geste refusé sans explication (un outil porté sur le récipient glissé sous la burette), des libellés qui se chevauchaient, une main ou un exemple de valeur qui cachaient ce qu'il faut lire.
+
 ## Le bilan d'un TP
 
 - **Le serveur est le professeur.** Les réponses ne sont pas dans le navigateur. À chaque étape, le navigateur envoie ce que l'élève a fait ; le serveur répond par un score et la correction. Les étapes se valident dans l'ordre, une seule fois.
@@ -127,6 +148,9 @@ Ce qui change :
 - Les réglages de la paillasse (dont la valeur à trouver) sont dans le code envoyé au navigateur, puisqu'il dessine la paillasse : un élève qui lit ce code peut les trouver. Le jugement, lui, reste au serveur.
 - Les petits sons des gestes (une goutte, un objet posé) sont en marche par défaut, avec un bouton pour les couper.
 - Les TP sont ouverts à tous les comptes pendant la version locale. Le choix gratuit ou Pass se fera avant la mise en ligne.
+- Le guide est en marche à la première visite, et une manipulation faite avec lui vaut B au mieux pour « Réaliser » (un score plafonné à 0,75). L'autre choix possible : le guide ne coûte rien, et sert seulement à apprendre à se servir de la paillasse.
+- La marque du guide est posée par le navigateur : un élève qui sait lire le code peut l'enlever. Il n'y a ni classement ni récompense derrière.
+- Les tolérances de lecture : 0,07 mL sur la burette (zéro réglé à une goutte près compris), 0,2 mL sur le saut de pH, 0,3 mL sur la rupture de pente.
 
 ## Les réponses de Yane à la proposition
 

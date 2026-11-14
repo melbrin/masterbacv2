@@ -17,6 +17,7 @@
 //   Fils ...................... les bornes d'un montage et les fils que l'élève tire entre elles
 //   Burette, Erlenmeyer, Becher, Fiole, Flacon, Eprouvette, PipetteJaugee, Pissette, CompteGouttes, Filet, Goutte
 //   son, vibre ................ les petits sons et les vibrations des gestes
+//   useGuide, Main, Indication  le guide : une main montre le prochain geste, une phrase le dit ; l'élève le coupe d'un bouton
 //
 // Les règles de dessin : une scène fait 360 unités de large ; une zone de toucher fait au moins 44 unités ; les objets
 // que l'élève déplace se dessinent en dernier ; les couleurs viennent des variables de la charte (--encre, --cuivre,
@@ -26,6 +27,7 @@ export * from "./commandes";
 export * from "./Etabli";
 export * from "./fils";
 export * from "./gestes";
+export * from "./guide";
 export * from "./mesure";
 export * from "./scene";
 export * from "./son";

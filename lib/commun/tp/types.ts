@@ -35,6 +35,23 @@ export const texteDe = (g: GesteBrut, cle: string): string | null => {
   return typeof v === "string" ? v : null;
 };
 
+// ---------- le guide ----------
+
+/**
+ * La marque que la vue ajoute à la liste des gestes quand le guide a servi pendant la manipulation (une main montre
+ * chaque geste : components/tp/kit/guide.tsx). Ce n'est pas un geste : aucune paillasse ne lui donne ce nom, et le
+ * serveur la retire avant de rejouer la manipulation.
+ */
+export const MARQUE_DU_GUIDE = "guide";
+/** Vrai si la manipulation s'est faite avec le guide. */
+export const guideServi = (gestes: readonly GesteBrut[]): boolean => gestes.some((g) => g.g === MARQUE_DU_GUIDE);
+/** Les gestes de l'élève, sans la marque du guide. */
+export const sansMarqueDuGuide = (gestes: readonly GesteBrut[]): GesteBrut[] => gestes.filter((g) => g.g !== MARQUE_DU_GUIDE);
+/** Les gestes de l'élève, avec la marque du guide. */
+export const avecMarqueDuGuide = (gestes: readonly GesteBrut[]): GesteBrut[] => [...sansMarqueDuGuide(gestes), { g: MARQUE_DU_GUIDE }];
+/** Avec le guide, une manipulation vaut au mieux ce score : le niveau B. Le niveau A se gagne sans aide, comme à l'épreuve. */
+export const PLAFOND_AVEC_GUIDE = 0.75;
+
 // ---------- les étapes ----------
 
 /** La paillasse d'une étape de manipulation : son genre, et les réglages qu'elle dessine. */
@@ -73,7 +90,8 @@ export interface RetourEtape {
     | { genre: "materiel"; utiles: string[]; pourquoi: Record<string, string> }
     | { genre: "ordre"; etapes: string[] }
     | { genre: "choix"; bonne: number; explication: string }
-    | { genre: "paillasse"; fautes: Faute[]; mesures: string[] }
+    /** `guide` : vrai si l'élève a manipulé avec le guide ; son score est alors plafonné (PLAFOND_AVEC_GUIDE) */
+    | { genre: "paillasse"; fautes: Faute[]; mesures: string[]; guide?: boolean }
     | { genre: "valeur"; attendu: string; detail: string };
 }
 

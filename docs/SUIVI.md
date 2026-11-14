@@ -9,7 +9,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - **Branche de travail** : `lot/0.2-outillage`, empilée sur `lot/0.1-installation-du-kit`. Rien n'est poussé sur GitHub.
 - **Dossier de travail** : `Documents/App Masterbac/app-masterbac/`. L'ancien dossier `masterbac-simulator/` (juillet 2026) est intact à côté et n'est pas repris.
 - **Lancer en local** : voir `docs/recettes/version-locale-1.md`. Port 3457 ; le port 3456 est celui de l'ancien dossier.
-- **Version locale** : essayée par Yane le 14 novembre, plusieurs fois. Ses demandes du jour sont dans les décisions 0005 à 0014. Dernières en date (soir du 14 novembre) : des TP où l'on manipule vraiment, plus de TP dont l'optique, une section « S'entraîner » à la place de « Jeux », pas de mise en forme « typique des IA ». Recettes : `docs/recettes/version-locale-3.md` à `version-locale-8.md`. En attente de son essai.
+- **Version locale** : essayée par Yane le 14 novembre, plusieurs fois. Ses demandes du jour sont dans les décisions 0005 à 0014. Dernières en date (soir du 14 novembre) : des TP où l'on manipule vraiment, plus de TP dont l'optique, une section « S'entraîner » à la place de « Jeux », pas de mise en forme « typique des IA », puis, après son essai du titrage, un guide (une main qui montre le geste) et un essai de bout en bout par moi. Recettes : `docs/recettes/version-locale-3.md` à `version-locale-8.md`. En attente de son essai.
 
 ## Fait et vérifié
 
@@ -34,7 +34,10 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
   - La paillasse Titrage refaite et ses trois TP (détartrant avec indicateur coloré, vinaigre au pH-mètre, sérum physiologique au conductimètre) : flacon à prendre pour rincer et remplir la burette, robinet à tourner (goutte à goutte, filet), pipette jusqu'au trait de jauge, loupe sur les graduations, lecture notée par l'élève, courbe des relevés avec repère. Essayée dans un vrai navigateur sur le banc d'essai (`scripts/essais/titrage.mts`) : manipulation soignée jugée sans faute par le serveur, pour les trois suivis.
   - Le cadre des TP essayé de bout en bout (`scripts/essais/tp.mts`) : chaque TP du début au bilan, paillasse en plein écran, reprise d'un TP laissé en route.
   - Les documents d'un TP et la page des TP redessinés en feuilles de sujet (filet gras et filet maigre, numéro en capitales espacées) : plus de carte arrondie à barre cuivre.
-- `npm run tout` : vert le 14 novembre au soir, après la refonte et avant l'arrivée des quinze TP en construction. Lint sans erreur, types, 445 tests avec couverture (moteur et règles du labo : 100 % des lignes), 25 contrôles de contenu, 62 tests de base, compilation.
+  - Le guide des paillasses (`docs/09-paillasses.md`, section 5 ; décision 0012, « Le guide ») : une main montre le prochain geste, une phrase le dit, l'étape du protocole ressort ; un bouton le coupe ; une manipulation guidée vaut B au mieux. Fait pour le titrage et ses trois TP.
+  - Les trois TP de titrage essayés de bout en bout, à la souris seulement, par un robot qui suit la main, lit la loupe et la courbe comme un élève : du sommaire au bilan (A, A, B, A), en 390 × 844 et en 1219 × 778, sans erreur de page (`scripts/essais/tp-eleve.mts`, `titrage-guide.mts`). Sans guide, le score reste 1 (`titrage.mts`). Les gestes maladroits ont leur essai (`titrage-maladroit.mts`).
+  - Ce que cet essai a fait corriger : une lecture juste comptée comme une faute, un robinet trop nerveux, des appuis brefs sans effet, une courbe de conductimétrie peu lisible (elle trace maintenant ses deux droites), des objets sans nom, des libellés qui se chevauchaient. Le détail est dans la décision 0012.
+- `npm run tout` : vert le 14 novembre au soir, après la refonte et avant l'arrivée des quinze TP en construction. Lint sans erreur, types, 445 tests avec couverture (moteur et règles du labo : 100 % des lignes), 25 contrôles de contenu, 62 tests de base, compilation. Depuis l'ajout du guide : lint, types et tests des TP relancés sur les fichiers touchés ; `npm run tout` est à relancer quand les paillasses en construction seront relues.
 
 ## Film de présentation
 
@@ -60,7 +63,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 
 ## En cours (soir du 14 novembre)
 
-Quinze TP et quatorze paillasses sont en construction, chacun dans ses fichiers. Ils ne sont pas inscrits dans l'application : chaque famille a son banc de chantier (`/app/tp/chantier/<famille>`, en local), qui ne charge que ses fichiers. À relire, essayer dans le navigateur, puis inscrire un par un dans les trois registres :
+Quinze TP et quatorze paillasses sont en construction, chacun dans ses fichiers. Ils ne sont pas inscrits dans l'application : chaque famille a son banc de chantier (`/app/tp/chantier/<famille>`, en local), qui ne charge que ses fichiers. Chacune doit recevoir son guide (un fichier `<genre>-guide.ts`, un test où l'élève suit le guide, un essai où un robot suit la main). À relire, essayer dans le navigateur, puis inscrire un par un dans les trois registres :
 
 | Famille | Paillasses | TP |
 | --- | --- | --- |
@@ -90,6 +93,7 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - Les nouvelles commandes (calibrage, jeux, défis du labo, mémoire, TP) n'ont pas encore leurs cas dans la matrice des accès, qui reste à écrire (point 9).
 - `tp.repondre` lit l'essai, puis l'écrit, sans verrou : deux validations envoyées en même temps pour la même étape pourraient s'écrire l'une sur l'autre. Le navigateur bloque le bouton pendant l'envoi. À regrouper dans une fonction de base.
 - Les réglages d'une paillasse de TP (dont la valeur à trouver) sont dans le code envoyé au navigateur, qui dessine la paillasse. Le jugement reste au serveur, qui rejoue les gestes.
+- La marque « le guide a servi » est posée par le navigateur dans la liste des gestes : un élève qui lit le code peut l'enlever et garder le niveau A. Il n'y a ni classement ni récompense derrière.
 - Les vingt-deux plateaux des jeux de mémoire partent ensemble dans la page d'un jeu. À charger à la demande, comme les paillasses.
 - La commande `tp.essayerPaillasse` (banc d'essai) ne répond qu'en local ; elle n'a pas de cas dans la matrice des accès.
 - Les règles de calcul du labo sont dans le code envoyé au navigateur, puisqu'il anime la simulation : un élève qui lit ce code peut retrouver une réponse. Il n'y a ni classement ni contenu payant derrière.
@@ -108,7 +112,7 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 | Essayer la quatrième et la cinquième version locale, le labo | calculer, entrer sa valeur, lancer la simulation, en physique puis en chimie | `docs/recettes/version-locale-4.md`, puis `version-locale-5.md` | 16 novembre |
 | Essayer la section Mémoire | vingt-deux jeux ; listes et histoires en brouillon | `docs/recettes/version-locale-7.md` | 18 novembre |
 | Essayer la huitième version : « S'entraîner », les TP où l'on manipule | ses remarques du 14 novembre au soir ; les situations sont des brouillons | `docs/recettes/version-locale-8.md` | 18 novembre |
-| Confirmer les décisions 0012 à 0014 | les choix de détail des TP, de la mémoire et de la nouvelle section | lire la partie « à confirmer » de chaque décision | 18 novembre |
+| Confirmer les décisions 0012 à 0014 | les choix de détail des TP, de la mémoire et de la nouvelle section ; en particulier : avec le guide, « Réaliser » vaut B au mieux | lire la partie « à confirmer » de chaque décision | 18 novembre |
 | Valider ou corriger les quarante-deux énoncés du labo, et confirmer la décision 0011 | ce sont des brouillons : ils ne se montrent qu'en local tant qu'ils ne sont pas validés | la partie « Ce que tu dois me dire » de la recette, puis la partie « à confirmer » de la décision | 18 novembre |
 | Valider l'architecture de départ | décision 0001 | lire `docs/02-architecture.md`, section 2, et répondre | 15 novembre |
 | Confirmer ou retirer les cinq ajustements, et répondre aux points de la section 7 du cahier des charges | ils fixent le périmètre de la bêta | `docs/01-cahier-des-charges.md`, sections 4 et 7 | 15 novembre |
@@ -149,4 +153,6 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - Un élément en `position: fixed` placé sous un parent animé ou transformé ne prend pas tout l'écran : l'établi des paillasses se monte donc tout en haut de la page (`createPortal`).
 - Quand plusieurs agents travaillent dans le même dossier, chacun reçoit ses fichiers, sa session d'essai et son banc de chantier. Rien d'inachevé ne s'inscrit dans les registres de l'application : avec Turbopack, un module cassé casse toute page qui l'importe, même par un import à la demande.
 - En développement, une page restée ouverte pendant une refonte peut garder d'anciens modules en mémoire (l'ancienne paillasse à cases à cocher, vue par Yane le 14 novembre) : toujours recharger la page avant un essai, et le dire dans la recette.
+- Le guide des paillasses est en marche à la première visite. Les essais de `scripts/essais/` le coupent d'office (`ouvre()`), sinon leur score serait plafonné ; un essai du guide le demande (`ouvre({ guide: true })`).
+- En développement, la pastille de Next.js (un « N » en bas à gauche) recouvre un bouton de la paillasse sur téléphone. Elle n'existe pas en ligne. Pour l'enlever pendant un essai : `devIndicators: false` dans `next.config.ts` (le serveur redémarre).
 - Une action qui écrit recharge la page en cours (c'est ainsi que Next.js fonctionne). Un écran qui doit garder un retour à l'écran après l'action (verdict, correction) a donc une adresse qui ne dépend pas de l'avancement, ou un composant qui reste monté.

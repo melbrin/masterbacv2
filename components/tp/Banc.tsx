@@ -6,6 +6,7 @@
 import { useState, type ComponentType } from "react";
 import type { EtapePublique, GesteBrut, Paillasse, RetourEtape } from "@/lib/commun/tp/types";
 import { AvecIndices } from "./Etapes";
+import { SuiviDuGuide } from "./kit/guide";
 
 type Retour = { ok: true; valeur: { retour: RetourEtape; mesures: Record<string, number> } } | { ok: false; message: string };
 /** La commande qui juge une manipulation : celle de l'application, ou celle d'un chantier. */
@@ -32,11 +33,12 @@ function UnePaillasse({ tp, graine, rang, etape, essayer, Vue }: { tp: string; g
     <section className="tp-etape" data-banc={rang}>
       <h2>Étape {rang + 1} : {etape.paillasse.genre}</h2>
       <p>{etape.consigne}</p>
-      <Vue paillasse={etape.paillasse} protocole={etape.protocole} attente={attente} fini={fini} />
+      {/* sur un banc de chantier, la vue n'est pas entourée par le registre de l'application : le suivi du guide se pose ici */}
+      <SuiviDuGuide fini={fini}>{(envoie) => <Vue paillasse={etape.paillasse} protocole={etape.protocole} attente={attente} fini={envoie} />}</SuiviDuGuide>
       {erreur && <p role="alert" className="labo-erreur">{erreur}</p>}
       {verdict && c?.genre === "paillasse" && (
         <div className="tp-correction" role="status" data-score={verdict.retour.score}>
-          <p><b>Score : {verdict.retour.score}.</b> {c.fautes.length === 0 ? "Aucune faute." : `${c.fautes.length} faute(s).`}</p>
+          <p><b>Score : {verdict.retour.score}.</b> {c.fautes.length === 0 ? "Aucune faute." : `${c.fautes.length} faute(s).`}{c.guide ? " Manipulation faite avec le guide." : ""}</p>
           <ul className="tp-liste-corrigee">{c.fautes.map((f) => <li key={f.code + f.texte} className={f.grave ? "est-faux" : ""}><b>{f.grave ? "Faute importante" : "Faute légère"} ({f.code}).</b> {f.texte}</li>)}</ul>
           <ul className="tp-mesures">{c.mesures.map((m) => <li key={m}><AvecIndices texte={m} /></li>)}</ul>
           <details>

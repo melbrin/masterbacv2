@@ -34,14 +34,14 @@ bilan.poubelle = await message();
 await deplace(SOUDE, HAUT_BURETTE);
 bilan.flacon = await message();
 await e.photo("1-flacon-pose");
-await maintiens(page, await ici(204, -4), 900); // « Verser », au doigt : environ 4,5 mL
+await maintiens(page, await ici(162, 50), 900); // « Verser », au doigt : environ 4,5 mL
 await attends(200);
 await e.photo("2-rincage-verse");
 await touche("Robinet de la burette", "End"); // grand ouvert
 bilan.robinet = await message();
 await attends(600);
 await e.photo("3-filet");
-await attends(2600);
+await attends(3400); // le temps que la burette se vide
 await touche("Robinet de la burette", "Home");
 // ----- remplir, puis régler le zéro -----
 await touche("Verser dans la burette", "ArrowRight", 26); // 26 mL : un millilitre au-dessus du zéro
@@ -65,7 +65,7 @@ await deplace({ x: 296, y: 336 }, PIPETTE);
 if (sonde) {
   await deplace(PISSETTE, VASE);
   await touche("Ajouter de l'eau distillée", "ArrowRight", conducti ? 10 : 8); // 50 mL, ou 40 mL
-  await deplace({ x: 336, y: 376 }, PISSETTE);
+  await deplace({ x: 336, y: 396 }, PISSETTE);
   await deplace(PISSETTE, COMPTE); // rincer la sonde
   bilan.rincage = await message();
   await deplace(COMPTE, VASE); // plonger la sonde
@@ -122,7 +122,7 @@ await e.photo("13-note");
 await page.getByRole("button", { name: "J'ai fini" }).click();
 await page.getByRole("button", { name: "Oui, j'ai fini" }).click();
 await page.waitForSelector("[data-score]", { timeout: 15000 });
-await page.getByRole("button", { name: "Quitter" }).click().catch(() => {});
+await page.getByRole("button", { name: "Quitter la paillasse" }).click().catch(() => {});
 await attends(400);
 bilan.score = await page.locator("[data-score]").getAttribute("data-score");
 bilan.verdict = await e.texte(".tp-correction");

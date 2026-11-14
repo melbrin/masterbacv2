@@ -53,6 +53,8 @@ export interface OptionsEssai {
   sombre?: boolean;
   /** demande moins d'animations, comme le réglage du téléphone */
   calme?: boolean;
+  /** laisse le guide des paillasses en marche (une main montre chaque geste, et le score est plafonné) ; sans cela, l'essai le coupe */
+  guide?: boolean;
 }
 
 /** Ouvre un navigateur connecté au compte d'essai. La page d'arrivée est « /app ». */
@@ -66,6 +68,8 @@ export async function ouvre(o: OptionsEssai): Promise<Essai> {
     colorScheme: o.sombre ? "dark" : "light", reducedMotion: o.calme ? "reduce" : "no-preference", hasTouch: (o.largeur ?? 390) < 700,
     storageState: session && existsSync(session) ? session : undefined,
   });
+  // le guide des paillasses est en marche à la première visite : un essai qui manipule seul le coupe avant le chargement de la page
+  await ctx.addInitScript((choix) => { try { window.localStorage.setItem("mb-guide", choix); } catch { /* sans stockage, le guide reste en marche */ } }, o.guide ? "oui" : "non");
   const page = await ctx.newPage();
   const erreurs: string[] = [];
   page.on("pageerror", (e) => erreurs.push(`erreur de page : ${e.message.slice(0, 300)}`));
@@ -89,7 +93,8 @@ export async function ouvre(o: OptionsEssai): Promise<Essai> {
   return {
     nav, ctx, page, erreurs,
     photo: async (nom, entiere = false) => { await page.screenshot({ path: `${o.sortie}/${nom}.png`, fullPage: entiere }); },
-    texte: (selecteur) => page.locator(selecteur).first().innerText().then((t) => t.replace(/\s+/g, " ").trim()).catch(() => null),
+    // un élément dessiné (SVG) ou replié (dans un « details » fermé) n'a pas de texte affiché : on lit alors son contenu
+    texte: (selecteur) => page.locator(selecteur).first().evaluate((el) => ((el as HTMLElement).innerText || el.textContent || "").replace(/\s+/g, " ").trim()).catch(() => null),
     largeur: () => page.evaluate(() => document.documentElement.scrollWidth),
     ferme: async () => { await garde(); await nav.close(); },
   };
@@ -132,4 +137,106 @@ export async function centre(element: Locator): Promise<Point> {
   const b = await element.boundingBox();
   if (!b) throw new Error("élément introuvable ou caché");
   return { x: b.x + b.width / 2, y: b.y + b.height / 2 };
+}
+
+// ---------- suivre le guide d'une paillasse ----------
+// Le guide montre le prochain geste avec une main (components/tp/kit/guide.tsx). Un essai peut le suivre à la souris,
+// sans rien savoir de la paillasse : il lit la phrase, le geste que la main montre, la touche mise en avant, et il fait
+// ce geste. C'est l'essai de bout en bout d'un guide : si la main se trompe d'endroit ou d'ordre, la manipulation échoue.
+
+/** Ce que le guide montre en ce moment. */
+export interface PasVu {
+  /** le nom du moment : il change quand le geste à faire change */
+  cle: string;
+  texte: string;
+  /** le geste de la main dans la scène, s'il y en a un */
+  geste: "glisser" | "maintenir" | "toucher" | "tourner" | "montrer" | null;
+  /** où la main agit, dans les unités du dessin */
+  x: number;
+  y: number;
+  /** pour « glisser » : où poser */
+  versX: number;
+  versY: number;
+  /** pour « tourner » : les angles de départ et d'arrivée, et le rayon du geste */
+  de: number;
+  a: number;
+  r: number;
+  /** le nom de la touche du bas mise en avant, s'il y en a une */
+  touche: string | null;
+}
+
+/** Lit le guide à l'écran ; null si le guide est coupé ou n'a rien à dire. */
+export async function lisGuide(page: Page): Promise<PasVu | null> {
+  return page.evaluate(() => {
+    const phrase = document.querySelector<HTMLElement>(".pl-guide");
+    if (!phrase) return null;
+    const main = document.querySelector<SVGGElement>(".pl-main");
+    const n = (nom: string) => Number(main?.getAttribute(nom) ?? 0);
+    const touche = document.querySelector<HTMLElement>(".pl-pied .pl-vise");
+    const geste = main?.getAttribute("data-geste") ?? null;
+    return {
+      cle: phrase.dataset.guide ?? "", texte: phrase.innerText.replace(/\s+/g, " ").trim(),
+      geste: geste as "glisser" | "maintenir" | "toucher" | "tourner" | "montrer" | null,
+      x: n("data-x"), y: n("data-y"), versX: n("data-vers-x"), versY: n("data-vers-y"), de: n("data-de"), a: n("data-a"), r: n("data-r"),
+      touche: touche ? touche.innerText.replace(/\s+/g, " ").trim() : null,
+    };
+  });
+}
+
+/** Attend que le guide passe à un autre moment ; rend ce qu'il montre alors (le même s'il n'a pas changé à temps). */
+export async function attendsLeGuide(page: Page, cle: string, ms = 30000): Promise<PasVu | null> {
+  const fin = Date.now() + ms;
+  for (;;) {
+    const p = await lisGuide(page);
+    if (!p || p.cle !== cle || Date.now() > fin) return p;
+    await attends(30);
+  }
+}
+
+/**
+ * Fait à la souris le geste que la main du guide montre dans la scène : glisser, garder appuyé jusqu'à ce que la consigne
+ * change, toucher, tourner. Rend faux si la main ne montre aucun geste à faire (une touche du bas, une lecture, une attente).
+ */
+export async function faisLeGeste(page: Page, scene: Locator, p: PasVu): Promise<boolean> {
+  const ici = (x: number, y: number) => pointEcran(scene, { x, y });
+  const surCercle = (deg: number, rayon: number) => ici(p.x + rayon * Math.sin((deg * Math.PI) / 180), p.y - rayon * Math.cos((deg * Math.PI) / 180));
+  switch (p.geste) {
+    case "glisser":
+      await glisse(page, await ici(p.x, p.y), await ici(p.versX, p.versY), 16, 14);
+      await attends(260);
+      return true;
+    case "maintenir": {
+      const point = await ici(p.x, p.y);
+      await page.mouse.move(point.x, point.y);
+      await page.mouse.down();
+      await attendsLeGuide(page, p.cle);
+      await page.mouse.up();
+      await attends(120);
+      return true;
+    }
+    case "toucher": {
+      const point = await ici(p.x, p.y);
+      await page.mouse.click(point.x, point.y);
+      await attends(220);
+      return true;
+    }
+    case "tourner": {
+      // le doigt se pose sur la poignée, puis suit l'arc jusqu'à l'angle d'arrivée
+      const rayon = Math.max(10, p.r - 12);
+      const depart = await surCercle(p.de, rayon);
+      await page.mouse.move(depart.x, depart.y);
+      await page.mouse.down();
+      const pas = Math.max(4, Math.ceil(Math.abs(p.a - p.de) / 6));
+      for (let i = 1; i <= pas; i++) {
+        const q = await surCercle(p.de + ((p.a - p.de) * i) / pas, rayon);
+        await page.mouse.move(q.x, q.y);
+        await attends(16);
+      }
+      await page.mouse.up();
+      await attends(120);
+      return true;
+    }
+    default:
+      return false;
+  }
 }

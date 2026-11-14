@@ -1,7 +1,7 @@
 import "server-only";
 import { nombre } from "@/lib/commun/format";
 import { melangeGraine } from "@/lib/commun/jeux";
-import { niveauPour, rejoue, type Bilan, type Competence, type EtapePublique, type ReglesPaillasse, type ReponseEtape, type RetourEtape } from "@/lib/commun/tp/types";
+import { PLAFOND_AVEC_GUIDE, guideServi, niveauPour, rejoue, sansMarqueDuGuide, type Bilan, type Competence, type EtapePublique, type ReglesPaillasse, type ReponseEtape, type RetourEtape } from "@/lib/commun/tp/types";
 import { TP, type EtapeTp, type Mesures, type Tp } from "@/lib/serveur/contenu/tp";
 import { env } from "@/lib/serveur/env";
 import { clientUtilisateur } from "@/lib/serveur/supabase/clients";
@@ -95,9 +95,11 @@ export async function verifie(etape: EtapeTp, reponse: ReponseEtape, mesures: Me
     const regles = await trouveRegles(etape.paillasse.genre);
     if (!regles) return null;
     const r = etape.paillasse.reglages;
-    const b = regles.bilan(r, rejoue(regles, r, reponse.gestes));
-    const score = Math.max(0, Math.min(1, Number.isFinite(b.score) ? b.score : 0));
-    return { retour: { score, correction: { genre: "paillasse", fautes: b.fautes, mesures: b.lignes } }, mesures: b.mesures };
+    const b = regles.bilan(r, rejoue(regles, r, sansMarqueDuGuide(reponse.gestes)));
+    // avec le guide, une main a montré chaque geste : comme à l'épreuve, une manipulation aidée ne vaut pas le niveau A
+    const guide = guideServi(reponse.gestes);
+    const score = Math.max(0, Math.min(guide ? PLAFOND_AVEC_GUIDE : 1, Number.isFinite(b.score) ? b.score : 0));
+    return { retour: { score, correction: { genre: "paillasse", fautes: b.fautes, mesures: b.lignes, ...(guide ? { guide: true } : {}) } }, mesures: b.mesures };
   }
   return null;
 }

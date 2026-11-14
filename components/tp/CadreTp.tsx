@@ -47,7 +47,10 @@ export default function CadreTp({ essai, etapes, retours, bilan: bilanDepart, re
   const manip = etapes.findIndex((e) => e.genre === "paillasse");
   const phase = fini ? 3 : rang < manip ? 0 : rang === manip ? 1 : 2;
   const situation = etapes[0]?.genre === "lecture" ? etapes[0] : null;
-  const releve = manip >= 0 && faits[manip]?.correction.genre === "paillasse" ? faits[manip].correction.mesures : null;
+  const manipulation = manip >= 0 && faits[manip]?.correction.genre === "paillasse" ? faits[manip].correction : null;
+  const releve = manipulation ? manipulation.mesures : null;
+  /** vrai si la manipulation s'est faite avec le guide, sans faute : c'est le guide seul qui a coûté le niveau A */
+  const avecGuide = manipulation?.guide === true && manipulation.fautes.length === 0;
 
   const remonte = () => haut.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
   const valide = (reponse: ReponseEtape) => {
@@ -81,7 +84,8 @@ export default function CadreTp({ essai, etapes, retours, bilan: bilanDepart, re
               <li key={c.id}><span className={`tp-niveau tp-niveau-${bilan[c.id]}`}>{bilan[c.id]}</span><span><b>{c.nom}</b><span className="petit discret">{c.quoi}</span></span></li>
             ))}
           </ul>
-          <p className="petit discret">A : réussi sans aide. B : une erreur. C : plusieurs erreurs. D : à reprendre.</p>
+          <p className="petit discret">A : réussi sans aide. B : une erreur, ou une manipulation faite avec le guide. C : plusieurs erreurs. D : à reprendre.</p>
+          {avecGuide && bilan.REA === "B" && <p className="tp-conseil"><b>Réaliser.</b> Tu as manipulé avec le guide, sans faute. Quand tu connais les gestes, refais ce TP sans le guide pour viser le A.</p>}
           {COMPETENCES.filter((c) => bilan[c.id] === "C" || bilan[c.id] === "D").map((c) => <p key={c.id} className="tp-conseil"><b>{c.nom}.</b> {CONSEILS[c.id]}</p>)}
           <div className="actions">
             <BoutonAction lancer={refaire}>Refaire ce TP</BoutonAction>
