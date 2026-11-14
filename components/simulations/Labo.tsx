@@ -10,7 +10,7 @@ import { useId, useRef, useState, type FormEvent } from "react";
 import Confettis from "@/components/appli/Confettis";
 import Icone from "@/components/appli/Icone";
 import ContenuHtml from "@/components/socle/ContenuHtml";
-import { nombre } from "@/lib/commun/format";
+import { lisNombre as lis, nombre } from "@/lib/commun/format";
 import { decimalesDuPas, grandeurs, regles, type Champ, type Issue, type Mesure, type Valeurs } from "@/lib/commun/simulations";
 import { validerDefi } from "@/lib/serveur/commandes/defis";
 import Etoiles from "./Etoiles";
@@ -62,12 +62,6 @@ interface Props {
 }
 
 // ---------- écriture ----------
-
-/** Lit un nombre saisi à la française : « 7,45 », « 7.45 », « 1 000 ». Renvoie null si ce n'est pas un nombre. */
-function lis(texte: string): number | null {
-  const net = texte.replace(/\s/g, "").replace(",", ".");
-  return /^\d+(\.\d+)?$/.test(net) ? Number(net) : null;
-}
 
 const precision = (pas: number): string => (pas >= 1 ? "à l'unité" : pas >= 0.1 ? "au dixième" : pas >= 0.01 ? "au centième" : "au millième");
 /** Une borne écrite avec juste ce qu'il faut de décimales : « 2 », « 0,1 », « 0,05 ». */

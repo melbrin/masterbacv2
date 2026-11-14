@@ -221,6 +221,20 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"tp_essais": {
+                  Row: {
+                    "cree_le": string,"etapes": NonNullable<Json>,"graine": number,"id": string,"mesures": NonNullable<Json>,"niveaux": Json | null,"termine_le": string | null,"tp": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cree_le"?: string,"etapes"?: NonNullable<Json>,"graine": number,"id"?: string,"mesures"?: NonNullable<Json>,"niveaux"?: Json | null,"termine_le"?: string | null,"tp": string,"user_id": string
+                  }
+                  Update: {
+                    "cree_le"?: string,"etapes"?: NonNullable<Json>,"graine"?: number,"id"?: string,"mesures"?: NonNullable<Json>,"niveaux"?: Json | null,"termine_le"?: string | null,"tp"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"vu_en_classe": {
                   Row: {
                     "coche_le": string,"fiche": number,"user_id": string

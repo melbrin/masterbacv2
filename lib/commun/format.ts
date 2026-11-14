@@ -41,6 +41,11 @@ export function puissanceDeDix(x: number, chiffres = 2): string {
   const haut = `${exposant < 0 ? "⁻" : ""}${[...String(Math.abs(exposant))].map((c) => EXPOSANTS[Number(c)]).join("")}`;
   return `${nombre(mantisse, chiffres - 1)}\u00a0×\u00a010${haut}`;
 }
+/** Lit un nombre saisi à la française : « 7,45 », « 7.45 », « 1 000 ». Renvoie null si ce n'est pas un nombre positif. */
+export function lisNombre(texte: string): number | null {
+  const net = texte.replace(/\s/g, "").replace(",", ".");
+  return /^\d+(\.\d+)?$/.test(net) ? Number(net) : null;
+}
 /** « 5 » ou « 5,5 » */
 export const points = (x: number) => nombre(x, Number.isInteger(x) ? 0 : 1);
 /** « 30 min », « 2 h », « 1 h 30 » */

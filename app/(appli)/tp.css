@@ -1,0 +1,90 @@
+/* Les TP virtuels (décision 0012). Toutes les classes commencent par « tp- ». */
+.tp { display: grid; gap: 12px; min-width: 0; scroll-margin-top: 68px; }
+.tp-rang { margin: 0; }
+.tp-etape { display: grid; gap: 12px; min-width: 0; }
+.tp-etape > h2 { margin: 0; font-size: 1.15rem; }
+.tp-etape > p { margin: 0; }
+.tp-etape sub, .tp-mesures sub, .tp-document sub { font-size: .72em; line-height: 0; }
+
+/* les documents du sujet */
+.tp-documents { display: grid; gap: 10px; }
+.tp-document { padding: 12px 14px; border: 1px solid var(--filet); border-left: 4px solid var(--cuivre); border-radius: 12px; background: var(--carte); }
+.tp-document h3 { margin: 0 0 6px; font-size: .95rem; }
+.tp-document ul { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; font-size: .92rem; }
+.tp-rappels { display: grid; gap: 8px; justify-items: start; }
+.tp-rappels .tp-documents { justify-self: stretch; }
+
+/* le tiroir du matériel et les réponses à choisir : de grandes touches, cochées quand elles sont prises */
+.tp-tiroir, .tp-options, .tp-preparer { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.tp-tiroir button, .tp-options button, .tp-preparer button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 8px 12px;
+  border: 1.5px solid var(--filet); border-radius: 12px; background: var(--carte); color: var(--texte); font: inherit; text-align: left; cursor: pointer; }
+.tp-tiroir button[aria-pressed="true"], .tp-options button[aria-pressed="true"] { border-color: var(--cuivre-texte); background: color-mix(in srgb, var(--cuivre) 14%, var(--carte)); color: var(--encre); font-weight: 600; }
+.tp-preparer button[aria-pressed="true"] { border-color: color-mix(in srgb, var(--vert) 55%, var(--filet)); color: var(--discret); }
+.tp-coche { display: grid; flex: none; width: 22px; height: 22px; border: 1.5px solid var(--filet); border-radius: 6px; place-items: center; color: #FFFFFF; }
+.tp-coche svg { width: 14px; height: 14px; stroke-width: 2.6; }
+button[aria-pressed="true"] > .tp-coche { border-color: var(--vert); background: var(--vert); }
+.tp-ordre { cursor: default; }
+.tp-aide { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--carte-2); font-size: .92rem; }
+
+/* la correction du professeur */
+.tp-correction .verdict { margin: 0; border: 1px solid var(--filet); }
+.tp-liste-corrigee { display: grid; gap: 6px; margin: 0; padding: 0 0 0 1.2em; font-size: .94rem; }
+ul.tp-liste-corrigee { padding: 0; list-style: none; }
+.tp-liste-corrigee li { padding: 8px 10px; border-radius: 10px; background: var(--carte); border: 1px solid var(--filet); }
+.tp-liste-corrigee li.est-faux { border-color: color-mix(in srgb, var(--brique) 55%, var(--filet)); background: var(--brique-fond); }
+.tp-liste-corrigee b { color: var(--encre); }
+.tp-mesures { display: grid; gap: 4px; margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--carte-2); list-style: none; color: var(--encre); font-weight: 600; font-variant-numeric: tabular-nums; }
+.tp-suite { margin-top: 2px; }
+
+/* la paillasse : l'écran de nuit du labo, puis les gestes */
+.tp-paillasse { display: grid; gap: 10px; min-width: 0; }
+/* la paillasse reste en haut de l'écran pendant que l'élève fait ses gestes dessous : il voit ce que chaque geste change */
+.tp-paillasse > .labo-ecran { position: sticky; top: 60px; z-index: 5; }
+.tp-paillasse .labo-scene { padding: 4px 6px 0; }
+.tp-paillasse .labo-verdict { min-height: 44px; padding: 6px 12px; }
+.tp-paillasse .labo-attente { color: var(--encre); font-size: .86rem; }
+.tp-gestes { display: grid; gap: 8px; padding: 12px; }
+.tp-gestes .tp-preparer { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.tp-gestes .tp-preparer button { min-height: 44px; padding: 6px 8px; gap: 8px; font-size: .88rem; line-height: 1.2; }
+.tp-relever { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.tp-relever .btn { min-width: 0; padding-inline: 8px; }
+.tp-recommencer { justify-self: center; }
+.tp-gestes h3 { margin: 4px 0 0; font-size: .82rem; font-family: var(--display); font-stretch: 112%; letter-spacing: .16em; text-transform: uppercase; color: var(--cuivre-texte); }
+.tp-verser { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.tp-verser button { min-height: 52px; padding: 6px 4px; border: 1.5px solid var(--filet); border-radius: 12px; background: var(--carte-2); color: var(--encre); font: inherit; font-weight: 700; cursor: pointer; touch-action: manipulation; }
+.tp-verser button:active { background: color-mix(in srgb, var(--cuivre) 22%, var(--carte)); }
+.tp-curseur { display: grid; gap: 6px; }
+.tp-curseur label { font-weight: 600; color: var(--encre); }
+.tp-curseur input { width: 100%; min-height: 44px; margin: 0; accent-color: var(--cuivre-texte); }
+.tp-goutte { opacity: 0; }
+
+/* le bilan par compétence */
+.tp-bilan { justify-items: stretch; text-align: left; }
+.tp-bilan > h2, .tp-bilan > p { text-align: center; justify-self: center; }
+.tp-bilan > p.tp-conseil { justify-self: stretch; text-align: left; }
+.tp-niveaux { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.tp-niveaux li { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--carte-2); }
+.tp-niveaux li > span:last-child { display: grid; }
+.tp-niveaux b { color: var(--encre); }
+.tp-niveau { display: grid; width: 44px; height: 44px; border-radius: 12px; place-items: center; font-family: var(--display); font-size: 1.4rem; font-weight: 800; color: #FFFFFF; }
+.tp-niveau-A { background: var(--vert); }
+.tp-niveau-B { background: color-mix(in srgb, var(--vert) 60%, var(--sable)); }
+.tp-niveau-C { background: var(--sable); }
+.tp-niveau-D { background: var(--brique); }
+.tp-conseil { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--carte-2); font-size: .92rem; text-align: left; }
+.tp-bilan .actions { justify-content: center; }
+/* les niveaux obtenus, en petit, sur la carte d'un TP */
+.tp-lettres { display: inline-flex; gap: 4px; vertical-align: middle; }
+.tp-lettres .tp-niveau { width: 24px; height: 24px; border-radius: 7px; font-size: .86rem; }
+
+@media (min-width: 720px) {
+  .tp-tiroir { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 960px) {
+  .tp-paillasse > .labo-ecran { top: 12px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tp-etape { animation: apparait .3s ease-out both; }
+  .tp-goutte { animation: tp-goutte .45s ease-in both; }
+  @keyframes tp-goutte { from { transform: translateY(0); opacity: 1; } 85% { opacity: 1; } to { transform: translateY(34px); opacity: 0; } }
+}
