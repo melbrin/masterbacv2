@@ -5,11 +5,16 @@ import { describe, expect, it } from "vitest";
 import { cleNotion, decimalesDuPas, etoilesPour, grandeurs, ID_SIMULATIONS, regles, type Defi, type Valeurs } from "@/lib/commun/simulations";
 import { arriveeDuSon, frequenceRecue, positionEmetteur } from "@/lib/commun/simulations/doppler";
 import { avancee, dureeChute, positionColis } from "@/lib/commun/simulations/largage";
+import { desintegration, dureeEcrite, fraction, NOYAUX } from "@/lib/commun/simulations/radio";
 import { instantSeuil, intensite, tau, tension } from "@/lib/commun/simulations/rc";
+import { altitudeOpposee, ATMOSPHERE, avance, marche, periode, vitesseCirculaire } from "@/lib/commun/simulations/satellite";
 import { tauThermique, temperature } from "@/lib/commun/simulations/temperature";
+import { restant, verse, volumeEquivalent, volumeVerse } from "@/lib/commun/simulations/titrage";
 import { defi, simulation, SIMULATIONS } from "@/lib/serveur/contenu/defis";
 
 const g = 9.81;
+/** G × M_T, en m³·s⁻², avec les valeurs données dans les énoncés. */
+const GM = 6.67e-11 * 5.97e24;
 const rad = (deg: number) => (deg * Math.PI) / 180;
 /** La vitesse qui fait passer le ballon par le centre du cercle, tirée de l'équation de la trajectoire. */
 const vitesseDuTir = (angle: number, H: number) => Math.sqrt((g * 4.6 ** 2) / (2 * Math.cos(rad(angle)) ** 2 * (4.6 * Math.tan(rad(angle)) + H - 3.05)));
@@ -31,7 +36,18 @@ const REPONSES: Record<string, Valeurs> = {
   "doppler-1": { v: 340 * (1 - 300 / 400) },
   "doppler-2": { fE: (440 * (340 - 80)) / 340 },
   "doppler-3": { vkmh: 340 * (1 - 400 / 425) * 3.6 },
+  "satellite-1": { v: Math.sqrt((GM) / 6.771e6) / 1000 },
+  "satellite-2": { T: (2 * Math.PI * Math.sqrt(7.071e6 ** 3 / GM)) / 60 },
+  "satellite-3": { h: Math.cbrt((GM * 86164 ** 2) / (4 * Math.PI ** 2)) / 1000 - 6371 },
+  "titrage-1": { V: (0.08 * 20) / 0.1 },
+  "titrage-2": { CB: (0.06 * 20) / 12 },
+  "titrage-3": { V: (0.05 * 20) / (5 * 0.02) },
+  "radio-1": { date: 2 * 8 },
+  "radio-2": { date: (5730 * Math.log(1 / 0.6)) / Math.LN2 },
+  "radio-3": { demiVie: (24 * Math.LN2) / Math.log(10) },
 };
+// les textes portent des espaces insécables (entre un nombre et son unité, entre les milliers) : ici on compare avec des espaces simples
+const net = (texte: string) => texte.replace(/[\u00a0\u202f]/g, " ");
 const tous = SIMULATIONS.flatMap((s) => s.defis.map((d) => ({ s, d })));
 const arrondi = (d: Defi, v: Valeurs): Valeurs => Object.fromEntries(d.champs.map((c) => [c.id, Math.round(v[c.id] / c.pas) * c.pas]));
 const issue = (id: string, saisies: Valeurs) => {
@@ -39,13 +55,14 @@ const issue = (id: string, saisies: Valeurs) => {
   const lu = grandeurs(x.defi, saisies);
   if (!lu.ok) throw new Error(`valeur hors bornes pour ${id} : ${lu.champ}`);
   const r = regles(x.simulation.id)!.issue(lu.p);
-  // les messages portent une espace insécable entre un nombre et son unité : ici on compare avec des espaces simples
-  return { ...r, message: r.message.replace(/\u00a0/g, " ") };
+  return { ...r, message: net(r.message) };
 };
 
 describe("registre du labo", () => {
-  it("cinq simulations, trois défis chacune, un par objectif, tous à l'état de brouillon", () => {
-    expect(SIMULATIONS.map((s) => s.id)).toEqual(["basket", "largage", "rc", "temperature", "doppler"]);
+  it("huit simulations, trois défis chacune, un par objectif, tous à l'état de brouillon", () => {
+    expect(SIMULATIONS.map((s) => s.id)).toEqual(["basket", "largage", "satellite", "temperature", "doppler", "rc", "titrage", "radio"]);
+    // dans l'ordre des fiches
+    expect(SIMULATIONS.map((s) => s.fiche)).toEqual([1, 1, 3, 5, 6, 8, 10, 11]);
     // chaque simulation a ses règles, et il n'y a pas de règles sans simulation
     expect(ID_SIMULATIONS).toEqual(SIMULATIONS.map((s) => s.id));
     expect(regles("inconnue")).toBeNull();
@@ -55,7 +72,7 @@ describe("registre du labo", () => {
       expect(s.defis.map((d) => d.id), s.id).toEqual([1, 2, 3].map((n) => `${s.id}-${n}`));
       expect(s.defis.every((d) => d.etat === "brouillon"), s.id).toBe(true);
     }
-    expect(new Set(tous.map((x) => x.d.id)).size).toBe(15);
+    expect(new Set(tous.map((x) => x.d.id)).size).toBe(24);
     expect(Object.keys(REPONSES).sort()).toEqual(tous.map((x) => x.d.id).sort());
   });
   it("chaque défi a un énoncé, des données, un rappel du cours et des champs bien bornés", () => {
@@ -253,5 +270,103 @@ describe("clé d'une notion", () => {
     expect(cleNotion('Charge sous <span class="math inline"><span class="katex">E</span></span>')).toBe("charge sous");
     expect(cleNotion("Instant d’un seuil $U_s$")).toBe("instant d'un seuil");
     expect(cleNotion("  Effet   Doppler ")).toBe("effet doppler");
+  });
+});
+
+describe("le satellite", () => {
+  const iss = { mode: 0, h: 400, v: 7.67, tol: 0.015 };
+  it("vitesse et durée d'un tour sur une orbite circulaire", () => {
+    expect(vitesseCirculaire(400)).toBeCloseTo(7.669, 3);
+    expect(periode(400) / 60).toBeCloseTo(92.5, 1);
+    // un tour dure la circonférence divisée par la vitesse
+    expect(periode(700)).toBeCloseTo((2 * Math.PI * 7071) / vitesseCirculaire(700), 6);
+  });
+  it("à la bonne vitesse, le satellite garde son altitude et boucle son tour", () => {
+    const m = marche(iss, periode(400));
+    expect(m.tombe).toBe(false);
+    expect(m.r - 6371).toBeGreaterThan(395);
+    expect(m.r - 6371).toBeLessThan(405);
+    expect(m.angle / (2 * Math.PI)).toBeCloseTo(1, 2);
+    expect(m.trace.length).toBeGreaterThan(50);
+    expect(marche(iss, 0)).toMatchObject({ t: 0, angle: 0, r: 6771, tombe: false });
+  });
+  it("trop lent, il rentre dans l'atmosphère ; trop rapide, il monte ; bien trop rapide, il s'échappe", () => {
+    const lent = marche({ ...iss, v: 7.2 }, periode(400));
+    expect(lent.tombe).toBe(true);
+    expect(lent.t).toBeLessThan(periode(400));
+    expect(lent.r - 6371).toBeLessThanOrEqual(ATMOSPHERE);
+    expect(altitudeOpposee({ ...iss, v: 7.2 })).toBeLessThan(0);
+    expect(altitudeOpposee({ ...iss, v: 8 })).toBeGreaterThan(1500);
+    expect(altitudeOpposee({ ...iss, v: vitesseCirculaire(400) })).toBeCloseTo(400, 6);
+    expect(altitudeOpposee({ ...iss, v: 11 })).toBe(Number.POSITIVE_INFINITY);
+    expect(issue("satellite-1", { v: 7.2 }).message).toMatch(/^Trop lent : le satellite descend jusqu'à l'atmosphère/);
+    expect(issue("satellite-1", { v: 7.6 }).message).toMatch(/^Trop lent : l'orbite n'est plus circulaire\. Le satellite descend jusqu'à \d+ km d'altitude\.$/);
+    expect(issue("satellite-1", { v: 8 }).message).toMatch(/^Trop rapide : l'orbite n'est plus circulaire/);
+    expect(net(regles("satellite")!.issue({ ...iss, v: 11 }).message)).toBe("Trop rapide : le satellite s'échappe et ne revient pas.");
+  });
+  it("dit si la photo est prise trop tôt ou trop tard, et si le satellite est trop bas ou trop haut", () => {
+    expect(issue("satellite-2", { T: 90 }).message).toMatch(/n'a fait que 0,91 tour : c'est trop tôt\.$/);
+    expect(issue("satellite-2", { T: 110 }).message).toMatch(/a déjà fait 1,11 tour : c'est trop tard\.$/);
+    expect(issue("satellite-3", { h: 20000 }).message).toMatch(/^Trop bas : le satellite fait un tour en 11 h \d\d min/);
+    expect(issue("satellite-3", { h: 50000 }).message).toMatch(/^Trop haut/);
+    expect(issue("satellite-3", { h: 35780 }).message).toBe("Le satellite fait un tour en 23 h 56 min, comme la Terre : il reste au-dessus de la station.");
+    expect(avance({ h: 35780 }, 86164)).toBeCloseTo(0, 0);
+    expect(avance({ h: 20000 }, 86164)).toBeGreaterThan(300);
+  });
+});
+
+describe("le titrage", () => {
+  const p = { CA: 0.08, VA: 20, CB: 0.1, a: 1, b: 1, V: 16 };
+  it("à l'équivalence, les réactifs sont dans les proportions de l'équation", () => {
+    expect(volumeEquivalent(p)).toBeCloseTo(16, 9);
+    // cinq ions fer(II) pour un ion permanganate
+    expect(volumeEquivalent({ CA: 0.05, VA: 20, CB: 0.02, a: 5, b: 1 })).toBeCloseTo(10, 9);
+    expect(restant(p, 0)).toBeCloseTo(1.6, 9);
+    expect(restant(p, 8)).toBeCloseTo(0.8, 9);
+    expect(restant(p, 16)).toBeCloseTo(0, 9);
+    expect(restant(p, 99)).toBe(0);
+  });
+  it("la burette s'arrête au volume choisi, ou à celui que l'énoncé fixe", () => {
+    expect(verse(p, 5)).toBe(5);
+    expect(verse(p, 40)).toBe(16);
+    expect(verse(p, -1)).toBe(0);
+    expect(volumeVerse({ ...p, Vfixe: 12 })).toBe(12);
+  });
+  it("dit ce qui manque, ou de combien l'équivalence est dépassée", () => {
+    expect(issue("titrage-1", { V: 12 }).message).toBe("La solution n'a pas changé de couleur : il manque 4,0 mL pour atteindre l'équivalence.");
+    expect(issue("titrage-1", { V: 18.5 }).message).toBe("La solution a changé de couleur dès 16,0 mL : tu as dépassé l'équivalence de 2,5 mL.");
+    expect(issue("titrage-2", { CB: 0.05 }).message).toMatch(/trop diluée\.$/);
+    expect(issue("titrage-2", { CB: 0.2 }).message).toMatch(/dès 6,0 mL au lieu de 12,0 mL : la solution titrante est trop concentrée\.$/);
+  });
+});
+
+describe("la décroissance radioactive", () => {
+  const iode = { demiVie: 8, date: 16, cible: 0.25, tol: 0.006, unite: 0, activite: 0 };
+  it("il reste la moitié des noyaux après une demi-vie, le quart après deux", () => {
+    expect(fraction(iode, 0)).toBe(1);
+    expect(fraction(iode, 8)).toBeCloseTo(0.5, 12);
+    expect(fraction(iode, 16)).toBeCloseTo(0.25, 12);
+    expect(fraction(iode, -3)).toBe(1);
+  });
+  it("le dessin suit la loi : à tout instant, le nombre de noyaux allumés est celui de la loi, à un noyau près", () => {
+    for (const t of [0, 3, 8, 16, 30, 60]) {
+      const allumes = Array.from({ length: NOYAUX }, (_, i) => desintegration(iode, i)).filter((x) => x > t).length;
+      expect(Math.abs(allumes - NOYAUX * fraction(iode, t)), `t = ${t}`).toBeLessThanOrEqual(1);
+    }
+  });
+  it("écrit les durées dans l'unité du défi, et dit si c'est trop tôt, trop tard, ou si la demi-vie est mal choisie", () => {
+    expect(net(dureeEcrite(iode, 16))).toBe("16,0 j");
+    expect(net(dureeEcrite({ unite: 1 }, 4220))).toBe("4 220 ans");
+    expect(issue("radio-1", { date: 10 }).message).toBe("Après 10,0 j, il reste encore 42,0 % des noyaux. Il en faut 25,0 % : c'est trop tôt.");
+    expect(issue("radio-1", { date: 30 }).message).toMatch(/il ne reste que 7,4 % des noyaux\. Il en fallait 25,0 % : c'est trop tard\.$/);
+    expect(issue("radio-2", { date: 4220 }).message).toBe("Après 4 220 ans, il reste 60,0 % de l'activité : c'est la valeur attendue.");
+    expect(issue("radio-3", { demiVie: 12 }).message).toBe("En 24,0 h, il reste 25,0 % de l'activité au lieu de 10,0 % : la demi-vie est trop longue.");
+    expect(issue("radio-3", { demiVie: 4 }).message).toMatch(/la demi-vie est trop courte\.$/);
+  });
+  it("donne à l'écran la durée d'une unité de temps, pour dire l'allure de l'animation", () => {
+    expect(regles("radio")!.secondes!({ unite: 0 })).toBe(86400);
+    expect(regles("radio")!.secondes!({ unite: 2 })).toBe(3600);
+    expect(regles("titrage")!.secondes!({})).toBeNull();
+    expect(regles("basket")!.secondes).toBeUndefined();
   });
 });

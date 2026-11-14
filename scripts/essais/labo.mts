@@ -2,13 +2,16 @@
 // Il se connecte par le code de la boîte locale, joue les quinze défis (une valeur fausse d'abord sur le premier défi
 // de chaque simulation, puis la bonne), prend des captures et écrit un bilan.
 // À transformer en parcours Playwright (docs/04-tests-et-qualite.md).
-// Il faut : le serveur sur le port 3457, la base locale, et un compte local sans ligne dans la table `defis`.
-// Usage : node scripts/essais/labo.mts <dossier des captures> [adresse du compte local]
+// Il faut : le serveur sur le port 3457, la base locale, et un compte local sans ligne dans la table `defis`
+// pour les simulations jouées.
+// Usage : node scripts/essais/labo.mts <dossier des captures> [adresse du compte local] [simulations à jouer, séparées par des virgules]
 import { chromium } from "@playwright/test";
 
 const BASE = "http://localhost:3457";
 const SORTIE = process.argv[2]!;
 const ADRESSE = process.argv[3] ?? "theo.essai@exemple.fr";
+/** Pour ne jouer que certaines simulations : leurs identifiants, séparés par des virgules. */
+const SEULES = process.argv[4]?.split(",") ?? null;
 const attends = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function code(apres: number): Promise<string> {
@@ -27,6 +30,7 @@ async function code(apres: number): Promise<string> {
 
 // les réponses, calculées ici avec les relations du cours, puis arrondies au pas de saisie
 const g = 9.81;
+const GM = 6.67e-11 * 5.97e24;
 const rad = (deg: number) => (deg * Math.PI) / 180;
 const tir = (angle: number, H: number) => Math.sqrt((g * 4.6 ** 2) / (2 * Math.cos(rad(angle)) ** 2 * (4.6 * Math.tan(rad(angle)) + H - 3.05)));
 const fr = (x: number, decimales: number) => x.toFixed(decimales).replace(".", ",");
@@ -47,7 +51,16 @@ const DEFIS: Defi[] = [
   { simulation: "doppler", rang: 1, bonne: fr(340 * (1 - 300 / 400), 1), fausse: "40", milieu: 3600 },
   { simulation: "doppler", rang: 2, bonne: fr((440 * 260) / 340, 1), milieu: 3600 },
   { simulation: "doppler", rang: 3, bonne: fr(340 * (1 - 400 / 425) * 3.6, 1), milieu: 3600 },
-];
+  { simulation: "satellite", rang: 1, bonne: fr(Math.sqrt(GM / 6.771e6) / 1000, 2), fausse: "7,2", milieu: 2200 },
+  { simulation: "satellite", rang: 2, bonne: fr((2 * Math.PI * Math.sqrt(7.071e6 ** 3 / GM)) / 60, 1), milieu: 3600 },
+  { simulation: "satellite", rang: 3, bonne: String(Math.round((Math.cbrt((GM * 86164 ** 2) / (4 * Math.PI ** 2)) / 1000 - 6371) / 10) * 10), milieu: 3600 },
+  { simulation: "titrage", rang: 1, bonne: "16", fausse: "12", milieu: 3000 },
+  { simulation: "titrage", rang: 2, bonne: "0,1", milieu: 3000 },
+  { simulation: "titrage", rang: 3, bonne: "10", milieu: 3000 },
+  { simulation: "radio", rang: 1, bonne: "16", fausse: "10", milieu: 3000 },
+  { simulation: "radio", rang: 2, bonne: fr(Math.round((5730 * Math.log(1 / 0.6)) / Math.LN2 / 10) * 10, 0), milieu: 3000 },
+  { simulation: "radio", rang: 3, bonne: fr((24 * Math.LN2) / Math.log(10), 1), milieu: 3000 },
+].filter((d) => !SEULES || SEULES.includes(d.simulation));
 
 const nav = await chromium.launch();
 const ctx = await nav.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, locale: "fr-FR", timezoneId: "Europe/Paris" });
@@ -145,13 +158,13 @@ for (const d of DEFIS) {
 }
 
 // ---- rejouer un défi déjà réussi : les étoiles ne changent pas ----
-await page.goto(`${BASE}/app/jeux/labo/basket/1`);
+await page.goto(`${BASE}/app/jeux/labo/${DEFIS[0].simulation}/1`);
 await attends(400);
 await lance(DEFIS[0].bonne);
 bilan.rejoue = { verdict: await verdict(), reussite: await texte(".labo-reussite"), regle: await texte(".labo-regle") };
 // le bouton « Défi suivant » mène au défi 2
 await page.getByRole("link", { name: "Défi suivant" }).click();
-await page.waitForURL(/labo\/basket\/2/);
+await page.waitForURL(/labo\/[a-z]+\/2/);
 bilan.suivant = page.url().replace(BASE, "");
 
 // ---- après : la liste et la page des jeux ----
@@ -176,13 +189,13 @@ await attends(500);
 await photo("sombre-rc-2", true);
 await page.emulateMedia({ colorScheme: "light" });
 await page.setViewportSize({ width: 1280, height: 800 });
-await page.goto(`${BASE}/app/jeux/labo/largage/1`);
+await page.goto(`${BASE}/app/jeux/labo/${DEFIS[0].simulation}/1`);
 await attends(500);
-await lance(DEFIS[3].bonne);
-await attends(2100);
-await photo("large-largage-1-en-cours");
+await lance(DEFIS[0].bonne);
+await attends(DEFIS[0].milieu);
+await photo("large-defi-en-cours");
 await verdict();
-await photo("large-largage-1-reussi");
+await photo("large-defi-reussi");
 await page.goto(`${BASE}/app/jeux`);
 await attends(500);
 await photo("large-hub");

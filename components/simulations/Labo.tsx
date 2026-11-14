@@ -72,8 +72,12 @@ function lis(texte: string): number | null {
 const precision = (pas: number): string => (pas >= 1 ? "à l'unité" : pas >= 0.1 ? "au dixième" : pas >= 0.01 ? "au centième" : "au millième");
 const bornes = (c: Champ): string => `Entre ${points(c.min)} et ${points(c.max)} ${c.unite}. Arrondis ${precision(c.pas)}.`;
 const fois = (x: number): string => nombre(x, x >= 10 || Math.abs(x - Math.round(x)) < 0.05 ? 0 : 1);
-/** L'allure de l'animation : « Temps réel », « Ralenti 10 fois », « Accéléré 93 fois ». */
-const allure = (cadence: number): string => (cadence > 1.05 ? `Accéléré ${fois(cadence)} fois` : cadence < 0.95 ? `Ralenti ${fois(1 / cadence)} fois` : "Temps réel");
+/** L'allure de l'animation : « Temps réel », « Ralenti 10 fois », « Accéléré 93 fois ». Au-delà de 100 000 fois, le nombre ne dit plus rien. */
+function allure(cadence: number | null): string {
+  if (cadence === null) return "";
+  if (cadence >= 100000) return "Très accéléré";
+  return cadence > 1.05 ? `Accéléré ${fois(cadence)} fois` : cadence < 0.95 ? `Ralenti ${fois(1 / cadence)} fois` : "Temps réel";
+}
 const rangEssai = (n: number): string => (n === 1 ? "premier essai" : `${n}e essai`);
 
 /** Écrit un texte en mettant en indice ce qui suit un tiret bas : « u_C » devient u, puis C en indice. */
@@ -120,6 +124,8 @@ export default function Labo({ simulation, theme, defi, relations, cours, depart
   const reussi = !!reponse?.reussi;
   const mesures = R.mesures(p, t);
   const reglee = lance_ || inconnues.length === 0;
+  // la durée d'une unité du temps de la simulation, en secondes ; vide si l'allure de l'animation n'a pas de sens
+  const secondes = R.secondes ? R.secondes(p) : 1;
 
   const doux = (): ScrollBehavior => (window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth");
   const change = (champ: string, texte: string) => {
@@ -176,7 +182,7 @@ export default function Labo({ simulation, theme, defi, relations, cours, depart
       <div ref={ecran} className={`labo-ecran${fini && reponse ? (reussi ? " est-reussi" : " est-rate") : ""}`}>
         <div className="labo-barre">
           <span>{theme}</span>
-          <span>{reglee ? allure(R.cadence(p)) : "À régler"}</span>
+          <span>{reglee ? allure(secondes === null ? null : R.cadence(p) * secondes) : "À régler"}</span>
         </div>
         <div className="labo-scene">
           <Scene p={p} t={t} phase={lance_ ? horloge.phase : "pret"} issue={lance_ ? essai.issue : null} inconnues={lance_ ? [] : inconnues} />

@@ -33,8 +33,13 @@ export interface Regles {
   issue: (p: Valeurs) => Issue;
   /** la durée du mouvement à montrer, en secondes de simulation */
   duree: (p: Valeurs) => number;
-  /** le nombre de secondes de simulation qui passent en une seconde à l'écran : 1 en temps réel, 0,1 au ralenti dix fois */
+  /** le temps de simulation qui passe en une seconde à l'écran : 1 en temps réel, 0,1 au ralenti dix fois */
   cadence: (p: Valeurs) => number;
+  /**
+   * La durée, en secondes, d'une unité du temps de la simulation : 86 400 si elle compte en jours. Sans cette fonction, elle compte en secondes.
+   * Une valeur vide dit que l'allure de l'animation n'a pas de sens (un débit choisi pour l'écran).
+   */
+  secondes?: (p: Valeurs) => number | null;
   /** les grandeurs affichées sous la scène à l'instant t */
   mesures: (p: Valeurs, t: number) => Mesure[];
 }
@@ -64,7 +69,6 @@ export interface Simulation {
   theme: string;
   fiche: number;
   accroche: string;
-  icone: string;
   defis: Defi[];
 }
 

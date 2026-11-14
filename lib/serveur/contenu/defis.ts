@@ -9,10 +9,11 @@ import type { Defi, Simulation } from "@/lib/commun/simulations";
 const g = { nom: "Intensité de la pesanteur g", valeur: "9,81 m·s⁻²" };
 const cercle = [{ nom: "Distance du cercle", valeur: "4,60 m" }, { nom: "Hauteur du cercle", valeur: "3,05 m" }];
 const son = { nom: "Célérité du son c", valeur: "340 m/s" };
+const terre = [{ nom: "Rayon de la Terre R_T", valeur: "6 371 km" }, { nom: "Masse de la Terre M_T", valeur: "5,97 × 10²⁴ kg" }, { nom: "Constante de gravitation G", valeur: "6,67 × 10⁻¹¹ N·m²·kg⁻²" }];
 
 export const SIMULATIONS: Simulation[] = [
   {
-    id: "basket", nom: "Le basketteur", theme: "Chute libre", fiche: 1, icone: "ballon",
+    id: "basket", nom: "Le basketteur", theme: "Chute libre", fiche: 1,
     accroche: "Calcule la vitesse du saut, puis celle du tir. Le ballon ne rentre que si ton calcul est juste.",
     defis: [
       {
@@ -42,7 +43,7 @@ export const SIMULATIONS: Simulation[] = [
     ],
   },
   {
-    id: "largage", nom: "Le largage", theme: "Chute libre", fiche: 1, icone: "cible",
+    id: "largage", nom: "Le largage", theme: "Chute libre", fiche: 1,
     accroche: "Un drone lâche un colis en plein vol. Calcule où, à quelle vitesse ou à quelle altitude, pour qu'il tombe sur la cible.",
     defis: [
       {
@@ -72,37 +73,37 @@ export const SIMULATIONS: Simulation[] = [
     ],
   },
   {
-    id: "rc", nom: "Le circuit RC", theme: "Électricité", fiche: 8, icone: "eclair",
-    accroche: "Choisis la résistance ou la capacité pour que la lampe s'allume, ou s'éteigne, exactement à la bonne date.",
+    id: "satellite", nom: "Le satellite", theme: "Gravitation", fiche: 3,
+    accroche: "Donne la bonne vitesse au satellite : trop lent, il retombe ; trop rapide, il s'éloigne. Puis trouve la durée d'un tour et l'altitude géostationnaire.",
     defis: [
       {
-        id: "rc-1", niveau: 10, titre: "Régler la constante de temps", etat: "brouillon",
-        enonce: "On charge le condensateur. La lampe témoin s'allume quand la tension u_C atteint 63 % de E. Elle doit s'allumer 2,0 s après la fermeture de l'interrupteur. Quelle résistance faut-il choisir ?",
-        donnees: [{ nom: "Tension du générateur E", valeur: "5,0 V" }, { nom: "Capacité C", valeur: "1 000 µF" }, { nom: "Seuil : 63 % de E", valeur: "3,16 V" }],
-        champs: [{ id: "R", nom: "Résistance R", unite: "kΩ", min: 0.1, max: 20, pas: 0.01 }],
-        fixes: { E: 5, C: 1000, seuil: 5 * (1 - Math.exp(-1)), tCible: 2, tol: 0.05, decharge: 0 },
-        rappel: ["Charge sous $E$"],
+        id: "satellite-1", niveau: 10, titre: "Mettre un satellite en orbite", etat: "brouillon",
+        enonce: "Une fusée lâche un satellite à 400 km d'altitude, à l'horizontale. Pour rester sur une orbite circulaire à cette altitude, il doit partir avec la bonne vitesse. Laquelle ?",
+        donnees: [{ nom: "Altitude h", valeur: "400 km" }, ...terre],
+        champs: [{ id: "v", nom: "Vitesse du satellite", unite: "km/s", min: 5, max: 10, pas: 0.01 }],
+        fixes: { mode: 0, h: 400, tol: 0.015 },
+        rappel: ["Satellite de la Terre", "Vitesse"],
       },
       {
-        id: "rc-2", niveau: 14, titre: "Le minuteur", etat: "brouillon",
-        enonce: "Un minuteur allume une lampe quand la tension u_C atteint 4,0 V. La lampe doit s'allumer 10 s après la fermeture de l'interrupteur. Quelle résistance faut-il choisir ?",
-        donnees: [{ nom: "Tension du générateur E", valeur: "6,0 V" }, { nom: "Capacité C", valeur: "470 µF" }, { nom: "Seuil U_s", valeur: "4,0 V" }],
-        champs: [{ id: "R", nom: "Résistance R", unite: "kΩ", min: 1, max: 50, pas: 0.1 }],
-        fixes: { E: 6, C: 470, seuil: 4, tCible: 10, tol: 0.15, decharge: 0 },
-        rappel: ["Charge sous $E$", "Instant d’un seuil $U_s$"],
+        id: "satellite-2", niveau: 14, titre: "La durée d'un tour", etat: "brouillon",
+        enonce: "Un satellite d'observation tourne à 700 km d'altitude, sur une orbite circulaire. Il prend une photo, puis doit en prendre une autre exactement un tour plus tard. Combien de temps dure un tour ?",
+        donnees: [{ nom: "Altitude h", valeur: "700 km" }, ...terre],
+        champs: [{ id: "T", nom: "Durée d'un tour", unite: "min", min: 60, max: 200, pas: 0.1 }],
+        fixes: { mode: 1, h: 700, tol: 0.3 },
+        rappel: ["Satellite de la Terre", "Période de révolution"],
       },
       {
-        id: "rc-3", niveau: 18, titre: "La durée de l'éclair", etat: "brouillon",
-        enonce: "Le condensateur d'un flash est chargé sous 300 V. Il se décharge dans la lampe, qui s'éteint quand la tension tombe à 100 V. L'éclair doit durer 0,50 s. Quelle capacité faut-il choisir ?",
-        donnees: [{ nom: "Tension de départ U_0", valeur: "300 V" }, { nom: "Résistance de la lampe R", valeur: "2,0 kΩ" }, { nom: "Seuil U_s", valeur: "100 V" }],
-        champs: [{ id: "C", nom: "Capacité C", unite: "µF", min: 10, max: 1000, pas: 1 }],
-        fixes: { E: 300, R: 2, seuil: 100, tCible: 0.5, tol: 0.01, decharge: 1 },
-        rappel: ["Décharge", "Instant d’un seuil $U_s$"],
+        id: "satellite-3", niveau: 18, titre: "Le satellite géostationnaire", etat: "brouillon",
+        enonce: "Un satellite de télévision doit rester au-dessus de la même station, sur l'équateur. Il doit donc faire un tour en un jour sidéral, comme la Terre. À quelle altitude faut-il le placer ?",
+        donnees: [{ nom: "Jour sidéral T", valeur: "86 164 s" }, ...terre],
+        champs: [{ id: "h", nom: "Altitude du satellite", unite: "km", min: 1000, max: 60000, pas: 10 }],
+        fixes: { mode: 2, tol: 2 },
+        rappel: ["Satellite de la Terre", "Troisième loi de Kepler", "Satellite géostationnaire"],
       },
     ],
   },
   {
-    id: "temperature", nom: "Le thé", theme: "Température", fiche: 5, icone: "flamme",
+    id: "temperature", nom: "Le thé", theme: "Température", fiche: 5,
     accroche: "Calcule combien de temps chauffer l'eau, puis quand boire ton thé. Trop tôt il brûle, trop tard il est froid.",
     defis: [
       {
@@ -132,7 +133,7 @@ export const SIMULATIONS: Simulation[] = [
     ],
   },
   {
-    id: "doppler", nom: "L'effet Doppler", theme: "Son", fiche: 6, icone: "relie",
+    id: "doppler", nom: "L'effet Doppler", theme: "Son", fiche: 6,
     accroche: "Un véhicule fonce vers toi : le son que tu entends est plus aigu. Calcule sa vitesse ou la fréquence émise pour entendre la bonne note.",
     defis: [
       {
@@ -158,6 +159,96 @@ export const SIMULATIONS: Simulation[] = [
         champs: [{ id: "vkmh", nom: "Vitesse du véhicule", unite: "km/h", min: 0, max: 300, pas: 0.1 }],
         fixes: { fE: 400, c: 340, cible: 425, tol: 0.5 },
         rappel: ["Effet Doppler"],
+      },
+    ],
+  },
+  {
+    id: "rc", nom: "Le circuit RC", theme: "Électricité", fiche: 8,
+    accroche: "Choisis la résistance ou la capacité pour que la lampe s'allume, ou s'éteigne, exactement à la bonne date.",
+    defis: [
+      {
+        id: "rc-1", niveau: 10, titre: "Régler la constante de temps", etat: "brouillon",
+        enonce: "On charge le condensateur. La lampe témoin s'allume quand la tension u_C atteint 63 % de E. Elle doit s'allumer 2,0 s après la fermeture de l'interrupteur. Quelle résistance faut-il choisir ?",
+        donnees: [{ nom: "Tension du générateur E", valeur: "5,0 V" }, { nom: "Capacité C", valeur: "1 000 µF" }, { nom: "Seuil : 63 % de E", valeur: "3,16 V" }],
+        champs: [{ id: "R", nom: "Résistance R", unite: "kΩ", min: 0.1, max: 20, pas: 0.01 }],
+        fixes: { E: 5, C: 1000, seuil: 5 * (1 - Math.exp(-1)), tCible: 2, tol: 0.05, decharge: 0 },
+        rappel: ["Charge sous $E$"],
+      },
+      {
+        id: "rc-2", niveau: 14, titre: "Le minuteur", etat: "brouillon",
+        enonce: "Un minuteur allume une lampe quand la tension u_C atteint 4,0 V. La lampe doit s'allumer 10 s après la fermeture de l'interrupteur. Quelle résistance faut-il choisir ?",
+        donnees: [{ nom: "Tension du générateur E", valeur: "6,0 V" }, { nom: "Capacité C", valeur: "470 µF" }, { nom: "Seuil U_s", valeur: "4,0 V" }],
+        champs: [{ id: "R", nom: "Résistance R", unite: "kΩ", min: 1, max: 50, pas: 0.1 }],
+        fixes: { E: 6, C: 470, seuil: 4, tCible: 10, tol: 0.15, decharge: 0 },
+        rappel: ["Charge sous $E$", "Instant d’un seuil $U_s$"],
+      },
+      {
+        id: "rc-3", niveau: 18, titre: "La durée de l'éclair", etat: "brouillon",
+        enonce: "Le condensateur d'un flash est chargé sous 300 V. Il se décharge dans la lampe, qui s'éteint quand la tension tombe à 100 V. L'éclair doit durer 0,50 s. Quelle capacité faut-il choisir ?",
+        donnees: [{ nom: "Tension de départ U_0", valeur: "300 V" }, { nom: "Résistance de la lampe R", valeur: "2,0 kΩ" }, { nom: "Seuil U_s", valeur: "100 V" }],
+        champs: [{ id: "C", nom: "Capacité C", unite: "µF", min: 10, max: 1000, pas: 1 }],
+        fixes: { E: 300, R: 2, seuil: 100, tCible: 0.5, tol: 0.01, decharge: 1 },
+        rappel: ["Décharge", "Instant d’un seuil $U_s$"],
+      },
+    ],
+  },
+  {
+    id: "titrage", nom: "Le titrage", theme: "Chimie", fiche: 10,
+    accroche: "Calcule le volume à verser : la solution doit changer de couleur à la dernière goutte, ni avant ni après.",
+    defis: [
+      {
+        id: "titrage-1", niveau: 10, titre: "Le volume équivalent", etat: "brouillon",
+        enonce: "On titre de l'acide chlorhydrique par de la soude : H₃O⁺ + HO⁻ → 2 H₂O. Un indicateur coloré, incolore au départ, devient rose à l'équivalence. Quel volume de soude faut-il verser pour atteindre l'équivalence ?",
+        donnees: [{ nom: "Concentration de l'acide C_A", valeur: "0,080 mol/L" }, { nom: "Volume d'acide titré V_A", valeur: "20,0 mL" }, { nom: "Concentration de la soude C_B", valeur: "0,10 mol/L" }],
+        champs: [{ id: "V", nom: "Volume de soude à verser", unite: "mL", min: 0, max: 25, pas: 0.1 }],
+        fixes: { CA: 0.08, VA: 20, CB: 0.1, a: 1, b: 1, tol: 0.15, couleur: 0 },
+        rappel: ["Équivalence", "Titrage colorimétrique"],
+      },
+      {
+        id: "titrage-2", niveau: 14, titre: "Préparer la soude", etat: "brouillon",
+        enonce: "On titre de l'acide éthanoïque par de la soude : CH₃COOH + HO⁻ → CH₃COO⁻ + H₂O. Pour une lecture précise, on veut que la solution change de couleur à 12,0 mL de soude versée. Quelle concentration doit avoir la soude ?",
+        donnees: [{ nom: "Concentration de l'acide C_A", valeur: "0,060 mol/L" }, { nom: "Volume d'acide titré V_A", valeur: "20,0 mL" }, { nom: "Volume versé à l'équivalence V_E", valeur: "12,0 mL" }],
+        champs: [{ id: "CB", nom: "Concentration de la soude", unite: "mol/L", min: 0.01, max: 0.5, pas: 0.001 }],
+        fixes: { CA: 0.06, VA: 20, Vfixe: 12, a: 1, b: 1, tol: 0.15, couleur: 0 },
+        rappel: ["Équivalence", "Titrage colorimétrique"],
+      },
+      {
+        id: "titrage-3", niveau: 18, titre: "Le titrage au permanganate", etat: "brouillon",
+        enonce: "On titre des ions fer(II) par une solution violette de permanganate de potassium : MnO₄⁻ + 5 Fe²⁺ + 8 H⁺ → Mn²⁺ + 5 Fe³⁺ + 4 H₂O. Avant l'équivalence, le permanganate versé est consommé : sa couleur disparaît. À l'équivalence, la couleur violette persiste. Quel volume faut-il verser pour atteindre l'équivalence ?",
+        donnees: [{ nom: "Concentration des ions fer(II) C_A", valeur: "0,050 mol/L" }, { nom: "Volume titré V_A", valeur: "20,0 mL" }, { nom: "Concentration du permanganate C_B", valeur: "0,020 mol/L" }],
+        champs: [{ id: "V", nom: "Volume de permanganate à verser", unite: "mL", min: 0, max: 25, pas: 0.1 }],
+        fixes: { CA: 0.05, VA: 20, CB: 0.02, a: 5, b: 1, tol: 0.15, couleur: 1 },
+        rappel: ["Équivalence", "Titrage colorimétrique"],
+      },
+    ],
+  },
+  {
+    id: "radio", nom: "La décroissance radioactive", theme: "Radioactivité", fiche: 11,
+    accroche: "Les noyaux se désintègrent un à un. Calcule la date, l'âge ou la demi-vie pour tomber sur la bonne part restante.",
+    defis: [
+      {
+        id: "radio-1", niveau: 10, titre: "Deux demi-vies", etat: "brouillon",
+        enonce: "Un échantillon contient de l'iode 131, dont la demi-vie est de 8,0 jours. Au bout de combien de temps ne reste-t-il qu'un quart des noyaux ?",
+        donnees: [{ nom: "Demi-vie de l'iode 131", valeur: "8,0 jours" }, { nom: "Part des noyaux restants", valeur: "25 %" }],
+        champs: [{ id: "date", nom: "Durée d'attente", unite: "jours", min: 0, max: 60, pas: 0.1 }],
+        fixes: { demiVie: 8, cible: 0.25, tol: 0.006, unite: 0, activite: 0 },
+        rappel: ["Décroissance"],
+      },
+      {
+        id: "radio-2", niveau: 14, titre: "L'âge d'un os", etat: "brouillon",
+        enonce: "Un os ancien contient du carbone 14, dont la demi-vie est de 5 730 ans. Son activité vaut 60 % de celle d'un os actuel. Quel est l'âge de cet os ?",
+        donnees: [{ nom: "Demi-vie du carbone 14", valeur: "5 730 ans" }, { nom: "Activité restante", valeur: "60 %" }],
+        champs: [{ id: "date", nom: "Âge de l'os", unite: "ans", min: 0, max: 20000, pas: 10 }],
+        fixes: { demiVie: 5730, cible: 0.6, tol: 0.005, unite: 1, activite: 1 },
+        rappel: ["Décroissance"],
+      },
+      {
+        id: "radio-3", niveau: 18, titre: "Choisir la demi-vie", etat: "brouillon",
+        enonce: "Pour un examen médical, on cherche un traceur dont l'activité tombe à 10 % de sa valeur de départ en 24 h. Quelle demi-vie doit-il avoir ?",
+        donnees: [{ nom: "Durée", valeur: "24 h" }, { nom: "Activité restante", valeur: "10 %" }],
+        champs: [{ id: "demiVie", nom: "Demi-vie du traceur", unite: "h", min: 1, max: 30, pas: 0.1 }],
+        fixes: { dateFixe: 24, cible: 0.1, tol: 0.0045, unite: 2, activite: 1 },
+        rappel: ["Décroissance"],
       },
     ],
   },

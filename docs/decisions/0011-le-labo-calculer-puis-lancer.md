@@ -17,15 +17,20 @@ Date : 2026-11-14
 - Les relations du cours sont à un appui : ce sont les lignes du tableau « À connaître par cœur » de la fiche. Elles s'ouvrent seules au deuxième essai raté.
 - Rejouer un défi réussi ne change pas ses étoiles. La même valeur ratée ne se relance pas deux fois de suite.
 
-## Les cinq simulations
+## Les huit simulations
 
 | Simulation | Fiche | Défi objectif 10 | Défi objectif 14 | Défi objectif 18 |
 | --- | --- | --- | --- | --- |
 | Le basketteur | 1 | vitesse du saut pour gagner 0,60 m | vitesse du tir à 45° | vitesse du tir en suspension, à 52° |
 | Le largage | 1 | distance où lâcher le colis | vitesse du drone | altitude du drone |
-| Le circuit RC | 8 | résistance pour 63 % de E à 2,0 s | résistance pour un seuil à 10 s | capacité pour une décharge de 0,50 s |
+| Le satellite | 3 | vitesse pour rester en orbite à 400 km | durée d'un tour à 700 km | altitude géostationnaire |
 | Le thé | 5 | durée de chauffe de l'eau | temps d'attente avant de boire | même question, avec le temps caractéristique à calculer |
 | L'effet Doppler | 6 | vitesse du véhicule | fréquence émise | vitesse en km/h à partir d'une mesure |
+| Le circuit RC | 8 | résistance pour 63 % de E à 2,0 s | résistance pour un seuil à 10 s | capacité pour une décharge de 0,50 s |
+| Le titrage | 10 | volume équivalent, acide et soude | concentration de la soude pour une équivalence à 12,0 mL | volume équivalent avec le permanganate (5 pour 1) |
+| La décroissance radioactive | 11 | durée pour qu'il reste un quart des noyaux | âge d'un os au carbone 14 | demi-vie d'un traceur |
+
+Les cinq premières ont été écrites d'abord. Le satellite, le titrage et la décroissance radioactive ont suivi le même jour, sur le même cadre : une nouvelle simulation demande ses règles de calcul, sa scène, ses trois énoncés et ses réponses dans les tests.
 
 La simulation libre du basketteur (décision 0010) reste, sous « Aller plus loin » et depuis la page du basketteur.
 
@@ -46,8 +51,10 @@ La simulation libre du basketteur (décision 0010) reste, sous « Aller plus loi
 
 - Le labo est ouvert à tous les comptes, offre gratuite comprise, comme les autres jeux. Il est en tête de la page des jeux.
 - La règle des étoiles (3, 2, 2, puis 1).
-- Les tolérances : 0,15 m autour du centre du cercle, 3 cm sur la hauteur du saut, 1 m autour de la cible du largage, 1 °C sur la température, 1,5 % à 2,5 % sur la date du circuit RC, 2 Hz à 0,5 Hz sur la fréquence.
-- Les valeurs des énoncés : panier à 4,60 m et 3,05 m, g = 9,81 m·s⁻², c = 340 m/s pour le son, 4 180 J·kg⁻¹·K⁻¹ pour l'eau.
+- Les tolérances : 0,15 m autour du centre du cercle, 3 cm sur la hauteur du saut, 1 m autour de la cible du largage, 1 °C sur la température, 1,5 % à 2,5 % sur la date du circuit RC, 2 Hz à 0,5 Hz sur la fréquence, 0,015 km/s sur la vitesse du satellite, 0,3 min sur la durée d'un tour, 2° de décalage par jour pour le géostationnaire, 0,15 mL sur le volume équivalent, un demi-point de pourcentage sur la part de noyaux restants.
+- Les valeurs des énoncés : panier à 4,60 m et 3,05 m, g = 9,81 m·s⁻², c = 340 m/s pour le son, 4 180 J·kg⁻¹·K⁻¹ pour l'eau, G = 6,67 × 10⁻¹¹ N·m²·kg⁻², masse de la Terre 5,97 × 10²⁴ kg, rayon de la Terre 6 371 km, jour sidéral 86 164 s, demi-vies de l'iode 131 (8,0 jours) et du carbone 14 (5 730 ans).
+- Les modèles simplifiés : sous 120 km d'altitude, le satellite est dit freiné par l'atmosphère et retombe ; la burette coule d'un trait jusqu'au volume choisi ; les cent noyaux dessinés suivent exactement la loi de décroissance, sans hasard.
+- Les équations des trois titrages (acide chlorhydrique et soude, acide éthanoïque et soude, ions fer(II) et permanganate) sont écrites dans les énoncés : à relire comme le reste.
 - La scène de nuit, dans le thème clair comme dans le thème sombre.
 - Les étoiles n'entrent pas encore dans le parcours ni dans les progrès.
 

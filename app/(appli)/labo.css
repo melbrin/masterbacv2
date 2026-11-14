@@ -28,6 +28,9 @@
 .labo-fort { fill: var(--encre); font-size: 11px; font-weight: 700; }
 .labo-grand { fill: #06142A; font-family: var(--display); font-size: 15px; font-weight: 800; }
 
+/* une onde qui part d'un événement, puis s'efface : sans animation, elle ne se montre pas */
+.labo-onde { opacity: 0; }
+
 /* les mesures, mises à jour pendant le mouvement */
 .labo-mesures { display: grid; gap: 6px; margin: 0; padding: 8px 10px 10px; }
 .labo-mesures > div { display: grid; gap: 0; min-width: 0; padding: 4px 8px 5px; border: 1px solid rgba(255, 255, 255, .07); border-radius: 10px; background: rgba(255, 255, 255, .055); }
@@ -140,6 +143,7 @@
   /* avant le lancement, ce qu'il faut atteindre bat doucement */
   .labo-appel { transform-box: fill-box; transform-origin: center; animation: labo-appel 1.6s ease-out infinite; }
   .labo-appel-doux { animation: labo-chauffe 1s ease-in-out infinite alternate; }
+  .labo-onde { transform-box: fill-box; transform-origin: center; animation: labo-appel .9s ease-out both; }
   .labo-verdict-ok > *, .labo-verdict-ko > * { animation: apparait .3s ease-out both; }
   .labo-verdict-ok .labo-pastille { animation: saute .5s cubic-bezier(.3, 1.6, .5, 1) both; }
   .labo-verdict-ko .labo-pastille { animation: labo-secousse .45s ease-out both; }

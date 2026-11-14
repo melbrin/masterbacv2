@@ -1,6 +1,6 @@
 # Recette : quatrième version locale, le labo
 
-Date : 14 novembre 2026. Durée : 20 minutes. Elle ajoute le labo : des défis où l'élève calcule d'abord, puis entre sa valeur dans une simulation. Tout tourne sur ton ordinateur, avec des données inventées.
+Date : 14 novembre 2026. Durée : 30 minutes. Elle ajoute le labo : vingt-quatre défis en huit simulations, où l'élève calcule d'abord, puis entre sa valeur dans la simulation. Tout tourne sur ton ordinateur, avec des données inventées.
 
 ## Avant de commencer
 
@@ -8,13 +8,13 @@ Date : 14 novembre 2026. Durée : 20 minutes. Elle ajoute le labo : des défis o
 2. Dans le Terminal, place-toi dans `Documents/App Masterbac/app-masterbac`, puis lance `npm run db:demarrer`, `npm run db:migrer` (une nouvelle table est arrivée : `defis`), et `npm run dev -- --port 3457`.
 3. Ouvre http://localhost:3457. La boîte des e-mails locaux est à http://127.0.0.1:54324.
 
-Prends une feuille et une calculatrice : il faut vraiment calculer. Le compte `theo.essai@exemple.fr` a déjà réussi les quinze défis pendant mes essais ; pour repartir de zéro, connecte-toi avec `nina.essai@exemple.fr` ou une adresse nouvelle.
+Prends une feuille et une calculatrice : il faut vraiment calculer. Le compte `theo.essai@exemple.fr` a déjà réussi les vingt-quatre défis pendant mes essais ; pour repartir de zéro, connecte-toi avec `nina.essai@exemple.fr` ou une adresse nouvelle.
 
 ## Ce que tu essaies
 
 | N° | Ce que tu fais | Ce que tu dois voir |
 | --- | --- | --- |
-| 1 | En bas, « Jeux » | en tête, « Le labo » : cinq cartes à faire défiler au doigt, chacune avec sa scène en mouvement, ses étoiles et « Jouer » |
+| 1 | En bas, « Jeux » | en tête, « Le labo » : huit cartes à faire défiler au doigt, chacune avec sa scène en mouvement, ses étoiles et « Jouer » |
 | 2 | « Le basketteur », « Jouer » | le défi 1 : la scène de nuit, « Ta mission », les données, puis le champ « Vitesse au décollage » |
 | 3 | « Voir les relations du cours » | les lignes « Vitesse » et « Position » du tableau de la fiche 1 |
 | 4 | Entre `3`, « Lancer la simulation » | l'écran remonte sur la scène, le joueur saute, puis « Raté. Trop bas : le joueur monte de 0,46 m… » et le bouton « Corriger » |
@@ -26,17 +26,20 @@ Prends une feuille et une calculatrice : il faut vraiment calculer. Le compte `t
 | 10 | « Le circuit RC » | le circuit, les points du courant, la courbe de la tension ; la lampe s'allume à la date visée si la résistance est juste |
 | 11 | « Le thé » | la température monte ou descend, le liquide change de couleur ; trop tôt ou trop tard, le défi est raté |
 | 12 | « L'effet Doppler » | les fronts d'onde se resserrent devant le véhicule ; la fréquence reçue s'affiche quand le son arrive |
-| 13 | Sur la carte d'une simulation, « Les 3 défis » | la liste : un défi réussi porte ses étoiles, le suivant est ouvert, les autres ont un cadenas |
-| 14 | Rejoue un défi déjà réussi | « Tu avais déjà réussi ce défi : tes étoiles ne changent pas. » |
-| 15 | Sur un ordinateur, élargis la fenêtre | la scène reste à gauche, la mission et la saisie sont à droite |
+| 13 | « Le satellite » | trop lent, le satellite retombe ; trop rapide, son orbite s'allonge ; à la bonne vitesse, il boucle son tour sur le cercle en pointillés |
+| 14 | « Le titrage » | la burette se vide goutte à goutte ; la solution change de couleur à la dernière goutte si le volume est juste |
+| 15 | « La décroissance radioactive » | cent noyaux s'éteignent un à un pendant que la courbe descend |
+| 16 | Sur la carte d'une simulation, « Les 3 défis » | la liste : un défi réussi porte ses étoiles, le suivant est ouvert, les autres ont un cadenas |
+| 17 | Rejoue un défi déjà réussi | « Tu avais déjà réussi ce défi : tes étoiles ne changent pas. » |
+| 18 | Sur un ordinateur, élargis la fenêtre | la scène reste à gauche, la mission et la saisie sont à droite |
 
-Les réponses, pour vérifier mes énoncés : 3,43 m/s ; 7,44 m/s ; 7,10 m/s (basketteur) ; 24,2 m ; 19,8 m/s ; 19,6 m (largage) ; 2,00 kΩ ; 19,4 kΩ ; 228 µF (circuit RC) ; 73 s ; 6,7 min ; 18,0 min (thé) ; 85,0 m/s ; 336,5 Hz ; 72,0 km/h (Doppler).
+Les réponses, pour vérifier mes énoncés : 3,43 m/s ; 7,44 m/s ; 7,10 m/s (basketteur) ; 24,2 m ; 19,8 m/s ; 19,6 m (largage) ; 2,00 kΩ ; 19,4 kΩ ; 228 µF (circuit RC) ; 73 s ; 6,7 min ; 18,0 min (thé) ; 85,0 m/s ; 336,5 Hz ; 72,0 km/h (Doppler) ; 7,67 km/s ; 98,7 min ; 35 780 km (satellite) ; 16,0 mL ; 0,100 mol/L ; 10,0 mL (titrage) ; 16,0 jours ; 4 220 ans ; 7,2 h (décroissance radioactive).
 
 ## Ce que tu dois me dire
 
-- Les quinze énoncés sont des brouillons : dis-moi lesquels tu valides, lesquels tu veux changer (texte, valeurs, tolérance). Tant qu'un défi n'est pas validé, il ne se montre qu'en local.
+- Les vingt-quatre énoncés sont des brouillons : dis-moi lesquels tu valides, lesquels tu veux changer (texte, valeurs, tolérance). Tant qu'un défi n'est pas validé, il ne se montre qu'en local.
 - La règle des étoiles te convient-elle : trois au premier essai, deux jusqu'au troisième, une ensuite ?
-- Quelles simulations veux-tu ensuite ? Les fiches permettent : le satellite (fiche 3), le titrage (fiche 10), la décroissance radioactive (fiche 11), la lentille (fiche 7), la poussée d'Archimède (fiche 4), l'énergie mécanique (fiche 2).
+- Quelles simulations veux-tu ensuite ? Les fiches permettent : la lentille et la lunette (fiche 7), la poussée d'Archimède (fiche 4), l'énergie mécanique et la particule dans un champ électrique (fiche 2), le pH (fiche 9), la pile (fiche 12).
 
 ## Ce qui n'est pas dans cette version
 

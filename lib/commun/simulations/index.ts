@@ -3,14 +3,20 @@
 import { reglesBasket } from "./basket";
 import { reglesDoppler } from "./doppler";
 import { reglesLargage } from "./largage";
+import { reglesRadio } from "./radio";
 import { reglesRc } from "./rc";
+import { reglesSatellite } from "./satellite";
 import { reglesTemperature } from "./temperature";
+import { reglesTitrage } from "./titrage";
 import type { Defi, Regles, Valeurs } from "./types";
 
 export * from "./types";
 
 /** Les règles de chaque simulation, par identifiant. */
-const REGLES: Record<string, Regles> = { basket: reglesBasket, largage: reglesLargage, rc: reglesRc, temperature: reglesTemperature, doppler: reglesDoppler };
+const REGLES: Record<string, Regles> = {
+  basket: reglesBasket, largage: reglesLargage, satellite: reglesSatellite, temperature: reglesTemperature,
+  doppler: reglesDoppler, rc: reglesRc, titrage: reglesTitrage, radio: reglesRadio,
+};
 export const ID_SIMULATIONS = Object.keys(REGLES);
 export const regles = (id: string): Regles | null => (Object.hasOwn(REGLES, id) ? REGLES[id] : null);
 
