@@ -22,7 +22,7 @@ export interface SessionQuiz {
   fiche: number | null;
   niveau: number | null;
   questions: string[];
-  secret: { graine?: number; ds?: string };
+  secret: { graine?: number; ds?: string; seance?: string };
   reponses: { id: string; juste: boolean }[];
   debut: string;
   limite: string | null;

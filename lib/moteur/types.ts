@@ -68,6 +68,8 @@ export interface SeancePlan {
   minutes: number;
   taches: Tache[];
   faite: boolean;
+  /** les étapes de lecture que l'élève a cochées (décision 0007) ; absent d'un plan qui vient d'être construit */
+  lues?: string[];
 }
 
 export type Format = "express" | "trois-jours" | "semaine";

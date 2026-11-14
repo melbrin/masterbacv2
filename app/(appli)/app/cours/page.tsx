@@ -13,12 +13,11 @@ export default async function Cours({ searchParams }: { searchParams: Promise<{ 
   const vus = new Set(m.chapitresVus(ctx));
   const carnet = m.carnet(ctx.etat);
   const domaines = [...new Set(catalogue.fiches.map((f) => f.domaine))];
-  const total = catalogue.fiches.reduce((a, f) => ({ q: a.q + f.items.filter((i) => i.k === "q").length, e: a.e + f.items.filter((i) => i.k === "ex").length }), { q: 0, e: 0 });
   const groupes = domaines.map((d) => ({ d, fiches: catalogue.fiches.filter((f) => f.domaine === d && (!seulementVues || vus.has(f.num))) })).filter((g) => g.fiches.length);
   return (
     <>
       <Entete surtitre="Physique-chimie · terminale" titre="Les cours de l'année"
-        sous={`Les ${catalogue.fiches.length} fiches, à jour des BAC 2025 et 2026 : ${total.q} questions de cours et ${total.e} exercices corrigés, lisibles sur téléphone.`} />
+        sous={`Les ${catalogue.fiches.length} fiches de l'année, avec toutes les questions tombées au bac de 2004 à 2026.`} />
       <div className="filtres" role="group" aria-label="Filtrer les fiches">
         <Link href="/app/cours" role="button" aria-pressed={!seulementVues}>Toutes les fiches</Link>
         <Link href="/app/cours?vues=1" role="button" aria-pressed={seulementVues}>Vues en classe ({vus.size})</Link>
@@ -42,7 +41,7 @@ export default async function Cours({ searchParams }: { searchParams: Promise<{ 
             })}
           </ul>
         </section>
-      )) : <p className="vide">Aucune fiche cochée « vue en classe » pour l&apos;instant.</p>}
+      )) : <p className="vide">Tu n&apos;as pas encore coché de chapitre vu en classe.</p>}
       <div className="legende-etats">
         <span><i style={{ background: "var(--vert)" }} />solide</span><span><i style={{ background: "color-mix(in srgb, var(--vert) 55%, var(--carte))" }} />acquis</span>
         <span><i style={{ background: "var(--cuivre)" }} />en cours</span><span><i style={{ background: "var(--carte-2)", border: "1px solid var(--filet)" }} />à voir</span>

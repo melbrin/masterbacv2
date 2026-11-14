@@ -70,6 +70,30 @@ export const cocherSeance = action({
   },
 });
 
+// Une étape de lecture (l'essentiel, les pièges, le carnet, l'épreuve du DS blanc) se coche à la main.
+// Les questions et le test se constatent dans les réponses de l'élève : ils ne passent pas par ici.
+export const cocherEtape = action({
+  nom: "ds.cocherEtape",
+  acces: "eleve",
+  entree: z.object({ id: s.uuid, seance: z.string().regex(/^s\d{1,2}$/), etape: z.string().regex(/^(essentiel:\d{1,2}|pieges|carnet|blanc)$/) }),
+  limite: { max: 300, secondes: 3600 },
+  async executer(e, session) {
+    await profilActif();
+    const base = clientAdmin();
+    const { data } = await base.from("ds").select("seances").eq("id", e.id).eq("user_id", session!.userId).maybeSingle();
+    if (!data) throw new Refus("introuvable");
+    const seances = data.seances as unknown as m.SeancePlan[];
+    const visee = seances.find((x) => x.id === e.seance);
+    if (!visee || !m.etapesDeSeance(visee).some((x) => x.id === e.etape && m.etapeACocher(x))) throw new Refus("introuvable");
+    const suite = seances.map((x) => (x.id === e.seance ? { ...x, lues: [...new Set([...(x.lues ?? []), e.etape])] } : x));
+    const { error } = await base.from("ds").update({ seances: suite as never }).eq("id", e.id).eq("user_id", session!.userId);
+    if (error) throw new Refus("erreur");
+    revalidatePath("/app", "layout");
+    // la page de la séance renvoie vers la première étape qui reste à faire, ou vers le plan si tout est fait
+    redirect(`/app/ds/${e.id}/${e.seance}`);
+  },
+});
+
 export const noterDs = action({
   nom: "ds.noter",
   acces: "eleve",

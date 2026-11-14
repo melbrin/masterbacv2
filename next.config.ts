@@ -14,6 +14,9 @@ const enTetes = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // En développement, Next.js écrit dans le terminal chaque appel d'action avec ses arguments :
+  // l'adresse e-mail et le code de connexion s'y retrouvaient. Les journaux ne portent ni adresse ni code (docs/03-securite.md).
+  logging: { serverFunctions: false },
   async headers() {
     return [{ source: "/:path*", headers: enTetes }];
   },

@@ -10,6 +10,8 @@ export interface DevoirComplet extends Devoir {
   moyenneClasse: number | null;
   offert: boolean;
   creeLe: string;
+  /** l'instant de création du plan, en millisecondes : une étape du plan est faite si l'élève y a répondu depuis */
+  creeA: number;
 }
 export interface Travail {
   ctx: Contexte;
@@ -45,7 +47,7 @@ export const travailDe = cache(async (userId: string, objectif: number): Promise
   const devoirs: DevoirComplet[] = (ds.data ?? []).map((d) => ({
     id: d.id, date: d.jour_devoir, duree: d.duree, fiches: d.fiches, objectif: d.objectif, format: d.format as Format,
     note: d.note === null ? null : Number(d.note), seances: d.seances as unknown as SeancePlan[],
-    moyenneClasse: d.moyenne_classe === null ? null : Number(d.moyenne_classe), offert: d.offert, creeLe: d.cree_le_jour,
+    moyenneClasse: d.moyenne_classe === null ? null : Number(d.moyenne_classe), offert: d.offert, creeLe: d.cree_le_jour, creeA: Date.parse(d.cree_le),
   }));
   etat.ds = devoirs;
   for (const s of seances.data ?? []) {

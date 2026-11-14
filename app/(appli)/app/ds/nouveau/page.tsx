@@ -13,7 +13,7 @@ export default async function NouveauDs() {
   }
   return (
     <>
-      <Entete fil={<Link href="/app/ds">Mode DS</Link>} titre="Préparer un DS" sous="Le format se choisit seul selon le temps qu'il reste." />
+      <Entete fil={<Link href="/app/ds">Mode DS</Link>} titre="Préparer un DS" sous="Le format du plan dépend du nombre de jours qu'il reste avant le devoir." />
       <FormulaireDs aujourdhui={jour} objectif={profil.note_visee as 10 | 14 | 18} offerte={!droits.coach}
         fiches={catalogue.fiches.map((f) => ({ num: f.num, titre: f.titre_court, vu: !!ctx.etat.vuEnClasse[String(f.num)] }))} />
     </>

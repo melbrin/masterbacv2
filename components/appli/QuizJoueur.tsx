@@ -55,12 +55,20 @@ function Question({ vue, fige, envoie, choisi }: { vue: Vue; fige: boolean; envo
   </>;
 }
 
-export default function QuizJoueur({ session, total, rangInitial, vueInitiale, retour, limite }: { session: string; total: number; rangInitial: number; vueInitiale: Vue; retour: string; limite: string | null }) {
+// Le joueur reste affiché du début à la fin, résultat compris : après la dernière réponse, la page se recharge
+// (le quiz est terminé côté serveur), et la correction de cette dernière question doit rester à l'écran.
+export default function QuizJoueur({ session, total, rangInitial, vueInitiale, bonnesInitiales, retour, libelleRetour = "Continuer", limite }: {
+  session: string; total: number; rangInitial: number;
+  /** la question en cours, ou rien si le quiz est déjà terminé */
+  vueInitiale: Vue | null;
+  bonnesInitiales: number;
+  retour: string; libelleRetour?: string; limite: string | null;
+}) {
   const [rang, setRang] = useState(rangInitial);
-  const [vue, setVue] = useState<Vue>(vueInitiale);
+  const [vue, setVue] = useState<Vue | null>(vueInitiale);
   const [res, setRes] = useState<RetourQuiz | null>(null);
   const [choisi, setChoisi] = useState<number | boolean | null>(null);
-  const [bilan, setBilan] = useState<RetourQuiz["bilan"]>(null);
+  const [bilan, setBilan] = useState<RetourQuiz["bilan"]>(vueInitiale ? null : { bonnes: bonnesInitiales, total, passage: null });
   const [message, setMessage] = useState("");
   const [enCours, lance] = useTransition();
 
@@ -77,14 +85,15 @@ export default function QuizJoueur({ session, total, rangInitial, vueInitiale, r
     else setBilan(res.bilan);
   };
 
-  if (bilan) {
+  if (bilan || !vue) {
+    const b = bilan ?? { bonnes: bonnesInitiales, total, passage: null };
     return (
-      <div className="carte">
-        <div className="score-final"><b className="chiffres">{bilan.bonnes}/{bilan.total}</b><span>bonnes réponses</span></div>
-        {bilan.passage === "reussi" && <p><b>Test de passage réussi.</b> Le niveau est validé.</p>}
-        {bilan.passage === "rate" && <p>Il faut 70 % de bonnes réponses pour valider le niveau. Reprends les questions ratées, puis retente le test.</p>}
-        {bilan.passage === null && <p>{bilan.bonnes === bilan.total ? "Tout est juste." : "Les questions ratées reviennent dans ton carnet d'erreurs dans 2 jours."}</p>}
-        <div className="actions"><Link className="btn btn-cuivre" href={retour}>Continuer</Link></div>
+      <div className="carte apparait">
+        <div className="score-final"><b className="chiffres">{b.bonnes}/{b.total}</b><span>{b.bonnes > 1 ? "bonnes réponses" : "bonne réponse"}</span></div>
+        {b.passage === "reussi" && <p><b>Test de passage réussi, bravo !</b> Tu as atteint cet objectif.</p>}
+        {b.passage === "rate" && <p>Il faut 70 % de bonnes réponses pour réussir ce test. Reprends les questions ratées, puis recommence.</p>}
+        {b.passage === null && <p>{b.bonnes === b.total ? "Tout est juste, bravo !" : "Tu reverras les questions ratées dans 2 jours, dans ton carnet d'erreurs."}</p>}
+        <div className="actions"><Link className="btn btn-cuivre" href={retour}>{libelleRetour}</Link></div>
       </div>
     );
   }
@@ -99,7 +108,7 @@ export default function QuizJoueur({ session, total, rangInitial, vueInitiale, r
         <p role="alert" className="petit" style={{ color: "var(--brique)", margin: 0 }}>{message}</p>
         {res && (
           <>
-            <div className={`retour-quiz ${res.juste ? "bon" : "faux"}`} role="status">
+            <div className={`retour-quiz apparait ${res.juste ? "bon" : "faux"}`} role="status">
               <b>{res.juste ? "Bonne réponse" : "Ce n'est pas ça"}</b>
               {!res.juste && res.bonneReponse && <span>La bonne réponse : {res.bonneReponse}. </span>}
               {res.explication}

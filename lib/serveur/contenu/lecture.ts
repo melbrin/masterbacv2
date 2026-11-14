@@ -76,3 +76,14 @@ export async function telechargeFigure(chemin: string): Promise<Blob | null> {
   const { data, error } = await clientAdmin().storage.from("figures").download(chemin);
   return error || !data ? null : data;
 }
+
+/**
+ * Ce qu'une page a le droit d'afficher d'une question sans contrôle du droit : l'énoncé et ses métadonnées.
+ * Le corrigé, les étapes et les indices n'en font pas partie : ils ne sortent que par les commandes, après contrôle.
+ */
+export function enonceSeul(item: ItemComplet) {
+  return {
+    genre: item.genre, numero: item.numero, niveau: item.niveau, type: item.type, demande: item.demande, mention: item.mention,
+    points: item.points, duree: item.duree, titre_html: item.titre_html, enonce_html: item.enonce_html,
+  };
+}

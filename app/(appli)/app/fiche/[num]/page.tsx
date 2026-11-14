@@ -4,7 +4,7 @@ import CaseVu from "@/components/appli/CaseVu";
 import Icone from "@/components/appli/Icone";
 import { BarreEtats, Entete, PillNiveau, Point } from "@/components/appli/Morceaux";
 import ContenuHtml from "@/components/socle/ContenuHtml";
-import { p2, points } from "@/lib/commun/format";
+import { etiquetteBac, etiquetteDapres, p2, pluriel, points } from "@/lib/commun/format";
 import * as m from "@/lib/moteur";
 import { ficheComplete, type ItemLeger } from "@/lib/serveur/contenu/lecture";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
@@ -20,8 +20,9 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
   const num = Number((await params).num);
   const sp = await searchParams;
   const onglet = ONGLETS.some(([id]) => id === sp.onglet) ? (sp.onglet as string) : "essentiel";
-  const filtre = [10, 14, 18].includes(Number(sp.niveau)) ? Number(sp.niveau) : 0;
   const { ctx, catalogue, profil } = await espaceEleve();
+  // les questions s'affichent pour un objectif : viser 14 demande aussi celles de l'objectif 10. Par défaut, l'objectif de l'élève.
+  const visee = [10, 14, 18].includes(Number(sp.niveau)) ? Number(sp.niveau) : profil.note_visee;
   const f = catalogue.fiches.find((x) => x.num === num);
   if (!f) notFound();
   const complet = await ficheComplete(num);
@@ -39,7 +40,7 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
         <span><span className="tit"><ContenuHtml html={i.titre} /></span>
           <span className="sous"><PillNiveau n={i.niveau} />
             {i.k === "ex" ? <span>{i.points ? `${points(i.points)} points` : ""}{i.duree ? ` · ${i.duree} min` : ""}</span> : <span>{i.type}</span>}
-            {i.k === "ex" && i.voir_bac ? <span className="puce puce-bac">D&apos;après le BAC</span> : i.demande ? <span className="puce puce-bac" title={i.demande}>Tombé au BAC</span> : null}
+            {i.k === "ex" && i.voir_bac ? <span className="puce puce-bac">{etiquetteDapres(i.voir_bac)}</span> : i.demande ? <span className="puce puce-bac" title={i.demande}>{etiquetteBac(i.demande)}</span> : null}
             {ctx.etat.carnet[k] && <span className="puce puce-ko">À revoir</span>}</span></span>
         <span className="fin"><Point statut={m.statut(ctx.etat, k)} /><Icone nom="chevron" /></span></Link></li>
     );
@@ -53,18 +54,20 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
         <ul className="contenu">{complet.pieges.map((p, i) => <li key={i}><ContenuHtml html={p} /></li>)}</ul></div>}
     </>;
   } else if (onglet === "questions") {
+    const nb = f.items.filter((i) => i.k === "q" && i.niveau <= visee).length;
     corps = <>
-      <div className="filtres" role="group" aria-label="Filtrer par niveau">
-        {[0, 10, 14, 18].map((L) => <Link key={L} href={`${base}?onglet=questions${L ? `&niveau=${L}` : ""}`} role="button" aria-pressed={filtre === L}>{L ? `Objectif ${L}` : "Tous les niveaux"}</Link>)}
+      <div className="filtres" role="group" aria-label="Choisir la note visée">
+        {[10, 14, 18].map((L) => <Link key={L} href={`${base}?onglet=questions&niveau=${L}`} role="button" aria-pressed={visee === L}>Viser {L}</Link>)}
       </div>
+      <p className="discret petit" style={{ margin: "8px 0 0" }}>Pour viser {visee} : {pluriel(nb, "question", "questions")}{visee === 10 ? ", celles de l'objectif 10" : visee === 14 ? ", celles des objectifs 10 et 14" : ", celles des objectifs 10, 14 et 18"}.</p>
       {f.themes.map((t) => {
-        const items = t.questions.map((n) => f.items.find((i) => i.k === "q" && i.n === n)).filter((i): i is ItemLeger => !!i && (!filtre || i.niveau === filtre));
+        const items = t.questions.map((n) => f.items.find((i) => i.k === "q" && i.n === n)).filter((i): i is ItemLeger => !!i && i.niveau <= visee);
         return items.length ? <section key={t.num}><h2 className="groupe-titre">Thème {t.num} · <ContenuHtml html={t.titre} /></h2><ul className="liste">{items.map(ligne)}</ul></section> : null;
       })}
     </>;
   } else if (onglet === "exercices") {
     corps = <>
-      <p className="discret">Des exercices de type BAC, chronométrés, avec leur barème. Ceux construits d&apos;après un sujet récent indiquent le sujet correspondant.</p>
+      <p className="discret">Des exercices de type bac, avec leur durée et leur barème.</p>
       <ul className="liste">{f.items.filter((i) => i.k === "ex").map(ligne)}</ul>
     </>;
   } else if (onglet === "quiz") {
@@ -73,14 +76,14 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
     corps = quiz.length ? (
       <div className="carte"><h2>Quiz du chapitre</h2>
         <p>{quiz.length} questions dans cette fiche : {parNiveau[0]} d&apos;objectif 10, {parNiveau[1]} d&apos;objectif 14, {parNiveau[2]} d&apos;objectif 18. Tu en as déjà fait {faits}.</p>
-        <p className="discret petit">{quiz.length > 10 ? "Le quiz en tire 10" : "Le quiz les reprend toutes"}, en commençant par celles que tu as ratées, puis celles que tu n&apos;as jamais faites. Pas de chronomètre.</p>
+        <p className="discret petit">{quiz.length > 10 ? "Chaque quiz pose 10 questions" : "Le quiz pose toutes les questions"} : d&apos;abord celles que tu as ratées, puis celles que tu n&apos;as jamais faites. Il n&apos;est pas chronométré.</p>
         <div className="actions"><Link className="btn btn-cuivre" href={`/app/quiz/nouveau?fiche=${num}`}><Icone nom="lecture" />Lancer le quiz</Link></div></div>
-    ) : <p className="vide">Les questions de quiz de cette fiche restent à écrire.</p>;
+    ) : <p className="vide">Cette fiche n&apos;a pas encore de quiz.</p>;
   } else if (onglet === "tombe") {
     corps = <ContenuHtml bloc className="carte contenu" html={complet.tombe_html} />;
   } else {
     corps = <>
-      <p className="discret">Chaque notion passe par quatre états : à voir, en cours, acquise, puis solide quand tu l&apos;as réussie deux fois à une semaine d&apos;écart.</p>
+      <p className="discret">Une notion est d&apos;abord à voir, puis en cours, puis acquise. Elle devient solide quand tu la réussis deux fois à une semaine d&apos;écart.</p>
       <ul className="liste">{f.liste_notions.map((n) => {
         const etat = m.etatNotion(ctx, num, n);
         return (
@@ -99,12 +102,12 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
       <Entete fil={<><Link href="/app/cours">Cours</Link> › <span>{f.domaine}</span></>} surtitre={`Fiche ${num} · physique-chimie`} titre={f.titre} />
       <div className="carte" style={{ display: "grid", gap: 10 }}>
         <CaseVu fiche={num} vu={!!ctx.etat.vuEnClasse[String(num)]} />
-        <div className="actions">{nv.atteint ? <><PillNiveau n={nv.atteint} /> atteint</> : <span className="puce">Niveau 10 en cours</span>}<span className="petit discret">{e.acquis + e.solide} notions acquises sur {e.total}</span></div>
+        <div className="actions">{nv.atteint ? <><PillNiveau n={nv.atteint} /> atteint</> : <span className="puce">Objectif 10 en cours</span>}<span className="petit discret">{e.acquis + e.solide} notions acquises sur {e.total}</span></div>
         <BarreEtats e={e} />
         <div className="actions">
           {nv.testDispo && nv.prochain ? <Link className="btn btn-cuivre" href={`/app/quiz/nouveau?fiche=${num}&passage=${nv.prochain}`}><Icone nom="medaille" />Test de passage à l&apos;objectif {nv.prochain}</Link>
-            : nv.prochain ? <span className="petit discret">Prochain niveau : {nv.prochain}. Il faut 70 % de réussite à ses questions{nv.prochain > 10 ? ", puis un test de passage de 15 minutes" : ""}.</span>
-            : <span className="petit discret">Niveau le plus haut atteint.</span>}
+            : nv.prochain ? <span className="petit discret">Pour atteindre l&apos;objectif {nv.prochain} : réussis 70 % de ses questions{nv.prochain > 10 ? ", puis passe un test de 15 minutes" : ""}.</span>
+            : <span className="petit discret">Tu as atteint l&apos;objectif le plus haut.</span>}
         </div>
       </div>
       <nav className="onglets" aria-label="Parties de la fiche">

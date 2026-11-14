@@ -10,6 +10,8 @@ export const sessionQuiz = requete({ nom: "quiz.session", acces: "eleve" }, asyn
   const courante = await questionCourante(s);
   return {
     id: s.id, genre: s.genre, fiche: s.fiche, niveau: s.niveau, total: s.questions.length, limite: s.limite,
+    // un test lancé depuis une séance de DS y retourne : ces deux champs ne servent qu'à construire ce lien
+    ds: s.secret.ds ?? null, seance: s.secret.seance ?? null,
     terminee: !!s.termine_le, bonnes: s.bonnes, rang: courante?.rang ?? s.reponses.length, vue: courante?.vue ?? null,
   };
 });

@@ -42,3 +42,17 @@ export function LigneLien({ href, num, children, fin }: { href: string; num: str
     </li>
   );
 }
+
+/** Les étapes d'une séance : celles d'avant sont faites, l'étape en cours est marquée. */
+export function Etapes({ noms, actif }: { noms: string[]; actif: number }) {
+  return (
+    <ol className="etapes" aria-label="Étapes de la séance">
+      {noms.map((n, i) => <li key={n} className={i < actif ? "fait" : ""} aria-current={i === actif ? "step" : undefined}>{i + 1}. {n}</li>)}
+    </ol>
+  );
+}
+
+/** Une case d'état devant une étape : faite ou à faire. */
+export function Coche({ faite }: { faite: boolean }) {
+  return <span className={`coche ${faite ? "coche-faite" : ""}`} role="img" aria-label={faite ? "Fait" : "À faire"}>{faite && <Icone nom="ok" />}</span>;
+}

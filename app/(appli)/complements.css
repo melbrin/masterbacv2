@@ -9,8 +9,8 @@ fieldset.champ legend { font-weight: 600; color: var(--encre); padding: 0; margi
   font: inherit; font-weight: 600; cursor: pointer; }
 .segments button[aria-checked="true"], .segments button[aria-pressed="true"] { border-color: var(--cuivre-texte); background: color-mix(in srgb, var(--cuivre) 14%, var(--carte)); color: var(--encre); }
 .options button.choisi { border-color: var(--cuivre); }
-/* un tableau large défile dans son cadre, jamais la page */
-.contenu table { display: block; max-width: 100%; overflow-x: auto; }
+/* un tableau large défile dans son cadre, jamais la page : la largeur minimale de la charte (420px) le faisait déborder de l'écran */
+.contenu table { display: block; max-width: 100%; min-width: 0; overflow-x: auto; }
 .contenu img { max-width: min(100%, var(--w, 100%)); height: auto; }
 form .champ + .champ, form fieldset.champ, form .champ + fieldset { margin-top: 12px; }
 .aide { font-size: .85rem; color: var(--discret); margin: 0; }
@@ -19,3 +19,81 @@ form .champ + .champ, form fieldset.champ, form .champ + fieldset { margin-top: 
 /* Corrigé au barème : une formule large défile dans son cadre, elle n'élargit pas l'étape (sinon les boutons de note sortent de l'écran). */
 .etape-bareme > * { min-width: 0; }
 .etape-bareme .contenu { min-width: 0; overflow-x: auto; }
+
+/* Formulaires : un espace entre le dernier champ et les boutons, entre le titre et le premier champ. */
+form .champ + .actions, form fieldset.champ + .actions, form .champ + p + .actions { margin-top: 16px; }
+form.formulaire h2 { margin-bottom: 12px; }
+
+/* Après l'autocorrection : une pastille et une phrase, puis le bouton qui mène à la suite. */
+.verdict { display: flex; align-items: center; gap: 12px; border-radius: 12px; padding: 10px 12px; background: var(--carte); }
+.verdict > span:last-child { display: grid; gap: 2px; }
+.verdict b { color: var(--encre); }
+.verdict .pastille { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; position: relative; }
+.verdict .pastille svg { width: 22px; height: 22px; }
+.verdict-ok .pastille { background: var(--vert); color: #FFFFFF; }
+.verdict-partiel .pastille { background: color-mix(in srgb, var(--cuivre) 22%, var(--carte)); color: var(--cuivre-texte); }
+.verdict-ko .pastille { background: var(--brique-fond); color: var(--brique); }
+.suite-travail { margin-top: 4px; }
+.auto-eval .choix button[aria-pressed="true"] { border-width: 2px; }
+.auto-eval .choix button[disabled] { cursor: default; color: var(--texte); }
+.auto-eval .choix button[disabled]:not([aria-pressed="true"]) { opacity: .5; }
+
+/* Consigne d'une étape sur papier, avec son minuteur. */
+.consigne { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; margin: 0 0 14px; }
+.consigne p { margin: 0; flex: 1 1 240px; color: var(--discret); font-size: .92rem; }
+
+/* Une étape cochée ou non, dans un plan. */
+.coche { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--filet); display: inline-grid; place-items: center; flex: none; }
+.coche svg { width: 14px; height: 14px; }
+.coche-faite { background: var(--vert); border-color: var(--vert); color: #FFFFFF; }
+ol.liste { list-style: none; padding: 0; margin: 0; }
+
+/* Séance terminée : la carte du bilan, la médaille, les trois chiffres. */
+.fete { text-align: center; display: grid; gap: 12px; justify-items: center; padding: 22px 16px; border-color: color-mix(in srgb, var(--vert) 45%, var(--filet)); }
+.fete h2 { margin: 0; font-size: clamp(1.3rem, 1.1rem + 1vw, 1.7rem); }
+.fete p { margin: 0; max-width: 46ch; }
+.fete .actions { justify-content: center; }
+.medaille { width: 64px; height: 64px; border-radius: 50%; background: var(--vert); color: #FFFFFF; display: grid; place-items: center; }
+.medaille svg { width: 34px; height: 34px; stroke-width: 2.4; }
+.chiffres-fete, .chiffres-cles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%; }
+.chiffres-fete > div { background: var(--carte-2); border-radius: 12px; padding: 10px 6px; display: grid; gap: 2px; }
+.chiffres-fete b, .chiffres-cles b { font-family: var(--display); font-weight: 800; font-stretch: 72%; font-size: 1.9rem; line-height: 1; color: var(--encre); }
+.chiffres-fete b small { font-size: .5em; color: var(--discret); }
+.chiffres-fete span, .chiffres-cles span { font-size: .78rem; color: var(--discret); }
+.chiffres-cles .carte { display: grid; gap: 4px; padding: 12px 10px; text-align: center; }
+.puce-serie { background: color-mix(in srgb, var(--cuivre) 16%, var(--carte)); color: var(--cuivre-texte); }
+
+/* Graphiques de l'écran des progrès. */
+.graphe { max-width: 560px; margin-inline: auto; }
+.graphe .barre-s { fill: color-mix(in srgb, var(--cuivre-texte) 55%, var(--carte)); }
+.graphe .barre-s.courante { fill: var(--cuivre-texte); }
+.niveaux-barres { display: grid; gap: 12px; }
+.niveaux-barres > div { display: grid; gap: 4px; }
+.niveaux-barres .tete { margin: 0; }
+
+/* Confettis : cachés tant que l'élève n'a pas accepté les animations. */
+.confettis { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 70; display: none; }
+.confettis i { position: absolute; top: -18px; width: 9px; height: 14px; border-radius: 2px; opacity: 0; }
+.confettis .c0 { background: var(--cuivre); } .confettis .c1 { background: var(--vert); } .confettis .c2 { background: var(--bleu); }
+.confettis .c3 { background: var(--sable); } .confettis .c4 { background: var(--brique); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .verdict { animation: apparait .3s ease-out both; }
+  .verdict .pastille { animation: saute .5s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .verdict-ok .pastille::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--vert); animation: onde .7s ease-out both; }
+  .auto-eval .choix button[aria-pressed="true"] { animation: appui .35s ease-out both; }
+  .suite-travail { animation: apparait .35s .25s ease-out both; }
+  .fete .medaille { animation: saute .6s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .fete h2, .fete p, .chiffres-fete { animation: apparait .4s .15s ease-out both; }
+  .coche-faite { animation: saute .4s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .confettis { display: block; }
+  .confettis i { animation: tombe 2.4s cubic-bezier(.2, .6, .4, 1) both; }
+  @keyframes saute { from { transform: scale(.2); opacity: .001; } to { transform: none; opacity: 1; } }
+  @keyframes onde { from { transform: scale(1); opacity: .9; } to { transform: scale(1.9); opacity: 0; } }
+  @keyframes appui { 0% { transform: scale(1); } 45% { transform: scale(.95); } 100% { transform: scale(1); } }
+  @keyframes tombe {
+    0% { opacity: 1; transform: translate3d(0, -20px, 0) rotate(0deg); }
+    85% { opacity: 1; }
+    100% { opacity: 0; transform: translate3d(var(--dx, 0px), 105vh, 0) rotate(calc(var(--r, 0deg) + 540deg)); }
+  }
+}

@@ -17,12 +17,12 @@ export default function CaseVu({ fiche, vu }: { fiche: number; vu: boolean }) {
           setCoche(suite);
           lance(async () => {
             const r = await cocherVu({ fiche, vu: suite });
-            if (r.ok) { setMessage(suite ? "Chapitre ajouté à ta progression." : "Chapitre retiré de ta progression."); router.refresh(); }
+            if (r.ok) { setMessage(suite ? "C'est noté : ta séance du jour pourra porter sur ce chapitre." : "C'est noté : ce chapitre n'est plus compté comme vu en classe."); router.refresh(); }
             else { setCoche(!suite); setMessage(r.message); }
           });
         }} /><span />
       </span>
-      <span><b>Vu en classe</b><br /><span className="petit discret" role="status">{message || "Ta séance du jour et ton plan suivent la progression de ton professeur."}</span></span>
+      <span><b>Vu en classe</b><br /><span className="petit discret" role="status">{message || "Coche ce chapitre quand tu l'as vu en classe : ta séance du jour pourra porter dessus."}</span></span>
     </label>
   );
 }

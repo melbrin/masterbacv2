@@ -33,7 +33,8 @@ export const commencerSeance = action({
     if (!profil || profil.etat !== "actif") throw new Refus("interdit");
     await seanceGardee(session!.userId, profil.note_visee);
     revalidatePath("/app", "layout");
-    redirect("/app/seance");
+    // « suite » mène droit à la première question de la séance
+    redirect("/app/seance?suite=1");
   },
 });
 
@@ -48,6 +49,6 @@ export const terminerSeance = action({
     const jour = await seanceGardee(session!.userId, profil.note_visee);
     await clientAdmin().from("seances_du_jour").update({ faite: true, etape: 3 }).eq("user_id", session!.userId).eq("jour", jour);
     revalidatePath("/app", "layout");
-    redirect("/app");
+    redirect("/app/seance?bravo=1");
   },
 });

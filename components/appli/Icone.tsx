@@ -23,6 +23,8 @@ const TRACES: Record<string, string> = {
   papier: "M6 2h9l5 5v15H6z|M14 2v6h6M9 13h7M9 17h5",
   medaille: "c:12,14,6|M8.5 3h7L14 9h-4z",
   cle: "c:8,15,4|M11 12l9-9M16 7l3 3",
+  flamme: "M12 3c.6 3.2 4.5 5 4.5 9.5a4.5 4.5 0 0 1-9 0c0-1.7.7-2.9 1.7-3.9.3 1.2.9 1.9 1.6 2.2C10.4 8.6 11 5.6 12 3z",
+  cible: "c:12,12,9|c:12,12,5|c:12,12,1",
 };
 
 export default function Icone({ nom, taille }: { nom: string; taille?: number }) {

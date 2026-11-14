@@ -30,3 +30,30 @@ export const points = (x: number) => nombre(x, Number.isInteger(x) ? 0 : 1);
 export const duree = (min: number) => (min < 60 ? `${min} min` : `${Math.floor(min / 60)} h${min % 60 ? ` ${String(min % 60).padStart(2, "0")}` : ""}`);
 export const pluriel = (n: number, un: string, plusieurs: string) => `${n} ${n > 1 ? plusieurs : un}`;
 export const p2 = (n: number) => String(n).padStart(2, "0");
+
+/** « première », « 2e », « 30e » : le rang d'une séance dans une phrase (« ta 30e séance »). */
+export const rangFeminin = (n: number) => (n === 1 ? "première" : `${n}e`);
+
+/**
+ * L'étiquette d'une question tombée au bac, avec les années quand la fiche les donne :
+ * « Demandé en 2025 et 2026 » devient « Tombé au BAC 2025 et 2026 ». Sans année connue : « Tombé au BAC ».
+ */
+export function etiquetteBac(demande: string): string {
+  const annees = [...new Set(demande.match(/\b20\d\d\b/g) ?? [])].sort();
+  if (!annees.length) return "Tombé au BAC";
+  return `Tombé au BAC ${annees.length > 2 ? `${annees.slice(0, -1).join(", ")} et ${annees[annees.length - 1]}` : annees.join(" et ")}`;
+}
+
+/** L'étiquette d'un exercice construit d'après un sujet : « voir BAC Polynésie 2025 » devient « D'après le BAC Polynésie 2025 ». */
+export function etiquetteDapres(voirBac: string): string {
+  const sujet = voirBac.replace(/^voir\s+BAC\s*/i, "").trim();
+  return sujet ? `D'après le BAC ${sujet}` : "D'après le BAC";
+}
+
+/**
+ * Met une majuscule à la première lettre d'un texte déjà nettoyé, même derrière une balise de paragraphe ou de liste.
+ * Une formule en tête de texte n'est pas touchée.
+ */
+export function majusculeInitiale(html: string): string {
+  return html.replace(/^((?:\s|<(?:p|div|ul|ol|li|strong|em|b|i)(?:\s[^>]*)?>)*)(\p{Ll})/u, (_, avant: string, lettre: string) => avant + lettre.toLocaleUpperCase("fr-FR"));
+}

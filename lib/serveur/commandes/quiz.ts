@@ -42,6 +42,7 @@ export const demarrerQuiz = action({
     let fiche: number | null = null;
     let niveau: number | null = null;
     let limite: string | null = null;
+    let origine: { ds?: string; seance?: string } = {};
     if (e.genre === "chapitre") {
       if (!catalogue.sommaire.parNum.has(e.fiche)) throw new Refus("introuvable");
       fiche = e.fiche;
@@ -58,6 +59,7 @@ export const demarrerQuiz = action({
       const tache = devoirs.find((d) => d.id === e.ds)?.seances.find((x) => x.id === e.seance)?.taches.find((t) => t.type === "quiz");
       if (!tache || tache.type !== "quiz") throw new Refus("introuvable");
       questions = tache.ids;
+      origine = { ds: e.ds, seance: e.seance };
     } else if (e.genre === "carnet") {
       questions = m.carnetDuJour(ctx).map((c) => c.k).filter((k) => k.startsWith("quiz:")).map((k) => k.slice(5)).slice(0, 20);
     } else {
@@ -66,7 +68,7 @@ export const demarrerQuiz = action({
     questions = [...new Set(questions)];
     if (!questions.length) throw new Refus("introuvable", "Il n'y a pas de question de quiz à faire ici pour l'instant.");
     const { data, error } = await clientAdmin().from("quiz_sessions")
-      .insert({ user_id: userId, genre: e.genre, fiche, niveau, questions, secret: { graine: nouvelleGraine() }, limite })
+      .insert({ user_id: userId, genre: e.genre, fiche, niveau, questions, secret: { graine: nouvelleGraine(), ...origine }, limite })
       .select("id").single();
     if (error || !data) throw new Refus("erreur");
     redirect(`/app/quiz/${data.id}`);
