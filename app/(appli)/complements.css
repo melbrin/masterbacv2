@@ -107,7 +107,7 @@ ol.liste { list-style: none; padding: 0; margin: 0; }
 .signal-bravo svg { color: var(--vert); }
 p.carte.signal { margin: 0; }
 
-/* Page des jeux : une carte par jeu. */
+/* Pages des jeux, de la mémoire, des TP et du labo : une carte par jeu, par TP, par simulation libre. */
 .hub-liste { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
 .hub-carte { display: grid; grid-template-columns: 44px 1fr; gap: 6px 12px; align-items: start; }
 .hub-carte h3 { margin: 0; font-size: 1.05rem; color: var(--encre); }
@@ -115,12 +115,6 @@ p.carte.signal { margin: 0; }
 .hub-carte .actions { grid-column: 2; }
 .hub-icone { width: 44px; height: 44px; border-radius: 12px; background: var(--carte-2); color: var(--cuivre-texte); display: grid; place-items: center; }
 .hub-icone svg { width: 24px; height: 24px; }
-/* une porte vers une autre section : une icône, deux lignes, un chevron */
-.hub-porte { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; }
-.hub-porte > span:nth-child(2) { display: grid; gap: 2px; }
-.hub-porte b { color: var(--encre); font-family: var(--display); font-size: 1.05rem; }
-.hub-porte .discret { font-size: .9rem; }
-.hub-porte > svg { width: 20px; height: 20px; color: var(--discret); }
 @media (min-width: 960px) { .hub-liste { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* Jeux corrigés par le serveur : bandeau, barre de temps, question. */

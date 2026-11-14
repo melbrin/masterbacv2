@@ -49,7 +49,7 @@ const regle = (rang: number, valeur: string) => page.locator("main input[type=ra
   pose.call(el, v);
   el.dispatchEvent(new Event("input", { bubbles: true }));
 }, valeur);
-await page.goto(`${BASE}/app/jeux/basket`);
+await page.goto(`${BASE}/app/labo/basket/libre`);
 await page.getByRole("button", { name: "Sauter" }).click();
 await attends(280);
 await photo("simu-saut-en-vol");

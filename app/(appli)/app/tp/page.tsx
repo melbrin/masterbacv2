@@ -2,9 +2,12 @@ import Link from "next/link";
 import BoutonAction from "@/components/appli/BoutonAction";
 import Icone from "@/components/appli/Icone";
 import { Entete } from "@/components/appli/Morceaux";
+import SousMenu from "@/components/appli/SousMenu";
+import { ENTRAINEMENT } from "@/lib/commun/entrainement";
 import { p2, pluriel } from "@/lib/commun/format";
 import { COMPETENCES } from "@/lib/commun/tp/types";
 import { demarrerTp } from "@/lib/serveur/commandes/tp";
+import { sectionsDe } from "@/lib/serveur/entrainement";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
 import { bilansDesTp, tpVisibles } from "@/lib/serveur/tp";
 
@@ -17,7 +20,8 @@ export default async function PageTp() {
   const { meilleurs, termines, enCours } = await bilansDesTp(session.userId);
   return (
     <>
-      <Entete surtitre="TP" titre="Entraîne-toi aux ECE"
+      <SousMenu actif="tp" ouvertes={sectionsDe(session.admin)} />
+      <Entete fil={<Link href={ENTRAINEMENT.href}>{ENTRAINEMENT.nom}</Link>} surtitre="TP" titre="Entraîne-toi aux ECE"
         sous="Un TP suit le fil de l'épreuve : tu prépares, tu manipules, tu exploites tes mesures. À chaque appel, l'application joue le rôle du professeur." />
       <p className="petit discret" style={{ margin: "0 0 4px" }}>Manipuler à l&apos;écran ne remplace pas les gestes du laboratoire. Tu t&apos;entraînes ici à ce qui fait perdre des points : le protocole, l&apos;ordre des gestes, la lecture d&apos;un appareil, l&apos;exploitation des mesures.</p>
       {termines > 0 && <p className="labo-bilan"><span><b>{termines}</b> {termines > 1 ? "TP terminés" : "TP terminé"}</span></p>}

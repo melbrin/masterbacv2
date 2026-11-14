@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Navigation from "@/components/appli/Navigation";
+import { sectionsDe } from "@/lib/serveur/entrainement";
 import { profilCourant } from "@/lib/serveur/requetes/profil";
 import { sessionCourante } from "@/lib/serveur/session";
-import { tpVisibles } from "@/lib/serveur/tp";
 
 // Cette mise en page redirige par confort. Elle ne protège rien : chaque page et chaque action vérifie elle-même la session.
 export default async function Coquille({ children }: { children: React.ReactNode }) {
@@ -11,9 +11,10 @@ export default async function Coquille({ children }: { children: React.ReactNode
   if (!session) redirect("/compte/connexion");
   const profil = await profilCourant();
   if (!profil) redirect("/compte/profil");
+  const ouvertes = sectionsDe(session.admin);
   return (
     <div className="app" data-theme-choisi={profil.theme}>
-      <Navigation admin={session.admin} tp={tpVisibles(session.admin).length > 0} />
+      <Navigation admin={session.admin} labo={ouvertes.includes("labo")} tp={ouvertes.includes("tp")} />
       <main className="principal" id="principal">
         <div className="colonne">
           {profil.etat === "limite" ? (

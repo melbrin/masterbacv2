@@ -100,19 +100,19 @@ await page.fill("#code", await code(t0));
 await page.click("button[type=submit]");
 await page.waitForURL(/\/app/);
 
-// ---- la page des jeux et la page d'une simulation, avant de jouer ----
-await page.goto(`${BASE}/app/jeux`);
+// ---- la page du labo et la page d'une simulation, avant de jouer ----
+await page.goto(`${BASE}/app/labo`);
 await attends(500);
 await photo("labo-hub-avant");
-bilan.hub = { titre: await texte("#titre-labo"), bilan: await texte(".labo-bilan"), cartes: await page.locator(".labo-fiche").count(), largeur: await largeur() };
-await page.goto(`${BASE}/app/jeux/labo/basket`);
+bilan.hub = { titre: await texte("h1"), bilan: await texte(".labo-bilan"), cartes: await page.locator(".labo-fiche").count(), largeur: await largeur() };
+await page.goto(`${BASE}/app/labo/basket`);
 await attends(400);
 await photo("labo-basket-liste-avant", true);
 bilan.listeAvant = { defis: await page.locator(".labo-defi").allInnerTexts().then((l) => l.map((x) => x.replace(/\s+/g, " ").trim())), largeur: await largeur() };
 // un défi fermé renvoie à la liste
-await page.goto(`${BASE}/app/jeux/labo/basket/2`);
+await page.goto(`${BASE}/app/labo/basket/2`);
 bilan.defiFerme = page.url().replace(BASE, "");
-await page.goto(`${BASE}/app/jeux/labo/inconnue`);
+await page.goto(`${BASE}/app/labo/inconnue`);
 bilan.simulationInconnue = (await texte("h1")) ?? "pas de titre";
 
 async function lance(valeur: string) {
@@ -128,7 +128,7 @@ const verdict = async () => {
 for (const d of DEFIS) {
   const nom = `${d.simulation}-${d.rang}`;
   const r: Record<string, unknown> = {};
-  await page.goto(`${BASE}/app/jeux/labo/${d.simulation}/${d.rang}`);
+  await page.goto(`${BASE}/app/labo/${d.simulation}/${d.rang}`);
   await attends(500);
   r.titre = await texte("h1");
   await photo(`${nom}-0-depart`, true);
@@ -176,7 +176,7 @@ for (const d of DEFIS) {
 }
 
 // ---- rejouer un défi déjà réussi : les étoiles ne changent pas ----
-await page.goto(`${BASE}/app/jeux/labo/${DEFIS[0].simulation}/1`);
+await page.goto(`${BASE}/app/labo/${DEFIS[0].simulation}/1`);
 await attends(400);
 await lance(DEFIS[0].bonne);
 bilan.rejoue = { verdict: await verdict(), reussite: await texte(".labo-reussite"), regle: await texte(".labo-regle") };
@@ -185,36 +185,36 @@ await page.getByRole("link", { name: "Défi suivant" }).click();
 await page.waitForURL(/labo\/[a-z]+\/2/);
 bilan.suivant = page.url().replace(BASE, "");
 
-// ---- après : la liste et la page des jeux ----
-await page.goto(`${BASE}/app/jeux/labo/basket`);
+// ---- après : la liste et la page du labo ----
+await page.goto(`${BASE}/app/labo/basket`);
 await attends(400);
 await photo("labo-basket-liste-apres", true);
 bilan.listeApres = await page.locator(".labo-defi").allInnerTexts().then((l) => l.map((x) => x.replace(/\s+/g, " ").trim()));
-await page.goto(`${BASE}/app/jeux`);
+await page.goto(`${BASE}/app/labo`);
 await attends(500);
 await photo("labo-hub-apres");
 await photo("labo-hub-page", true);
 bilan.hubApres = { bilan: await texte(".labo-bilan"), largeur: await largeur() };
-// le rayon défile au doigt : la dernière carte se voit après un défilement
-await page.locator(".labo-rayon").evaluate((el) => el.scrollTo({ left: el.scrollWidth, behavior: "instant" }));
+// le premier rayon défile au doigt : sa dernière carte se voit après un défilement
+await page.locator(".labo-rayon").first().evaluate((el) => el.scrollTo({ left: el.scrollWidth, behavior: "instant" }));
 await attends(300);
 await photo("labo-hub-fin-du-rayon");
 
 // ---- en thème sombre et sur un grand écran ----
 await page.emulateMedia({ colorScheme: "dark" });
-await page.goto(`${BASE}/app/jeux/labo/rc/2`);
+await page.goto(`${BASE}/app/labo/rc/2`);
 await attends(500);
 await photo("sombre-rc-2", true);
 await page.emulateMedia({ colorScheme: "light" });
 await page.setViewportSize({ width: 1280, height: 800 });
-await page.goto(`${BASE}/app/jeux/labo/${DEFIS[0].simulation}/1`);
+await page.goto(`${BASE}/app/labo/${DEFIS[0].simulation}/1`);
 await attends(500);
 await lance(DEFIS[0].bonne);
 await attends(DEFIS[0].milieu);
 await photo("large-defi-en-cours");
 await verdict();
 await photo("large-defi-reussi");
-await page.goto(`${BASE}/app/jeux`);
+await page.goto(`${BASE}/app/labo`);
 await attends(500);
 await photo("large-hub");
 

@@ -3,8 +3,9 @@
 
 /* ---------- l'écran de la simulation ----------
    Une scène de nuit, dans le thème clair comme dans le thème sombre. Les couleurs de la charte y prennent leurs
-   versions claires : les dessins communs (terrain, joueur, graduations) restent lisibles sans rien changer. */
-.labo-ecran, .labo-vignette {
+   versions claires : les dessins communs (terrain, joueur, graduations) restent lisibles sans rien changer.
+   Les portes de la page « S'entraîner » (entrainement.css) sont dans la même nuit. */
+.labo-ecran, .labo-vignette, .porte {
   --encre: #F3ECE6; --texte: #E2DCD6; --discret: #9DB0C9; --filet: rgba(243, 236, 230, .16);
   --carte: #0B2140; --carte-2: #08182F; --cuivre: #E0A77A; --cuivre-texte: #E8B48C;
   --vert: #7CC4A0; --brique: #F0948A; --bleu: #8DB6E0; --sable: #E8C27A;
@@ -91,11 +92,9 @@
 .labo-etoiles-grandes { gap: 8px; font-size: 2.6rem; }
 
 /* ---------- les pages du labo ---------- */
-/* le rayon des simulations, en tête de la page des jeux : il se fait défiler au doigt ; sur un grand écran, c'est une grille */
+/* un rayon de simulations, sur la page du labo : il se fait défiler au doigt ; sur un grand écran, c'est une grille */
 .labo-rayon { display: flex; gap: 12px; margin: 0 -16px; padding: 2px 16px 12px; overflow-x: auto; list-style: none; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .labo-rayon::-webkit-scrollbar { display: none; }
-.labo-rayon-titre { display: flex; align-items: baseline; gap: 10px; margin: 6px 0 8px; color: var(--encre); font-family: var(--display); font-size: 1rem; font-weight: 700; }
-.labo-rayon-titre span { color: var(--discret); font-family: var(--corps); font-size: .84rem; font-weight: 400; }
 .labo-rayon > li { flex: 0 0 min(80%, 300px); min-width: 0; scroll-snap-align: center; }
 .labo-fiche { display: grid; grid-template-rows: auto 1fr; height: 100%; overflow: hidden; border: 1px solid var(--filet); border-radius: 18px; background: var(--carte); box-shadow: var(--ombre); }
 .labo-vignette { display: grid; height: 148px; padding: 8px; place-items: center; overflow: hidden; }

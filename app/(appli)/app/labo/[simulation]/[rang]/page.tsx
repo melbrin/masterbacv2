@@ -18,14 +18,14 @@ export default async function PageDefi({ params }: { params: Promise<{ simulatio
   const defi = visible?.defis[rang];
   if (!visible || !defi) notFound();
   const { simulation, defis } = visible;
-  const retour = `/app/jeux/labo/${simulation.id}`;
+  const retour = `/app/labo/${simulation.id}`;
   const avancement = await avancementDesDefis(session.userId);
   if (!defiOuvert(defis, rang, avancement)) redirect(retour);
   const relations = await relationsDuDefi(simulation, defi);
   const suivant = defis[rang + 1];
   return (
     <>
-      <Entete fil={<><Link href="/app/jeux">Jeux</Link> › <Link href={retour}>{simulation.nom}</Link></>}
+      <Entete fil={<><Link href="/app/labo">Labo</Link> › <Link href={retour}>{simulation.nom}</Link></>}
         surtitre={`Défi ${rang + 1} sur ${defis.length}`} titre={defi.titre} />
       <p style={{ margin: "0 0 12px" }}><PillNiveau n={defi.niveau} /></p>
       <Labo key={defi.id} simulation={simulation.id} theme={simulation.theme}

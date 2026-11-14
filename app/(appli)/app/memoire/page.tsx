@@ -1,8 +1,11 @@
 import Link from "next/link";
 import Icone from "@/components/appli/Icone";
 import { Entete } from "@/components/appli/Morceaux";
+import SousMenu from "@/components/appli/SousMenu";
+import { ENTRAINEMENT } from "@/lib/commun/entrainement";
 import { pluriel } from "@/lib/commun/format";
 import { FAMILLES_MEMOIRE, JEUX_MEMOIRE } from "@/lib/commun/memoire";
+import { sectionsDe } from "@/lib/serveur/entrainement";
 import { bilanMemoire } from "@/lib/serveur/memoire";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
 
@@ -14,7 +17,8 @@ export default async function Memoire() {
   const bilan = await bilanMemoire(session.userId);
   return (
     <>
-      <Entete surtitre="Mémoire" titre="Entraîne ta mémoire" sous="Quelques minutes par jour suffisent. Chaque jeu fait travailler une façon de retenir." />
+      <SousMenu actif="memoire" ouvertes={sectionsDe(session.admin)} />
+      <Entete fil={<Link href={ENTRAINEMENT.href}>{ENTRAINEMENT.nom}</Link>} surtitre="Mémoire" titre="Entraîne ta mémoire" sous="Quelques minutes par jour suffisent. Chaque jeu fait travailler une façon de retenir." />
       {bilan.parties > 0 && (
         <p className="labo-bilan">
           <span><b>{bilan.joursSemaine}</b> {bilan.joursSemaine > 1 ? "jours" : "jour"} d&apos;entraînement sur les sept derniers</span>

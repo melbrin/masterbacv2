@@ -1,0 +1,98 @@
+/* La section « S'entraîner » : le sous-menu de ses quatre pages, ses entrées dans la barre latérale, les portes de sa
+   page d'accueil, son bloc sur la page « Aujourd'hui ». Les classes des portes commencent par « porte ». */
+
+/* ---------- le sous-menu : Labo, TP, Mémoire, Jeux ----------
+   Il part des onglets des fiches (.onglets). Sur un téléphone, ses entrées se partagent la largeur de l'écran. */
+.sous-menu { margin-top: 4px; margin-bottom: 0; }
+.sous-menu a { display: grid; place-items: center; min-height: 46px; padding: 8px 14px; font-family: var(--display); font-size: .95rem; }
+@media (max-width: 959px) { .sous-menu a { flex: 1 1 0; } }
+
+/* ---------- dans la barre latérale : les sous-sections, en retrait sous « S'entraîner » ---------- */
+.lateral-groupe { display: flex; flex-direction: column; gap: 2px; }
+.lateral nav a.lateral-sous { padding: 7px 10px 7px 40px; font-size: .9rem; color: var(--discret); }
+.lateral nav a.lateral-sous[aria-current="page"] { color: var(--encre); }
+/* dans une sous-section, l'icône de « S'entraîner » prend la couleur de la marque */
+.lateral-groupe[data-ouvert] > a:first-child svg { color: var(--cuivre-texte); }
+
+/* ---------- les portes de la page « S'entraîner » ----------
+   Une porte est une petite affiche : la nuit du labo (ses couleurs sont dans labo.css), une illustration, le nom en
+   grand, une phrase, deux chiffres. Les quatre rangs d'une porte s'alignent sur ceux de sa voisine. */
+.portes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.porte { position: relative; display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; min-width: 0; overflow: hidden;
+  border: 1px solid rgba(141, 182, 224, .26); border-radius: 20px; box-shadow: 0 10px 28px rgba(0, 17, 40, .2); }
+/* une porte seule sur son rang prend toute la largeur */
+.porte:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.porte:hover { border-color: color-mix(in srgb, var(--cuivre) 70%, transparent); }
+
+/* la scène grandit avec l'écran, d'un téléphone à une tablette */
+.porte-scene { display: grid; place-items: center; height: clamp(124px, 32vw, 170px); padding: 12px 10px 0; }
+.porte-scene > svg, .porte-scene .labo-vignette svg { display: block; width: 100%; height: 100%; max-height: none; }
+.porte-scene .labo-vignette { display: block; width: 100%; height: 100%; padding: 0; background: none; }
+.porte-question { fill: var(--cuivre); font-family: var(--display); font-size: 44px; font-weight: 800; font-stretch: 80%; }
+/* l'éventail des jeux : les deux cartes du fond s'écartent autour d'un point placé sous les cartes, dans les unités du dessin */
+.porte-carte { transform-origin: 100px 154px; }
+.porte-carte-faux { transform: rotate(-20deg); }
+.porte-carte-vrai { transform: rotate(20deg); }
+
+.porte-nom { margin: 0; padding: 10px 14px 0; color: #FFFFFF; font-size: clamp(1.75rem, 1.15rem + 2.6vw, 2.35rem); font-weight: 800; font-stretch: 72%;
+  line-height: 1; letter-spacing: 0; }
+.porte-nom a { color: inherit; text-decoration: none; }
+/* le lien porte le nom de la sous-section, et toute l'affiche se touche */
+.porte-nom a::after { content: ""; position: absolute; inset: 0; border-radius: 20px; }
+.porte-nom a:focus-visible { outline: none; }
+.porte-nom a:focus-visible::after { outline: 3px solid var(--cuivre); outline-offset: -5px; }
+.porte-phrase { margin: 0; padding: 5px 14px 0; color: color-mix(in srgb, var(--encre) 80%, transparent); font-size: .86rem; line-height: 1.35; }
+/* les chiffres, sous un filet cuivre comme les compteurs du cockpit */
+.porte-chiffres { --trait: color-mix(in srgb, var(--cuivre) 60%, transparent);
+  display: flex; flex-direction: column; gap: 1px; margin: 0; padding: 10px 14px 14px;
+  background: linear-gradient(var(--trait), var(--trait)) no-repeat 14px 0 / calc(100% - 28px) 1px;
+  color: var(--discret); font-size: .8rem; font-variant-numeric: tabular-nums; line-height: 1.3; }
+.porte-phrase + .porte-chiffres { margin-top: 10px; }
+.porte-chiffres b { color: var(--encre); }
+.porte-nombre b { margin-right: 2px; color: #FFFFFF; font-family: var(--display); font-size: 1.55rem; font-weight: 800; font-stretch: 70%; line-height: 1; }
+.porte-etoile { width: .95em; height: .95em; margin-right: 4px; fill: var(--cuivre); vertical-align: -.1em; }
+
+@media (min-width: 960px) {
+  .portes { gap: 16px; }
+  .porte-scene { padding: 16px 18px 0; }
+  .porte-nom { padding: 14px 22px 0; }
+  .porte-phrase { padding: 6px 22px 0; font-size: .96rem; }
+  .porte-chiffres { flex-direction: row; align-items: baseline; justify-content: space-between; gap: 0 14px; padding: 12px 22px 18px;
+    background-position: 22px 0; background-size: calc(100% - 44px) 1px; font-size: .88rem; }
+}
+
+/* ---------- sur la page « Aujourd'hui » : le bloc « S'entraîner », dans les couleurs du cockpit ---------- */
+.entrainement { display: grid; gap: 12px; margin-top: 14px; padding: 16px 18px; border-radius: 20px; background: var(--nuit); color: var(--sur-nuit); }
+.entrainement-tete { display: grid; justify-items: start; gap: 2px; }
+.entrainement-tete h2 { color: #FFFFFF; font-size: 1.15rem; }
+/* le titre se touche sur 44 points de haut, sans écarter les lignes qui l'entourent */
+.entrainement-tete h2 a { display: inline-flex; align-items: center; gap: 2px; min-height: 44px; margin: -9px 0; padding-right: 12px; color: inherit; text-decoration: none; }
+.entrainement-tete h2 svg { color: #D7A983; }
+.entrainement-tete p { margin: 0; color: color-mix(in srgb, var(--sur-nuit) 80%, transparent); font-size: .88rem; }
+.entrainement ul { display: grid; grid-auto-columns: minmax(0, 1fr); grid-auto-flow: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.entrainement li a { display: grid; align-content: start; gap: 3px; min-height: 58px; padding-top: 8px;
+  border-top: 1px solid color-mix(in srgb, var(--cuivre) 70%, transparent); color: inherit; text-decoration: none; }
+.entrainement li b { color: #FFFFFF; font-family: var(--display); font-size: clamp(1.1rem, .62rem + 2.4vw, 1.6rem); font-weight: 800; font-stretch: 72%; line-height: 1.05; }
+.entrainement li span { color: color-mix(in srgb, var(--sur-nuit) 82%, transparent); font-size: .78rem; font-variant-numeric: tabular-nums; }
+.entrainement li a:hover b { color: #D7A983; }
+/* sur un écran très étroit, les entrées se rangent deux par deux */
+@media (max-width: 349px) { .entrainement ul { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* les portes arrivent l'une après l'autre ; l'animation ne garde rien après sa fin, pour laisser la porte se soulever sous le pointeur */
+  .porte { animation: apparait .4s ease-out backwards; transition: transform .18s ease-out, border-color .18s; }
+  .porte:nth-child(2) { animation-delay: .06s; }
+  .porte:nth-child(3) { animation-delay: .12s; }
+  .porte:nth-child(4) { animation-delay: .18s; }
+  .porte:hover { transform: translateY(-2px); }
+  .porte:active { transform: scale(.985); }
+  /* la vie des illustrations : la goutte tombe, la lueur des cases allumées respire, l'éventail des cartes s'ouvre et se referme */
+  .porte-goutte { animation: porte-goutte 1.7s ease-in infinite; }
+  .porte-lueur { animation: porte-lueur 2.8s ease-in-out infinite alternate; }
+  .porte-carte-faux { animation: porte-faux 3.2s ease-in-out infinite alternate; }
+  .porte-carte-vrai { animation: porte-vrai 3.2s ease-in-out infinite alternate; }
+  @keyframes porte-goutte { 0% { transform: translateY(-6px); opacity: 0; } 12% { opacity: 1; } 78% { transform: translateY(8px); opacity: 1; } 100% { transform: translateY(9px); opacity: 0; } }
+  @keyframes porte-lueur { from { opacity: .08; } to { opacity: .42; } }
+  @keyframes porte-faux { from { transform: rotate(-17deg); } to { transform: rotate(-22deg); } }
+  @keyframes porte-vrai { from { transform: rotate(17deg); } to { transform: rotate(22deg); } }
+}

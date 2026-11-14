@@ -4,9 +4,13 @@ import { BarreEtats, PillNiveau } from "@/components/appli/Morceaux";
 import NoterDs from "@/components/appli/NoterDs";
 import ContenuHtml from "@/components/socle/ContenuHtml";
 import { ajouteJours, ecartEnJours } from "@/lib/commun/dates";
+import { ENTRAINEMENT, SECTIONS, type IdSection } from "@/lib/commun/entrainement";
 import { dateLongue, dateSimple, duree, initialeJour, nombre, p2, pluriel } from "@/lib/commun/format";
+import { JEUX } from "@/lib/commun/jeux";
 import { JEUX_MEMOIRE } from "@/lib/commun/memoire";
 import * as m from "@/lib/moteur";
+import { simulationsVisibles } from "@/lib/serveur/defis";
+import { sectionsDe } from "@/lib/serveur/entrainement";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
 import { tpVisibles } from "@/lib/serveur/tp";
 import { calibragesDe, suiviPour } from "@/lib/serveur/suivi";
@@ -50,6 +54,14 @@ export default async function Aujourdhui() {
     nbCarnet ? `${pluriel(nbCarnet, "question", "questions")} de ton carnet d'erreurs` : "",
     nbQuiz ? `${pluriel(nbQuiz, "question", "questions")} de quiz` : "",
   ].filter(Boolean).join(" et ") || "Rien à revoir aujourd'hui";
+  // la section « S'entraîner » : ses sous-sections qui ont du contenu pour ce compte, et ce que chacune contient
+  const ouvertes = sectionsDe(session.admin);
+  const contenu: Record<IdSection, string> = {
+    labo: pluriel(simulationsVisibles(session.admin).reduce((s, x) => s + x.defis.length, 0), "défi", "défis"),
+    tp: `${tpVisibles(session.admin).length} TP`,
+    memoire: pluriel(JEUX_MEMOIRE.length, "jeu", "jeux"),
+    jeux: pluriel(JEUX.length, "jeu", "jeux"),
+  };
   const heure = Number(new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", hour: "numeric", hour12: false }).format(new Date(ctx.maintenant)));
   const salut = heure < 5 || heure >= 18 ? "Bonsoir" : "Bonjour";
   // les étapes de la séance, avec ce qui est déjà fait ; l'offre gratuite n'a pas la partie « à revoir »
@@ -144,14 +156,21 @@ export default async function Aujourdhui() {
         })() : (
           <Link className="carte carte-lien" href="/app/ds/nouveau"><h2>Tu as un DS bientôt ?</h2><p className="discret" style={{ margin: 0 }}>Saisis la date et les chapitres. Ton plan de révision est généré automatiquement.</p></Link>
         )}
-        <Link className="carte carte-lien" href="/app/jeux"><h2>Jeux</h2><p className="discret" style={{ margin: 0 }}>Le labo : calcule, puis lance la simulation. Et dix jeux pour revoir ton cours.</p></Link>
-        {tpVisibles(session.admin).length > 0 && <Link className="carte carte-lien" href="/app/tp"><h2>TP</h2><p className="discret" style={{ margin: 0 }}>Entraîne-toi aux ECE : prépare, manipule, exploite tes mesures.</p></Link>}
-        {JEUX_MEMOIRE.length > 0 && <Link className="carte carte-lien" href="/app/memoire"><h2>Mémoire</h2><p className="discret" style={{ margin: 0 }}>Quelques minutes par jour pour mieux retenir : {pluriel(JEUX_MEMOIRE.length, "jeu", "jeux")} de mémoire.</p></Link>}
         <Link className="carte carte-lien" href="/app/carnet">
           <div className="tete"><h2>Carnet d&apos;erreurs</h2><span className={`puce ${aRevoir.length ? "puce-ko" : "puce-ok"}`}>{aRevoir.length} à revoir</span></div>
           <p className="discret" style={{ margin: 0 }}>Tu revois chaque question ratée 2 jours plus tard, puis une semaine après, puis trois semaines après.</p>
         </Link>
       </div>
+
+      <section className="entrainement" aria-labelledby="titre-entrainement">
+        <div className="entrainement-tete">
+          <h2 id="titre-entrainement"><Link href={ENTRAINEMENT.href}>{ENTRAINEMENT.nom}<Icone nom="chevron" taille={18} /></Link></h2>
+          <p>{ENTRAINEMENT.phrase}</p>
+        </div>
+        <ul>
+          {SECTIONS.filter((s) => ouvertes.includes(s.id)).map((s) => <li key={s.id}><Link href={s.href}><b>{s.nom}</b><span>{contenu[s.id]}</span></Link></li>)}
+        </ul>
+      </section>
 
       <div className="section-titre"><h2>Ta semaine</h2>{serie.jours >= 2 && <span className="puce puce-serie"><Icone nom="flamme" />{serie.jours} jours d&apos;affilée</span>}</div>
       <div className="carte">

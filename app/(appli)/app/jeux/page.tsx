@@ -2,18 +2,16 @@ import Link from "next/link";
 import BoutonAction from "@/components/appli/BoutonAction";
 import Icone from "@/components/appli/Icone";
 import { Entete } from "@/components/appli/Morceaux";
-import Etoiles from "@/components/simulations/Etoiles";
-import Vignette from "@/components/simulations/Vignette";
+import SousMenu from "@/components/appli/SousMenu";
+import { ENTRAINEMENT } from "@/lib/commun/entrainement";
 import { JEUX, type IdJeu } from "@/lib/commun/jeux";
-import { JEUX_MEMOIRE } from "@/lib/commun/memoire";
 import { pluriel } from "@/lib/commun/format";
 import * as m from "@/lib/moteur";
 import { demarrerJeu } from "@/lib/serveur/commandes/jeux";
 import { demarrerQuiz } from "@/lib/serveur/commandes/quiz";
-import { apercuDe, avancementDesDefis, bilanDesDefis, simulationsVisibles } from "@/lib/serveur/defis";
+import { sectionsDe } from "@/lib/serveur/entrainement";
 import { recordsDe } from "@/lib/serveur/jeux";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
-import { tpVisibles } from "@/lib/serveur/tp";
 
 export const metadata = { title: "Jeux" };
 
@@ -29,16 +27,11 @@ const FAMILLES: { titre: string; sous: string; jeux: IdJeu[] }[] = [
   { titre: "Répondre vite et juste", sous: "Sur les questions de quiz. Tes réponses comptent dans tes progrès.", jeux: ["chrono", "vraifaux", "ordre"] },
 ];
 
-// Les jeux : le labo en tête (décision 0011), puis dix façons de revoir le cours, sur les chapitres vus en classe
-// ou sur un seul chapitre (décision 0010).
+// Les jeux de révision (décision 0010) : dix façons de revoir le cours, sur les chapitres vus en classe ou sur un seul
+// chapitre. Le quiz mélangé est en bas de page.
 export default async function Jeux({ searchParams }: { searchParams: Promise<{ fiche?: string }> }) {
   const { ctx, catalogue, session } = await espaceEleve();
   const { records, partiesSemaine } = await recordsDe(session.userId);
-  const labo = simulationsVisibles(session.admin);
-  const tps = tpVisibles(session.admin);
-  const avancement = labo.length ? await avancementDesDefis(session.userId) : new Map();
-  const bilans = labo.map((x) => bilanDesDefis(x.defis, avancement));
-  const nbDefis = labo.reduce((s, x) => s + x.defis.length, 0);
   const demandee = Number((await searchParams).fiche);
   const seule = catalogue.fiches.find((f) => f.num === demandee) ?? null;
   const vus = m.chapitresVus(ctx);
@@ -69,72 +62,9 @@ export default async function Jeux({ searchParams }: { searchParams: Promise<{ f
 
   return (
     <>
-      <Entete surtitre="Jeux" titre="Revois ton cours en jouant" />
-
-      {labo.length > 0 && (
-        <section aria-labelledby="titre-labo">
-          <div className="section-titre" style={{ marginTop: 0 }}><h2 id="titre-labo">Le labo</h2></div>
-          <p className="petit discret" style={{ margin: "0 0 8px" }}>Calcule d&apos;abord. Entre ensuite ta valeur dans la simulation : le défi est réussi si la simulation réussit.</p>
-          <p className="labo-bilan">
-            <span><b>{bilans.reduce((s, b) => s + b.reussis, 0)}</b> sur {pluriel(nbDefis, "défi réussi", "défis réussis")}</span>
-            <span><Etoiles gagnees={1} total={1} /> <b>{bilans.reduce((s, b) => s + b.etoiles, 0)}</b> sur {3 * nbDefis}</span>
-          </p>
-          {[{ titre: "En physique", rayon: labo.filter((x) => x.simulation.fiche <= 8) }, { titre: "En chimie", rayon: labo.filter((x) => x.simulation.fiche > 8) }].filter((r) => r.rayon.length > 0).map((r) => (
-            <div key={r.titre}>
-              <p className="labo-rayon-titre">{r.titre} <span>{pluriel(r.rayon.length, "simulation", "simulations")}</span></p>
-              <ul className="labo-rayon">
-                {r.rayon.map(({ simulation, defis }) => {
-                  const b = bilans[labo.findIndex((x) => x.simulation.id === simulation.id)];
-                  const jouer = `/app/jeux/labo/${simulation.id}/${b.prochain + 1}`;
-                  return (
-                    <li key={simulation.id}>
-                      <article className="labo-fiche">
-                        <Vignette simulation={simulation.id} {...apercuDe(simulation, defis[0])} />
-                        <div className="labo-fiche-corps">
-                          <span className="labo-theme">{simulation.theme}</span>
-                          <h3>{simulation.nom}</h3>
-                          <p>{simulation.accroche}</p>
-                          <p><Etoiles gagnees={1} total={1} /> {b.etoiles} sur {3 * defis.length} · {b.reussis} sur {pluriel(defis.length, "défi réussi", "défis réussis")}</p>
-                          {vus.length > 0 && !vus.includes(simulation.fiche) && <span className="puce puce-bleu" style={{ justifySelf: "start" }}>Chapitre pas encore vu en classe</span>}
-                          <div className="actions">
-                            <Link className="btn btn-cuivre" href={jouer}>{b.reussis === 0 ? "Jouer" : b.reussis === defis.length ? "Rejouer" : "Continuer"}</Link>
-                            <Link className="btn-texte" href={`/app/jeux/labo/${simulation.id}`}>Les {defis.length} défis</Link>
-                          </div>
-                        </div>
-                      </article>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </section>
-      )}
-
-      {tps.length > 0 && (
-        <section aria-labelledby="titre-tp">
-          <div className="section-titre"><h2 id="titre-tp">Les TP</h2></div>
-          <Link className="carte carte-lien hub-porte" href="/app/tp">
-            <span className="hub-icone"><Icone nom="fiole" /></span>
-            <span><b>Entraîne-toi aux ECE</b><span className="discret">{pluriel(tps.length, "TP", "TP")} où tu prépares, tu manipules et tu exploites tes mesures, comme à l&apos;épreuve.</span></span>
-            <Icone nom="chevron" />
-          </Link>
-        </section>
-      )}
-
-      {JEUX_MEMOIRE.length > 0 && (
-        <section aria-labelledby="titre-memoire">
-          <div className="section-titre"><h2 id="titre-memoire">Mémoire</h2></div>
-          <Link className="carte carte-lien hub-porte" href="/app/memoire">
-            <span className="hub-icone"><Icone nom="ampoule" /></span>
-            <span><b>Entraîne ta mémoire</b><span className="discret">{pluriel(JEUX_MEMOIRE.length, "jeu", "jeux")} pour mieux retenir : des suites, des places, des images, des mots.</span></span>
-            <Icone nom="chevron" />
-          </Link>
-        </section>
-      )}
-
-      <div className="section-titre"><h2>Les jeux de révision</h2></div>
-      <p className="petit discret" style={{ margin: "0 0 10px" }}>{seule ? `Sur la fiche ${seule.num} : ${seule.titre_court}.` : vus.length ? `Sur tes ${pluriel(vus.length, "chapitre vu", "chapitres vus")} en classe.` : "Sur le premier chapitre de l'année. Coche tes chapitres vus en classe pour jouer sur les tiens."}</p>
+      <SousMenu actif="jeux" ouvertes={sectionsDe(session.admin)} />
+      <Entete fil={<Link href={ENTRAINEMENT.href}>{ENTRAINEMENT.nom}</Link>} surtitre="Jeux" titre="Revois ton cours en jouant"
+        sous={seule ? `Sur la fiche ${seule.num} : ${seule.titre_court}.` : vus.length ? `Sur tes ${pluriel(vus.length, "chapitre vu", "chapitres vus")} en classe.` : "Sur le premier chapitre de l'année. Coche tes chapitres vus en classe pour jouer sur les tiens."} />
       <div className="filtres" role="group" aria-label="Choisir les chapitres">
         <Link href="/app/jeux" role="button" aria-pressed={!seule}>Mes chapitres</Link>
         {catalogue.fiches.map((f) => <Link key={f.num} href={`/app/jeux?fiche=${f.num}`} role="button" aria-pressed={seule?.num === f.num} title={f.titre_court}>F.{f.num}</Link>)}
@@ -155,11 +85,6 @@ export default async function Jeux({ searchParams }: { searchParams: Promise<{ f
           <span className="hub-icone"><Icone nom="eclair" /></span>
           <div><h3>Quiz mélangé</h3><p>Dix questions tirées dans tous tes chapitres vus en classe. Celles que tu as ratées passent d&apos;abord.</p></div>
           <div className="actions">{vus.length ? <BoutonAction lancer={melange}>Lancer le quiz</BoutonAction> : <span className="petit discret">Coche d&apos;abord tes chapitres vus en classe, dans les cours.</span>}</div>
-        </li>
-        <li className="carte hub-carte">
-          <span className="hub-icone"><Icone nom="ballon" /></span>
-          <div><h3>Le basketteur, en mode libre</h3><p>Règle toi-même la vitesse et l&apos;angle, puis regarde le saut et le tir. Sans défi ni étoiles.</p></div>
-          <div className="actions"><Link className="btn btn-cuivre" href="/app/jeux/basket">Ouvrir la simulation</Link></div>
         </li>
       </ul>
     </>

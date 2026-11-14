@@ -25,7 +25,7 @@ export default async function PageSimulation({ params }: { params: Promise<{ sim
   const fiche = catalogue.fiches.find((f) => f.num === simulation.fiche);
   return (
     <>
-      <Entete fil={<Link href="/app/jeux">Jeux</Link>} surtitre={`Le labo · ${simulation.theme}`} titre={simulation.nom} sous={simulation.accroche} />
+      <Entete fil={<Link href="/app/labo">Labo</Link>} surtitre={simulation.theme} titre={simulation.nom} sous={simulation.accroche} />
       <Vignette simulation={simulation.id} {...apercuDe(simulation, defis[0])} className="labo-apercu" />
       <p className="labo-bilan">
         <span><b>{bilan.reussis}</b> sur {pluriel(defis.length, "défi réussi", "défis réussis")}</span>
@@ -43,14 +43,14 @@ export default async function PageSimulation({ params }: { params: Promise<{ sim
                 <h3>Défi {rang + 1} : {d.titre}</h3>
                 {!ouvert && <p>Réussis d&apos;abord le défi {rang}.</p>}
               </div>
-              {ouvert && <div className="actions"><Link className={`btn ${etoiles !== null ? "btn-ligne" : "btn-cuivre"}`} href={`/app/jeux/labo/${simulation.id}/${rang + 1}`}>{etoiles !== null ? "Rejouer" : "Jouer"}</Link></div>}
+              {ouvert && <div className="actions"><Link className={`btn ${etoiles !== null ? "btn-ligne" : "btn-cuivre"}`} href={`/app/labo/${simulation.id}/${rang + 1}`}>{etoiles !== null ? "Rejouer" : "Jouer"}</Link></div>}
             </li>
           );
         })}
       </ol>
       <div className="actions simu-suite">
         {fiche && <Link className="btn btn-ligne" href={`/app/fiche/${p2(fiche.num)}`}>Revoir le cours : {fiche.titre_court}</Link>}
-        {simulation.id === "basket" && <Link className="btn btn-ligne" href="/app/jeux/basket">Mode libre : régler le saut et le tir</Link>}
+        {simulation.id === "basket" && <Link className="btn btn-ligne" href="/app/labo/basket/libre">Mode libre : régler le saut et le tir</Link>}
       </div>
     </>
   );

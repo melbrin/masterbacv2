@@ -1,5 +1,6 @@
 // Les phrases du parcours : ce que chaque étape et chaque alerte disent à l'élève, et où elles mènent.
 // Les règles sont dans lib/moteur/parcours.ts ; ici, seulement leur mise en mots (décision 0005 : langue simple).
+import { ENTRAINEMENT } from "@/lib/commun/entrainement";
 import { p2, pluriel } from "@/lib/commun/format";
 import type { Alerte, EtapeParcours } from "@/lib/moteur";
 
@@ -47,6 +48,6 @@ export function afficheAlerte(a: Alerte, titreFiche: (n: number) => string, prev
     case "bravo":
       return { ton: "bravo", texte: `Bravo ! Tu as réussi le test de l'objectif ${a.niveau} : ${titreFiche(a.fiche)}.` };
     case "but":
-      return { ton: "bravo", texte: "Tu as atteint ta note visée sur tous tes chapitres vus en classe. Tu peux viser plus haut dans ton profil, ou garder tes acquis avec les jeux.", href: "/app/jeux", lien: "Ouvrir les jeux" };
+      return { ton: "bravo", texte: "Tu as atteint ta note visée sur tous tes chapitres vus en classe. Tu peux viser plus haut dans ton profil, ou garder tes acquis en t'entraînant.", href: ENTRAINEMENT.href, lien: "M'entraîner" };
   }
 }
