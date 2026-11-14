@@ -90,6 +90,132 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
 .tp-lettres { display: inline-flex; gap: 4px; vertical-align: middle; }
 .tp-lettres .tp-niveau { width: 24px; height: 24px; border-radius: 7px; font-size: .86rem; }
 
+/* ---------- le kit des paillasses (components/tp/kit/). Toutes ses classes commencent par « pl- ». ---------- */
+
+/* l'établi : la paillasse prend tout l'écran, dans la scène de nuit du labo */
+.pl-etabli {
+  --encre: #F3ECE6; --texte: #E2DCD6; --discret: #9DB0C9; --filet: rgba(243, 236, 230, .16);
+  --carte: #0B2140; --carte-2: #08182F; --cuivre: #E0A77A; --cuivre-texte: #E8B48C;
+  --vert: #7CC4A0; --brique: #F0948A; --bleu: #8DB6E0; --sable: #E8C27A;
+  position: fixed; inset: 0; z-index: 80; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; grid-template-columns: minmax(0, 1fr);
+  color: var(--texte); background: radial-gradient(120% 70% at 50% 0%, #153766 0%, #0B2140 52%, #06142A 100%);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overscroll-behavior: contain;
+}
+.pl-barre { grid-row: 1; grid-column: 1; display: flex; align-items: center; gap: 6px; padding: 8px 10px 6px 14px; }
+.pl-titre { flex: 1; min-width: 0; margin: 0; overflow: hidden; font-family: var(--display); font-size: .78rem; font-weight: 750; font-stretch: 112%; letter-spacing: .2em;
+  text-transform: uppercase; text-overflow: ellipsis; white-space: nowrap; color: var(--cuivre); outline: none; }
+.pl-bouton { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; min-height: 44px; padding: 6px 10px; border: 1px solid var(--filet);
+  border-radius: 10px; background: rgba(255, 255, 255, .04); color: var(--encre); font: inherit; font-size: .84rem; font-weight: 600; cursor: pointer; }
+.pl-bouton svg { width: 18px; height: 18px; flex: none; }
+.pl-bouton[aria-pressed="false"] { color: var(--discret); }
+.pl-bouton[aria-expanded="true"] { border-color: var(--cuivre); color: var(--cuivre); }
+.pl-plan { grid-row: 2; grid-column: 1; position: relative; display: grid; min-height: 0; padding: 0 6px; }
+.pl-scene { display: block; width: 100%; height: 100%; min-height: 0; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.pl-pied { grid-row: 3; grid-column: 1; display: grid; gap: 8px; padding: 8px 12px 10px; border-top: 1px solid var(--filet); background: rgba(6, 20, 42, .72); }
+.pl-message { min-height: 2.5em; margin: 0; color: var(--encre); font-size: .9rem; line-height: 1.25; }
+.pl-outils, .pl-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.pl-outils > *, .pl-actions > * { flex: 1 1 0; min-width: 0; }
+.pl-etabli .btn { min-height: 48px; padding: 6px 10px; font-size: .9rem; line-height: 1.15; }
+.pl-etabli .btn-cuivre { background: #E0A77A; color: #06142A; }
+.pl-etabli .btn-ligne { border-color: rgba(243, 236, 230, .32); color: var(--encre); }
+.pl-etabli .btn-ligne:hover { background: rgba(255, 255, 255, .06); }
+.pl-confirme { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.pl-confirme > span { grid-column: 1 / -1; color: var(--encre); font-size: .9rem; }
+/* le protocole : une feuille qui monte du bas sur le téléphone, une colonne sur un écran large */
+.pl-cote { position: absolute; right: 0; bottom: 0; left: 0; z-index: 2; display: none; max-height: 70%; padding: 14px 16px 16px; overflow-y: auto; border-top: 1px solid var(--cuivre);
+  background: #0A1C36; box-shadow: 0 -12px 32px rgba(0, 0, 0, .4); }
+.pl-etabli > .pl-cote { grid-row: 2; grid-column: 1; align-self: end; position: relative; }
+.pl-cote.est-ouvert { display: block; }
+.pl-cote h3 { margin: 0 0 8px; font-family: var(--display); font-size: .74rem; font-weight: 750; font-stretch: 112%; letter-spacing: .18em; text-transform: uppercase; color: var(--cuivre); }
+.pl-cote-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.pl-cote ol { display: grid; gap: 8px; margin: 0 0 12px; padding-left: 1.3em; color: var(--encre); font-size: .92rem; line-height: 1.35; }
+.pl-chargement, .tp-chargement { margin: 0; padding: 18px 14px; border-radius: 12px; background: var(--carte-2); color: var(--discret); text-align: center; }
+/* le banc d'essai, en local */
+.tp-banc-journal { max-height: 180px; margin: 6px 0 0; padding: 8px; overflow: auto; border-radius: 8px; background: var(--carte-2); font-size: .72rem; white-space: pre-wrap; word-break: break-all; }
+/* la carte qui ouvre la paillasse */
+.pl-porte { display: grid; gap: 12px; justify-items: start; }
+.pl-porte p { margin: 0; }
+
+/* les dessins de la scène */
+.pl-scene text { fill: var(--discret); font-family: var(--corps); font-size: 9px; font-variant-numeric: tabular-nums; }
+.pl-scene .pl-fort { fill: var(--encre); font-size: 10px; font-weight: 700; }
+.pl-scene [tabindex]:focus { outline: none; }
+.pl-scene [tabindex]:focus-visible { outline: 2px solid var(--sable); outline-offset: 2px; border-radius: 6px; }
+.pl-verre { fill: none; stroke: var(--encre); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.pl-menisque { fill: none; stroke: var(--encre); stroke-width: 1; stroke-linecap: round; }
+.pl-repere { stroke: var(--cuivre); stroke-width: 1.5; stroke-linecap: round; }
+.pl-echelle line { stroke: var(--encre); }
+.pl-echelle text { fill: var(--discret); font-size: 7px; }
+.pl-loupe-fond { fill: #06142A; }
+.pl-loupe-bord { fill: none; stroke: var(--cuivre); stroke-width: 2.4; }
+.pl-scene .pl-loupe-chiffre { fill: var(--encre); font-size: 10px; font-weight: 700; }
+.pl-afficheur rect { fill: #04101F; stroke: var(--discret); stroke-width: 1; }
+.pl-scene .pl-afficheur-valeur { fill: #9BE7C4; font-family: var(--display); font-size: 16px; font-weight: 700; }
+.pl-scene .pl-afficheur-unite { fill: #6FB69A; font-size: 8px; font-weight: 700; }
+.pl-etiquette { fill: #F3ECE6; }
+.pl-scene .pl-etiquette-texte { fill: #06142A; font-size: 6.5px; font-weight: 700; }
+.pl-scene .pl-etiquette-texte.pl-clair { fill: var(--encre); }
+/* un objet à prendre, une cible où le poser */
+.pl-objet { cursor: grab; }
+.pl-objet.pl-glisse { cursor: grabbing; }
+.pl-objet[aria-disabled="true"] { cursor: default; }
+.pl-halo { fill: rgba(232, 194, 122, .1); stroke: var(--sable); stroke-width: 1.4; stroke-dasharray: 4 3; }
+.pl-cible { cursor: pointer; }
+.pl-cible-anneau { fill: rgba(124, 196, 160, .14); stroke: var(--vert); stroke-width: 2; stroke-dasharray: 5 4; }
+.pl-cible-ici .pl-cible-anneau { fill: rgba(124, 196, 160, .36); stroke-dasharray: none; }
+.pl-cible-onde { fill: none; stroke: var(--vert); stroke-width: 1.5; opacity: 0; pointer-events: none; }
+/* les commandes d'un appareil */
+.pl-molette, .pl-touche { cursor: pointer; }
+.pl-molette[aria-disabled="true"], .pl-touche[aria-disabled="true"] { cursor: default; opacity: .45; }
+.pl-touche-fond { fill: var(--carte-2); stroke: rgba(243, 236, 230, .5); stroke-width: 1.2; }
+.pl-touche-active .pl-touche-fond { fill: rgba(224, 167, 122, .3); stroke: var(--cuivre); }
+.pl-poussoir { cursor: pointer; }
+.pl-poussoir[aria-disabled="true"] { opacity: .4; cursor: default; }
+.pl-poussoir-fond { fill: rgba(224, 167, 122, .16); stroke: var(--cuivre); stroke-width: 1.6; }
+.pl-poussoir:active .pl-poussoir-fond { fill: rgba(224, 167, 122, .42); }
+.pl-scene .pl-touche-texte { fill: var(--encre); font-size: 9.5px; font-weight: 700; pointer-events: none; }
+/* les bornes et les fils */
+.pl-borne { cursor: crosshair; }
+.pl-borne-anneau { fill: transparent; stroke: transparent; stroke-width: 2.5; }
+.pl-borne-choisie .pl-borne-anneau, .pl-borne-proche .pl-borne-anneau { stroke: var(--sable); fill: rgba(232, 194, 122, .18); }
+.pl-fil path[role="button"] { cursor: pointer; }
+.pl-fil-choisi > path:first-of-type { stroke-dasharray: 6 4; }
+.pl-fil-tire { stroke: var(--sable); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 5 4; pointer-events: none; }
+.pl-fil-retirer { cursor: pointer; }
+.pl-fil-retirer circle:nth-of-type(2) { fill: var(--brique); }
+.pl-fil-retirer path { fill: none; stroke: #06142A; stroke-width: 2.2; stroke-linecap: round; }
+/* la tache de couleur là où la goutte tombe : elle s'efface d'autant plus lentement que l'équivalence approche */
+.pl-eclat { opacity: 0; }
+/* ce qui coule : sans animation, le filet se voit, la goutte non */
+.pl-filet { stroke-dasharray: 5 3; pointer-events: none; }
+.pl-goutte { opacity: 0; pointer-events: none; }
+
+/* la saisie d'une lecture : son champ et son pavé de chiffres */
+.pl-releve { display: grid; gap: 8px; }
+.pl-releve label { color: var(--encre); font-size: .9rem; font-weight: 600; }
+.pl-releve-champ { display: flex; align-items: center; gap: 8px; }
+.pl-releve-champ input { flex: 1; min-width: 0; min-height: 46px; padding: 6px 12px; border: 1.5px solid var(--cuivre); border-radius: 10px; background: #04101F; color: #9BE7C4;
+  font-family: var(--display); font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pl-releve-champ span { color: var(--discret); font-weight: 600; }
+.pl-releve-erreur { margin: 0; color: var(--brique); font-size: .86rem; }
+.pl-pave { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.pl-pave button { display: grid; min-height: 44px; border: 1px solid var(--filet); border-radius: 10px; background: rgba(255, 255, 255, .06); color: var(--encre); font: inherit; font-size: 1.1rem; font-weight: 700;
+  place-items: center; cursor: pointer; touch-action: manipulation; }
+.pl-pave button:active { background: rgba(224, 167, 122, .3); }
+.pl-pave svg { width: 20px; height: 20px; }
+
+/* sur un écran large : la scène à gauche, le protocole et l'appel à droite */
+@media (min-width: 900px) {
+  .pl-etabli { grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: auto minmax(0, 1fr) auto; }
+  .pl-barre { grid-column: 1 / -1; }
+  .pl-plan { grid-row: 2 / 4; grid-column: 1; padding: 0 16px 16px; }
+  .pl-etabli > .pl-cote { grid-row: 2; grid-column: 2; display: block; align-self: stretch; max-height: none; border-top: 0; border-left: 1px solid var(--filet); background: transparent; box-shadow: none; }
+  .pl-pied { grid-row: 3; grid-column: 2; border-left: 1px solid var(--filet); }
+  .pl-bouton-protocole, .pl-cote-fermer { display: none; }
+  .pl-cote-actions { margin-top: 4px; }
+}
+
 @media (min-width: 720px) {
   .tp-tiroir { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -100,4 +226,17 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
   .tp-etape { animation: apparait .3s ease-out both; }
   .tp-goutte { animation: tp-goutte .45s ease-in both; }
   @keyframes tp-goutte { from { transform: translateY(0); opacity: 1; } 85% { opacity: 1; } to { transform: translateY(34px); opacity: 0; } }
+  .pl-cible-onde { animation: pl-onde 1.4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pl-onde { from { transform: scale(1); opacity: .7; } to { transform: scale(1.7); opacity: 0; } }
+  .pl-filet { animation: pl-coule .28s linear infinite; }
+  @keyframes pl-coule { to { stroke-dashoffset: -8; } }
+  .pl-goutte { animation: pl-chute .38s ease-in both; }
+  @keyframes pl-chute { from { transform: translateY(0); opacity: 1; } 88% { opacity: 1; } to { transform: translateY(var(--pl-chute, 30px)); opacity: 0; } }
+  .pl-objet:not(.pl-glisse) { transition: transform .18s ease-out; }
+  .pl-eclat { animation: pl-eclat .5s ease-out both; }
+  @keyframes pl-eclat { from { opacity: .9; } to { opacity: 0; } }
+  .pl-barreau-tourne { animation: pl-tourne .24s linear infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pl-tourne { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.15); } }
+  .pl-cote.est-ouvert { animation: pl-monte .22s ease-out both; }
+  @keyframes pl-monte { from { transform: translateY(12px); opacity: 0; } to { transform: none; opacity: 1; } }
 }

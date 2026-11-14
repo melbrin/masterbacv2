@@ -23,7 +23,7 @@ export default async function PageEssai({ params }: { params: Promise<{ id: stri
   return (
     <>
       <Entete fil={<Link href="/app/tp">TP</Link>} surtitre={`${t.famille} · ${t.minutes} min`} titre={t.titre} />
-      <CadreTp key={essai.id} essai={essai.id} etapes={t.etapes.map((e) => etapePublique(e, essai.graine))} retours={essai.retours} bilan={essai.bilan} retour="/app/tp" refaire={refaire} />
+      <CadreTp key={essai.id} essai={essai.id} etapes={t.etapes(essai.graine).map((e) => etapePublique(e, essai.graine))} retours={essai.retours} bilan={essai.bilan} retour="/app/tp" refaire={refaire} />
     </>
   );
 }

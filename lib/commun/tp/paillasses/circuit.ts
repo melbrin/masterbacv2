@@ -2,7 +2,8 @@
 // Le montage attendu est un circuit en série : générateur, interrupteur (s'il y en a un), résistance, condensateur.
 // Fonctions pures : le navigateur s'en sert pour dessiner et tracer la courbe, le serveur pour rejouer la manipulation.
 // Les tensions sont en volts, les résistances en ohms, les capacités en farads, les durées en secondes.
-import type { Faute } from "./types";
+import { nombre } from "@/lib/commun/format";
+import { nombreDe, texteDe, type Faute, type GesteBrut, type ReglesPaillasse } from "../types";
 
 export interface Dipole {
   id: string;
@@ -187,3 +188,38 @@ export function bilanCircuit(r: ReglagesCircuit, etat: EtatCircuit): { mesures: 
   const score = derniere ? Math.max(0, 1 - fautes.reduce((s, f) => s + (f.grave ? 0.5 : 0.25), 0)) : 0;
   return { mesures, fautes, score };
 }
+
+// ---------- pour le cadre des TP ----------
+
+/** Lit un geste envoyé par le navigateur ; null s'il n'est pas de cette paillasse. */
+function lis(g: GesteBrut): GesteCircuit | null {
+  const a = texteDe(g, "a"), b = texteDe(g, "b"), h = nombreDe(g, "h"), tau = nombreDe(g, "tau");
+  if ((g.g === "relier" || g.g === "retirer") && a !== null && b !== null) return { g: g.g, a, b };
+  if (g.g === "acquerir") return { g: "acquerir" };
+  if (g.g === "niveau" && h !== null) return { g: "niveau", h };
+  if (g.g === "lire" && tau !== null) return { g: "lire", tau };
+  return null;
+}
+
+export const regles: ReglesPaillasse<ReglagesCircuit, EtatCircuit> = {
+  depart: () => CIRCUIT_INITIAL,
+  geste(r, etat, g) {
+    const lu = lis(g);
+    return lu ? gesteCircuit(r, etat, lu) : etat;
+  },
+  bilan(r, etat) {
+    const b = bilanCircuit(r, etat);
+    if (r.lecture) {
+      const lignes = b.mesures.tau === undefined
+        ? [`Sans lecture, on continue avec la valeur du professeur : τ = ${nombre(tauVrai(r), 2)} s.`]
+        : [`Ta lecture : τ = ${nombre(b.mesures.tau, 2)} s.`, `Valeur exacte : ${nombre(tauVrai(r), 2)} s.`];
+      return { score: b.score, fautes: b.fautes, mesures: { tau: b.mesures.tau ?? tauVrai(r) }, lignes };
+    }
+    // un appareil qui affiche lui-même la mesure : les valeurs de tous les niveaux servent à l'exploitation
+    return {
+      score: b.score, fautes: b.fautes,
+      mesures: Object.fromEntries(r.niveaux.map((h) => [`tau${h}`, tauVrai(r, h)])),
+      lignes: r.niveaux.map((h) => `Niveau ${h} cm : τ = ${nombre(tauVrai(r, h) * 1e6, 0)} µs.`),
+    };
+  },
+};

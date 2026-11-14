@@ -9,7 +9,8 @@ import { useState } from "react";
 import Icone from "@/components/appli/Icone";
 import { useHorloge } from "@/components/simulations/horloge";
 import { nombre } from "@/lib/commun/format";
-import { CIRCUIT_INITIAL, FILS_MAX, analyse, defautDuMontage, gesteCircuit, tension, type EtatCircuit, type GesteCircuit, type ReglagesCircuit } from "@/lib/commun/tp/circuit";
+import { CIRCUIT_INITIAL, FILS_MAX, analyse, defautDuMontage, gesteCircuit, tension, type EtatCircuit, type GesteCircuit, type ReglagesCircuit } from "@/lib/commun/tp/paillasses/circuit";
+import type { GesteBrut, PropsPaillasse } from "@/lib/commun/tp/types";
 
 /** Une borne : sa place sur le dessin, son nom dans une phrase, son nom dans la liste des fils, et ce qui s'écrit à côté d'elle. */
 interface Borne { id: string; x: number; y: number; nom: string; bref: string; court: string }
@@ -83,7 +84,7 @@ function DecorCapteur({ reglages, niveau }: { reglages: ReglagesCircuit; niveau:
   );
 }
 
-export default function PaillasseCircuit({ reglages, fini, attente }: { reglages: ReglagesCircuit; fini: (gestes: GesteCircuit[]) => void; attente: boolean }) {
+export default function PaillasseCircuit({ reglages, fini, attente }: PropsPaillasse<ReglagesCircuit>) {
   const [{ etat, gestes }, setManip] = useState<{ etat: EtatCircuit; gestes: GesteCircuit[] }>({ etat: CIRCUIT_INITIAL, gestes: [] });
   const [choisie, setChoisie] = useState<string | null>(null);
   const [message, setMessage] = useState("Touche une borne, puis une autre : un fil les relie.");
@@ -128,7 +129,7 @@ export default function PaillasseCircuit({ reglages, fini, attente }: { reglages
   const termine = () => {
     const incomplet = charge ? etat.lu === null : etat.acquisitions.every((a) => a.tau === null);
     if (incomplet && !confirme) { setConfirme(true); setMessage(charge ? "Tu n'as pas noté de temps caractéristique. Touche encore le bouton pour finir quand même." : "Aucune mesure n'a réussi. Touche encore le bouton pour finir quand même."); return; }
-    fini(gestes);
+    fini(gestes as GesteBrut[]);
   };
 
   // la courbe de la dernière acquisition, tracée jusqu'à l'instant de l'horloge

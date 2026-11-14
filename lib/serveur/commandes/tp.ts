@@ -4,8 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import * as s from "@/lib/commun/schemas";
-import type { Bilan, ReponseEtape, RetourEtape } from "@/lib/commun/tp/types";
+import type { Bilan, GesteBrut, ReponseEtape, RetourEtape } from "@/lib/commun/tp/types";
 import { tp as trouveTp } from "@/lib/serveur/contenu/tp";
+import { env } from "@/lib/serveur/env";
 import { action, Refus } from "@/lib/serveur/fabriques";
 import { nouvelleGraine } from "@/lib/serveur/quiz";
 import { profilCourant } from "@/lib/serveur/requetes/profil";
@@ -17,20 +18,16 @@ async function eleveActif() {
   if (!profil || profil.etat !== "actif" || profil.role !== "eleve") throw new Refus("interdit");
 }
 
-const borne = z.string().regex(/^[a-z0-9+-]{1,12}$/);
-const geste = z.discriminatedUnion("g", [
-  z.object({ g: z.literal("rincer") }), z.object({ g: z.literal("remplir") }), z.object({ g: z.literal("zero") }), z.object({ g: z.literal("prise") }),
-  z.object({ g: z.literal("indicateur") }), z.object({ g: z.literal("sonde") }), z.object({ g: z.literal("agiter") }),
-  z.object({ g: z.literal("verser"), v: z.number().min(0).max(5) }), z.object({ g: z.literal("noter"), v: z.number().min(0).max(30).optional() }), z.object({ g: z.literal("recommencer") }),
-  z.object({ g: z.literal("relier"), a: borne, b: borne }), z.object({ g: z.literal("retirer"), a: borne, b: borne }), z.object({ g: z.literal("acquerir") }),
-  z.object({ g: z.literal("niveau"), h: z.number().min(0).max(50) }), z.object({ g: z.literal("lire"), tau: z.number().min(0).max(10000) }),
-]);
+// Un geste de manipulation : un nom, et au plus sept valeurs simples et bornées. Chaque paillasse y lit ce qu'elle connaît
+// et ignore le reste (lib/commun/tp/types.ts).
+const geste = z.record(z.string().regex(/^[a-z][a-zA-Z0-9]{0,11}$/), z.union([z.number().min(-1e6).max(1e6), z.string().regex(/^[a-zA-Z0-9+_.:-]{0,24}$/), z.boolean()]))
+  .refine((g) => typeof g.g === "string" && /^[a-z]{2,20}$/.test(g.g) && Object.keys(g).length <= 8);
 const reponse = z.discriminatedUnion("g", [
   z.object({ g: z.literal("lecture") }),
   z.object({ g: z.literal("materiel"), choisis: z.array(z.string().regex(/^[a-z]{2,20}$/)).max(20) }),
   z.object({ g: z.literal("ordre"), ordre: z.array(z.number().int().min(0).max(19)).max(20) }),
   z.object({ g: z.literal("choix"), choix: z.number().int().min(0).max(9) }),
-  z.object({ g: z.literal("paillasse"), gestes: z.array(geste).max(1500) }),
+  z.object({ g: z.literal("paillasse"), gestes: z.array(geste).max(4000) }),
   z.object({ g: z.literal("valeur"), valeur: z.number().min(-1e9).max(1e9) }),
 ]);
 
@@ -67,18 +64,39 @@ export const repondreTp = action({
     const t = trouveTp(essai.tp);
     if (!t || !tpVisible(t, session!.admin)) throw new Refus("introuvable");
     const retours = essai.etapes as unknown as RetourEtape[];
-    if (essai.termine_le || e.etape !== retours.length || e.etape >= t.etapes.length) throw new Refus("invalide", "Cette étape est déjà validée. Recharge la page pour reprendre le TP.");
+    const etapes = t.etapes(essai.graine);
+    if (essai.termine_le || e.etape !== retours.length || e.etape >= etapes.length) throw new Refus("invalide", "Cette étape est déjà validée. Recharge la page pour reprendre le TP.");
     const mesures = essai.mesures as Record<string, number>;
-    const verdict = verifie(t.etapes[e.etape], e.reponse as ReponseEtape, mesures, essai.graine);
+    const verdict = await verifie(etapes[e.etape], e.reponse as ReponseEtape, mesures, essai.graine);
     if (!verdict) throw new Refus("invalide");
     const suite = [...retours, verdict.retour];
-    const fini = suite.length === t.etapes.length;
-    const bilan = fini ? bilanDuTp(t, suite.map((r) => r.score)) : null;
+    const fini = suite.length === etapes.length;
+    const bilan = fini ? bilanDuTp(etapes, suite.map((r) => r.score)) : null;
     const { error: ecriture } = await base.from("tp_essais")
       .update({ etapes: suite as unknown as never, mesures: { ...mesures, ...(verdict.mesures ?? {}) }, niveaux: bilan, termine_le: fini ? new Date().toISOString() : null })
       .eq("id", e.essai).eq("user_id", userId).is("termine_le", null);
     if (ecriture) throw new Refus("erreur");
     if (fini) revalidatePath("/app", "layout");
     return { retour: verdict.retour, bilan };
+  },
+});
+
+// Le banc d'essai, en local seulement : juge la manipulation d'une étape de paillasse sans créer d'essai ni rien écrire.
+// Il sert à mettre au point une paillasse sans refaire tout le TP.
+export const essayerPaillasse = action({
+  nom: "tp.essayerPaillasse",
+  acces: "eleve",
+  entree: z.object({ tp: z.string().regex(/^[a-z]{2,20}$/), graine: z.number().int().min(0).max(2 ** 31), etape: z.number().int().min(0).max(40), gestes: z.array(geste).max(4000) }),
+  limite: { max: 600, secondes: 3600 },
+  async executer(e, session): Promise<{ retour: RetourEtape; mesures: Record<string, number> }> {
+    if (env().APP_ENV !== "local") throw new Refus("introuvable");
+    await eleveActif();
+    const t = trouveTp(e.tp);
+    if (!t || !(t.etat === "valide" || session!.admin || env().APP_ENV === "local")) throw new Refus("introuvable");
+    const etape = t.etapes(e.graine)[e.etape];
+    if (!etape || etape.genre !== "paillasse") throw new Refus("invalide");
+    const verdict = await verifie(etape, { g: "paillasse", gestes: e.gestes as GesteBrut[] }, {}, e.graine);
+    if (!verdict) throw new Refus("invalide");
+    return { retour: verdict.retour, mesures: verdict.mesures ?? {} };
   },
 });

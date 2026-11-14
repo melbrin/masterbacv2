@@ -1,16 +1,43 @@
 import "server-only";
 import { nombre } from "@/lib/commun/format";
 import { melangeGraine } from "@/lib/commun/jeux";
-import { bilanCircuit, rejoueCircuit, tauVrai, type GesteCircuit } from "@/lib/commun/tp/circuit";
-import { bilanTitrage, rejoueTitrage, type GesteTitrage } from "@/lib/commun/tp/titrage";
-import { niveauPour, type Bilan, type Competence, type EtapePublique, type Geste, type ReponseEtape, type RetourEtape } from "@/lib/commun/tp/types";
+import { niveauPour, rejoue, type Bilan, type Competence, type EtapePublique, type ReglesPaillasse, type ReponseEtape, type RetourEtape } from "@/lib/commun/tp/types";
 import { TP, type EtapeTp, type Mesures, type Tp } from "@/lib/serveur/contenu/tp";
 import { env } from "@/lib/serveur/env";
 import { clientUtilisateur } from "@/lib/serveur/supabase/clients";
 
-/** Un TP en brouillon ne se montre qu'en local, ou à l'administrateur (même règle que les défis du labo). */
-export const tpVisible = (t: Tp, admin: boolean): boolean => t.etat === "valide" || admin || env().APP_ENV === "local";
+/** Un TP en brouillon ne se montre qu'en local, ou à l'administrateur (même règle que les défis du labo). Un TP en construction ne se montre pas. */
+export const tpVisible = (t: Tp, admin: boolean): boolean => t.pret !== false && (t.etat === "valide" || admin || env().APP_ENV === "local");
 export const tpVisibles = (admin: boolean): Tp[] => TP.filter((t) => tpVisible(t, admin));
+
+// ---------- les règles des paillasses ----------
+
+type Regles = ReglesPaillasse<unknown, unknown>;
+/** Les règles de chaque paillasse, chargées à la demande : le serveur rejoue avec elles les gestes de l'élève. */
+const REGLES: Record<string, () => Promise<{ regles: Regles }>> = {
+  titrage: () => import("@/lib/commun/tp/paillasses/titrage"),
+  circuit: () => import("@/lib/commun/tp/paillasses/circuit"),
+  microcontroleur: () => import("@/lib/commun/tp/paillasses/microcontroleur"),
+  solutions: () => import("@/lib/commun/tp/paillasses/solutions"),
+  spectro: () => import("@/lib/commun/tp/paillasses/spectro"),
+  optique: () => import("@/lib/commun/tp/paillasses/optique"),
+  diffraction: () => import("@/lib/commun/tp/paillasses/diffraction"),
+  ultrasons: () => import("@/lib/commun/tp/paillasses/ultrasons"),
+  doppler: () => import("@/lib/commun/tp/paillasses/doppler"),
+  pointage: () => import("@/lib/commun/tp/paillasses/pointage"),
+  calorimetre: () => import("@/lib/commun/tp/paillasses/calorimetre"),
+  pile: () => import("@/lib/commun/tp/paillasses/pile"),
+  electrolyse: () => import("@/lib/commun/tp/paillasses/electrolyse"),
+  archimede: () => import("@/lib/commun/tp/paillasses/archimede"),
+  reflux: () => import("@/lib/commun/tp/paillasses/reflux"),
+  ccm: () => import("@/lib/commun/tp/paillasses/ccm"),
+};
+export const GENRES_DE_PAILLASSE = Object.keys(REGLES);
+/** Les règles d'une paillasse ; null si ce genre n'existe pas. */
+export async function reglesDe(genre: string): Promise<Regles | null> {
+  const charge = Object.hasOwn(REGLES, genre) ? REGLES[genre] : null;
+  return charge ? (await charge()).regles : null;
+}
 
 // ---------- ce que le navigateur reçoit ----------
 
@@ -27,21 +54,17 @@ function presentation(etape: Extract<EtapeTp, { genre: "ordre" }>, graine: numbe
 /** Une étape sans sa réponse, telle que le navigateur la reçoit. */
 export function etapePublique(etape: EtapeTp, graine: number): EtapePublique {
   switch (etape.genre) {
-    case "lecture": return etape;
+    case "lecture": return { genre: "lecture", titre: etape.titre, paragraphes: etape.paragraphes, documents: etape.documents };
     case "materiel": return { genre: "materiel", competence: etape.competence, consigne: etape.consigne, objets: etape.objets.map((o) => ({ id: o.id, nom: o.nom })) };
     case "ordre": return { genre: "ordre", competence: etape.competence, consigne: etape.consigne, etapes: presentation(etape, graine).map((i) => etape.etapes[i]) };
     case "choix": return { genre: "choix", competence: etape.competence, question: etape.question, options: etape.options };
-    case "paillasse": return etape;
+    case "paillasse": return { genre: "paillasse", competence: etape.competence, consigne: etape.consigne, protocole: etape.protocole, paillasse: etape.paillasse };
     case "valeur": return { genre: "valeur", competence: etape.competence, question: etape.question, unite: etape.unite, aide: etape.aide };
   }
 }
 
 // ---------- la vérification d'une étape ----------
 
-const GESTES_TITRAGE = ["rincer", "remplir", "zero", "prise", "indicateur", "sonde", "agiter", "verser", "noter", "recommencer"];
-const estDuTitrage = (g: Geste): g is GesteTitrage => GESTES_TITRAGE.includes(g.g);
-const estDuCircuit = (g: Geste): g is GesteCircuit => !GESTES_TITRAGE.includes(g.g);
-const ml = (x: number) => `${nombre(x, 2)} mL`;
 /** Vrai si deux ordres ne diffèrent que par deux étapes voisines échangées. */
 const voisins = (a: number[], b: number[]): boolean => {
   const ecarts = a.map((x, i) => (x === b[i] ? -1 : i)).filter((i) => i >= 0);
@@ -52,7 +75,7 @@ const voisins = (a: number[], b: number[]): boolean => {
  * Vérifie la réponse à une étape, comme le professeur à un appel : un score de 0 à 1 et la correction.
  * Renvoie aussi les mesures tirées de la manipulation, pour les étapes d'exploitation. Vide si la réponse n'est pas du genre de l'étape.
  */
-export function verifie(etape: EtapeTp, reponse: ReponseEtape, mesures: Mesures, graine: number): { retour: RetourEtape; mesures?: Mesures } | null {
+export async function verifie(etape: EtapeTp, reponse: ReponseEtape, mesures: Mesures, graine: number): Promise<{ retour: RetourEtape; mesures?: Mesures } | null> {
   if (etape.genre === "lecture" && reponse.g === "lecture") return { retour: { score: 1, correction: { genre: "lecture" } } };
   if (etape.genre === "materiel" && reponse.g === "materiel") {
     const choisis = new Set(reponse.choisis);
@@ -80,30 +103,20 @@ export function verifie(etape: EtapeTp, reponse: ReponseEtape, mesures: Mesures,
   }
   if (etape.genre === "paillasse" && reponse.g === "paillasse") {
     // le serveur rejoue les gestes de l'élève avec les règles de la paillasse : le résultat ne se déclare pas
-    if (etape.paillasse.genre === "titrage") {
-      const r = etape.paillasse.reglages;
-      const b = bilanTitrage(r, rejoueTitrage(r, reponse.gestes.filter(estDuTitrage)));
-      const lignes = b.VE === null ? [`Sans volume noté, on continue avec la valeur du professeur : V_E = ${ml(b.vrai)}.`] : [`Ton volume à l'équivalence : V_E = ${ml(b.VE)}.`, `Valeur exacte : ${ml(b.vrai)}.`];
-      return { retour: { score: b.score, correction: { genre: "paillasse", fautes: b.fautes, mesures: lignes } }, mesures: { VE: b.VE ?? b.vrai } };
-    }
+    const regles = await reglesDe(etape.paillasse.genre);
+    if (!regles) return null;
     const r = etape.paillasse.reglages;
-    const b = bilanCircuit(r, rejoueCircuit(r, reponse.gestes.filter(estDuCircuit)));
-    if (r.lecture) {
-      const tau = b.mesures.tau ?? tauVrai(r);
-      const lignes = b.mesures.tau === undefined ? [`Sans lecture, on continue avec la valeur du professeur : τ = ${nombre(tauVrai(r), 2)} s.`] : [`Ta lecture : τ = ${nombre(tau, 2)} s.`, `Valeur exacte : ${nombre(tauVrai(r), 2)} s.`];
-      return { retour: { score: b.score, correction: { genre: "paillasse", fautes: b.fautes, mesures: lignes } }, mesures: { tau } };
-    }
-    // un appareil qui affiche lui-même la mesure : les valeurs de tous les niveaux servent à l'exploitation
-    const taus = Object.fromEntries(r.niveaux.map((h) => [`tau${h}`, tauVrai(r, h)]));
-    return { retour: { score: b.score, correction: { genre: "paillasse", fautes: b.fautes, mesures: r.niveaux.map((h) => `Niveau ${h} cm : τ = ${nombre(tauVrai(r, h) * 1e6, 0)} µs.`) } }, mesures: taus };
+    const b = regles.bilan(r, rejoue(regles, r, reponse.gestes));
+    const score = Math.max(0, Math.min(1, Number.isFinite(b.score) ? b.score : 0));
+    return { retour: { score, correction: { genre: "paillasse", fautes: b.fautes, mesures: b.lignes } }, mesures: b.mesures };
   }
   return null;
 }
 
 /** Le bilan d'un TP : pour chaque compétence, le niveau qui correspond à la moyenne des scores de ses étapes. */
-export function bilanDuTp(t: Tp, scores: number[]): Bilan {
+export function bilanDuTp(etapes: readonly EtapeTp[], scores: readonly number[]): Bilan {
   const parCompetence = new Map<Competence, number[]>();
-  t.etapes.forEach((e, i) => {
+  etapes.forEach((e, i) => {
     if (e.genre === "lecture" || scores[i] === undefined) return;
     parCompetence.set(e.competence, [...(parCompetence.get(e.competence) ?? []), scores[i]]);
   });

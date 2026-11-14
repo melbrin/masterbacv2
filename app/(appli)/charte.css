@@ -82,7 +82,8 @@ img { max-width: 100%; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- coquille ---------- */
-.app { min-height: 100%; display: grid; grid-template-columns: 1fr; }
+/* la barre du haut garde sa hauteur ; le contenu prend le reste, même sur une page plus courte que l'écran */
+.app { min-height: 100%; display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
 .barre-haut { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 10px 16px;
   background: color-mix(in srgb, var(--fond) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--filet); }
 .marque { display: flex; flex-direction: column; text-decoration: none; line-height: 1.1; }
@@ -100,7 +101,7 @@ img { max-width: 100%; }
 .onglets-bas a[aria-current="page"] { color: var(--cuivre-texte); background: color-mix(in srgb, var(--cuivre) 10%, transparent); }
 
 @media (min-width: 960px) {
-  .app { grid-template-columns: 252px 1fr; }
+  .app { grid-template-columns: 252px 1fr; grid-template-rows: auto; }
   .barre-haut { display: none; }
   .lateral { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; padding: 22px 14px;
     border-right: 1px solid var(--filet); background: var(--carte); overflow-y: auto; }
