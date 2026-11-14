@@ -45,12 +45,15 @@ export default function CadreTp({ essai, etapes, retours, bilan: bilanDepart, re
   const fini = !corrige && faits.length >= etapes.length;
   const etape = etapes[Math.min(rang, etapes.length - 1)];
   const manip = etapes.findIndex((e) => e.genre === "paillasse");
-  const phase = fini ? 3 : rang < manip ? 0 : rang === manip ? 1 : 2;
+  // un TP peut avoir plusieurs paillasses : on manipule à chacune, on exploite entre deux et après
+  const phase = fini ? 3 : rang < manip ? 0 : etape.genre === "paillasse" ? 1 : 2;
   const situation = etapes[0]?.genre === "lecture" ? etapes[0] : null;
-  const manipulation = manip >= 0 && faits[manip]?.correction.genre === "paillasse" ? faits[manip].correction : null;
-  const releve = manipulation ? manipulation.mesures : null;
-  /** vrai si la manipulation s'est faite avec le guide, sans faute : c'est le guide seul qui a coûté le niveau A */
-  const avecGuide = manipulation?.guide === true && manipulation.fautes.length === 0;
+  /** ce que le professeur a dit de chaque manipulation déjà faite */
+  const manipulations = faits.flatMap((f) => (f.correction.genre === "paillasse" ? [f.correction] : []));
+  /** les mesures de toutes les manipulations faites : l'élève les garde sous les yeux pour calculer */
+  const releve = manipulations.length > 0 ? manipulations.flatMap((m) => m.mesures) : null;
+  /** vrai si le guide a servi et qu'aucune manipulation n'a de faute : c'est le guide seul qui a coûté le niveau A */
+  const avecGuide = manipulations.some((m) => m.guide === true) && manipulations.every((m) => m.fautes.length === 0);
 
   const remonte = () => haut.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
   const valide = (reponse: ReponseEtape) => {

@@ -137,7 +137,7 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
 .pl-bouton-guide[aria-pressed="true"] { border-color: var(--sable); background: rgba(232, 194, 122, .12); color: var(--sable); }
 .pl-plan { grid-row: 2; grid-column: 1; position: relative; display: grid; min-height: 0; padding: 0 6px; }
 .pl-scene { display: block; width: 100%; height: 100%; min-height: 0; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-.pl-pied { grid-row: 3; grid-column: 1; display: grid; gap: 8px; padding: 8px 12px 10px; border-top: 1px solid var(--filet); background: rgba(6, 20, 42, .72); }
+.pl-pied { grid-row: 3; grid-column: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 8px 12px 10px; border-top: 1px solid var(--filet); background: rgba(6, 20, 42, .72); }
 .pl-message { min-height: 2.5em; margin: 0; color: var(--encre); font-size: .9rem; line-height: 1.25; }
 /* le guide : ce qu'il faut faire maintenant. Ce qui vient de se passer se lit alors en plus petit, dessous. */
 .pl-guide { display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; margin: 0; color: var(--sable); font-size: .98rem; font-weight: 650; line-height: 1.25; }
@@ -249,10 +249,11 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
 .pl-goutte { opacity: 0; pointer-events: none; }
 
 /* la saisie d'une lecture : son champ et son pavé de chiffres */
-.pl-releve { display: grid; gap: 8px; }
+/* la saisie tient dans la largeur qu'on lui donne, même étroite : rien n'y impose sa propre largeur */
+.pl-releve { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
 .pl-releve label { color: var(--encre); font-size: .9rem; font-weight: 600; }
 .pl-releve-champ { display: flex; align-items: center; gap: 8px; }
-.pl-releve-champ input { flex: 1; min-width: 0; min-height: 46px; padding: 6px 12px; border: 1.5px solid var(--cuivre); border-radius: 10px; background: #04101F; color: #9BE7C4;
+.pl-releve-champ input { flex: 1 1 0; width: 0; min-width: 0; min-height: 46px; padding: 6px 12px; border: 1.5px solid var(--cuivre); border-radius: 10px; background: #04101F; color: #9BE7C4;
   font-family: var(--display); font-size: 1.3rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .pl-releve-champ span { color: var(--discret); font-weight: 600; }
 .pl-releve-erreur { margin: 0; color: var(--brique); font-size: .86rem; }
@@ -277,7 +278,7 @@ ul.tp-liste-corrigee { padding: 0; list-style: none; }
 /* dès que la fenêtre est assez large pour sa hauteur (un ordinateur, une tablette couchée) : la scène, qui est en hauteur,
    à gauche ; le protocole, le guide et l'appel à droite. La scène y gagne toute la hauteur de l'écran. */
 @media (min-width: 680px) and (min-aspect-ratio: 4/5) {
-  .pl-etabli { grid-template-columns: minmax(0, 1fr) clamp(260px, 34vw, 360px); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .pl-etabli { grid-template-columns: minmax(0, 1fr) clamp(280px, 36vw, 360px); grid-template-rows: auto minmax(0, 1fr) auto; }
   .pl-guide { min-height: 0; }
   .pl-message-second { display: block; min-height: 1.25em; overflow: visible; -webkit-line-clamp: unset; line-clamp: unset; }
   .pl-actions > * { flex: 1 1 96px; }

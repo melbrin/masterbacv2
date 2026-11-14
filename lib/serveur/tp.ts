@@ -19,6 +19,8 @@ export type Regles = ReglesPaillasse<unknown, unknown>;
  */
 const REGLES: Record<string, () => Promise<{ regles: Regles }>> = {
   titrage: () => import("@/lib/commun/tp/paillasses/titrage"),
+  reflux: () => import("@/lib/commun/tp/paillasses/reflux"),
+  ccm: () => import("@/lib/commun/tp/paillasses/ccm"),
 };
 export const GENRES_DE_PAILLASSE = Object.keys(REGLES);
 /** Les règles d'une paillasse ; null si ce genre n'existe pas. */

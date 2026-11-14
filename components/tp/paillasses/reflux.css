@@ -1,0 +1,63 @@
+/* La paillasse « reflux » : les dessins propres au chauffage à reflux, à l'ampoule à décanter et à la balance. */
+
+/* la paillasse, la potence, les étagères */
+.pl-reflux-sol { stroke: var(--filet); stroke-width: 1.5; }
+.pl-reflux-potence { fill: none; stroke: var(--encre); stroke-width: 2.2; stroke-linecap: round; opacity: .5; }
+.pl-reflux-etagere { stroke: var(--encre); stroke-width: 1.4; stroke-linecap: round; opacity: .4; }
+
+/* le ballon, son valet, le chauffe-ballon, le support élévateur, les pinces */
+.pl-reflux-grain { fill: var(--sable); }
+.pl-reflux-bulle { fill: none; stroke: var(--encre); stroke-width: .9; opacity: .75; }
+.pl-reflux-liege { fill: #8E7256; stroke: var(--encre); stroke-width: 1; stroke-linejoin: round; }
+.pl-reflux-appareil { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.4; stroke-linejoin: round; }
+.pl-reflux-bol { fill: #04101F; stroke: var(--encre); stroke-width: 1; }
+.pl-reflux-bol.est-chaud { fill: rgba(240, 126, 64, .5); stroke: #F5A878; }
+.pl-reflux-voyant { fill: var(--discret); }
+.pl-reflux-voyant.est-allume { fill: #FF8A5C; }
+.pl-reflux-ciseau { fill: none; stroke: var(--encre); stroke-width: 1.6; stroke-linecap: round; }
+.pl-reflux-noix { fill: var(--discret); }
+.pl-reflux-pince { fill: none; stroke: var(--discret); stroke-width: 3; stroke-linecap: round; }
+
+/* le réfrigérant : l'eau du manchon, les vapeurs, les gouttes qui retombent */
+.pl-reflux-eau { fill: rgba(120, 180, 245, .28); }
+.pl-reflux-ruisseau { fill: none; stroke: rgba(120, 180, 245, .75); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.pl-reflux-vapeur { fill: rgba(243, 236, 230, .6); pointer-events: none; }
+.pl-reflux-retombe { fill: rgba(190, 220, 245, .95); pointer-events: none; }
+.pl-reflux-fuite { fill: rgba(243, 236, 230, .42); pointer-events: none; }
+.pl-reflux-tuyau { fill: none; stroke: var(--bleu); stroke-width: 3; stroke-linecap: round; }
+
+/* l'élève et ses protections */
+.pl-reflux-corps { fill: rgba(243, 236, 230, .08); stroke: var(--encre); stroke-width: 1.4; stroke-linejoin: round; }
+.pl-reflux-corps.est-vetu { fill: #F3ECE6; }
+.pl-reflux-couture { fill: none; stroke: #0B2140; stroke-width: 1.3; stroke-linecap: round; }
+.pl-reflux-tete { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.4; }
+.pl-reflux-lunettes { fill: rgba(141, 182, 224, .4); stroke: var(--bleu); stroke-width: 1.5; stroke-linejoin: round; }
+.pl-reflux-main { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.2; }
+.pl-reflux-main.est-gantee { fill: var(--bleu); }
+.pl-reflux-habit { fill: rgba(243, 236, 230, .12); stroke: var(--encre); stroke-width: 1.3; stroke-linejoin: round; }
+.pl-reflux-habit.est-gant { fill: rgba(141, 182, 224, .3); stroke: var(--bleu); }
+.pl-reflux-patere { stroke: var(--encre); stroke-width: 1.6; stroke-linecap: round; opacity: .5; }
+
+/* l'ampoule à décanter, la balance */
+.pl-reflux-limite { stroke: var(--encre); stroke-width: 1; }
+.pl-reflux-bouchon { fill: var(--cuivre); }
+.pl-reflux-plateau { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.3; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* en changeant de poste, la paillasse arrive en glissant */
+  .pl-reflux-poste { animation: pl-reflux-poste .28s ease-out both; }
+  @keyframes pl-reflux-poste { from { transform: translateX(26px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .pl-reflux-bulle { animation: pl-reflux-bulle .9s ease-in infinite; }
+  .pl-reflux-bulle.est-forte { animation-duration: .42s; }
+  @keyframes pl-reflux-bulle { from { transform: translateY(0); opacity: .9; } to { transform: translateY(-17px); opacity: 0; } }
+  .pl-reflux-vapeur { animation: pl-reflux-vapeur 1.5s linear infinite; }
+  @keyframes pl-reflux-vapeur { from { transform: translateY(0); opacity: .75; } to { transform: translateY(-56px); opacity: 0; } }
+  .pl-reflux-vapeur.est-haute { animation-name: pl-reflux-vapeur-haute; }
+  @keyframes pl-reflux-vapeur-haute { from { transform: translateY(0); opacity: .75; } to { transform: translateY(-168px); opacity: .5; } }
+  .pl-reflux-retombe { animation: pl-reflux-retombe 1.4s ease-in infinite; }
+  @keyframes pl-reflux-retombe { from { transform: translateY(0); opacity: 1; } to { transform: translateY(58px); opacity: 0; } }
+  .pl-reflux-fuite { animation: pl-reflux-fuite 1.3s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes pl-reflux-fuite { from { transform: translateY(0) scale(.6); opacity: .65; } to { transform: translateY(-28px) scale(1.9); opacity: 0; } }
+  .pl-reflux-secoue { animation: pl-reflux-secoue .55s ease-in-out; transform-box: fill-box; transform-origin: 50% 85%; }
+  @keyframes pl-reflux-secoue { 20% { transform: rotate(-10deg); } 50% { transform: rotate(9deg); } 80% { transform: rotate(-5deg); } }
+}

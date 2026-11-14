@@ -23,6 +23,8 @@ function vue<R>(importe: () => Promise<{ default: ComponentType<PropsPaillasse<R
 // banc de chantier (app/(appli)/app/tp/chantier/) : un fichier à moitié écrit ne doit jamais atteindre les pages des élèves.
 const VUES: Record<string, Vue> = {
   titrage: vue(() => import("./Titrage")),
+  reflux: vue(() => import("./Reflux")),
+  ccm: vue(() => import("./Ccm")),
 };
 
 /** La paillasse d'une étape de manipulation. */
