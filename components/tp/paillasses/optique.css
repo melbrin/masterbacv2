@@ -1,0 +1,46 @@
+/* La paillasse « optique » (components/tp/paillasses/Optique.tsx) : le banc, la vue de l'écran, la règle. */
+
+/* la lumière de la salle : un voile clair sur toute la scène, qui s'éteint avec l'interrupteur */
+.pl-optique-salle { fill: #F3ECE6; opacity: 0; pointer-events: none; }
+.pl-optique-salle.est-allumee { opacity: .13; }
+
+/* l'écran vu de face : sombre dans le noir, pâle quand la salle est éclairée */
+.pl-optique-face { fill: #050E1C; }
+.pl-optique-face.est-eclairee { fill: #A9A49F; }
+.pl-optique-cadre { fill: none; stroke: var(--discret); stroke-width: 1.2; }
+.pl-optique-lueur { fill: #FFF1CC; fill-opacity: .16; }
+.pl-optique-image { fill: #FFF1CC; }
+
+/* la règle posée contre l'image */
+.pl-optique-regle { cursor: grab; }
+.pl-optique-regle-corps { fill: #E8DFD3; stroke: #06142A; stroke-width: .5; opacity: .95; }
+.pl-optique-regle line { stroke: #06142A; }
+.pl-scene .pl-optique-regle text { fill: #06142A; font-size: 7px; font-weight: 700; }
+
+/* le banc : le rail, les cavaliers, ce qu'ils portent */
+.pl-optique-banc { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.2; }
+.pl-optique-table { stroke: var(--filet); stroke-width: 1.5; }
+.pl-optique-tige { stroke: var(--encre); stroke-width: 2; stroke-linecap: round; }
+.pl-optique-pied { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.2; }
+.pl-optique-index { fill: none; stroke: var(--discret); stroke-width: 1.8; stroke-linecap: round; }
+.pl-optique-cavalier.est-choisi .pl-optique-index { stroke: var(--cuivre); }
+.pl-optique-cavalier.est-choisi .pl-optique-pied { stroke: var(--cuivre); }
+.pl-scene .pl-optique-cavalier.est-choisi .pl-optique-nom { fill: var(--cuivre); }
+.pl-optique-boitier { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.3; stroke-linejoin: round; }
+.pl-optique-diapo { fill: var(--discret); }
+.pl-optique-diapo.est-allumee { fill: #FFE9B0; }
+.pl-optique-halo { fill: #FFE9B0; opacity: .2; pointer-events: none; }
+.pl-optique-verre { fill: rgba(190, 215, 240, .3); stroke: var(--encre); stroke-width: 1.2; stroke-linejoin: round; }
+.pl-optique-monture { fill: none; stroke: var(--discret); stroke-width: 1.1; }
+.pl-optique-monture.est-vide { stroke-dasharray: 3 3; }
+.pl-optique-plaque { fill: #E8DFD3; stroke: var(--encre); stroke-width: .8; }
+.pl-optique-faisceau { fill: #FFE9B0; opacity: .09; pointer-events: none; }
+
+/* la boîte de lentilles */
+.pl-optique-boite { fill: rgba(255, 255, 255, .03); stroke: var(--filet); stroke-width: 1.2; }
+.pl-optique-case { fill: none; stroke: var(--discret); stroke-width: 1; stroke-dasharray: 4 3; }
+.pl-optique-ranger { cursor: pointer; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pl-optique-salle, .pl-optique-face { transition: opacity .35s ease-out, fill .35s ease-out; }
+}

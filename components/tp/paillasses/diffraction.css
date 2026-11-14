@@ -1,0 +1,41 @@
+/* La paillasse « diffraction » (components/tp/paillasses/Diffraction.tsx) : l'écran vu de face, le laser, les diapositives. */
+
+/* l'écran vu de face : la figure, la graduation, les deux curseurs */
+.pl-diffraction-face { fill: #050E1C; stroke: var(--discret); stroke-width: 1.2; }
+.pl-diffraction-point { pointer-events: none; }
+.pl-diffraction-curseur { cursor: ew-resize; }
+.pl-diffraction-curseur line { stroke: var(--sable); stroke-width: .9; }
+.pl-diffraction-curseur rect.pl-diffraction-onglet { fill: var(--sable); }
+.pl-scene .pl-diffraction-curseur text { fill: #06142A; font-size: 9px; font-weight: 800; pointer-events: none; }
+
+/* le banc : le rail, le laser, le porte-diapositive, l'écran */
+.pl-diffraction-banc { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.2; }
+.pl-diffraction-table { stroke: var(--filet); stroke-width: 1.5; }
+.pl-diffraction-tige { stroke: var(--encre); stroke-width: 2; stroke-linecap: round; }
+.pl-diffraction-pied { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.2; }
+.pl-diffraction-index { fill: none; stroke: var(--cuivre); stroke-width: 1.8; stroke-linecap: round; }
+.pl-diffraction-plaque { fill: #E8DFD3; stroke: var(--encre); stroke-width: .8; }
+.pl-diffraction-laser { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.3; stroke-linejoin: round; }
+.pl-diffraction-nez { fill: var(--discret); }
+.pl-scene .pl-diffraction-marque { fill: var(--encre); font-size: 6.5px; font-weight: 800; letter-spacing: .08em; pointer-events: none; }
+.pl-diffraction-berceau { fill: none; stroke: var(--discret); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.pl-diffraction-faisceau { fill: none; stroke-linecap: round; pointer-events: none; }
+.pl-diffraction-eventail { pointer-events: none; }
+.pl-scene .pl-diffraction-alerte { fill: var(--brique); font-size: 9.5px; font-weight: 700; }
+
+/* les diapositives : une monture claire, une fenêtre sombre, ce qui laisse passer la lumière */
+.pl-diffraction-monture { fill: #E8DFD3; stroke: #06142A; stroke-width: .6; }
+.pl-diffraction-fenetre { fill: #06142A; }
+.pl-diffraction-fenetre.est-claire { fill: #CFE0F2; }
+.pl-diffraction-trait { stroke: #F3ECE6; stroke-width: 1; stroke-linecap: round; }
+.pl-diffraction-trait.est-sombre { stroke: #06142A; stroke-width: 1.3; }
+.pl-diffraction-coche { fill: none; stroke: var(--vert); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pl-diffraction-boite { fill: rgba(255, 255, 255, .03); stroke: var(--filet); stroke-width: 1.2; }
+.pl-diffraction-case { fill: none; stroke: var(--discret); stroke-width: 1; stroke-dasharray: 4 3; }
+.pl-diffraction-ranger { cursor: pointer; }
+.pl-diffraction-tranche { fill: #E8DFD3; stroke: var(--encre); stroke-width: .8; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pl-diffraction-alerte { animation: pl-diffraction-alerte .7s ease-in-out infinite alternate; }
+  @keyframes pl-diffraction-alerte { from { opacity: 1; } to { opacity: .45; } }
+}

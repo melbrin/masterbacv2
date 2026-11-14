@@ -27,6 +27,8 @@ const VUES: Record<string, Vue> = {
   ccm: vue(() => import("./Ccm")),
   circuit: vue(() => import("./Circuit")),
   microcontroleur: vue(() => import("./Microcontroleur")),
+  optique: vue(() => import("./Optique")),
+  diffraction: vue(() => import("./Diffraction")),
 };
 
 /** La paillasse d'une étape de manipulation. */

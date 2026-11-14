@@ -1,0 +1,5 @@
+/* Les pièces du rail (components/tp/paillasses/optiqueRail.tsx) : le cavalier qui glisse, la loupe posée sur son repère. */
+.pl-optique-cavalier { cursor: grab; }
+.pl-optique-loupe { cursor: ew-resize; }
+.pl-optique-rail { fill: #12305A; }
+.pl-optique-repere { fill: var(--cuivre); stroke: var(--cuivre); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
