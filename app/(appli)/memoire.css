@@ -1,1 +1,330 @@
 /* La section Mémoire (décision 0013). Toutes les classes commencent par « mem- ». */
+/* Les couleurs viennent de la charte : le thème sombre suit sans rien ajouter ici.
+   Sans animation, tout reste jouable : les mouvements sont réunis à la fin du fichier, pour qui ne les a pas refusés. */
+
+/* ---------- plateau, consigne ---------- */
+/* une seule colonne qui ne s'élargit jamais avec son contenu */
+.mem-jeu, .mem-scene, .mem-consigne, .mem-clavier { display: grid; grid-template-columns: minmax(0, 1fr); }
+.mem-jeu { gap: 12px; scroll-margin-top: 76px; }
+/* Sur un téléphone, l'écran d'un jeu a la hauteur qui reste sous la barre du haut (76 points) et au-dessus de la marge
+   du bas de la page (104 points). Le plateau monte en haut de l'écran au départ et n'en bouge plus, que ce qu'il
+   montre soit court ou long : la page garde sa hauteur d'une phase à l'autre. */
+@media (max-width: 959px) {
+  .mem-ecran { min-height: calc(100vh - 180px); min-height: calc(100dvh - 180px); }
+}
+/* ces éléments reçoivent le focus par le programme, pour qu'on ne reparte pas du haut de la page : pas de contour autour d'eux */
+.mem-jeu:focus, .mem-scene:focus { outline: none; }
+
+.mem-consigne { gap: 14px; justify-items: start; }
+.mem-consigne-icone { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center;
+  background: color-mix(in srgb, var(--cuivre) 16%, var(--carte)); color: var(--cuivre-texte); }
+.mem-consigne-icone svg { width: 28px; height: 28px; }
+.mem-consigne-texte { font-size: 1.08rem; line-height: 1.45; color: var(--encre); }
+.mem-consigne-texte p { margin: 0; }
+.mem-consigne-texte p + p { margin-top: 4px; }
+.mem-consigne-reperes { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.mem-consigne-reperes .puce { font-size: .8rem; padding: 3px 10px; }
+
+.mem-enjeu { font-size: .84rem; font-weight: 700; color: var(--cuivre-texte); white-space: nowrap; }
+
+/* ---------- la scène : ce qu'il faut retenir, puis la réponse ---------- */
+.mem-scene { position: relative; justify-items: center; align-content: center; gap: 10px; min-height: 204px; padding: 18px 12px 16px;
+  text-align: center; scroll-margin-top: 76px; }
+.mem-scene > p { margin: 0; }
+.mem-aide { font-size: .88rem; color: var(--discret); }
+.mem-rappel-suite { font-family: var(--display); font-weight: 800; font-stretch: 85%; font-size: 1.1rem; letter-spacing: .08em; color: var(--encre); }
+/* le grand signe qui défile : un chiffre, une opération, un mot */
+.mem-vedette { display: grid; place-items: center; min-height: 5.4rem; max-width: 100%; font-family: var(--display); font-weight: 800;
+  font-stretch: 80%; font-size: 5rem; line-height: 1; color: var(--encre); }
+.mem-vedette-mot { font-size: 2.3rem; font-stretch: 92%; font-weight: 750; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.mem-vedette-code { font-family: var(--corps); font-weight: 800; font-size: 2.6rem; letter-spacing: .14em; padding-left: .14em; }
+
+.mem-points { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; min-height: 10px; }
+.mem-points i { width: 8px; height: 8px; border-radius: 50%; background: var(--filet); }
+.mem-points .mem-point-vu { background: color-mix(in srgb, var(--cuivre) 60%, var(--filet)); }
+.mem-points .mem-point-ici { background: var(--cuivre-texte); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cuivre) 28%, transparent); }
+
+/* le temps qui reste pour regarder : une barre en haut de la scène */
+.mem-sablier { position: absolute; top: 0; left: 0; right: 0; }
+/* la barre ne se montre que si elle peut se vider : sans animation, les secondes sont écrites à sa place */
+.mem-sablier-barre { display: none; height: 5px; overflow: hidden; border-radius: var(--rayon) var(--rayon) 0 0; background: var(--carte-2); }
+.mem-sablier-barre i { display: block; height: 100%; background: var(--cuivre); transform-origin: left center; }
+.mem-rebours { position: absolute; top: 8px; right: 12px; font-family: var(--display); font-weight: 800; font-stretch: 80%;
+  font-size: 1.1rem; color: var(--cuivre-texte); }
+
+/* ---------- le verdict d'une manche ---------- */
+.mem-verdict { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; min-height: 46px; }
+.mem-verdict .jeu-annonce { flex: 1; min-width: 0; }
+.mem-suite { flex: none; }
+
+/* ---------- la saisie ---------- */
+.mem-saisie { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 14px; max-width: 100%; }
+.mem-paquet { display: flex; gap: 4px; min-width: 0; }
+.mem-signe { flex: 0 1 30px; min-width: 0; width: 30px; height: 42px; display: grid; place-items: center; border-radius: 9px;
+  border: 1.5px solid var(--filet); background: var(--carte-2); color: var(--encre);
+  font-family: var(--display); font-weight: 800; font-stretch: 85%; font-size: 1.5rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.mem-signe-ici { border-color: var(--cuivre); background: var(--carte); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cuivre) 20%, transparent); }
+.mem-signe-juste { border-color: color-mix(in srgb, var(--vert) 55%, var(--filet)); background: var(--vert-fond); }
+/* un signe faux est barré : la couleur ne le dit pas seule */
+.mem-signe-faux { border-color: var(--brique); background: var(--brique-fond); color: var(--brique);
+  text-decoration: line-through; text-decoration-thickness: 2px; }
+
+/* ---------- les claviers ---------- */
+.mem-pave { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%; max-width: 340px; margin: 0 auto; }
+.mem-clavier { gap: 8px; width: 100%; max-width: 420px; margin: 0 auto; }
+.mem-clavier-signes { display: grid; grid-template-columns: repeat(var(--mem-colonnes, 6), minmax(0, 1fr)); gap: 6px; }
+.mem-clavier-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.mem-touche { min-width: 0; min-height: 54px; padding: 0; display: grid; place-items: center; border-radius: 14px; cursor: pointer;
+  border: 1.5px solid var(--filet); border-bottom-width: 3px; background: var(--carte); color: var(--encre);
+  font-family: var(--display); font-weight: 750; font-stretch: 90%; font-size: 1.5rem; line-height: 1; }
+.mem-clavier .mem-touche { min-height: 48px; font-size: 1.25rem; border-radius: 12px; }
+.mem-touche:active { background: var(--carte-2); }
+.mem-touche[aria-disabled="true"] { opacity: .45; cursor: default; }
+.mem-touche-action { min-width: 0; min-height: 54px; padding: 6px 8px; gap: 6px; border-radius: 14px; font-size: .9rem; }
+.mem-touche-action svg { width: 20px; height: 20px; flex: none; }
+.mem-clavier .mem-touche-action { min-height: 48px; }
+/* sur le pavé, les deux actions montrent leur dessin ; leur nom reste lu par un lecteur d'écran */
+.mem-pave .mem-touche-nom { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.mem-pave .mem-touche-action svg { width: 24px; height: 24px; }
+
+/* ---------- la grille de cases ---------- */
+/* la grille ne dépasse jamais 96 points par colonne : deux colonnes ne donnent pas deux cases géantes */
+.mem-grille { display: grid; grid-template-columns: repeat(var(--mem-colonnes, 4), minmax(0, 1fr)); gap: 8px; width: 100%;
+  max-width: min(400px, calc(var(--mem-colonnes, 4) * 96px)); margin: 0 auto; }
+.mem-case { position: relative; min-width: 0; aspect-ratio: 1; padding: 0; display: grid; place-items: center; border-radius: 14px; cursor: pointer;
+  border: 1.5px solid var(--filet); background: var(--carte); color: var(--encre);
+  font-family: var(--display); font-weight: 800; font-stretch: 85%; font-size: 1.4rem; line-height: 1; }
+.mem-case[aria-disabled="true"] { cursor: default; }
+/* une case allumée : pleine, avec un rond clair au centre */
+.mem-case-allumee { background: var(--cuivre); border-color: var(--cuivre-texte); }
+.mem-case-allumee:empty::after { content: ""; width: 28%; height: 28%; border-radius: 50%; background: var(--carte); }
+.mem-case-juste { background: var(--vert-fond); border-color: var(--vert); color: var(--vert); }
+.mem-case-fausse { background: var(--brique-fond); border-color: var(--brique); color: var(--brique); }
+/* une case qu'il fallait toucher : un contour en pointillé */
+.mem-case-oubliee { border: 2px dashed var(--cuivre-texte); background: color-mix(in srgb, var(--cuivre) 14%, var(--carte)); color: var(--cuivre-texte); }
+.mem-case-marque { display: grid; place-items: center; }
+.mem-case-marque svg { width: 46%; min-width: 22px; height: auto; aspect-ratio: 1; stroke-width: 2.6; }
+/* avec un contenu, la marque se range dans un coin */
+.mem-case-coin { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; color: var(--carte); }
+.mem-case-juste .mem-case-coin { background: var(--vert); }
+.mem-case-fausse .mem-case-coin { background: var(--brique); }
+.mem-case-coin svg { width: 13px; min-width: 0; }
+.mem-case .mem-picto, .mem-case .mem-forme { width: 62%; height: auto; aspect-ratio: 1; }
+
+/* ---------- les réponses à choisir ---------- */
+.mem-choix { display: grid; grid-template-columns: repeat(var(--mem-colonnes, 2), minmax(0, 1fr)); gap: 8px; }
+.mem-option { position: relative; min-width: 0; min-height: 56px; padding: 10px 12px; display: grid; place-items: center; border-radius: 14px; cursor: pointer;
+  border: 1.5px solid var(--filet); background: var(--carte); color: var(--encre); font-size: 1rem; font-weight: 600; line-height: 1.25; text-align: center;
+  overflow-wrap: anywhere; }
+.mem-option[aria-disabled="true"] { cursor: default; }
+.mem-option-marque { position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; }
+.mem-option-marque svg { width: 14px; height: 14px; }
+
+/* les états d'une réponse (jeux.css) l'emportent sur la couleur de départ des boutons de la section */
+.mem-option.jeu-choisi, .mem-mot.jeu-choisi { border-color: var(--cuivre-texte); background: color-mix(in srgb, var(--cuivre) 16%, var(--carte)); }
+.mem-option.jeu-bon, .mem-mot.jeu-bon { border-color: var(--vert); background: var(--vert-fond); }
+.mem-option.jeu-faux, .mem-mot.jeu-faux { border-color: var(--brique); background: var(--brique-fond); }
+
+/* ---------- pictogrammes et formes ---------- */
+.mem-picto { display: block; width: 48px; height: 48px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; color: var(--encre); }
+.mem-trait-fond, .mem-fond { fill: color-mix(in srgb, var(--cuivre) 32%, transparent); }
+.mem-fond, .mem-plein { stroke: none; }
+.mem-plein { fill: currentColor; }
+.mem-picto-nomme { display: grid; justify-items: center; gap: 4px; font-size: .9rem; font-weight: 600; color: var(--encre); }
+.mem-picto-nomme .mem-picto { width: 44px; height: 44px; }
+
+.mem-motifs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.mem-forme { display: block; width: 48px; height: 48px; stroke: currentColor; stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round; }
+.mem-forme-vide { stroke-width: 2.4; }
+.mem-forme-trait { color: var(--encre); stroke-width: 2; }
+.mem-teinte-bleu { color: var(--bleu); }
+.mem-teinte-vert { color: var(--vert); }
+.mem-teinte-rouge { color: var(--brique); }
+.mem-teinte-sable { color: var(--sable); }
+
+/* ---------- scènes particulières ---------- */
+/* une scène qui porte une grille ou une planche prend la hauteur de son contenu */
+.mem-scene-grille, .mem-scene-planche { min-height: 0; padding: 14px 12px 12px; gap: 12px; }
+.mem-scene-basse { min-height: 112px; }
+/* la ligne au-dessus d'une grille garde sa hauteur d'une phase à l'autre : la grille ne bouge pas */
+.mem-tete { min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; }
+.mem-question { margin: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 6px;
+  font-size: 1.1rem; font-weight: 600; line-height: 1.3; color: var(--encre); text-wrap: balance; }
+.mem-question-objet { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 4px; border-radius: 12px; background: var(--carte-2); }
+.mem-question-objet .mem-picto { width: 36px; height: 36px; }
+/* l'objet demandé et le point d'interrogation restent sur la même ligne */
+.mem-question-fin { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.mem-cachee { visibility: hidden; }
+.mem-compte { font-family: var(--display); font-weight: 800; font-stretch: 85%; font-size: 1.15rem; color: var(--encre); white-space: nowrap; }
+.mem-barre { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--brique); font-weight: 700; }
+
+/* ---------- Suite de couleurs ---------- */
+.mem-pad { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; width: 100%; max-width: 400px; margin: 0 auto; }
+.mem-couleur { position: relative; min-width: 0; height: 118px; padding: 0; display: grid; place-items: center; border-radius: 20px; cursor: pointer;
+  border: 2px solid currentColor; background: color-mix(in srgb, currentColor 14%, var(--carte)); }
+.mem-couleur[aria-disabled="true"] { cursor: default; }
+.mem-couleur .mem-forme { width: 54px; height: 54px; }
+/* une touche allumée : pleine, son symbole en clair */
+.mem-couleur.mem-allumee { background: currentColor; }
+.mem-couleur.mem-allumee .mem-forme { color: var(--carte); }
+.mem-couleur-fausse { border-style: dashed; }
+.mem-symboles { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.mem-symboles li { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; }
+.mem-symboles .mem-forme { width: 22px; height: 22px; }
+/* la touche qu'il fallait toucher : entourée d'un pointillé */
+.mem-symbole-ici { outline: 2px dashed var(--brique); outline-offset: 1px; }
+
+/* ---------- Calcul en chaîne ---------- */
+.mem-resultat { min-width: 2.4ch; padding: 0 .2em; border-bottom: 4px solid var(--cuivre); }
+.mem-etapes { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.mem-etapes li { padding: 5px 10px; border-radius: 10px; background: var(--carte-2); color: var(--texte); font-size: .95rem; white-space: nowrap;
+  font-variant-numeric: tabular-nums; }
+.mem-etapes b { color: var(--encre); }
+.mem-etape-finale { background: var(--vert-fond); box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--vert) 55%, var(--filet)); }
+
+/* ---------- planches d'objets ---------- */
+/* cinq objets par rangée au plus */
+.mem-planche { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 322px; list-style: none; margin: 0; padding: 0; }
+.mem-tuile { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 14px; background: var(--carte-2); border: 1px solid var(--filet); }
+.mem-tuile .mem-picto { width: 40px; height: 40px; }
+.mem-avant-apres { display: inline-flex; align-items: center; gap: 8px; font-size: .88rem; color: var(--discret); }
+.mem-avant-apres .mem-forme { width: 26px; height: 26px; }
+
+/* ---------- Liste de mots, Mots associés ---------- */
+.mem-mots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: 100%; }
+.mem-mot { position: relative; min-width: 0; min-height: 46px; padding: 4px 5px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 4px;
+  border-radius: 12px; cursor: pointer; border: 1.5px solid var(--filet); background: var(--carte); color: var(--encre);
+  font-size: .9rem; font-weight: 600; line-height: 1.15; overflow-wrap: anywhere; }
+.mem-mot[aria-disabled="true"] { cursor: default; }
+.mem-mot svg { flex: none; width: 14px; height: 14px; stroke-width: 2.8; }
+/* un mot oublié : un contour en pointillé et le mot « oublié » */
+.mem-mot-oublie { border: 2px dashed var(--cuivre-texte); background: color-mix(in srgb, var(--cuivre) 12%, var(--carte)); }
+.mem-mot-note { flex-basis: 100%; font-size: .64rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--cuivre-texte); }
+.mem-paire { display: grid; place-items: center; min-height: 5.4rem; max-width: 100%; font-family: var(--display); font-weight: 750; font-stretch: 92%;
+  font-size: 1.9rem; line-height: 1.15; color: var(--encre); }
+.mem-paire > span { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2px 12px; }
+.mem-paire-lien { color: var(--cuivre-texte); font-weight: 800; }
+
+/* ---------- L'histoire ---------- */
+.mem-recit { justify-items: start; text-align: left; padding: 22px 16px 16px; }
+.mem-recit-texte { font-size: 1.08rem; line-height: 1.6; color: var(--encre); }
+.mem-scene-question { min-height: 150px; }
+
+/* ---------- Par paquets ---------- */
+.mem-vedette-nombre { font-size: 2.2rem; letter-spacing: .03em; min-height: 3.4rem; }
+.mem-paquets { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; min-height: 3.4rem; }
+.mem-paquet-lu { padding: 7px 9px; border-radius: 12px; border: 1.5px solid var(--filet); background: var(--carte-2); color: var(--encre);
+  font-family: var(--display); font-weight: 800; font-stretch: 85%; font-size: 1.5rem; line-height: 1; }
+.mem-paquet-ici { border-color: var(--cuivre); background: color-mix(in srgb, var(--cuivre) 16%, var(--carte)); }
+
+/* ---------- Un tour en arrière ---------- */
+.mem-symbole .mem-forme { width: 84px; height: 84px; }
+.mem-deux { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.mem-grand { min-height: 60px; font-size: 1.05rem; }
+
+/* ---------- Paires de symboles : les cartes reprennent le retournement des paires de jeux.css ---------- */
+.mem-cartes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; width: 100%; max-width: 400px; margin: 0 auto; }
+.mem-cartes .jeu-paire { height: auto; aspect-ratio: 1; }
+.mem-cartes .jeu-paire-face { padding: 0; overflow: hidden; }
+.mem-cartes .mem-picto { width: 58%; height: auto; aspect-ratio: 1; }
+
+/* ---------- Formes et couleurs ---------- */
+.mem-tuile-forme .mem-forme { width: 40px; height: 40px; }
+.mem-question-objet .mem-forme { width: 32px; height: 32px; }
+.mem-couleur-nommee { display: flex; align-items: center; gap: 10px; text-align: left; }
+.mem-couleur-nommee .mem-forme { flex: none; width: 34px; height: 34px; }
+.mem-couleur-nommee small { display: block; font-size: .74rem; font-weight: 500; color: var(--discret); }
+
+/* ---------- Les mots dans l'ordre ---------- */
+.mem-mots-larges { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mem-mots-larges .mem-mot { min-height: 50px; gap: 0 8px; font-size: 1rem; }
+.mem-mot-rang { flex: none; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--vert); color: var(--carte);
+  font-size: .78rem; font-weight: 800; }
+.mem-mot-oublie .mem-mot-rang { background: var(--cuivre-texte); }
+.mem-mot.jeu-faux .mem-mot-rang { background: var(--brique); }
+
+/* ---------- Les prénoms ---------- */
+.mem-personnages { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 8px; list-style: none; margin: 0; padding: 0; }
+.mem-personnages li { width: 74px; display: grid; justify-items: center; gap: 2px; font-size: .92rem; line-height: 1.2; color: var(--encre); overflow-wrap: anywhere; }
+/* un personnage a la peau claire et les cheveux sombres dans les deux thèmes ; seul le contour des cheveux et de l'habit suit le thème */
+.mem-visage { display: block; width: 60px; height: 70px; fill: none; stroke: var(--nuit); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.mem-habit { fill: currentColor; stroke: var(--encre); }
+.mem-peau { fill: color-mix(in srgb, var(--cuivre) 36%, var(--sur-nuit)); }
+.mem-cheveux { fill: var(--nuit); stroke: var(--encre); }
+.mem-bijou { fill: var(--cuivre); }
+.mem-oeil { fill: var(--nuit); stroke: none; }
+.mem-portrait .mem-visage { width: 96px; height: 112px; }
+
+/* ---------- Le palais de mémoire : un toit, et deux pièces par étage ---------- */
+.mem-maison { width: 100%; max-width: 340px; }
+.mem-toit { display: block; width: 100%; height: 34px; overflow: visible; fill: color-mix(in srgb, var(--cuivre) 30%, var(--carte));
+  stroke: var(--encre); stroke-width: 1.5; stroke-linejoin: round; }
+/* le toit s'étire en largeur : son trait garde son épaisseur */
+.mem-toit path { vector-effect: non-scaling-stroke; }
+.mem-pieces { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 5%; padding: 0; list-style: none; overflow: hidden;
+  border: 1.5px solid var(--encre); border-radius: 0 0 8px 8px; background: var(--carte); }
+.mem-piece { position: relative; min-height: 58px; padding: 16px 4px 2px; display: grid; place-items: center; border: 0 solid var(--filet); }
+.mem-piece:nth-child(odd) { border-right-width: 1.5px; }
+.mem-piece:nth-child(n+3) { border-top-width: 1.5px; }
+.mem-piece-nom { position: absolute; top: 4px; left: 7px; font-size: .64rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--discret); }
+.mem-piece .mem-picto { width: 34px; height: 34px; }
+/* la pièce demandée : un cadre et un point d'interrogation */
+.mem-piece-ici { background: color-mix(in srgb, var(--cuivre) 16%, var(--carte)); box-shadow: inset 0 0 0 2px var(--cuivre-texte); }
+.mem-piece-point { font-family: var(--display); font-weight: 800; font-size: 1.5rem; line-height: 1; color: var(--cuivre-texte); }
+
+/* un écran peu haut : la scène et les touches se resserrent, pour que le clavier reste à l'écran */
+@media (max-height: 720px) {
+  .mem-scene { min-height: 150px; padding-top: 14px; padding-bottom: 12px; }
+  .mem-scene-grille, .mem-scene-planche { min-height: 0; }
+  .mem-scene-basse { min-height: 96px; }
+  .mem-vedette { font-size: 4rem; min-height: 4.2rem; }
+  .mem-vedette-mot { font-size: 2rem; }
+  .mem-vedette-code { font-size: 2.3rem; }
+  .mem-vedette-nombre { font-size: 2rem; min-height: 3rem; }
+  .mem-touche, .mem-touche-action { min-height: 46px; }
+  .mem-clavier .mem-touche, .mem-clavier .mem-touche-action { min-height: 44px; }
+  .mem-couleur { height: 96px; }
+  /* le palais : des pièces moins hautes, et les quatre objets proposés sur une seule rangée */
+  .mem-toit { height: 24px; }
+  .mem-piece { min-height: 46px; padding-top: 14px; }
+  .mem-piece .mem-picto { width: 28px; height: 28px; }
+  .mem-choix:has(.mem-picto-nomme) { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  .mem-choix:has(.mem-picto-nomme) .mem-option { padding: 8px 2px; }
+  .mem-choix:has(.mem-picto-nomme) .mem-picto-nomme { font-size: .72rem; }
+  .mem-choix:has(.mem-picto-nomme) .mem-picto { width: 36px; height: 36px; }
+}
+
+/* la souris survole ; au doigt, pas de survol qui reste collé après un appui */
+@media (hover: hover) {
+  .mem-touche:not([aria-disabled="true"]):hover, .mem-option:not([aria-disabled="true"]):hover, .mem-case:not([aria-disabled="true"]):hover,
+  .mem-mot:not([aria-disabled="true"]):hover { border-color: var(--cuivre); }
+}
+
+/* ---------- mouvements ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* ce qui défile arrive d'un petit bond : deux éléments de suite se distinguent bien */
+  .mem-pop { animation: mem-pop .22s cubic-bezier(.3, 1.5, .5, 1) both; }
+  @keyframes mem-pop { from { transform: scale(.72); opacity: .001; } to { transform: none; opacity: 1; } }
+
+  /* le sablier se vide ; les secondes écrites sont cachées */
+  .mem-sablier-barre { display: block; }
+  .mem-sablier-barre i { animation: mem-sablier var(--mem-duree, 2s) linear both; }
+  .mem-rebours { display: none; }
+  @keyframes mem-sablier { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+  .mem-touche { transition: transform .08s ease-out, background-color .12s ease-out; }
+  .mem-touche:not([aria-disabled="true"]):active { transform: translateY(2px); }
+  .mem-signe { transition: border-color .15s ease-out, background-color .15s ease-out, box-shadow .15s ease-out; }
+  .mem-case { transition: background-color .16s ease-out, border-color .16s ease-out, transform .16s ease-out; }
+  .mem-case-allumee { animation: mem-allume .28s cubic-bezier(.3, 1.4, .5, 1) both; }
+  .mem-case-juste { animation: mem-allume .28s cubic-bezier(.3, 1.4, .5, 1) both; }
+  .mem-case-fausse { animation: jeu-secousse .35s ease-in-out; }
+  @keyframes mem-allume { from { transform: scale(.86); } to { transform: none; } }
+
+  .mem-couleur { transition: background-color .1s ease-out, transform .1s ease-out; }
+  .mem-couleur.mem-allumee { transform: scale(1.04); }
+  .mem-couleur-fausse { animation: jeu-secousse .35s ease-in-out; }
+  .mem-mot { transition: background-color .15s ease-out, border-color .15s ease-out, opacity .15s ease-out; }
+  .mem-option { transition: background-color .18s ease-out, border-color .18s ease-out, opacity .18s ease-out; }
+  .mem-recit-texte { animation: apparait .35s ease-out both; }
+}
