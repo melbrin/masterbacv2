@@ -1,0 +1,25 @@
+/* La paillasse Archimède (components/tp/paillasses/Archimede.tsx). Toutes ses classes commencent par « pl-archimede- ». */
+
+/* le solide accroché suit la potence sans retard : pas de glissement adouci pour lui */
+.pl-archimede-pendu > .pl-objet:not(.pl-glisse) { transition: none; }
+
+.pl-archimede-potence { cursor: ns-resize; }
+.pl-archimede-noix { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.4; }
+.pl-archimede-chevron { fill: none; stroke: var(--cuivre); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.pl-archimede-tube { fill: rgba(243, 236, 230, .06); stroke: var(--encre); stroke-width: 1.3; }
+.pl-archimede-ressort { fill: none; stroke: var(--discret); stroke-width: 1.1; stroke-linejoin: round; stroke-linecap: round; }
+.pl-archimede-fil { fill: none; stroke: var(--discret); stroke-width: 1; stroke-linecap: round; }
+.pl-archimede-socle { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.2; }
+.pl-archimede-banc { stroke: var(--filet); stroke-width: 1.5; }
+.pl-archimede-solide { stroke: var(--encre); stroke-width: 1.2; }
+.pl-scene .pl-archimede-lettre { fill: #06142A; font-size: 12px; font-weight: 800; pointer-events: none; }
+.pl-archimede-goutte { fill: rgba(200, 222, 244, .95); pointer-events: none; }
+.pl-archimede-papier { fill: #F3ECE6; stroke: var(--discret); stroke-width: 1; }
+.pl-scene .pl-archimede-vide { fill: var(--discret); font-size: 9px; }
+.pl-scene .pl-archimede-carnet { fill: var(--texte); font-size: 10px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* une goutte se détache du solide mouillé */
+  .pl-archimede-tombe { animation: pl-archimede-tombe 1.3s ease-in infinite; }
+  @keyframes pl-archimede-tombe { 0%, 35% { transform: translateY(0); opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(22px); opacity: 0; } }
+}

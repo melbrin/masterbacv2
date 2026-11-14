@@ -30,6 +30,10 @@ const REGLES: Record<string, () => Promise<{ regles: Regles }>> = {
   ultrasons: () => import("@/lib/commun/tp/paillasses/ultrasons"),
   pointage: () => import("@/lib/commun/tp/paillasses/pointage"),
   doppler: () => import("@/lib/commun/tp/paillasses/doppler"),
+  archimede: () => import("@/lib/commun/tp/paillasses/archimede"),
+  calorimetre: () => import("@/lib/commun/tp/paillasses/calorimetre"),
+  pile: () => import("@/lib/commun/tp/paillasses/pile"),
+  electrolyse: () => import("@/lib/commun/tp/paillasses/electrolyse"),
 };
 export const GENRES_DE_PAILLASSE = Object.keys(REGLES);
 /** Les règles d'une paillasse ; null si ce genre n'existe pas. */

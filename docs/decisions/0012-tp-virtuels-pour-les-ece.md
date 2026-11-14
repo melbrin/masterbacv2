@@ -130,6 +130,20 @@ Ce que l'essai a fait corriger au titrage :
 - La courbe de conductimétrie se lisait mal (un axe écrasé, une cassure entre deux points) : son axe se resserre sur les mesures, et elle trace les deux droites qui passent par les points voisins du repère. L'élève cherche la place où elles se croisent sur le repère : c'est la méthode du cours.
 - Des objets sans nom (pipette, barreau, erlenmeyer), un bécher sans graduations pour doser l'eau, un geste refusé sans explication (un outil porté sur le récipient glissé sous la burette), des libellés qui se chevauchaient, une main ou un exemple de valeur qui cachaient ce qu'il faut lire.
 
+## Les vingt TP, inscrits le 14 novembre au soir
+
+Les lots B et C sont arrivés, chacun avec son guide : vingt TP sur dix-sept paillasses (la liste est dans `docs/SUIVI.md`). Au moins un TP par famille de la banque, sauf les débits et les vidanges.
+
+À confirmer par Yane, famille par famille :
+
+- Synthèse : l'espèce choisie (éthanoate de benzyle), les chiffres du modèle (constante d'équilibre 4, temps caractéristique 8 min, pertes sans eau, sans pierre ponce, ballon qui tombe), le temps en accéléré.
+- Circuits : la lecture du temps caractéristique tolérée à 6 % plus un point de la courbe ; le niveau d'eau à 0,2 cm.
+- Chimie des solutions : les lectures sur graphique tolérées à 3 % ou 0,3 mg/L, et à 10 % pour le temps de demi-réaction ; le temps accéléré dix ou vingt fois ; l'outil de lecture de la courbe de cinétique (le trait de la valeur finale, puis sa moitié).
+- Optique : les valeurs des situations (lentilles, cheveux de 60 et 80 µm, diodes de 635, 660 et 685 nm), la tolérance de 5 % sur la vergence, l'œil fictif de la lunette.
+- Ondes et mécanique : le robot qui compte sur 340 m/s et les températures de salle ; les deux balles freinées par l'air ; la limite de 2,5 m/s du chariot.
+- Thermique, électrochimie, fluides : le temps dix fois plus rapide au calorimètre (au rythme réel quand le bloc est à l'air) ; l'avance rapide de l'électrolyse ; la faute de chronomètre au-delà de 15 s ; le réglage de l'intensité toléré à 10 %.
+- Pour toutes : quand rien ne se rattrape, le guide fait tout recommencer.
+
 ## Le bilan d'un TP
 
 - **Le serveur est le professeur.** Les réponses ne sont pas dans le navigateur. À chaque étape, le navigateur envoie ce que l'élève a fait ; le serveur répond par un score et la correction. Les étapes se valident dans l'ordre, une seule fois.

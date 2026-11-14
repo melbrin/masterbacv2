@@ -52,6 +52,8 @@ Les registres de l'application (`lib/serveur/tp.ts`, `components/tp/paillasses/i
 
 Quand un TP est relu, essayé et vert, il passe dans les trois registres de l'application, et son chantier peut être retiré.
 
+Le 14 novembre au soir, les six familles sont inscrites. Leurs chantiers restent en place tant que leurs essais pointent dessus : il faudra les faire pointer sur le banc de l'application (`/app/tp/banc/<tp>`), puis retirer les chantiers.
+
 ### Les règles
 
 Elles exportent `regles`, de type `ReglesPaillasse<Reglages, Etat>` (`lib/commun/tp/types.ts`) :

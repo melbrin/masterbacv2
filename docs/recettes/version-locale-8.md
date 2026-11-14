@@ -1,6 +1,6 @@
 # Recette : huitième version locale, « S'entraîner » et les TP où l'on manipule
 
-Date : 14 novembre 2026, le soir. Durée : une heure. Elle répond à tes remarques du 14 novembre : des TP où l'on manipule comme en vrai, un guide qui montre chaque geste, une section qui ne s'appelle plus « Jeux », pas de mise en forme « typique des IA ». Tout tourne sur ton ordinateur, avec des données inventées.
+Date : 14 novembre 2026, le soir. Durée : une heure pour les titrages et le guide ; compte vingt minutes de plus par TP que tu veux essayer. Elle répond à tes remarques du 14 novembre : des TP où l'on manipule comme en vrai, un guide qui montre chaque geste, une section qui ne s'appelle plus « Jeux », pas de mise en forme « typique des IA ». Tout tourne sur ton ordinateur, avec des données inventées.
 
 ## Avant de commencer
 
@@ -102,12 +102,31 @@ Les mêmes gestes, sans la main. Tu peux les faire dans le désordre ou mal : la
 | 51 | « Une jauge de niveau d'eau », jusqu'à la paillasse | une plaque d'essai, une carte à microcontrôleur, un capteur dans sa cuve, un carnet |
 | 52 | Suis la main : les fils, puis verser, mesurer, lire le niveau à la loupe et la durée sur le moniteur, noter | le carnet se remplit ligne par ligne |
 
+## Les autres TP
+
+Tous se jouent de la même façon : le guide en marche la première fois, puis sans lui.
+
+| N° | Ce que tu fais | Ce que tu dois voir |
+| --- | --- | --- |
+| 53 | « Préparer une solution par dilution » | la verrerie à choisir, la pipette jaugée, la fiole à compléter au trait, le bouchon, l'agitation |
+| 54 | « Doser un colorant par étalonnage » | le spectrophotomètre, le blanc, la gamme, puis la droite et la concentration lue dessus |
+| 55 | « Suivre une transformation dans le temps » | le mélange, le chronomètre, les relevés, puis le temps de demi-réaction lu sur la courbe |
+| 56 | « Trois métaux, trois piles » | les lames, le pont salin, le multimètre à régler et à brancher |
+| 57 | « Un dépôt de cuivre » | les plaques pesées, le circuit, l'intensité à régler, le temps en accéléré, le dépôt pesé |
+| 58 | « Une lentille à contrôler », « Une lunette sur le banc d'optique » | le banc gradué, l'image de la lettre à rendre nette, la loupe sur le rail, la règle |
+| 59 | « Le diamètre d'un cheveu », « Une diode laser sans étiquette » | le laser, les diapositives, les taches ou les franges, deux curseurs sur l'écran gradué |
+| 60 | « Un télémètre à régler » | l'oscilloscope à câbler et à régler, le récepteur à glisser, le carnet |
+| 61 | « Un chariot à contrôler » | le mobile qui passe, l'enregistrement, le spectre à zoomer, le chronomètre |
+| 62 | « Une chute filmée » | l'étalon, l'origine, le pointage image par image, les courbes |
+| 63 | « Mesurer une poussée d'Archimède » | le dynamomètre, l'éprouvette, les volumes lus à la loupe |
+| 64 | « Un métal à identifier » | la balance, le bloc chauffé puis plongé, le thermomètre lu à la loupe |
+
 ## Sur l'ordinateur
 
 | N° | Ce que tu fais | Ce que tu dois voir |
 | --- | --- | --- |
-| 53 | Ouvre une paillasse sur un grand écran | la scène à gauche, le protocole toujours affiché à droite |
-| 54 | Avec la touche Tab, va jusqu'au robinet ; flèches, puis « G » | les flèches ouvrent et ferment ; « G » fait tomber une goutte, « F » verse un millilitre |
+| 65 | Ouvre une paillasse sur un grand écran | la scène à gauche, le protocole toujours affiché à droite |
+| 66 | Avec la touche Tab, va jusqu'au robinet ; flèches, puis « G » | les flèches ouvrent et ferment ; « G » fait tomber une goutte, « F » verse un millilitre |
 
 ## Ce que tu dois me dire
 
@@ -121,7 +140,7 @@ Les mêmes gestes, sans la main. Tu peux les faire dans le désordre ou mal : la
 
 ## Ce qui n'est pas encore dans cette version
 
-- Douze autres TP sont en construction sur le même principe : dilution, dosage par étalonnage, cinétique, pile, électrolyse, distance focale, lunette, diffraction, interférences, ultrasons, effet Doppler, chute filmée, poussée d'Archimède, calorimétrie. Ils n'apparaissent pas tant qu'ils ne sont pas prêts.
-- Les gestes au doigt ne sont vérifiés qu'avec des touchers émulés. Dis-moi ce que ça donne sur ton téléphone : glisser un objet, garder le doigt sur « Verser », tourner le robinet.
-- Les valeurs du modèle de la synthèse (constante d'équilibre, pertes par minute sans eau ou sans pierre ponce) sont plausibles, sans source : à valider.
+- Les vingt TP sont des brouillons : situations, valeurs et tolérances sont à relire (décision 0012, « à confirmer »).
+- Seuls les trois titrages ont été joués en entier par un « bon élève » de test. Les dix-sept autres : leur paillasse avec et sans guide, et le cadre avec des réponses au hasard.
+- Les gestes au doigt ne sont vérifiés qu'avec des touchers émulés, et seulement pour le titrage. Dis-moi ce que ça donne sur ton téléphone : glisser un objet, garder le doigt sur « Verser », tourner le robinet.
 - Les TP n'entrent pas encore dans le parcours ni dans les progrès.

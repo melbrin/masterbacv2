@@ -58,29 +58,33 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 8. Application installable : manifeste, service worker, page hors ligne.
 9. Tests : intégration des commandes contre la base locale, parcours Playwright, 28 cas d'abus, matrice des accès depuis le registre. Relectures par `relecteur-securite` et `relecteur-conformite`.
 10. Format des sources de quiz, d'indices et de barèmes (décision à écrire), puis préparation du contenu en brouillon.
-11. Suites des demandes du 14 novembre : finir et intégrer les paillasses en construction (voir « En cours ») ; écrire de nouvelles questions de quiz, en brouillon, pour avoir plusieurs quiz par chapitre (il y en a 5 à 21 par chapitre, aucune pour la fiche 14) ; d'autres simulations de physique pour le labo (lentille et lunette, poussée d'Archimède, énergie mécanique, particule dans un champ électrique) ; faire entrer le labo, les TP, la mémoire et le calibrage dans le parcours, les progrès, la page des parents et le bilan.
+11. Suites des demandes du 14 novembre : ce qui reste sur les TP (voir « Les vingt TP ») ; écrire de nouvelles questions de quiz, en brouillon, pour avoir plusieurs quiz par chapitre (il y en a 5 à 21 par chapitre, aucune pour la fiche 14) ; d'autres simulations de physique pour le labo (lentille et lunette, poussée d'Archimède, énergie mécanique, particule dans un champ électrique) ; faire entrer le labo, les TP, la mémoire et le calibrage dans le parcours, les progrès, la page des parents et le bilan.
 12. Relire dans la langue de la décision 0005 les pages du test de niveau et de l'administration.
 
-## En cours (soir du 14 novembre)
+## Les vingt TP (soir du 14 novembre)
 
-L'application propose six TP : les trois titrages, la synthèse organique (« Un parfum de jasmin »), et les deux TP de circuits (« Un condensateur sans étiquette », « Une jauge de niveau d'eau »). Chacun a son guide, et a été essayé avec et sans guide dans un vrai navigateur.
+L'application propose vingt TP sur dix-sept paillasses, chacune avec son guide. Tous sont des brouillons, visibles en local seulement.
 
-Douze TP et dix paillasses sont encore en construction, chacun dans ses fichiers. Ils ne sont pas inscrits dans l'application : chaque famille a son banc de chantier (`/app/tp/chantier/<famille>`, en local), qui ne charge que ses fichiers. Chacune reçoit son guide (un fichier `<genre>-guide.ts`, un test où l'élève suit le guide, un essai où un robot suit la main). À relire, essayer dans le navigateur, puis inscrire dans les trois registres :
-
-| Famille | Paillasses | TP |
+| Matière | TP | Paillasses |
 | --- | --- | --- |
-| Chimie des solutions | `solutions`, `spectro` | `dilution`, `etalonnage`, `cinetique` |
-| Optique | `optique`, `diffraction` | `focale`, `lunette`, `cheveu`, `young` |
-| Ondes et mécanique | `ultrasons`, `doppler`, `pointage` | `ultrasons`, `doppler`, `chute` |
-| Thermique, électrochimie, fluides | `archimede`, `calorimetre`, `pile`, `electrolyse` | `archimede`, `calorimetrie`, `pile`, `electrolyse` |
+| Chimie | un détartrant, un vinaigre, un sérum physiologique (titrages) | `titrage` |
+| Chimie | une dilution ; un dosage par étalonnage ; un suivi cinétique | `solutions`, `spectro` |
+| Chimie | trois piles ; un dépôt de cuivre | `pile`, `electrolyse` |
+| Chimie | un parfum de jasmin (synthèse, puis chromatographie) | `reflux`, `ccm` |
+| Physique | un condensateur ; une jauge de niveau | `circuit`, `microcontroleur` |
+| Physique | une lentille ; une lunette ; un cheveu ; une diode laser | `optique`, `diffraction` |
+| Physique | un télémètre ; un chariot ; une chute filmée | `ultrasons`, `doppler`, `pointage` |
+| Physique | une poussée d'Archimède ; un métal à identifier | `archimede`, `calorimetre` |
 
-Pour inscrire une famille : ses tests, son lint, son essai guidé en 390 et en 720 de large, son essai sans guide, puis les trois registres, `scripts/essais/tp.mts` sur ses TP, et un commit qui ne prend que ses fichiers.
+Ce qui a été vérifié pour chaque famille avant de l'inscrire : ses tests (dont l'élève qui suit le guide, pour chaque graine), son lint, un essai avec le guide dans un vrai navigateur à 720 de large ou en largeur téléphone (score 0,75, aucune faute), un essai sans guide (score 1), et le déroulé du TP dans son cadre. Les trois titrages ont en plus été joués en entier par un « bon élève » (`scripts/essais/tp-eleve.mts`).
 
-Signalé par ce chantier, pas encore traité dans le kit :
+Ce qui reste à faire sur les TP :
 
-- `LoupeNiveau` : un chiffre loin du centre est rogné par le bord de la loupe ; il manque une option « surface plate » pour une cuve (les circuits dessinent un ménisque d'un millimètre).
-- `Fils` : la croix qui retire un fil passe sous les bornes voisines, et la paillasse ne sait pas quel fil est choisi. Les circuits ont leur propre composant (`circuitFils.tsx`) ; la synthèse et les ultrasons se servent de celui du kit.
-- La main du guide couvre parfois ce qui est sous son doigt : chaque paillasse décale ses points.
+- Un essai sur un vrai téléphone, au doigt : il n'y a eu que des touchers émulés, et seulement pour le titrage.
+- Jouer chaque TP en entier comme un bon élève (réponses justes, calculs avec sa mesure), pour les dix-sept TP qui ne sont pas des titrages.
+- Retirer les bancs de chantier (`app/(appli)/app/tp/chantier/`, `components/tp/chantier/`, `lib/serveur/commandes/chantier/`) : les essais des familles pointent encore dessus ; les faire pointer sur le banc de l'application (`/app/tp/banc/<tp>`), puis retirer les chantiers.
+- Dans le kit : `LoupeNiveau` rogne un chiffre loin du centre et n'a pas de surface plate ; `Fils` place sa croix de retrait sous les bornes voisines et n'exporte pas le milieu d'un fil (trois familles ont leur propre calcul) ; la main du guide n'a pas d'option pour choisir son côté ; `useGlisse` a un seuil de 3 unités qui fait sauter une pièce sur un rail ; il n'y a pas de molette fine ; `Etabli` ne sait pas mettre « Tout recommencer » ou « Annuler » en avant.
+- Faire valider par Yane les situations et les choix de chaque famille (voir la décision 0012, « à confirmer »).
 
 Incident du 14 novembre au soir : un fichier de règles en cours de réécriture, encore inscrit dans les registres, a cassé toutes les pages de TP pendant un essai de Yane. Depuis, rien d'inachevé n'est inscrit (voir `docs/09-paillasses.md`, section 3).
 

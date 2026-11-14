@@ -1,0 +1,4 @@
+/* La balance des paillasses (components/tp/paillasses/calorimetre-balance.tsx). Ses classes commencent par « pl-balance- ». */
+.pl-balance-boitier { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.4; }
+.pl-balance-plateau { fill: var(--discret); stroke: var(--encre); stroke-width: 1; }
+.pl-balance-pied { fill: var(--discret); }

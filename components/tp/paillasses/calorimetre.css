@@ -1,0 +1,30 @@
+/* La paillasse Calorimètre (components/tp/paillasses/Calorimetre.tsx). Toutes ses classes commencent par « pl-calorimetre- ». */
+.pl-calorimetre-banc { stroke: var(--filet); stroke-width: 1.5; }
+.pl-calorimetre-corps { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.4; }
+.pl-calorimetre-cavite { fill: #06142A; stroke: var(--filet); stroke-width: 1; }
+.pl-calorimetre-couvercle { fill: var(--carte); stroke: var(--encre); stroke-width: 1.4; }
+.pl-calorimetre-bloc { fill: #AEB6C2; stroke: var(--encre); stroke-width: 1.2; }
+.pl-calorimetre-pince { fill: none; stroke: var(--sable); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.pl-calorimetre-colonne { fill: #EE8272; }
+.pl-calorimetre-plaque { fill: var(--carte-2); stroke: var(--encre); stroke-width: 1.2; }
+.pl-calorimetre-chauffe { stroke: var(--brique); stroke-width: 2; stroke-linecap: round; }
+.pl-calorimetre-vapeur { fill: none; stroke: var(--discret); stroke-width: 1.3; stroke-linecap: round; opacity: .6; }
+.pl-calorimetre-bulle { fill: none; stroke: rgba(210, 228, 246, .8); stroke-width: .9; }
+.pl-calorimetre-tige { fill: none; stroke: var(--discret); stroke-width: 2; stroke-linecap: round; }
+.pl-scene .pl-calorimetre-heure { fill: var(--encre); font-family: var(--display); font-size: 13px; font-weight: 700; }
+.pl-scene .pl-calorimetre-carnet { fill: var(--texte); font-size: 10px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pl-calorimetre-vapeur { animation: pl-calorimetre-vapeur 1.7s ease-in-out infinite alternate; }
+  .pl-calorimetre-vapeur:nth-of-type(2) { animation-delay: -.6s; }
+  .pl-calorimetre-vapeur:nth-of-type(3) { animation-delay: -1.1s; }
+  @keyframes pl-calorimetre-vapeur { from { transform: translateY(3px); opacity: .25; } to { transform: translateY(-4px); opacity: .7; } }
+  .pl-calorimetre-bulle { animation: pl-calorimetre-bulle 1.2s linear infinite; }
+  .pl-calorimetre-bulle:nth-of-type(2) { animation-delay: -.4s; }
+  .pl-calorimetre-bulle:nth-of-type(3) { animation-delay: -.8s; }
+  .pl-calorimetre-bulle:nth-of-type(4) { animation-delay: -.2s; }
+  @keyframes pl-calorimetre-bulle { from { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } to { transform: translateY(-38px); opacity: 0; } }
+  /* l'agitateur monte et descend tant qu'on agite */
+  .pl-calorimetre-remue { animation: pl-calorimetre-remue .32s ease-in-out infinite alternate; }
+  @keyframes pl-calorimetre-remue { from { transform: translateY(0); } to { transform: translateY(-9px); } }
+}

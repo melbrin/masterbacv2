@@ -34,6 +34,10 @@ const VUES: Record<string, Vue> = {
   ultrasons: vue(() => import("./Ultrasons")),
   pointage: vue(() => import("./Pointage")),
   doppler: vue(() => import("./Doppler")),
+  archimede: vue(() => import("./Archimede")),
+  calorimetre: vue(() => import("./Calorimetre")),
+  pile: vue(() => import("./Pile")),
+  electrolyse: vue(() => import("./Electrolyse")),
 };
 
 /** La paillasse d'une étape de manipulation. */
