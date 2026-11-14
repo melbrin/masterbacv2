@@ -34,7 +34,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
   - La paillasse Titrage refaite et ses deux TP (détartrant, vinaigre) : flacon à prendre pour rincer et remplir la burette, robinet à tourner (goutte à goutte, filet), pipette jusqu'au trait de jauge, loupe sur les graduations, lecture notée par l'élève, courbe du pH-mètre avec repère. Essayée dans un vrai navigateur sur le banc d'essai (`scripts/essais/titrage.mts`) : manipulation soignée jugée sans faute par le serveur, pour l'indicateur et pour le pH-mètre.
   - Le cadre des TP essayé de bout en bout (`scripts/essais/tp.mts`) : chaque TP du début au bilan, paillasse en plein écran, reprise d'un TP laissé en route.
   - Les documents d'un TP et la page des TP redessinés en feuilles de sujet (filet gras et filet maigre, numéro en capitales espacées) : plus de carte arrondie à barre cuivre.
-- `npm run tout` : à relancer à la fin de la huitième version. Dernier passage complet vert le 14 novembre avant la refonte (370 tests, 62 tests de base, compilation). Depuis : 439 tests unitaires verts, lint sans erreur.
+- `npm run tout` : vert le 14 novembre au soir, après la refonte et avant l'arrivée des quinze TP en construction. Lint sans erreur, types, 439 tests avec couverture (moteur et règles du labo : 100 % des lignes), 25 contrôles de contenu, 62 tests de base, compilation.
 
 ## Film de présentation
 

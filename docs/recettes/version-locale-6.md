@@ -1,5 +1,7 @@
 # Recette : sixième version locale, les TP façon ECE
 
+> Cette recette décrit les premiers TP, où l'on agissait par des boutons. Ils ont été refaits le 14 novembre au soir : suis `version-locale-8.md` à la place.
+
 Date : 14 novembre 2026. Durée : 40 minutes. Elle ajoute les TP virtuels du lot A : quatre TP, deux paillasses. Tout tourne sur ton ordinateur, avec des données inventées.
 
 ## Avant de commencer
