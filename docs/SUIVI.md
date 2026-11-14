@@ -9,7 +9,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - **Branche de travail** : `lot/0.2-outillage`, empilée sur `lot/0.1-installation-du-kit`. Rien n'est poussé sur GitHub.
 - **Dossier de travail** : `Documents/App Masterbac/app-masterbac/`. L'ancien dossier `masterbac-simulator/` (juillet 2026) est intact à côté et n'est pas repris.
 - **Lancer en local** : voir `docs/recettes/version-locale-1.md`. Port 3457 ; le port 3456 est celui de l'ancien dossier.
-- **Version locale** : essayée par Yane le 14 novembre, plusieurs fois. Ses demandes du jour sont dans les décisions 0005 à 0014. Dernières en date (soir du 14 novembre) : des TP où l'on manipule vraiment, plus de TP dont l'optique, une section « S'entraîner » à la place de « Jeux », pas de mise en forme « typique des IA », puis, après son essai du titrage, un guide (une main qui montre le geste) et un essai de bout en bout par moi. Recettes : `docs/recettes/version-locale-3.md` à `version-locale-8.md`. En attente de son essai.
+- **Version locale** : essayée par Yane le 14 novembre, plusieurs fois. Ses demandes du jour sont dans les décisions 0005 à 0014. Dernières en date (soir du 14 novembre) : des TP où l'on manipule vraiment, plus de TP dont l'optique, une section « S'entraîner » à la place de « Jeux », pas de mise en forme « typique des IA », puis, après son essai du titrage, un guide (une main qui montre le geste) et un essai de bout en bout par moi. Recettes : `docs/recettes/version-locale-3.md` à `version-locale-8.md`. Le 15 novembre, Yane a essayé les TP : « ça a l'air de fonctionner ». Il les refera avec son équipe ; ses remarques sont attendues.
 
 ## Fait et vérifié
 
@@ -81,7 +81,7 @@ Ce qui a été vérifié pour chaque famille avant de l'inscrire : ses tests (do
 Ce qui reste à faire sur les TP :
 
 - Un essai sur un vrai téléphone, au doigt : il n'y a eu que des touchers émulés, et seulement pour le titrage.
-- Jouer chaque TP en entier comme un bon élève (réponses justes, calculs avec sa mesure), pour les dix-sept TP qui ne sont pas des titrages.
+- Jouer chaque TP en entier comme un bon élève (réponses justes, calculs avec sa mesure), pour les dix-sept TP qui ne sont pas des titrages. Proposé à Yane le 15 novembre : « pas maintenant ».
 - Retirer les bancs de chantier (`app/(appli)/app/tp/chantier/`, `components/tp/chantier/`, `lib/serveur/commandes/chantier/`) : les essais des familles pointent encore dessus ; les faire pointer sur le banc de l'application (`/app/tp/banc/<tp>`), puis retirer les chantiers.
 - Dans le kit : `LoupeNiveau` rogne un chiffre loin du centre et n'a pas de surface plate ; `Fils` place sa croix de retrait sous les bornes voisines et n'exporte pas le milieu d'un fil (trois familles ont leur propre calcul) ; la main du guide n'a pas d'option pour choisir son côté ; `useGlisse` a un seuil de 3 unités qui fait sauter une pièce sur un rail ; il n'y a pas de molette fine ; `Etabli` ne sait pas mettre « Tout recommencer » ou « Annuler » en avant.
 - Faire valider par Yane les situations et les choix de chaque famille (voir la décision 0012, « à confirmer »).
@@ -121,7 +121,8 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 | Confirmer les décisions 0008 à 0010 | plan de DS par chapitre, règles du calibrage et du parcours, liste des jeux, place des jeux dans le menu, valeurs de la simulation | lire la partie « à confirmer » de chaque décision | 16 novembre |
 | Essayer la quatrième et la cinquième version locale, le labo | calculer, entrer sa valeur, lancer la simulation, en physique puis en chimie | `docs/recettes/version-locale-4.md`, puis `version-locale-5.md` | 16 novembre |
 | Essayer la section Mémoire | vingt-deux jeux ; listes et histoires en brouillon | `docs/recettes/version-locale-7.md` | 18 novembre |
-| Essayer la huitième version : « S'entraîner », les TP où l'on manipule | ses remarques du 14 novembre au soir ; les situations sont des brouillons | `docs/recettes/version-locale-8.md` | 18 novembre |
+| Dire par quoi continuer | ordre proposé le 15 novembre : « S'entraîner » dans le parcours et les progrès ; rappels et application installable ; compte et administration de la bêta ; parents ; solidité, puis mise en ligne. Plan de l'année, bac blanc et nouvelles simulations gardés pour janvier | répondre dans la conversation | prochaine session |
+| Refaire les TP avec son équipe et dire ce qui ne va pas | le 15 novembre, Yane a essayé les TP : « ça a l'air de fonctionner » ; les situations restent des brouillons | `docs/recettes/version-locale-8.md` | 18 novembre |
 | Confirmer les décisions 0012 à 0014 | les choix de détail des TP, de la mémoire et de la nouvelle section ; en particulier : avec le guide, « Réaliser » vaut B au mieux | lire la partie « à confirmer » de chaque décision | 18 novembre |
 | Valider ou corriger les quarante-deux énoncés du labo, et confirmer la décision 0011 | ce sont des brouillons : ils ne se montrent qu'en local tant qu'ils ne sont pas validés | la partie « Ce que tu dois me dire » de la recette, puis la partie « à confirmer » de la décision | 18 novembre |
 | Valider l'architecture de départ | décision 0001 | lire `docs/02-architecture.md`, section 2, et répondre | 15 novembre |
