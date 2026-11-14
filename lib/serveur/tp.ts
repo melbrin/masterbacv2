@@ -21,6 +21,8 @@ const REGLES: Record<string, () => Promise<{ regles: Regles }>> = {
   titrage: () => import("@/lib/commun/tp/paillasses/titrage"),
   reflux: () => import("@/lib/commun/tp/paillasses/reflux"),
   ccm: () => import("@/lib/commun/tp/paillasses/ccm"),
+  solutions: () => import("@/lib/commun/tp/paillasses/solutions"),
+  spectro: () => import("@/lib/commun/tp/paillasses/spectro"),
   circuit: () => import("@/lib/commun/tp/paillasses/circuit"),
   microcontroleur: () => import("@/lib/commun/tp/paillasses/microcontroleur"),
   optique: () => import("@/lib/commun/tp/paillasses/optique"),

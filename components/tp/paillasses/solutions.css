@@ -1,0 +1,25 @@
+/* La paillasse Solutions (components/tp/paillasses/Solutions.tsx). Toutes ses classes commencent par « pl-solutions- ». */
+
+/* l'étagère et le dessus de la paillasse */
+.pl-solutions-planche { fill: rgba(243, 236, 230, .1); stroke: rgba(243, 236, 230, .45); stroke-width: 1; }
+.pl-solutions-table { stroke: rgba(243, 236, 230, .3); stroke-width: 1.2; stroke-linecap: round; }
+/* la place vide d'une pièce sortie de l'étagère */
+.pl-solutions-place { fill: none; stroke: rgba(243, 236, 230, .22); stroke-width: 1; stroke-dasharray: 3 4; }
+/* la graduation d'un bécher, la poire d'une pipette, le bouchon d'une fiole */
+.pl-solutions-graduation { stroke: var(--encre); stroke-width: .8; opacity: .7; }
+.pl-solutions-poire { fill: var(--brique); }
+.pl-solutions-bouchon { fill: var(--cuivre); stroke: #06142A; stroke-width: .6; }
+/* la solution répandue sur la paillasse */
+.pl-solutions-flaque { opacity: .75; }
+
+/* le récipient tourne autour de son centre quand on le retourne, autour de son pied quand on l'agite */
+.pl-solutions-retourne, .pl-solutions-agite { transform-origin: 0 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .pl-solutions-retourne { animation: pl-solutions-retourne .9s ease-in-out both; }
+  @keyframes pl-solutions-retourne { from { transform: rotate(0); } 42%, 58% { transform: rotate(180deg); } to { transform: rotate(360deg); } }
+  .pl-solutions-agite { animation: pl-solutions-agite .7s ease-in-out both; }
+  @keyframes pl-solutions-agite { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+  .pl-solutions-flaque { animation: pl-solutions-flaque .6s ease-out both; transform-box: fill-box; transform-origin: center; }
+  @keyframes pl-solutions-flaque { from { transform: scaleX(.2); opacity: 0; } to { transform: scaleX(1); opacity: .75; } }
+}
