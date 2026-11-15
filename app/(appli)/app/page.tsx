@@ -6,13 +6,9 @@ import ContenuHtml from "@/components/socle/ContenuHtml";
 import { ajouteJours, ecartEnJours } from "@/lib/commun/dates";
 import { ENTRAINEMENT, SECTIONS, type IdSection } from "@/lib/commun/entrainement";
 import { dateLongue, dateSimple, duree, initialeJour, nombre, p2, pluriel } from "@/lib/commun/format";
-import { JEUX } from "@/lib/commun/jeux";
-import { JEUX_MEMOIRE } from "@/lib/commun/memoire";
 import * as m from "@/lib/moteur";
-import { simulationsVisibles } from "@/lib/serveur/defis";
-import { sectionsDe } from "@/lib/serveur/entrainement";
+import { entrainementDe, sectionsDe } from "@/lib/serveur/entrainement";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
-import { tpVisibles } from "@/lib/serveur/tp";
 import { calibragesDe, suiviPour } from "@/lib/serveur/suivi";
 import { afficheAlerte, afficheEtape } from "./parcours/textes";
 
@@ -21,12 +17,13 @@ export const metadata = { title: "Aujourd'hui" };
 export default async function Aujourdhui() {
   const espace = await espaceEleve();
   const { profil, droits, ctx, catalogue, jour, devoirs, session } = espace;
-  // le parcours : le palier en cours, un signal s'il y en a un, et la prochaine étape hors séance du jour (elle a sa carte)
-  const { passes, enCours } = await calibragesDe(session.userId, espace);
-  const parcours = m.parcours(ctx, suiviPour(espace, passes));
+  // le parcours : le palier en cours, un signal s'il y en a un, et la prochaine étape hors séance du jour (elle a sa carte).
+  // Il reçoit l'entraînement de l'élève : il peut proposer un défi du labo ou un TP (décision 0015).
+  const [{ passes, enCours }, entrainement] = await Promise.all([calibragesDe(session.userId, espace), entrainementDe(session, ctx.maintenant)]);
+  const parcours = m.parcours(ctx, suiviPour(espace, passes, entrainement.suivi));
   const titreFiche = (n: number) => catalogue.fiches.find((f) => f.num === n)?.titre_court ?? `Fiche ${n}`;
   const etape = parcours.etapes.find((e) => e.type !== "seance" && e.type !== "calibrage");
-  const prochaine = etape ? afficheEtape(etape, titreFiche, droits.coach ? 25 : 20) : null;
+  const prochaine = etape ? afficheEtape(etape, titreFiche, droits.coach ? 25 : 20, entrainement.noms) : null;
   const signal = parcours.alertes[0] ? afficheAlerte(parcours.alertes[0], titreFiche, m.seancesPrevues(ctx.reglages, profil.note_visee)) : null;
   const palier = parcours.paliers.find((x) => x.niveau === parcours.palier);
   const titre = (fiches: number[]) => fiches.map((n) => catalogue.sommaire.parNum.get(n) && catalogue.fiches.find((f) => f.num === n)?.titre_court).join(", ");
@@ -54,13 +51,14 @@ export default async function Aujourdhui() {
     nbCarnet ? `${pluriel(nbCarnet, "question", "questions")} de ton carnet d'erreurs` : "",
     nbQuiz ? `${pluriel(nbQuiz, "question", "questions")} de quiz` : "",
   ].filter(Boolean).join(" et ") || "Rien à revoir aujourd'hui";
-  // la section « S'entraîner » : ses sous-sections qui ont du contenu pour ce compte, et ce que chacune contient
+  // la section « S'entraîner » : ses sous-sections qui ont du contenu pour ce compte, et où l'élève en est dans chacune
   const ouvertes = sectionsDe(session.admin);
+  const pratique = entrainement.bilan;
   const contenu: Record<IdSection, string> = {
-    labo: pluriel(simulationsVisibles(session.admin).reduce((s, x) => s + x.defis.length, 0), "défi", "défis"),
-    tp: `${tpVisibles(session.admin).length} TP`,
-    memoire: pluriel(JEUX_MEMOIRE.length, "jeu", "jeux"),
-    jeux: pluriel(JEUX.length, "jeu", "jeux"),
+    labo: `${pluriel(pratique.labo.etoiles, "étoile", "étoiles")} sur ${pratique.labo.etoilesMax}`,
+    tp: `${pratique.tp.finis} ${pratique.tp.finis > 1 ? "terminés" : "terminé"} sur ${pratique.tp.tp}`,
+    memoire: `${pluriel(pratique.memoire.jours, "jour", "jours")} sur 7`,
+    jeux: `${pluriel(pratique.jeux.parties, "partie", "parties")} en 7 jours`,
   };
   const heure = Number(new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", hour: "numeric", hour12: false }).format(new Date(ctx.maintenant)));
   const salut = heure < 5 || heure >= 18 ? "Bonsoir" : "Bonjour";
@@ -111,7 +109,7 @@ export default async function Aujourdhui() {
               <div className="barre" style={{ marginBottom: 10 }}><i className="b-solide" style={{ width: `${(100 * palier.atteints) / Math.max(1, palier.total)}%` }} /></div></>
           ) : parcours.chapitres.length > 0 ? <p style={{ margin: "0 0 8px" }}>Tu as atteint ta note visée sur tous tes chapitres vus en classe.</p> : null}
           {signal && <p className={`signal signal-${signal.ton}`} role="status"><Icone nom={signal.ton === "bravo" ? "ok" : "cible"} taille={20} /><span>{signal.texte}</span></p>}
-          {prochaine && <p style={{ margin: 0 }}><b>Prochaine étape :</b> {prochaine.titre}. <Link href={prochaine.href}>{prochaine.bouton}</Link></p>}
+          {prochaine && <p style={{ margin: 0 }}><b>Prochaine étape :</b> {prochaine.titre}. <Link href={prochaine.href} data-etape={prochaine.type}>{prochaine.bouton}</Link></p>}
         </div>
       )}
 

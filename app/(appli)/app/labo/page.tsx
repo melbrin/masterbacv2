@@ -8,17 +8,24 @@ import { ENTRAINEMENT } from "@/lib/commun/entrainement";
 import { pluriel } from "@/lib/commun/format";
 import * as m from "@/lib/moteur";
 import { apercuDe, avancementDesDefis, bilanDesDefis, simulationsVisibles, type Avancement } from "@/lib/serveur/defis";
-import { sectionsDe } from "@/lib/serveur/entrainement";
+import { entrainementDe, sectionsDe } from "@/lib/serveur/entrainement";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
+import { proposesParLeParcours } from "@/lib/serveur/suivi";
 
 export const metadata = { title: "Labo" };
 
 // Le labo (décision 0011) : des simulations à défis, rangées en physique et en chimie. L'élève calcule d'abord,
 // entre sa valeur, puis lance la simulation. En bas de page, le basketteur en mode libre, sans défi.
 export default async function Labo() {
-  const { ctx, session } = await espaceEleve();
+  const espace = await espaceEleve();
+  const { ctx, session } = espace;
   const labo = simulationsVisibles(session.admin);
-  const avancement = labo.length ? await avancementDesDefis(session.userId) : new Map<string, Avancement>();
+  const [avancement, entrainement] = await Promise.all([
+    labo.length ? avancementDesDefis(session.userId) : new Map<string, Avancement>(),
+    entrainementDe(session, ctx.maintenant),
+  ]);
+  // les défis que le parcours de l'élève propose en ce moment (décision 0015)
+  const proposes = proposesParLeParcours(espace, entrainement.suivi).defis;
   const bilans = labo.map((x) => bilanDesDefis(x.defis, avancement));
   const nbDefis = labo.reduce((s, x) => s + x.defis.length, 0);
   const vus = m.chapitresVus(ctx);
@@ -55,6 +62,7 @@ export default async function Labo() {
                       <p>{simulation.accroche}</p>
                       <p><Etoiles gagnees={1} total={1} /> {b.etoiles} sur {3 * defis.length} · {b.reussis} sur {pluriel(defis.length, "défi réussi", "défis réussis")}</p>
                       {vus.length > 0 && !vus.includes(simulation.fiche) && <span className="puce puce-bleu" style={{ justifySelf: "start" }}>Chapitre pas encore vu en classe</span>}
+                      {defis.some((d) => proposes.has(d.id)) && <span className="puce puce-parcours">Dans ton parcours</span>}
                       <div className="actions">
                         <Link className="btn btn-cuivre" href={`${adresse}/${b.prochain + 1}`}>{b.reussis === 0 ? "Jouer" : b.reussis === defis.length ? "Rejouer" : "Continuer"}</Link>
                         <Link className="btn-texte" href={adresse}>Les {defis.length} défis</Link>

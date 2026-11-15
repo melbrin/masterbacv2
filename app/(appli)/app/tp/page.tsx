@@ -2,12 +2,13 @@ import Link from "next/link";
 import BoutonAction from "@/components/appli/BoutonAction";
 import { Entete } from "@/components/appli/Morceaux";
 import SousMenu from "@/components/appli/SousMenu";
-import { ENTRAINEMENT } from "@/lib/commun/entrainement";
+import { ENTRAINEMENT, ancreDuTp } from "@/lib/commun/entrainement";
 import { p2, pluriel } from "@/lib/commun/format";
 import { COMPETENCES } from "@/lib/commun/tp/types";
 import { demarrerTp } from "@/lib/serveur/commandes/tp";
-import { sectionsDe } from "@/lib/serveur/entrainement";
+import { entrainementDe, sectionsDe } from "@/lib/serveur/entrainement";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
+import { proposesParLeParcours } from "@/lib/serveur/suivi";
 import { bilansDesTp, tpVisibles } from "@/lib/serveur/tp";
 
 export const metadata = { title: "TP" };
@@ -15,9 +16,12 @@ export const metadata = { title: "TP" };
 // Les TP virtuels (décision 0012) : des situations d'entraînement aux ECE, en chimie et en physique.
 // La page est un sommaire, comme le cahier de TP d'un élève : un numéro, une famille de manipulation, un titre.
 export default async function PageTp() {
-  const { session, catalogue } = await espaceEleve();
+  const espace = await espaceEleve();
+  const { session, catalogue } = espace;
   const liste = tpVisibles(session.admin);
-  const { meilleurs, enCours } = await bilansDesTp(session.userId);
+  const [{ meilleurs, enCours }, entrainement] = await Promise.all([bilansDesTp(session.userId), entrainementDe(session, espace.ctx.maintenant)]);
+  // les TP que le parcours de l'élève propose en ce moment (décision 0015)
+  const proposes = proposesParLeParcours(espace, entrainement.suivi).tp;
   const faits = liste.filter((t) => meilleurs.has(t.id)).length;
   return (
     <>
@@ -40,9 +44,10 @@ export default async function PageTp() {
                 const fiche = catalogue.fiches.find((f) => f.num === t.fiche);
                 const lancer = async () => { "use server"; return demarrerTp({ tp: t.id }); };
                 return (
-                  <li key={t.id}>
+                  <li key={t.id} id={ancreDuTp(t.id)}>
                     <span className="tp-sommaire-rang" aria-hidden="true">{p2(liste.indexOf(t) + 1)}</span>
                     <div>
+                      {proposes.has(t.id) && <p className="tp-sommaire-marque"><span className="puce puce-parcours">Dans ton parcours</span></p>}
                       <p className="tp-sommaire-famille">{t.famille} · {t.minutes} min</p>
                       <h3>{t.titre}</h3>
                       <p className="tp-sommaire-accroche">{t.accroche}</p>

@@ -92,7 +92,9 @@ export type EtapeParcours =
   | { type: "seance" }
   | { type: "carnet"; nombre: number }
   | { type: "passage"; fiche: number; niveau: number }
-  | { type: "objectif"; fiche: number; niveau: number; faits: number; total: number; taux: number };
+  | { type: "objectif"; fiche: number; niveau: number; faits: number; total: number; taux: number }
+  | { type: "defi"; fiche: number; simulation: string; defi: string; rang: number; niveau: number }
+  | { type: "tp"; fiche: number; tp: string; reprise: string | null };
 
 export type Alerte =
   | { type: "pause"; jours: number }
@@ -113,12 +115,63 @@ export interface Parcours {
   alertes: Alerte[];
 }
 
-/** Ce que le moteur ne peut pas lire dans l'état : la date du dernier calibrage, et la séance de DS qui attend. */
+/** Un défi du labo que ce compte peut voir : son chapitre, son objectif, et les étoiles gagnées. */
+export interface DefiSuivi {
+  id: string;
+  simulation: string;
+  /** le rang du défi dans sa simulation, à partir de 1 : un défi ne s'ouvre que quand le précédent est réussi */
+  rang: number;
+  fiche: number;
+  niveau: number;
+  /** null tant que le défi n'est pas réussi */
+  etoiles: number | null;
+}
+
+/** Un TP que ce compte peut voir : son chapitre, s'il en a terminé un essai, et l'essai laissé en route s'il y en a un. */
+export interface TpSuivi {
+  id: string;
+  fiche: number;
+  fini: boolean;
+  reprise: string | null;
+}
+
+/** Ce que le moteur ne peut pas lire dans l'état : la date du dernier calibrage, la séance de DS qui attend, l'entraînement. */
 export interface Suivi {
   /** l'instant du dernier test de calibrage terminé, en millisecondes ; null s'il n'y en a jamais eu */
   dernierCalibrage: number | null;
   /** la première séance qui reste à faire dans le plan du prochain devoir */
   seanceDs: { id: string; seance: string; titre: string; date: Jour } | null;
+  /**
+   * Ce que « S'entraîner » propose à ce compte, dans l'ordre de ses pages, et où l'élève en est (décision 0015).
+   * Absent : le parcours ne propose ni défi ni TP.
+   */
+  entrainement?: { defis: DefiSuivi[]; tp: TpSuivi[] };
+}
+
+/**
+ * L'entraînement d'un chapitre (décision 0015) : un défi du labo, puis un TP, un de chaque au plus.
+ * Le défi : dans chaque simulation du chapitre, le premier qui n'est pas réussi ; on garde celui du plus petit objectif,
+ * et seulement s'il ne dépasse pas la limite, c'est-à-dire l'objectif que l'élève travaille sur ce chapitre.
+ * Le TP : celui qu'il a laissé en route, sinon le premier qu'il n'a pas terminé.
+ */
+function entrainementDuChapitre(suivi: Suivi, fiche: number, limite: number): EtapeParcours[] {
+  const e = suivi.entrainement;
+  if (!e) return [];
+  const out: EtapeParcours[] = [];
+  // le premier défi qui reste à réussir dans chaque simulation du chapitre
+  const aFaire = new Map<string, DefiSuivi>();
+  for (const d of e.defis) {
+    if (d.fiche !== fiche || d.etoiles !== null) continue;
+    const garde = aFaire.get(d.simulation);
+    if (!garde || d.rang < garde.rang) aFaire.set(d.simulation, d);
+  }
+  // tri stable : à objectif égal, la simulation qui vient d'abord dans le labo
+  const defi = [...aFaire.values()].sort((a, b) => a.niveau - b.niveau)[0];
+  if (defi && defi.niveau <= limite) out.push({ type: "defi", fiche, simulation: defi.simulation, defi: defi.id, rang: defi.rang, niveau: defi.niveau });
+  const restants = e.tp.filter((t) => t.fiche === fiche && !t.fini);
+  const tp = restants.find((t) => t.reprise !== null) ?? restants[0];
+  if (tp) out.push({ type: "tp", fiche, tp: tp.id, reprise: tp.reprise });
+  return out;
 }
 
 export function parcours(ctx: Contexte, suivi: Suivi): Parcours {
@@ -154,7 +207,13 @@ export function parcours(ctx: Contexte, suivi: Suivi): Parcours {
   const ordre = chapitres.filter((c) => c.prochain !== null)
     .sort((a, b) => Number(b.dansDs) - Number(a.dansDs) || a.atteint - b.atteint || a.taux - b.taux || a.fiche - b.fiche);
   for (const c of ordre) if (c.testDispo) etapes.push({ type: "passage", fiche: c.fiche, niveau: c.prochain as number });
-  for (const c of ordre) if (!c.testDispo) etapes.push({ type: "objectif", fiche: c.fiche, niveau: c.prochain as number, faits: c.faits, total: c.total, taux: c.taux });
+  // chapitre par chapitre : son prochain objectif, puis de quoi s'y entraîner (un défi du labo, un TP)
+  for (const c of ordre) {
+    if (!c.testDispo) etapes.push({ type: "objectif", fiche: c.fiche, niveau: c.prochain as number, faits: c.faits, total: c.total, taux: c.taux });
+    etapes.push(...entrainementDuChapitre(suivi, c.fiche, c.prochain as number));
+  }
+  // là où la note visée est atteinte, l'entraînement continue, sans la dépasser
+  for (const c of chapitres) if (c.prochain === null) etapes.push(...entrainementDuChapitre(suivi, c.fiche, vise));
   if (suivi.dernierCalibrage !== null && ctx.maintenant - suivi.dernierCalibrage >= reglages.joursCalibrageAncien * JOUR_MS) etapes.push({ type: "calibrage", raison: "ancien" });
 
   const alertes: Alerte[] = [];

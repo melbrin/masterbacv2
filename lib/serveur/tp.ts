@@ -1,4 +1,5 @@
 import "server-only";
+import { meilleursBilans } from "@/lib/commun/bilan-entrainement";
 import { nombre } from "@/lib/commun/format";
 import { melangeGraine } from "@/lib/commun/jeux";
 import { PLAFOND_AVEC_GUIDE, guideServi, niveauPour, rejoue, sansMarqueDuGuide, type Bilan, type Competence, type EtapePublique, type ReglesPaillasse, type ReponseEtape, type RetourEtape } from "@/lib/commun/tp/types";
@@ -149,10 +150,6 @@ export async function essaiDe(userId: string, id: string): Promise<Essai | null>
   return data ? { id: data.id, tp: data.tp, graine: data.graine, retours: data.etapes as unknown as RetourEtape[], mesures: data.mesures as Mesures, bilan: data.niveaux as Bilan | null } : null;
 }
 
-const POINTS: Record<string, number> = { A: 3, B: 2, C: 1, D: 0 };
-/** La valeur d'un bilan, pour garder le meilleur : la somme des niveaux. */
-const valeur = (b: Bilan): number => Object.values(b).reduce((s, n) => s + (POINTS[n] ?? 0), 0);
-
 /**
  * Pour chaque TP, l'essai laissé en route que la page propose de reprendre : le plus récent où l'élève a validé au moins
  * une étape, sauf s'il a refait ce TP en entier depuis.
@@ -176,11 +173,6 @@ export async function bilansDesTp(userId: string): Promise<{ meilleurs: Map<stri
     base.from("tp_essais").select("id, tp, cree_le").eq("user_id", userId).is("termine_le", null).neq("etapes", "[]").order("cree_le", { ascending: false }).limit(50),
   ]);
   if (finis.error || ouverts.error) throw new Error("La base ne répond pas.");
-  const meilleurs = new Map<string, Bilan>();
-  for (const l of finis.data ?? []) {
-    const b = l.niveaux as Bilan;
-    const avant = meilleurs.get(l.tp);
-    if (!avant || valeur(b) > valeur(avant)) meilleurs.set(l.tp, b);
-  }
+  const meilleurs = meilleursBilans((finis.data ?? []).map((l) => ({ tp: l.tp, bilan: l.niveaux as Bilan })));
   return { meilleurs, termines: (finis.data ?? []).length, enCours: essaisAReprendre(finis.data ?? [], ouverts.data ?? []) };
 }

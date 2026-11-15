@@ -13,7 +13,8 @@ export const attends = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Le code de connexion reçu par l'adresse dans la boîte locale, après l'instant donné. */
 async function code(adresse: string, apres: number): Promise<string> {
-  for (let i = 0; i < 40; i++) {
+  // le premier code d'une adresse neuve peut mettre plus de vingt secondes à arriver dans la boîte locale
+  for (let i = 0; i < 100; i++) {
     const d = (await (await fetch("http://127.0.0.1:54324/api/v1/messages?limit=8")).json()) as { messages: { ID: string; Created: string; To: { Address: string }[] }[] };
     const m = d.messages.find((x) => x.To.some((t) => t.Address === adresse) && Date.parse(x.Created) >= apres - 2000);
     if (m) {
@@ -46,6 +47,8 @@ export interface OptionsEssai {
   /** le dossier des captures */
   sortie: string;
   adresse?: string;
+  /** le prénom donné au profil si l'adresse est celle d'un compte neuf */
+  prenom?: string;
   /** le fichier où la session est gardée, hors du dépôt ; par défaut, la variable ESSAI_SESSION */
   session?: string;
   largeur?: number;
@@ -86,7 +89,14 @@ export async function ouvre(o: OptionsEssai): Promise<Essai> {
     });
     await page.fill("#code", await code(adresse, t0));
     await page.click("button[type=submit]");
-    await page.waitForURL(/\/app/);
+    await page.waitForURL(/\/app|\/compte\/profil/);
+    // un compte neuf répond d'abord aux trois questions du profil ; il arrive ensuite sur le test de calibrage
+    if (new URL(page.url()).pathname.startsWith("/compte/profil")) {
+      await page.fill("#prenom", o.prenom ?? "Inès");
+      await page.getByRole("radio", { name: "Oui" }).click();
+      await page.getByRole("button", { name: "Créer mon compte" }).click();
+      await page.waitForURL(/\/app/);
+    }
   }
   const garde = async () => { if (session) { mkdirSync(dirname(session), { recursive: true }); await ctx.storageState({ path: session }); } };
   await garde();

@@ -9,7 +9,7 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 - **Branche de travail** : `lot/0.2-outillage`, empilée sur `lot/0.1-installation-du-kit`. Rien n'est poussé sur GitHub.
 - **Dossier de travail** : `Documents/App Masterbac/app-masterbac/`. L'ancien dossier `masterbac-simulator/` (juillet 2026) est intact à côté et n'est pas repris.
 - **Lancer en local** : voir `docs/recettes/version-locale-1.md`. Port 3457 ; le port 3456 est celui de l'ancien dossier.
-- **Version locale** : essayée par Yane le 14 novembre, plusieurs fois. Ses demandes du jour sont dans les décisions 0005 à 0014. Dernières en date (soir du 14 novembre) : des TP où l'on manipule vraiment, plus de TP dont l'optique, une section « S'entraîner » à la place de « Jeux », pas de mise en forme « typique des IA », puis, après son essai du titrage, un guide (une main qui montre le geste) et un essai de bout en bout par moi. Recettes : `docs/recettes/version-locale-3.md` à `version-locale-8.md`. Le 15 novembre, Yane a essayé les TP : « ça a l'air de fonctionner ». Il les refera avec son équipe ; ses remarques sont attendues.
+- **Version locale** : essayée par Yane le 14 novembre, plusieurs fois. Ses demandes du jour sont dans les décisions 0005 à 0014. Dernières en date (soir du 14 novembre) : des TP où l'on manipule vraiment, plus de TP dont l'optique, une section « S'entraîner » à la place de « Jeux », pas de mise en forme « typique des IA », puis, après son essai du titrage, un guide (une main qui montre le geste) et un essai de bout en bout par moi. Recettes : `docs/recettes/version-locale-3.md` à `version-locale-8.md`. Le 15 novembre, Yane a essayé les TP : « ça a l'air de fonctionner ». Il les refera avec son équipe ; ses remarques sont attendues. Le même jour, il a accepté l'ordre de la suite et son premier point (« Oui, commence ») : l'entraînement entre dans le parcours et les progrès (neuvième version, décision 0015, recette `version-locale-9.md`).
 
 ## Fait et vérifié
 
@@ -37,7 +37,14 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
   - Le guide des paillasses (`docs/09-paillasses.md`, section 5 ; décision 0012, « Le guide ») : une main montre le prochain geste, une phrase le dit, l'étape du protocole ressort ; un bouton le coupe ; une manipulation guidée vaut B au mieux. Fait pour le titrage et ses trois TP.
   - Les trois TP de titrage essayés de bout en bout, à la souris seulement, par un robot qui suit la main, lit la loupe et la courbe comme un élève : du sommaire au bilan (A, A, B, A), en 390 × 844 et en 1219 × 778, sans erreur de page (`scripts/essais/tp-eleve.mts`, `titrage-guide.mts`). Sans guide, le score reste 1 (`titrage.mts`). Les gestes maladroits ont leur essai (`titrage-maladroit.mts`).
   - Ce que cet essai a fait corriger : une lecture juste comptée comme une faute, un robinet trop nerveux, des appuis brefs sans effet, une courbe de conductimétrie peu lisible (elle trace maintenant ses deux droites), des objets sans nom, des libellés qui se chevauchaient. Le détail est dans la décision 0012.
-- `npm run tout` : vert le 14 novembre en fin de soirée, avec les vingt TP inscrits. Lint sans erreur (13 avertissements dans les pages d'avant le kit), types, 1 150 tests avec couverture, 25 contrôles de contenu, 62 tests de base, compilation.
+- Neuvième version locale (15 novembre), l'entraînement dans le parcours et les progrès (décision 0015) :
+  - Le parcours propose, après l'objectif de chaque chapitre vu en classe, un défi du labo puis un TP (`lib/moteur/parcours.ts`, étapes `defi` et `tp`). Sans l'entraînement, il rend exactement les étapes d'avant : un test de propriété le vérifie.
+  - Les progrès comptent le labo, les TP (une grille comme celle de l'épreuve d'ECE), la mémoire et les jeux ; l'accueil et les portes de la section montrent les mêmes chiffres, calculés à un seul endroit (`lib/commun/bilan-entrainement.ts`, `lib/serveur/entrainement.ts`).
+  - Les pages du labo et des TP marquent « Dans ton parcours » ce que le parcours propose.
+  - Aucune table ni commande nouvelle : des lectures, avec les droits de l'élève.
+  - Essayé dans un vrai navigateur par un robot qui joue comme un élève (`scripts/essais/parcours-entrainement.mts`, mode « vite », compte neuf, 390 × 844) : étapes proposées, défi suivi et réussi, page des TP ouverte à la hauteur du TP, TP laissé puis repris depuis le parcours, TP terminé, puis relecture du parcours, de l'accueil, des progrès, de la section, du labo et des TP. Aucun écart, aucune erreur de page. Mêmes pages photographiées et regardées à 720 et 1219 de large, et en thème sombre ; `sections.mts` rejoué sans écart.
+  - Pas essayé : le mode « joue » du même robot (le TP manipulé avec le guide depuis le parcours, une partie de mémoire). L'écran de l'ordinateur était rabattu, voir les points de vigilance. À lancer ordinateur ouvert ; la commande est dans la recette.
+- `npm run tout` : vert le 15 novembre au matin, avec la neuvième version. Lint sans erreur (13 avertissements dans les pages d'avant le kit), types, 1 177 tests avec couverture (96 % des branches), 25 contrôles de contenu, 62 tests de base, compilation.
 
 ## Film de présentation
 
@@ -58,8 +65,11 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 8. Application installable : manifeste, service worker, page hors ligne.
 9. Tests : intégration des commandes contre la base locale, parcours Playwright, 28 cas d'abus, matrice des accès depuis le registre. Relectures par `relecteur-securite` et `relecteur-conformite`.
 10. Format des sources de quiz, d'indices et de barèmes (décision à écrire), puis préparation du contenu en brouillon.
-11. Suites des demandes du 14 novembre : ce qui reste sur les TP (voir « Les vingt TP ») ; écrire de nouvelles questions de quiz, en brouillon, pour avoir plusieurs quiz par chapitre (il y en a 5 à 21 par chapitre, aucune pour la fiche 14) ; d'autres simulations de physique pour le labo (lentille et lunette, poussée d'Archimède, énergie mécanique, particule dans un champ électrique) ; faire entrer le labo, les TP, la mémoire et le calibrage dans le parcours, les progrès, la page des parents et le bilan.
+11. Suites des demandes du 14 novembre : ce qui reste sur les TP (voir « Les vingt TP ») ; écrire de nouvelles questions de quiz, en brouillon, pour avoir plusieurs quiz par chapitre (il y en a 5 à 21 par chapitre, aucune pour la fiche 14) ; d'autres simulations de physique pour le labo (lentille et lunette, poussée d'Archimède, énergie mécanique, particule dans un champ électrique). L'entraînement est entré dans le parcours et les progrès le 15 novembre (décision 0015) ; il reste à le montrer sur la page des parents et dans leur bilan, quand ils existeront, et à féliciter un TP terminé dans les signaux du parcours.
 12. Relire dans la langue de la décision 0005 les pages du test de niveau et de l'administration.
+13. La route `/api/sante` du lot 0.4 n'existe pas (vu le 15 novembre) : à créer avec la sonde, avant la mise en ligne.
+
+Ordre accepté par Yane le 15 novembre pour la suite : l'entraînement dans le parcours et les progrès (fait) ; rappels par e-mail et application installable ; compte et administration de la bêta ; parents ; solidité, puis mise en ligne. Plan de l'année, bac blanc et nouvelles simulations gardés pour janvier.
 
 ## Les vingt TP (soir du 14 novembre)
 
@@ -102,6 +112,7 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - Le score d'un jeu qui tourne dans le navigateur est annoncé par le navigateur (`verifiee` à faux dans `parties`). Il ne sert qu'au record personnel.
 - Les nouvelles commandes (calibrage, jeux, défis du labo, mémoire, TP) n'ont pas encore leurs cas dans la matrice des accès, qui reste à écrire (point 9).
 - `tp.repondre` lit l'essai, puis l'écrit, sans verrou : deux validations envoyées en même temps pour la même étape pourraient s'écrire l'une sur l'autre. Le navigateur bloque le bouton pendant l'envoi. À regrouper dans une fonction de base.
+- Les pages « Aujourd'hui », parcours, progrès, labo, TP et « S'entraîner » font cinq lectures de plus chacune pour l'entraînement (`faitsDe`). À regrouper dans une fonction de base si une page devient lente.
 - Les réglages d'une paillasse de TP (dont la valeur à trouver) sont dans le code envoyé au navigateur, qui dessine la paillasse. Le jugement reste au serveur, qui rejoue les gestes.
 - La marque « le guide a servi » est posée par le navigateur dans la liste des gestes : un élève qui lit le code peut l'enlever et garder le niveau A. Il n'y a ni classement ni récompense derrière.
 - Les vingt-deux plateaux des jeux de mémoire partent ensemble dans la page d'un jeu. À charger à la demande, comme les paillasses.
@@ -121,7 +132,8 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 | Confirmer les décisions 0008 à 0010 | plan de DS par chapitre, règles du calibrage et du parcours, liste des jeux, place des jeux dans le menu, valeurs de la simulation | lire la partie « à confirmer » de chaque décision | 16 novembre |
 | Essayer la quatrième et la cinquième version locale, le labo | calculer, entrer sa valeur, lancer la simulation, en physique puis en chimie | `docs/recettes/version-locale-4.md`, puis `version-locale-5.md` | 16 novembre |
 | Essayer la section Mémoire | vingt-deux jeux ; listes et histoires en brouillon | `docs/recettes/version-locale-7.md` | 18 novembre |
-| Dire par quoi continuer | ordre proposé le 15 novembre : « S'entraîner » dans le parcours et les progrès ; rappels et application installable ; compte et administration de la bêta ; parents ; solidité, puis mise en ligne. Plan de l'année, bac blanc et nouvelles simulations gardés pour janvier | répondre dans la conversation | prochaine session |
+| Essayer la neuvième version : l'entraînement dans le parcours et les progrès | il a dit « Oui, commence » le 15 novembre ; les règles de détail sont mon choix | `docs/recettes/version-locale-9.md` | 18 novembre |
+| Confirmer la décision 0015 | où se placent le défi et le TP dans le parcours, un TP terminé une fois n'est plus proposé, un défi ne change pas l'objectif atteint | lire « Mes choix » dans la décision, ou les trois questions de la recette | 18 novembre |
 | Refaire les TP avec son équipe et dire ce qui ne va pas | le 15 novembre, Yane a essayé les TP : « ça a l'air de fonctionner » ; les situations restent des brouillons | `docs/recettes/version-locale-8.md` | 18 novembre |
 | Confirmer les décisions 0012 à 0014 | les choix de détail des TP, de la mémoire et de la nouvelle section ; en particulier : avec le guide, « Réaliser » vaut B au mieux | lire la partie « à confirmer » de chaque décision | 18 novembre |
 | Valider ou corriger les quarante-deux énoncés du labo, et confirmer la décision 0011 | ce sont des brouillons : ils ne se montrent qu'en local tant qu'ils ne sont pas validés | la partie « Ce que tu dois me dire » de la recette, puis la partie « à confirmer » de la décision | 18 novembre |
@@ -134,6 +146,7 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 
 ## Décisions récentes
 
+- 0015, l'entraînement entre dans le parcours et dans les progrès : principe accepté par Yane le 15 novembre ; règles de détail à confirmer.
 - 0001, architecture de départ : validée par Yane le 13 novembre, sauf le point 7 (paiement), remplacé par la décision 0002.
 - 0002, vente sur Shopify, accès ouverts dans l'administration : pas de Stripe dans l'application.
 - 0004, pas de doublon dans la partie « à revoir » de la séance : proposée, à confirmer.
@@ -167,4 +180,6 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - Un essai à la souris ne prouve rien pour le doigt. Le 14 novembre, sur toutes les paillasses, un objet glissé au doigt était lâché en route (le navigateur reprenait le geste pour faire défiler) ; seul un essai avec des touchers émulés l'a montré (`scripts/essais/titrage-doigt.mts`). Corrigé dans le kit. Tant que Yane n'a pas essayé sur son téléphone, les gestes au doigt ne sont vérifiés qu'en émulation.
 - Le guide des paillasses est en marche à la première visite. Les essais de `scripts/essais/` le coupent d'office (`ouvre()`), sinon leur score serait plafonné ; un essai du guide le demande (`ouvre({ guide: true })`).
 - En développement, la pastille de Next.js (un « N » en bas à gauche) recouvre un bouton de la paillasse sur téléphone. Elle n'existe pas en ligne. Pour l'enlever pendant un essai : `devIndicators: false` dans `next.config.ts` (le serveur redémarre).
+- Les essais qui manipulent en temps réel (une main qui maintient un appui, un minuteur) ne tournent pas quand l'écran de l'ordinateur est rabattu : il dort et ne se réveille que par à-coups. Le 15 novembre, le robot du titrage s'y est bloqué deux fois. Pour ces cas, `scripts/essais/parcours-entrainement.mts` a un mode « vite » qui ne dépend pas du temps réel ; il ne manipule pas.
+- Le premier code de connexion d'une adresse neuve peut mettre plus de vingt secondes à arriver dans la boîte locale : `scripts/essais/outils.mts` attend quarante secondes, et sait créer le profil d'un compte neuf.
 - Une action qui écrit recharge la page en cours (c'est ainsi que Next.js fonctionne). Un écran qui doit garder un retour à l'écran après l'action (verdict, correction) a donc une adresse qui ne dépend pas de l'avancement, ou un composant qui reste monté.

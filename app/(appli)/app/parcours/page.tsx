@@ -2,8 +2,10 @@ import Link from "next/link";
 import Icone from "@/components/appli/Icone";
 import { Coche, Entete, PillNiveau } from "@/components/appli/Morceaux";
 import { jourDeParis } from "@/lib/commun/dates";
+import { ancreDuTp } from "@/lib/commun/entrainement";
 import { dateSimple, p2, pluriel } from "@/lib/commun/format";
 import * as m from "@/lib/moteur";
+import { entrainementDe } from "@/lib/serveur/entrainement";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
 import { calibragesDe, suiviPour } from "@/lib/serveur/suivi";
 import { afficheAlerte, afficheEtape } from "./textes";
@@ -12,15 +14,26 @@ export const metadata = { title: "Mon parcours" };
 
 // Le parcours (décision 0009) : où l'élève en est sur chaque chapitre vu en classe, palier par palier, et la
 // prochaine chose à faire. Tout est recalculé à chaque affichage à partir de ses réponses : le suivi est toujours à jour.
+// Depuis la décision 0015, il propose aussi de quoi s'entraîner sur chaque chapitre : un défi du labo, un TP.
 export default async function Parcours({ searchParams }: { searchParams: Promise<{ calibrage?: string }> }) {
   const apresTest = (await searchParams).calibrage === "1";
   const espace = await espaceEleve();
   const { ctx, catalogue, profil, droits, session } = espace;
-  const { passes, enCours } = await calibragesDe(session.userId, espace);
-  const p = m.parcours(ctx, suiviPour(espace, passes));
+  const [{ passes, enCours }, entrainement] = await Promise.all([calibragesDe(session.userId, espace), entrainementDe(session, ctx.maintenant)]);
+  const p = m.parcours(ctx, suiviPour(espace, passes, entrainement.suivi));
   const titreFiche = (n: number) => catalogue.fiches.find((f) => f.num === n)?.titre_court ?? `Fiche ${n}`;
   const prevues = m.seancesPrevues(ctx.reglages, profil.note_visee);
-  const etapes = p.etapes.map((e) => afficheEtape(e, titreFiche, droits.coach ? 25 : 20));
+  const etapes = p.etapes.map((e) => afficheEtape(e, titreFiche, droits.coach ? 25 : 20, entrainement.noms));
+  // l'entraînement des chapitres vus en classe : les défis du labo de chaque palier, et les TP
+  const pratique = (fiche: number) => entrainement.bilan.chapitres.get(fiche);
+  const tpDesChapitres = p.chapitres.flatMap((c) => {
+    const e = pratique(c.fiche);
+    if (!e || !e.tp) return [];
+    const liste = entrainement.suivi.tp.filter((t) => t.fiche === c.fiche);
+    return [{ fiche: c.fiche, tp: e.tp, finis: e.tpFinis, vers: (liste.find((t) => !t.fini) ?? liste[0]).id }];
+  });
+  const tpFinis = tpDesChapitres.reduce((n, c) => n + c.finis, 0);
+  const tpEnTout = tpDesChapitres.reduce((n, c) => n + c.tp, 0);
   const [prochaine, ...suite] = etapes;
   const dernier = passes[0];
   const avant = passes[1];
@@ -79,15 +92,15 @@ export default async function Parcours({ searchParams }: { searchParams: Promise
           <section className="carte" style={{ borderColor: "var(--cuivre)" }}>
             <h2>{prochaine.titre}</h2>
             <p>{prochaine.detail}</p>
-            <div className="actions"><Link className="btn btn-cuivre" href={prochaine.href}><Icone nom="lecture" />{prochaine.bouton}</Link></div>
+            <div className="actions"><Link className="btn btn-cuivre" href={prochaine.href} data-etape={prochaine.type}><Icone nom="lecture" />{prochaine.bouton}</Link></div>
           </section>
         </>
       )}
       {suite.length > 0 && (
         <>
           <div className="section-titre"><h2>Ensuite</h2></div>
-          <ol className="liste">{suite.slice(0, 6).map((e, i) => (
-            <li key={e.href + i}><Link className="ligne" href={e.href}><span className="num">{i + 2}</span>
+          <ol className="liste">{suite.slice(0, 8).map((e, i) => (
+            <li key={e.href + i}><Link className="ligne" href={e.href} data-etape={e.type}><span className="num">{i + 2}</span>
               <span><span className="tit">{e.titre}</span><span className="sous"><span>{e.detail}</span></span></span>
               <span className="fin"><Icone nom="chevron" /></span></Link></li>
           ))}</ol>
@@ -105,12 +118,15 @@ export default async function Parcours({ searchParams }: { searchParams: Promise
               <ul className="liste">{p.chapitres.map((c) => {
                 const fait = c.atteint >= palier.niveau;
                 const enCoursIci = !fait && c.prochain === palier.niveau;
+                const labo = pratique(c.fiche)?.parNiveau.get(palier.niveau);
                 return (
                   <li key={c.fiche}><Link className="ligne" href={`/app/fiche/${p2(c.fiche)}?onglet=questions&niveau=${palier.niveau}`}><span className="num">F.{c.fiche}</span>
                     <span><span className="tit">{titreFiche(c.fiche)}</span>
                       <span className="sous">{fait ? <span>objectif atteint</span>
                         : enCoursIci ? <span>{c.faits ? `${pluriel(c.faits, "question travaillée", "questions travaillées")} sur ${c.total}, ${Math.round(c.taux * 100)} % de réussite` : "à commencer"}{c.testDispo ? " · test de passage disponible" : ""}</span>
-                        : <span>après le palier précédent</span>}{c.dansDs && <span className="puce puce-bleu">Au prochain DS</span>}</span></span>
+                        : <span>après le palier précédent</span>}
+                        {labo && <span>Labo : {labo.reussis} {labo.reussis > 1 ? "défis réussis" : "défi réussi"} sur {labo.defis}</span>}
+                        {c.dansDs && <span className="puce puce-bleu">Au prochain DS</span>}</span></span>
                     <span className="fin"><Coche faite={fait} /><Icone nom="chevron" /></span></Link></li>
                 );
               })}</ul>
@@ -118,7 +134,23 @@ export default async function Parcours({ searchParams }: { searchParams: Promise
           ))}
         </div>
       ) : <p className="vide">Coche dans les cours les chapitres que tu as vus en classe, ou passe ton test de calibrage : tes paliers s&apos;afficheront ici.</p>}
-      <p className="petit discret" style={{ marginTop: 14 }}>Un objectif est atteint sur un chapitre quand tu réussis 70 % de ses questions. Pour les objectifs 14 et 18, il faut aussi réussir un test de passage.</p>
+      <p className="petit discret" style={{ marginTop: 14 }}>Un objectif est atteint sur un chapitre quand tu réussis 70 % de ses questions. Pour les objectifs 14 et 18, il faut aussi réussir un test de passage. Les défis du labo et les TP t&apos;entraînent : ils ne changent pas l&apos;objectif atteint.</p>
+
+      {tpDesChapitres.length > 0 && (
+        <>
+          <div className="section-titre"><h2>Tes TP, pour l&apos;épreuve d&apos;ECE</h2><Link href="/app/tp">Tous les TP</Link></div>
+          <section className="carte">
+            <div className="tete"><h2>Sur tes chapitres</h2>
+              <span className={`puce ${tpFinis === tpEnTout ? "puce-ok" : ""}`}>{tpFinis} {tpFinis > 1 ? "terminés" : "terminé"} sur {tpEnTout}</span></div>
+            <div className="barre" style={{ marginBottom: 10 }}><i className="b-solide" style={{ width: `${taux(tpFinis, tpEnTout)}%` }} /></div>
+            <ul className="liste">{tpDesChapitres.map((c) => (
+              <li key={c.fiche}><Link className="ligne" href={`/app/tp#${ancreDuTp(c.vers)}`}><span className="num">F.{c.fiche}</span>
+                <span><span className="tit">{titreFiche(c.fiche)}</span><span className="sous"><span>{c.finis} TP {c.finis > 1 ? "terminés" : "terminé"} sur {c.tp}</span></span></span>
+                <span className="fin"><Coche faite={c.finis === c.tp} /><Icone nom="chevron" /></span></Link></li>
+            ))}</ul>
+          </section>
+        </>
+      )}
     </>
   );
 }

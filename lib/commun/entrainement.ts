@@ -20,6 +20,9 @@ const sous = (chemin: string, href: string): boolean => chemin === href || chemi
 /** La sous-section à laquelle une adresse appartient : sa page, ou une page intérieure (un défi, un essai de TP, un jeu). */
 export const sectionDe = (chemin: string): IdSection | null => SECTIONS.find((s) => sous(chemin, s.href))?.id ?? null;
 
+/** L'ancre d'un TP sur la page des TP : un lien du parcours ouvre la page à sa hauteur. */
+export const ancreDuTp = (id: string): string => `tp-${id}`;
+
 /** Vrai sur la page « S'entraîner » et dans ses quatre sous-sections : l'onglet du bas du téléphone y reste allumé. */
 export const dansEntrainement = (chemin: string): boolean => sous(chemin, ENTRAINEMENT.href) || sectionDe(chemin) !== null;
 

@@ -67,7 +67,7 @@ Les mots, les prénoms, les histoires et les dessins sont écrits pour MasterBac
 - Quatre couleurs seulement, chacune avec son motif et son nom : un jeu ne demande jamais de distinguer deux couleurs.
 - Les listes de mots, les 48 prénoms, les six modèles d'histoire et les 62 dessins sont des brouillons, à relire.
 - La liste des jeux, leurs noms et leurs familles.
-- La mémoire n'entre pas encore dans le parcours, les progrès ni la séance du jour.
+- La mémoire n'entre pas encore dans le parcours, les progrès ni la séance du jour. (Depuis le 15 novembre, elle compte dans les progrès et sur l'accueil, sans être une étape du parcours : décision 0015.)
 - La section commence avec vingt-deux jeux. D'autres peuvent suivre sur le même cadre : un jeu demande ses tirages, son plateau et ses tests.
 
 ## Ce que ça change

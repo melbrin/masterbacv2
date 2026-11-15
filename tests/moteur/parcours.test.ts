@@ -178,6 +178,81 @@ describe("parcours", () => {
   });
 });
 
+describe("l'entraînement dans le parcours (décision 0015)", () => {
+  // le labo du petit sommaire : deux simulations au chapitre 1, une au chapitre 2 ; trois défis chacune, un par objectif
+  const defis = (simulation: string, fiche: number, etoiles: (number | null)[] = [null, null, null]): m.DefiSuivi[] =>
+    [10, 14, 18].map((niveau, i) => ({ id: `${simulation}-${i + 1}`, simulation, rang: i + 1, fiche, niveau, etoiles: etoiles[i] }));
+  const tp = (id: string, fiche: number, fini = false, reprise: string | null = null): m.TpSuivi => ({ id, fiche, fini, reprise });
+  const avec = (entrainement: NonNullable<Suivi["entrainement"]>): Suivi => ({ ...sansSuivi, entrainement });
+  const pratique = (p: m.Parcours) => p.etapes.filter((e) => e.type === "defi" || e.type === "tp");
+  // le chapitre 1 a atteint l'objectif 10 et travaille le 14 ; le chapitre 2 commence
+  const lance = () => {
+    let etat = vus(vide(), 1, 2);
+    for (const k of ["1-q1", "1-q2", "1-q3", "quiz:A10", "quiz:A10b"]) etat = repond(etat, k);
+    return etat;
+  };
+
+  it("sans entraînement, le parcours ne propose ni défi ni TP", () => {
+    expect(pratique(m.parcours(ctx(lance()), sansSuivi))).toEqual([]);
+    expect(pratique(m.parcours(ctx(lance()), avec({ defis: [], tp: [] })))).toEqual([]);
+  });
+  it("après l'objectif d'un chapitre, propose son défi du labo puis son TP", () => {
+    const p = m.parcours(ctx(lance()), avec({ defis: [...defis("basket", 1), ...defis("ph", 2)], tp: [tp("chute", 1), tp("dilution", 2)] }));
+    expect(p.etapes.filter((e) => e.type !== "seance").map((e) => [e.type, (e as { fiche: number }).fiche])).toEqual([
+      ["objectif", 2], ["defi", 2], ["tp", 2], ["objectif", 1], ["defi", 1], ["tp", 1],
+    ]);
+    expect(pratique(p)[0]).toEqual({ type: "defi", fiche: 2, simulation: "ph", defi: "ph-1", rang: 1, niveau: 10 });
+    expect(pratique(p)[1]).toEqual({ type: "tp", fiche: 2, tp: "dilution", reprise: null });
+  });
+  it("un défi ne dépasse pas l'objectif que l'élève travaille sur le chapitre", () => {
+    // chapitre 2 : objectif 10 en cours, le défi d'objectif 10 est réussi, celui d'objectif 14 attend
+    const p = m.parcours(ctx(lance()), avec({ defis: [...defis("basket", 1, [3, null, null]), ...defis("ph", 2, [2, null, null])], tp: [] }));
+    expect(pratique(p)).toEqual([{ type: "defi", fiche: 1, simulation: "basket", defi: "basket-2", rang: 2, niveau: 14 }]);
+    // viser 10 : le chapitre 1 a atteint la note visée, ses défis d'objectif 14 ne sont pas proposés
+    const dix = m.parcours(ctx({ ...lance(), profil: { objectif: 10 } }), avec({ defis: defis("basket", 1, [3, null, null]), tp: [] }));
+    expect(pratique(dix)).toEqual([]);
+  });
+  it("là où la note visée est atteinte, l'entraînement continue, après les autres chapitres", () => {
+    const etat = { ...lance(), profil: { objectif: 10 } };
+    const p = m.parcours(ctx(etat), avec({ defis: [...defis("basket", 1), ...defis("ph", 2)], tp: [tp("chute", 1)] }));
+    expect(p.chapitres.map((c) => c.prochain)).toEqual([null, 10]);
+    expect(pratique(p).map((e) => [e.type, e.fiche])).toEqual([["defi", 2], ["defi", 1], ["tp", 1]]);
+    expect(pratique(p)[1]).toMatchObject({ defi: "basket-1", niveau: 10 });
+  });
+  it("avec deux simulations, prend le défi du plus petit objectif ; à objectif égal, la première du labo", () => {
+    const deux = (a: (number | null)[], b: (number | null)[]) => pratique(m.parcours(ctx(lance()), avec({ defis: [...defis("basket", 1, a), ...defis("largage", 1, b)], tp: [] })));
+    expect(deux([null, null, null], [null, null, null])[0]).toMatchObject({ defi: "basket-1" });
+    expect(deux([3, null, null], [null, null, null])[0]).toMatchObject({ defi: "largage-1", niveau: 10 });
+    expect(deux([3, null, null], [1, null, null])[0]).toMatchObject({ defi: "basket-2", niveau: 14 });
+    // tout ce qui reste dépasse l'objectif 14 du chapitre
+    expect(deux([3, 3, null], [1, 2, null])).toEqual([]);
+    expect(deux([3, 3, 3], [1, 2, 3])).toEqual([]);
+  });
+  it("dans une simulation, c'est le premier défi non réussi qui compte, quel que soit l'ordre de la liste", () => {
+    const melanges = [...defis("basket", 1)].reverse();
+    expect(pratique(m.parcours(ctx(lance()), avec({ defis: melanges, tp: [] })))[0]).toMatchObject({ defi: "basket-1", rang: 1 });
+  });
+  it("propose d'abord le TP laissé en route, jamais un TP terminé", () => {
+    const de = (...liste: m.TpSuivi[]) => pratique(m.parcours(ctx(lance()), avec({ defis: [], tp: liste }))).filter((e) => e.fiche === 1);
+    expect(de(tp("chute", 1), tp("pendule", 1))).toEqual([{ type: "tp", fiche: 1, tp: "chute", reprise: null }]);
+    expect(de(tp("chute", 1), tp("pendule", 1, false, "essai-7"))).toEqual([{ type: "tp", fiche: 1, tp: "pendule", reprise: "essai-7" }]);
+    expect(de(tp("chute", 1, true), tp("pendule", 1))).toEqual([{ type: "tp", fiche: 1, tp: "pendule", reprise: null }]);
+    // un TP terminé puis recommencé reste terminé : le parcours ne le redemande pas
+    expect(de(tp("chute", 1, true, "essai-9"))).toEqual([]);
+  });
+  it("ne propose rien pour un chapitre qui n'est pas vu en classe", () => {
+    const p = m.parcours(ctx(lance()), avec({ defis: defis("satellite", 3), tp: [tp("archimede", 3)] }));
+    expect(pratique(p)).toEqual([]);
+  });
+  it("un chapitre dont le test de passage est disponible garde son entraînement à sa place", () => {
+    let etat = vus(vide(), 1);
+    for (const k of ["1-q1", "1-q2", "1-q3", "quiz:A10", "quiz:A10b", "1-q4", "1-q5", "1-q6", "quiz:A14"]) etat = repond(etat, k);
+    etat = { ...etat, seances: [{ date: AUJ, minutes: 25 }] };
+    const p = m.parcours(ctx(etat), avec({ defis: defis("basket", 1), tp: [tp("chute", 1)] }));
+    expect(p.etapes.map((e) => e.type)).toEqual(["passage", "defi", "tp"]);
+  });
+});
+
 describe("plan d'un DS sur plusieurs chapitres (décision 0008)", () => {
   const ds = (fiches: number[], dans: number, duree = 2, objectif = 14) => ({ id: "d", date: ajouteJours(AUJ, dans), duree, fiches, objectif });
   const refsDe = (plan: ReturnType<typeof m.construitPlan>) => plan.seances.flatMap((s) => s.taches.flatMap((t) => (t.type === "questions" || t.type === "ds-blanc" ? t.refs : t.type === "exercice" ? [t.ref] : [])));
@@ -314,6 +389,50 @@ describe("propriétés du calibrage, du parcours et du plan réparti", () => {
       // chaque chapitre vu qui a encore un objectif à atteindre a exactement une étape
       const cibles = p.etapes.filter((e) => e.type === "objectif" || e.type === "passage").map((e) => (e as { fiche: number }).fiche).sort((a, b) => a - b);
       expect(cibles).toEqual(p.chapitres.filter((x) => x.prochain !== null).map((x) => x.fiche));
+    }));
+  });
+  it("entraînement : un défi et un TP au plus par chapitre vu, jamais réussis, jamais au-dessus de l'objectif travaillé ; le reste du parcours ne bouge pas", () => {
+    const defi = fc.record({ simulation: fc.constantFrom("a", "b", "c", "d"), rang: fc.integer({ min: 1, max: 3 }), fiche: fc.constantFrom(...NUMS), etoiles: fc.option(fc.integer({ min: 1, max: 3 })) });
+    const unTp = fc.record({ id: fc.constantFrom("t1", "t2", "t3", "t4", "t5"), fiche: fc.constantFrom(...NUMS), fini: fc.boolean(), reprise: fc.option(fc.constant("essai")) });
+    fc.assert(fc.property(eleve, fc.array(defi, { maxLength: 12 }), fc.uniqueArray(unTp, { maxLength: 5, selector: (t) => t.id }), (c, tirage, tps) => {
+      // une simulation appartient à un seul chapitre, et chacun de ses rangs n'a qu'un défi
+      const chapitre = new Map<string, number>();
+      const vusIds = new Set<string>();
+      const defis: m.DefiSuivi[] = [];
+      for (const d of tirage) {
+        const fiche = chapitre.get(d.simulation) ?? d.fiche;
+        chapitre.set(d.simulation, fiche);
+        const id = `${d.simulation}-${d.rang}`;
+        if (vusIds.has(id)) continue;
+        vusIds.add(id);
+        defis.push({ id, simulation: d.simulation, rang: d.rang, fiche, niveau: [10, 14, 18][d.rang - 1], etoiles: d.etoiles });
+      }
+      const sans = m.parcours(c, { dernierCalibrage: null, seanceDs: null });
+      const p = m.parcours(c, { dernierCalibrage: null, seanceDs: null, entrainement: { defis, tp: tps } });
+      const pratique = p.etapes.filter((e) => e.type === "defi" || e.type === "tp");
+      // sans les étapes d'entraînement, c'est le parcours d'avant, dans le même ordre
+      expect(p.etapes.filter((e) => e.type !== "defi" && e.type !== "tp")).toEqual(sans.etapes);
+      expect({ ...p, etapes: [] }).toEqual({ ...sans, etapes: [] });
+      const vise = c.etat.profil.objectif as number;
+      for (const e of pratique) {
+        const chap = p.chapitres.find((x) => x.fiche === e.fiche);
+        expect(chap).toBeDefined();
+        if (e.type === "defi") {
+          const d = defis.find((x) => x.id === e.defi);
+          expect(d).toMatchObject({ fiche: e.fiche, etoiles: null, niveau: e.niveau, rang: e.rang });
+          expect(e.niveau).toBeLessThanOrEqual(chap?.prochain ?? vise);
+          // aucun défi de la même simulation ne reste à réussir avant lui
+          expect(defis.some((x) => x.simulation === e.simulation && x.etoiles === null && x.rang < e.rang)).toBe(false);
+        } else {
+          const t = tps.find((x) => x.id === e.tp);
+          expect(t).toMatchObject({ fiche: e.fiche, fini: false });
+          expect(e.reprise).toBe(t?.reprise ?? null);
+        }
+      }
+      for (const x of p.chapitres) {
+        expect(pratique.filter((e) => e.fiche === x.fiche && e.type === "defi").length).toBeLessThanOrEqual(1);
+        expect(pratique.filter((e) => e.fiche === x.fiche && e.type === "tp").length).toBe(tps.some((t) => t.fiche === x.fiche && !t.fini) ? 1 : 0);
+      }
     }));
   });
   it("plan réparti : jamais deux fois la même question, jamais plus de huit par séance, aucun chapitre oublié quand il a des candidates", () => {

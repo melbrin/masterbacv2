@@ -5,12 +5,10 @@ import Vignette from "@/components/simulations/Vignette";
 import { ENTRAINEMENT, SECTIONS, type IdSection } from "@/lib/commun/entrainement";
 import { JEUX } from "@/lib/commun/jeux";
 import { JEUX_MEMOIRE } from "@/lib/commun/memoire";
-import { apercuDe, avancementDesDefis, bilanDesDefis, simulationsVisibles } from "@/lib/serveur/defis";
-import { sectionsDe } from "@/lib/serveur/entrainement";
-import { recordsDe } from "@/lib/serveur/jeux";
-import { bilanMemoire } from "@/lib/serveur/memoire";
+import { apercuDe, simulationsVisibles } from "@/lib/serveur/defis";
+import { entrainementDe, sectionsDe } from "@/lib/serveur/entrainement";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
-import { bilansDesTp, tpVisibles } from "@/lib/serveur/tp";
+import { tpVisibles } from "@/lib/serveur/tp";
 
 export const metadata = { title: ENTRAINEMENT.nom };
 
@@ -21,23 +19,20 @@ const accord = (n: number, un: string, plusieurs: string) => (n > 1 ? plusieurs 
 const Etoile = () => <svg className="porte-etoile" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z" /></svg>;
 
 // La page de la section « S'entraîner » : une porte par sous-section, comme une petite affiche. Une porte ne se montre
-// que si sa sous-section a du contenu pour ce compte. Chaque lecture se fait avec les droits de l'élève.
+// que si sa sous-section a du contenu pour ce compte. Les chiffres sont ceux de l'accueil et des progrès (décision 0015) :
+// ils se lisent une seule fois, avec les droits de l'élève.
 export default async function Entrainement() {
-  const { session } = await espaceEleve();
+  const { session, ctx } = await espaceEleve();
   const ouvertes = sectionsDe(session.admin);
   const labo = simulationsVisibles(session.admin);
   const tps = tpVisibles(session.admin);
-  const [avancement, tp, memoire, jeux] = await Promise.all([
-    ouvertes.includes("labo") ? avancementDesDefis(session.userId) : null,
-    ouvertes.includes("tp") ? bilansDesTp(session.userId) : null,
-    ouvertes.includes("memoire") ? bilanMemoire(session.userId) : null,
-    recordsDe(session.userId),
-  ]);
-  const nbDefis = labo.reduce((s, x) => s + x.defis.length, 0);
-  const etoiles = avancement ? labo.reduce((s, x) => s + bilanDesDefis(x.defis, avancement).etoiles, 0) : 0;
+  const { bilan } = await entrainementDe(session, ctx.maintenant);
+  const nbDefis = bilan.labo.defis;
+  const etoiles = bilan.labo.etoiles;
   // un TP refait ne compte qu'une fois
-  const tpFinis = tp ? tps.filter((t) => tp.meilleurs.has(t.id)).length : 0;
-  const jours = memoire?.joursSemaine ?? 0;
+  const tpFinis = bilan.tp.finis;
+  const jours = bilan.memoire.jours;
+  const parties = bilan.jeux.parties;
   const portes: Record<IdSection, Porte> = {
     labo: {
       scene: labo[0] ? <Vignette simulation={labo[0].simulation.id} {...apercuDe(labo[0].simulation, labo[0].defis[0])} /> : null,
@@ -55,7 +50,7 @@ export default async function Entrainement() {
     },
     jeux: {
       scene: <IllustrationJeux />, nombre: JEUX.length, unite: "jeux",
-      suite: <><b>{jeux.partiesSemaine}</b> {accord(jeux.partiesSemaine, "partie", "parties")} en 7 jours</>,
+      suite: <><b>{parties}</b> {accord(parties, "partie", "parties")} en 7 jours</>,
     },
   };
 

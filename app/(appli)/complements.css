@@ -61,12 +61,21 @@ ol.liste { list-style: none; padding: 0; margin: 0; }
 .chiffres-fete b small { font-size: .5em; color: var(--discret); }
 .chiffres-fete span, .chiffres-cles span { font-size: .78rem; color: var(--discret); }
 .chiffres-cles .carte { display: grid; gap: 4px; padding: 12px 10px; text-align: center; }
-.puce-serie { background: color-mix(in srgb, var(--cuivre) 16%, var(--carte)); color: var(--cuivre-texte); }
+.puce-serie, .puce-parcours { background: color-mix(in srgb, var(--cuivre) 16%, var(--carte)); color: var(--cuivre-texte); }
 
 /* Graphiques de l'écran des progrès. */
 .graphe { max-width: 560px; margin-inline: auto; }
 .graphe .barre-s { fill: color-mix(in srgb, var(--cuivre-texte) 55%, var(--carte)); }
 .graphe .barre-s.courante { fill: var(--cuivre-texte); }
+/* L'entraînement sur l'écran des progrès : le labo, puis la grille d'ECE, puis la mémoire. Sur un écran large,
+   la grille d'ECE, plus haute, prend la colonne de droite ; le labo et la mémoire se rangent à gauche. */
+.progres-entrainement { display: grid; gap: 14px; }
+@media (min-width: 640px) {
+  .progres-entrainement { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .progres-entrainement > .progres-tp { grid-column: 2; grid-row: 1 / span 2; }
+  /* la hauteur en trop de la grille d'ECE va à la seconde rangée : la mémoire reste collée sous le labo */
+  .progres-entrainement:has(> .progres-tp) { grid-template-rows: auto 1fr; }
+}
 .niveaux-barres { display: grid; gap: 12px; }
 .niveaux-barres > div { display: grid; gap: 4px; }
 .niveaux-barres .tete { margin: 0; }

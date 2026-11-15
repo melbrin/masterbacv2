@@ -1,12 +1,24 @@
 // Les phrases du parcours : ce que chaque étape et chaque alerte disent à l'élève, et où elles mènent.
 // Les règles sont dans lib/moteur/parcours.ts ; ici, seulement leur mise en mots (décision 0005 : langue simple).
-import { ENTRAINEMENT } from "@/lib/commun/entrainement";
+import { ENTRAINEMENT, ancreDuTp } from "@/lib/commun/entrainement";
 import { p2, pluriel } from "@/lib/commun/format";
 import type { Alerte, EtapeParcours } from "@/lib/moteur";
 
 export interface Affiche { titre: string; detail: string; href: string; bouton: string }
+/** Une étape mise en mots, avec son genre : la page le pose sur le lien (`data-etape`). */
+export type EtapeAffichee = Affiche & { type: EtapeParcours["type"] };
 
-export function afficheEtape(e: EtapeParcours, titreFiche: (n: number) => string, minutesSeance: number): Affiche {
+/** Les noms d'un défi du labo et d'un TP, pour les étapes d'entraînement (décision 0015). */
+export interface NomsDesEtapes {
+  defi: (id: string) => { simulation: string; titre: string } | null;
+  tp: (id: string) => { titre: string; famille: string; minutes: number } | null;
+}
+
+export function afficheEtape(e: EtapeParcours, titreFiche: (n: number) => string, minutesSeance: number, noms: NomsDesEtapes): EtapeAffichee {
+  return { type: e.type, ...phrases(e, titreFiche, minutesSeance, noms) };
+}
+
+function phrases(e: EtapeParcours, titreFiche: (n: number) => string, minutesSeance: number, noms: NomsDesEtapes): Affiche {
   switch (e.type) {
     case "calibrage":
       return e.raison === "jamais"
@@ -30,6 +42,24 @@ export function afficheEtape(e: EtapeParcours, titreFiche: (n: number) => string
           : `${pluriel(e.total, "question", "questions")} à travailler. Il faut 70 % de réussite.`,
         href: `/app/fiche/${p2(e.fiche)}?onglet=questions&niveau=${e.niveau}`, bouton: "Travailler ce chapitre",
       };
+    case "defi": {
+      const nom = noms.defi(e.defi);
+      return {
+        titre: `Réussis un défi du labo : ${nom?.simulation ?? "une simulation"}`,
+        detail: `${titreFiche(e.fiche)}, objectif ${e.niveau}${nom ? ` : « ${nom.titre} »` : ""}. Tu calcules, puis tu lances la simulation.`,
+        href: `/app/labo/${e.simulation}/${e.rang}`, bouton: "Ouvrir le défi",
+      };
+    }
+    case "tp": {
+      const nom = noms.tp(e.tp);
+      return {
+        titre: `${e.reprise ? "Termine ton TP" : "Fais un TP"} : ${nom?.titre ?? "un TP de ce chapitre"}`,
+        detail: e.reprise
+          ? `${titreFiche(e.fiche)}. Tu le reprends là où tu l'as laissé.`
+          : `${titreFiche(e.fiche)}${nom ? `, ${nom.minutes} minutes` : ""}. Tu manipules comme à l'épreuve d'ECE.`,
+        href: e.reprise ? `/app/tp/essai/${e.reprise}` : `/app/tp#${ancreDuTp(e.tp)}`, bouton: e.reprise ? "Reprendre le TP" : "Voir ce TP",
+      };
+    }
   }
 }
 

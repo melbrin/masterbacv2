@@ -71,7 +71,7 @@ La simulation libre du basketteur (décision 0010) reste, sous « Aller plus loi
 - Les modèles simplifiés : sous 120 km d'altitude, le satellite est dit freiné par l'atmosphère et retombe ; la burette coule d'un trait jusqu'au volume choisi ; les cent noyaux dessinés suivent exactement la loi de décroissance, sans hasard.
 - Les équations des trois titrages (acide chlorhydrique et soude, acide éthanoïque et soude, ions fer(II) et permanganate) sont écrites dans les énoncés : à relire comme le reste.
 - La scène de nuit, dans le thème clair comme dans le thème sombre.
-- Les étoiles n'entrent pas encore dans le parcours ni dans les progrès.
+- Les étoiles n'entrent pas encore dans le parcours ni dans les progrès. (Depuis le 15 novembre, elles y entrent : décision 0015.)
 
 ## Ce que ça change
 

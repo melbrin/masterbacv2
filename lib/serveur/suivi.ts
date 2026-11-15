@@ -30,13 +30,27 @@ export async function calibragesDe(userId: string, travail: Travail): Promise<{ 
   return { passes, enCours: recent?.id ?? null };
 }
 
-/** Ce que le parcours a besoin de savoir en plus de l'état : le dernier calibrage, et la séance de DS qui attend. */
-export function suiviPour(travail: Travail, passes: CalibragePasse[]): m.Suivi {
+/**
+ * Ce que le parcours a besoin de savoir en plus de l'état : le dernier calibrage, la séance de DS qui attend, et où
+ * l'élève en est dans « S'entraîner » (décision 0015). Sans ce dernier, le parcours ne propose ni défi ni TP.
+ */
+export function suiviPour(travail: Travail, passes: CalibragePasse[], entrainement?: m.Suivi["entrainement"]): m.Suivi {
   const ds = m.prochainDS(travail.ctx);
   const complet = ds ? travail.devoirs.find((d) => d.id === ds.id) : null;
   const seance = complet?.seances.find((s) => !m.seancePlanFaite(travail.ctx, complet.creeA, s));
   return {
     dernierCalibrage: passes[0]?.quand ?? null,
     seanceDs: complet && seance ? { id: complet.id, seance: seance.id, titre: seance.titre, date: seance.date } : null,
+    ...(entrainement ? { entrainement } : {}),
+  };
+}
+
+/** Les défis du labo et les TP que le parcours propose en ce moment : leurs pages les signalent (décision 0015). */
+export function proposesParLeParcours(travail: Travail, entrainement: m.Suivi["entrainement"]): { defis: Set<string>; tp: Set<string> } {
+  // l'entraînement proposé ne dépend ni du calibrage ni du plan de DS
+  const etapes = m.parcours(travail.ctx, { dernierCalibrage: null, seanceDs: null, entrainement }).etapes;
+  return {
+    defis: new Set(etapes.flatMap((e) => (e.type === "defi" ? [e.defi] : []))),
+    tp: new Set(etapes.flatMap((e) => (e.type === "tp" ? [e.tp] : []))),
   };
 }

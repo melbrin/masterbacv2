@@ -2,15 +2,21 @@ import Link from "next/link";
 import { BarresSemaines, CourbeNotes } from "@/components/appli/Graphiques";
 import Icone from "@/components/appli/Icone";
 import { BarreEtats, Entete, PillNiveau } from "@/components/appli/Morceaux";
+import Etoiles from "@/components/simulations/Etoiles";
+import GrilleEce from "@/components/tp/GrilleEce";
 import { ajouteJours } from "@/lib/commun/dates";
+import { ENTRAINEMENT } from "@/lib/commun/entrainement";
 import { dateSimple, initialeJour, nombre, p2, pluriel } from "@/lib/commun/format";
 import * as m from "@/lib/moteur";
+import { entrainementDe } from "@/lib/serveur/entrainement";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
 
 export const metadata = { title: "Progrès" };
 
 export default async function Progres() {
-  const { ctx, catalogue, devoirs, profil, jour } = await espaceEleve();
+  const { ctx, catalogue, devoirs, profil, jour, session } = await espaceEleve();
+  // l'entraînement (décision 0015) : le labo, les TP, la mémoire et les jeux comptent dans les progrès
+  const { offre, bilan: pratique } = await entrainementDe(session, ctx.maintenant);
   const note = m.noteEstimee(ctx);
   const affichable = note && note.notes >= 1 && note.essais >= 20;
   const vus = m.chapitresVus(ctx);
@@ -30,6 +36,18 @@ export default async function Progres() {
   const total28 = quatreSemaines.filter((d) => faits.has(d)).length;
   const tests = suivis.filter((x) => x.nv.testDispo && x.nv.prochain);
   const gagnees = mois.notionsMaintenant - mois.notionsAvant;
+  // ce qui a été fait à l'entraînement ce mois-ci : un chiffre par sous-section qui a quelque chose à proposer
+  const pratiqueDuMois = [
+    ...(offre.defis.length ? [{ n: pratique.mois.defis, un: "défi du labo réussi", plusieurs: "défis du labo réussis" }] : []),
+    ...(offre.tp.length ? [{ n: pratique.mois.tp, un: "TP terminé", plusieurs: "TP terminés" }] : []),
+    { n: pratique.mois.parties, un: "partie jouée", plusieurs: "parties jouées" },
+  ];
+  const pratiqueDeLaSemaine = [
+    pratique.semaine.defis ? pluriel(pratique.semaine.defis, "défi du labo réussi", "défis du labo réussis") : "",
+    pratique.semaine.tp ? pluriel(pratique.semaine.tp, "TP terminé", "TP terminés") : "",
+    pratique.semaine.parties ? pluriel(pratique.semaine.parties, "partie jouée", "parties jouées") : "",
+  ].filter(Boolean);
+  const grille = pratique.tp.grille.filter((c) => c.niveau);
 
   return (
     <>
@@ -55,11 +73,15 @@ export default async function Progres() {
         <div className="carte"><b className="chiffres">{mois.questions}</b><span>{mois.questions > 1 ? "réponses données" : "réponse donnée"}</span></div>
         <div className="carte"><b className="chiffres">{gagnees > 0 ? `+${gagnees}` : gagnees}</b><span>{Math.abs(gagnees) > 1 ? "notions acquises" : "notion acquise"}</span></div>
       </div>
+      <div className="chiffres-cles" style={{ marginTop: 8, gridTemplateColumns: `repeat(${pratiqueDuMois.length}, minmax(0, 1fr))` }}>
+        {pratiqueDuMois.map((c) => <div className="carte" key={c.un}><b className="chiffres">{c.n}</b><span>{c.n > 1 ? c.plusieurs : c.un}</span></div>)}
+      </div>
 
       <div className="section-titre"><h2>Ton travail, semaine après semaine</h2></div>
       <section className="carte">
         <p className="petit discret" style={{ margin: "0 0 6px" }}>Le nombre de réponses que tu as données chaque semaine, sur 8 semaines. Sous la date : le nombre de séances terminées.</p>
         <BarresSemaines semaines={semaines} />
+        {pratiqueDeLaSemaine.length > 0 && <p className="petit discret" style={{ margin: "8px 0 0" }}>Cette semaine, à l&apos;entraînement : {pratiqueDeLaSemaine.join(", ")}.</p>}
       </section>
 
       <div className="grille-2" style={{ marginTop: 14 }}>
@@ -87,6 +109,35 @@ export default async function Progres() {
         </section>
       </div>
 
+      <div className="section-titre"><h2>À l&apos;entraînement</h2><Link href={ENTRAINEMENT.href}>{ENTRAINEMENT.nom}</Link></div>
+      <div className="progres-entrainement" id="entrainement">
+        {offre.defis.length > 0 && (
+          <section className="carte"><div className="tete"><h2>Au labo</h2><span className="puce"><Etoiles gagnees={1} total={1} /> {pratique.labo.etoiles} sur {pratique.labo.etoilesMax}</span></div>
+            <div className="niveaux-barres">
+              {pratique.labo.parNiveau.map((n) => (
+                <div key={n.niveau}><div className="tete"><PillNiveau n={n.niveau} /><b>{n.reussis} sur {n.defis}</b></div>
+                  <div className="barre" role="img" aria-label={`Objectif ${n.niveau} : ${pluriel(n.reussis, "défi réussi", "défis réussis")} sur ${n.defis}`}><i className="b-solide" style={{ width: `${(100 * n.reussis) / Math.max(1, n.defis)}%` }} /></div></div>
+              ))}
+            </div>
+            <p className="petit discret" style={{ margin: "10px 0 0" }}>Les défis réussis, objectif par objectif. Trois étoiles : réussi au premier essai.</p>
+          </section>
+        )}
+        {offre.tp.length > 0 && (
+          <section className="carte progres-tp"><div className="tete"><h2>En TP</h2><span className="puce">{pratique.tp.finis} {pratique.tp.finis > 1 ? "terminés" : "terminé"} sur {pratique.tp.tp}</span></div>
+            {grille.length > 0 ? (
+              <>
+                <GrilleEce lignes={grille} />
+                <p className="petit discret" style={{ margin: "10px 0 0" }}>Ton niveau habituel dans chaque compétence de l&apos;épreuve d&apos;ECE, sur tes TP terminés. A : réussi sans aide. B : une erreur, ou une manipulation faite avec le guide. C : plusieurs erreurs. D : à reprendre.</p>
+              </>
+            ) : <p className="discret" style={{ margin: 0 }}>Termine un TP : ton niveau dans chaque compétence de l&apos;épreuve d&apos;ECE s&apos;affichera ici.</p>}
+          </section>
+        )}
+        <section className="carte"><h2>Mémoire et jeux</h2>
+          <p style={{ margin: "0 0 6px" }}>Mémoire : <b>{pluriel(pratique.memoire.jours, "jour", "jours")}</b> d&apos;entraînement sur les 7 derniers, {pluriel(pratique.memoire.parties, "partie", "parties")}.</p>
+          <p style={{ margin: 0 }}>Jeux de révision : <b>{pluriel(pratique.jeux.parties, "partie", "parties")}</b> sur les 7 derniers jours.</p>
+        </section>
+      </div>
+
       {tests.length > 0 && <>
         <div className="section-titre"><h2>Tests de passage disponibles</h2></div>
         <ul className="liste">{tests.map(({ f, nv }) => (
@@ -97,15 +148,22 @@ export default async function Progres() {
       </>}
 
       <div className="section-titre"><h2>Chapitre par chapitre</h2><Link href="/app/cours">Tous les cours</Link></div>
-      {suivis.length ? <ul className="liste">{suivis.map(({ f, e, nv }) => (
+      {suivis.length ? <ul className="liste">{suivis.map(({ f, e, nv }) => {
+        const labo = pratique.chapitres.get(f.num);
+        return (
         <li key={f.num}><Link className="ligne" href={`/app/fiche/${p2(f.num)}?onglet=notions`}><span className="num">F.{f.num}</span>
           <span><span className="tit">{f.titre_court}</span>
             <span className="sous">{nv.atteint ? <><PillNiveau n={nv.atteint} /> atteint</> : <span>Objectif 10 en cours</span>}
               {nv.prochain && <span>objectif {nv.prochain} : {pluriel(nv.res[nv.prochain].faits, "question faite", "questions faites")} sur {nv.res[nv.prochain].total}, {Math.round(nv.res[nv.prochain].taux * 100)} % de réussite</span>}</span>
             <span className="sous"><span>{pluriel(e.solide, "notion solide", "notions solides")} · {pluriel(e.acquis, "acquise", "acquises")} · {e["en-cours"]} en cours · {e["a-voir"]} à voir</span></span>
+            {labo && <span className="sous"><span>{[
+              labo.defis ? `Labo : ${pluriel(labo.etoiles, "étoile", "étoiles")} sur ${3 * labo.defis}` : "",
+              labo.tp ? `TP : ${labo.tpFinis} ${labo.tpFinis > 1 ? "terminés" : "terminé"} sur ${labo.tp}` : "",
+            ].filter(Boolean).join(" · ")}</span></span>}
             <span style={{ display: "block", marginTop: 6, maxWidth: 300 }}><BarreEtats e={e} /></span></span>
           <span className="fin"><Icone nom="chevron" /></span></Link></li>
-      ))}</ul> : <p className="vide">Coche dans les cours les chapitres que tu as vus en classe : tes progrès sur chaque chapitre s&apos;afficheront ici.</p>}
+        );
+      })}</ul> : <p className="vide">Coche dans les cours les chapitres que tu as vus en classe : tes progrès sur chaque chapitre s&apos;afficheront ici.</p>}
 
       <div className="section-titre"><h2>Tes notes de DS</h2><Link href="/app/ds">Mode DS</Link></div>
       {notes.length ? <ul className="liste">{notes.map((d) => (
