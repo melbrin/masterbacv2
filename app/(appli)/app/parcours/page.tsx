@@ -122,7 +122,7 @@ export default async function Parcours({ searchParams }: { searchParams: Promise
                 return (
                   <li key={c.fiche}><Link className="ligne" href={`/app/fiche/${p2(c.fiche)}?onglet=questions&niveau=${palier.niveau}`}><span className="num">F.{c.fiche}</span>
                     <span><span className="tit">{titreFiche(c.fiche)}</span>
-                      <span className="sous">{fait ? <span>objectif atteint</span>
+                      <span className="sous" style={{ columnGap: 14 }}>{fait ? <span>objectif atteint</span>
                         : enCoursIci ? <span>{c.faits ? `${pluriel(c.faits, "question travaillée", "questions travaillées")} sur ${c.total}, ${Math.round(c.taux * 100)} % de réussite` : "à commencer"}{c.testDispo ? " · test de passage disponible" : ""}</span>
                         : <span>après le palier précédent</span>}
                         {labo && <span>Labo : {labo.reussis} {labo.reussis > 1 ? "défis réussis" : "défi réussi"} sur {labo.defis}</span>}

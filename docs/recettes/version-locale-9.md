@@ -49,18 +49,17 @@ Sans réponse de ta part, je garde ces choix.
 
 ## Ce qui a été essayé, et ce qui ne l'a pas été
 
-Essayé le 15 novembre par un robot qui joue comme un élève, dans un vrai navigateur, en largeur téléphone (`scripts/essais/parcours-entrainement.mts`, mode « vite ») : il crée un compte, coche les fiches 1 et 10, suit l'étape du défi et le réussit, suit l'étape du TP, le laisse en route, le reprend depuis son parcours, le termine, puis relit le parcours, l'accueil, les progrès, la section, le labo et la page des TP. Aucun écart, aucune erreur de page. Les mêmes pages ont été photographiées à 720 et à 1219 points de large, et en thème sombre.
+Essayé le 15 novembre par un robot qui joue comme un élève, dans un vrai navigateur, en largeur téléphone (`scripts/essais/parcours-entrainement.mts`) : il crée un compte, coche les fiches 1 et 10, suit l'étape du défi et le réussit, suit l'étape du TP, le laisse en route, le reprend depuis son parcours, le fait en entier avec le guide (bilan A, A, B, A), joue une partie de mémoire, puis relit le parcours, l'accueil, les progrès, la section, le labo et la page des TP. Aucun écart, aucune erreur de page. Les mêmes pages ont été photographiées et regardées à 720 et à 1219 points de large, et en thème sombre.
 
 Pas essayé :
 
-- **Le TP manipulé en entier depuis le parcours, et une partie de mémoire** (le mode « joue » du même robot). Ces essais suivent la main du guide en temps réel, et l'écran de ton ordinateur était rabattu : il dormait. Dans le mode « vite », le robot termine le TP sans manipuler. La manipulation elle-même a été essayée le 14 novembre et n'a pas changé.
 - Un vrai téléphone.
 - Un compte qui prépare un DS en même temps.
 
-Pour lancer l'essai complet, ordinateur ouvert, serveur et base démarrés (compte cinq minutes) :
+Pour relancer l'essai, ordinateur ouvert, serveur et base démarrés (compte quatre minutes) :
 
 ```bash
 node scripts/essais/parcours-entrainement.mts sorties/parcours /tmp/session-parcours.json eleve.essai@exemple.fr
 ```
 
-L'adresse doit être neuve : change-la à chaque essai.
+L'adresse doit être neuve : change-la à chaque essai. L'écran de l'ordinateur doit rester ouvert : rabattu, l'ordinateur dort et le robot se bloque sur les gestes maintenus.
