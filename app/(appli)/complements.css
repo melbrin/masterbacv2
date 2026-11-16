@@ -168,3 +168,10 @@ p.carte.signal { margin: 0; }
 .panne h1:focus { outline: none; }
 .panne .actions { margin-top: 4px; }
 .panne-numero { margin: 18px 0 0; max-width: 62ch; }
+
+/* Les touches de symboles sous une réponse à trou : un exposant, et les lettres des formules. */
+.touches-trou { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.touches-trou button { min-width: 44px; min-height: 44px; padding: 0 10px; border: 1px solid var(--filet); border-radius: 10px; background: var(--carte); color: var(--encre); font: inherit; font-weight: 600; cursor: pointer; }
+.touches-trou button[aria-pressed="true"] { border-color: var(--cuivre); background: color-mix(in srgb, var(--cuivre) 16%, var(--carte)); }
+.touches-trou button:disabled { opacity: .5; cursor: default; }
+.touches-trou sup { font-size: .7em; }

@@ -10,8 +10,35 @@ export type Reponse =
   | { type: "association"; droites: string[] }
   | { type: "ordre"; elements: string[] };
 
-/** Compare sans tenir compte de la casse, des accents, des espaces ni des signes « · », « . », « * » et « × ». */
-export const norme = (s: string): string => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[\s·.*×]/g, "");
+const HAUTS = "⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺";
+const BAS = "₀₁₂₃₄₅₆₇₈₉";
+const PLATS = "0123456789-+";
+
+/**
+ * Compare sans tenir compte de la casse, des accents, des espaces, des signes « · », « . », « * » et « × », ni de la
+ * façon d'écrire un exposant ou un indice : « 10⁻¹⁴ », « 10^-14 » et « 10^(-14) » se valent, comme « f'₂ » et « f'2 ».
+ */
+export const norme = (s: string): string =>
+  [...s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/−/g, "-")]
+    .map((c) => (HAUTS.includes(c) ? PLATS[HAUTS.indexOf(c)] : BAS.includes(c) ? PLATS[BAS.indexOf(c)] : c)).join("")
+    .replace(/[\s·.*×^()]/g, "");
+
+/** Écrit en exposant les chiffres et les signes d'un texte : « -14 » devient « ⁻¹⁴ ». Le reste ne change pas. */
+export const enExposant = (s: string): string => [...s.replace(/−/g, "-")].map((c) => (PLATS.includes(c) ? HAUTS[PLATS.indexOf(c)] : c)).join("");
+
+/**
+ * Ce que le champ d'une réponse à trou affiche quand l'élève tape un caractère à la fin : après « ^ », ou tant que
+ * l'exposant est en cours, les chiffres et les signes montent en exposant, comme sur une copie. Tout autre caractère
+ * termine l'exposant. Rend le nouveau texte et dit si l'exposant continue.
+ */
+export function saisieDeTrou(avant: string, apres: string, exposant: boolean): { texte: string; exposant: boolean } {
+  // seule une frappe en fin de texte est transformée : une correction au milieu, un collage ou un effacement passent tels quels
+  if (apres.length !== avant.length + 1 || !apres.startsWith(avant)) return { texte: apres.replace(/\^/g, ""), exposant: exposant && apres.length > 0 && apres.startsWith(avant) };
+  const c = apres.slice(-1);
+  if (c === "^") return { texte: avant, exposant: true };
+  if (exposant && (PLATS.includes(c) || c === "−")) return { texte: avant + enExposant(c), exposant: true };
+  return { texte: apres, exposant: false };
+}
 
 export interface Verdict { juste: boolean; bonneReponse: string }
 

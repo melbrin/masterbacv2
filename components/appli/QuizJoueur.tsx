@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
+import { saisieDeTrou } from "@/lib/commun/quiz";
 import { repondreQuiz, type RetourQuiz } from "@/lib/serveur/commandes/quiz";
 import Icone from "./Icone";
 
@@ -9,10 +10,14 @@ interface Vue { type: "qcm" | "vrai_faux" | "trou" | "association" | "ordre"; ni
 type Reponse =
   | { type: "qcm"; choix: number } | { type: "vrai_faux"; valeur: boolean } | { type: "trou"; texte: string }
   | { type: "association"; droites: string[] } | { type: "ordre"; elements: string[] };
+/** Les signes des formules qu'un clavier de téléphone n'a pas sous la main, avec leur nom pour un lecteur d'écran. */
+const SYMBOLES: [string, string][] = [["×", "Multiplié par"], ["λ", "Lambda"], ["ν", "Nu"], ["Δ", "Delta"], ["Σ", "Sigma"], ["π", "Pi"]];
 const NOMS = { qcm: "QCM", vrai_faux: "Vrai ou faux", trou: "Texte à trous", association: "Association", ordre: "Mise en ordre" };
 
 function Question({ vue, fige, envoie, choisi }: { vue: Vue; fige: boolean; envoie: (r: Reponse) => void; choisi: number | boolean | null }) {
   const [texte, setTexte] = useState("");
+  const [exposant, setExposant] = useState(false);
+  const champ = useRef<HTMLInputElement>(null);
   const [assoc, setAssoc] = useState<string[]>(() => (vue.gauches ?? []).map(() => ""));
   const [ordre, setOrdre] = useState<string[]>(() => vue.elements ?? []);
   if (vue.type === "qcm") {
@@ -27,9 +32,17 @@ function Question({ vue, fige, envoie, choisi }: { vue: Vue; fige: boolean; envo
     </div>;
   }
   if (vue.type === "trou") {
+    // les symboles qu'un clavier de téléphone n'a pas : un exposant comme dans 10⁻¹⁴, et les lettres des formules
+    const ajoute = (signe: string) => { setExposant(false); setTexte((t) => (t + signe).slice(0, 120)); champ.current?.focus(); };
     return <form className="champ" onSubmit={(e) => { e.preventDefault(); if (texte.trim()) envoie({ type: "trou", texte }); }}>
       <label htmlFor="rep-trou">Ta réponse</label>
-      <input id="rep-trou" autoComplete="off" autoCapitalize="off" spellCheck={false} maxLength={120} disabled={fige} value={texte} onChange={(e) => setTexte(e.target.value)} />
+      <input id="rep-trou" ref={champ} autoComplete="off" autoCapitalize="off" spellCheck={false} maxLength={120} disabled={fige} value={texte} aria-describedby="aide-trou"
+        onChange={(e) => { const r = saisieDeTrou(texte, e.target.value, exposant); setTexte(r.texte); setExposant(r.exposant); }} />
+      <div className="touches-trou" role="group" aria-label="Symboles">
+        <button type="button" disabled={fige} aria-pressed={exposant} aria-label="Exposant" onClick={() => { setExposant((x) => !x); champ.current?.focus(); }}>x<sup>n</sup></button>
+        {SYMBOLES.map(([signe, nom]) => <button key={signe} type="button" disabled={fige} aria-label={nom} onClick={() => ajoute(signe)}>{signe}</button>)}
+      </div>
+      <p className="aide" id="aide-trou">{exposant ? "Exposant en cours : tape ses chiffres, puis touche xⁿ pour en sortir." : "Pour une puissance comme 10⁻¹⁴ : tape 10, touche xⁿ, puis tape −14."}</p>
       <div className="actions"><button className="btn" type="submit" disabled={fige || !texte.trim()}>Valider</button></div>
     </form>;
   }

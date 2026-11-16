@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { corrige, norme } from "@/lib/commun/quiz";
+import { corrige, enExposant, norme, saisieDeTrou } from "@/lib/commun/quiz";
 
 describe("correction des quiz", () => {
   it("QCM : seul l'indice de la bonne réponse est juste, un indice hors liste est faux", () => {
@@ -35,5 +35,27 @@ describe("correction des quiz", () => {
   it("une réponse d'un autre type que la question est fausse", () => {
     expect(corrige("qcm", ["a"], { c: 0 }, { type: "vrai_faux", valeur: true }).juste).toBe(false);
     expect(corrige("ordre", undefined, {}, { type: "ordre", elements: [] }).juste).toBe(false);
+  });
+});
+
+describe("écriture des exposants dans une réponse à trou", () => {
+  it("accepte toutes les façons d'écrire une puissance ou un indice", () => {
+    const c = { reponse: "10⁻¹⁴", acceptees: ["1e-14"] };
+    for (const texte of ["10⁻¹⁴", "10^-14", "10^(-14)", "10 ^ −14", "1e-14"]) expect(corrige("trou", undefined, c, { type: "trou", texte }).juste).toBe(true);
+    for (const texte of ["10¹⁴", "10^14", "14", ""]) expect(corrige("trou", undefined, c, { type: "trou", texte }).juste).toBe(false);
+    expect(corrige("trou", undefined, { reponse: "U²" }, { type: "trou", texte: "u^2" }).juste).toBe(true);
+    expect(corrige("trou", undefined, { reponse: "f'₂" }, { type: "trou", texte: "f'2" }).juste).toBe(true);
+  });
+  it("monte les chiffres en exposant pendant la saisie, après « ^ » ou la touche d'exposant", () => {
+    expect(enExposant("-14")).toBe("⁻¹⁴");
+    expect(saisieDeTrou("10", "10^", false)).toEqual({ texte: "10", exposant: true });
+    expect(saisieDeTrou("10", "10-", true)).toEqual({ texte: "10⁻", exposant: true });
+    expect(saisieDeTrou("10⁻", "10⁻1", true)).toEqual({ texte: "10⁻¹", exposant: true });
+    // une lettre termine l'exposant ; sans exposant en cours, rien ne change
+    expect(saisieDeTrou("10⁻¹⁴", "10⁻¹⁴ ", true)).toEqual({ texte: "10⁻¹⁴ ", exposant: false });
+    expect(saisieDeTrou("10", "104", false)).toEqual({ texte: "104", exposant: false });
+    // un effacement ou un collage passent tels quels, sans « ^ »
+    expect(saisieDeTrou("10⁻¹", "10⁻", true).texte).toBe("10⁻");
+    expect(saisieDeTrou("", "10^-14", false).texte).toBe("10-14");
   });
 });
