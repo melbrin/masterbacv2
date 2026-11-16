@@ -162,3 +162,9 @@ p.carte.signal { margin: 0; }
   @keyframes part-droite { to { transform: translateX(120%) rotate(14deg); opacity: 0; } }
   @keyframes part-gauche { to { transform: translateX(-120%) rotate(-14deg); opacity: 0; } }
 }
+
+/* La page de panne et la page introuvable : un titre, une phrase, un bouton. */
+.panne { display: grid; gap: 4px; padding-bottom: 24px; }
+.panne h1:focus { outline: none; }
+.panne .actions { margin-top: 4px; }
+.panne-numero { margin: 18px 0 0; max-width: 62ch; }

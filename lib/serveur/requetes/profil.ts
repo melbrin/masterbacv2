@@ -8,6 +8,8 @@ export const profilCourant = cache(async () => {
   const session = await sessionCourante();
   if (!session) return null;
   const base = await clientUtilisateur();
-  const { data } = await base.from("profils").select("*").eq("user_id", session.userId).maybeSingle();
+  const { data, error } = await base.from("profils").select("*").eq("user_id", session.userId).maybeSingle();
+  // une lecture qui échoue n'est pas « pas de profil » : sans cela, une panne de la base renvoyait l'élève à la création de son profil
+  if (error) throw new Error("La base ne répond pas.");
   return data;
 });

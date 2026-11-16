@@ -7,6 +7,16 @@ import type { Database } from "./types";
 
 export type Base = SupabaseClient<Database>;
 
+/**
+ * Une lecture qui échoue doit le dire vite. Par défaut, la bibliothèque refait chaque lecture refusée pendant sept
+ * secondes (1 s, 2 s, 4 s) : comme une page en enchaîne plusieurs, l'élève attendait trente secondes avant de voir
+ * la page de panne. Sans nouvelle tentative, il la voit tout de suite, avec son bouton « Réessayer »
+ * (components/socle/Panne.tsx). Mesuré le 16 novembre 2026 avec @supabase/supabase-js 2.119.0.
+ */
+const SANS_NOUVELLE_TENTATIVE = { retry: false } as const;
+/** Au-delà, une lecture faite pour afficher une page est abandonnée : une connexion muette ne fait plus attendre sans fin. */
+const DELAI_DE_LECTURE_MS = 8000;
+
 /** Options de tous les cookies de session : illisibles par un script, jamais envoyés à un autre site. */
 export const OPTIONS_COOKIE = { httpOnly: true, sameSite: "lax" as const, path: "/" };
 
@@ -18,6 +28,7 @@ export async function clientUtilisateur(): Promise<Base> {
   const e = env();
   const pot = await cookies();
   return createServerClient<Database>(e.SUPABASE_URL, e.SUPABASE_PUBLISHABLE_KEY, {
+    db: { ...SANS_NOUVELLE_TENTATIVE, timeout: DELAI_DE_LECTURE_MS },
     cookies: {
       getAll: () => pot.getAll(),
       setAll(liste) {
@@ -40,7 +51,8 @@ let admin: Base | null = null;
 export function clientAdmin(): Base {
   if (!admin) {
     const e = env();
-    admin = createClient<Database>(e.SUPABASE_URL, e.SUPABASE_SECRET_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
+    // pas de délai ici : une écriture longue (un import de contenu) ne doit pas être coupée en route
+    admin = createClient<Database>(e.SUPABASE_URL, e.SUPABASE_SECRET_KEY, { auth: { persistSession: false, autoRefreshToken: false }, db: SANS_NOUVELLE_TENTATIVE });
   }
   return admin;
 }
