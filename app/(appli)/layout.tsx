@@ -8,6 +8,7 @@ import "./labo.css";
 import "./memoire.css";
 import "./tp.css";
 import "./entrainement.css";
+import "./accueil.css";
 
 export const metadata: Metadata = {
   title: { default: "MasterBac", template: "%s · MasterBac" },

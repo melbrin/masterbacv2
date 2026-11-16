@@ -221,6 +221,20 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"tests_accueil": {
+                  Row: {
+                    "debut": string,"fiches": (number)[],"graine": number,"id": string,"limite": string,"questions": (string)[],"rattache_le": string | null,"reponses": NonNullable<Json>,"termine_le": string | null,"user_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "debut"?: string,"fiches": (number)[],"graine": number,"id"?: string,"limite": string,"questions": (string)[],"rattache_le"?: string | null,"reponses"?: NonNullable<Json>,"termine_le"?: string | null,"user_id"?: string | null
+                  }
+                  Update: {
+                    "debut"?: string,"fiches"?: (number)[],"graine"?: number,"id"?: string,"limite"?: string,"questions"?: (string)[],"rattache_le"?: string | null,"reponses"?: NonNullable<Json>,"termine_le"?: string | null,"user_id"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"tp_essais": {
                   Row: {
                     "cree_le": string,"etapes": NonNullable<Json>,"graine": number,"id": string,"mesures": NonNullable<Json>,"niveaux": Json | null,"termine_le": string | null,"tp": string,"user_id": string

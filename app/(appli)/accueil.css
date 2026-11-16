@@ -1,0 +1,27 @@
+/* La page d'accueil : une affiche de nuit avec une seule chose à faire, puis deux listes à filets, comme un sommaire. */
+.accueil { max-width: 720px; margin: 0 auto; padding: 0 16px 64px; }
+.accueil-barre { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; }
+.accueil-barre a { font-size: .9rem; font-weight: 600; }
+.accueil-marque { display: grid; font-family: var(--display); font-weight: 800; font-stretch: 112%; letter-spacing: .22em; text-transform: uppercase; color: var(--cuivre-texte); }
+.accueil-marque small { font-family: inherit; font-weight: 400; font-stretch: 100%; letter-spacing: 0; text-transform: none; color: var(--discret); font-size: .8rem; }
+.accueil-affiche { position: relative; overflow: hidden; display: grid; gap: 14px; justify-items: start; padding: 28px 22px 26px; border-radius: 22px; background: var(--nuit); color: var(--sur-nuit); }
+.accueil-affiche::after { content: ""; position: absolute; inset: auto -120px -170px auto; width: 320px; height: 320px; border-radius: 50%; border: 1px solid color-mix(in srgb, #D7A983 45%, transparent); pointer-events: none; }
+.accueil-compte { margin: 0; font-family: var(--display); font-size: .7rem; font-weight: 750; font-stretch: 115%; letter-spacing: .2em; text-transform: uppercase; color: #D7A983; }
+.accueil-affiche h1 { margin: 0; color: #FFFFFF; font-size: clamp(1.9rem, 1.1rem + 4vw, 3rem); line-height: 1.05; text-wrap: balance; }
+.accueil-promesse { margin: 0; max-width: 46ch; color: color-mix(in srgb, var(--sur-nuit) 86%, transparent); }
+.accueil-bouton { min-height: 52px; padding-inline: 26px; font-size: 1.05rem; }
+.accueil-note { margin: 0; font-size: .84rem; color: color-mix(in srgb, var(--sur-nuit) 70%, transparent); }
+.accueil-titre { margin: 34px 0 0; padding-top: 10px; border-top: 3px solid var(--encre); font-size: 1.25rem; }
+.accueil-etapes, .accueil-liste { margin: 10px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--encre); }
+.accueil-etapes li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 4px 10px; padding: 14px 0; }
+.accueil-etapes li + li, .accueil-liste li + li { border-top: 1px dotted color-mix(in srgb, var(--encre) 26%, transparent); }
+.accueil-rang { font-family: var(--display); font-size: 1.7rem; font-weight: 800; font-stretch: 72%; line-height: 1; color: var(--cuivre-texte); }
+.accueil-etapes h3, .accueil-liste h3 { margin: 0 0 2px; font-size: 1.02rem; }
+.accueil-etapes p, .accueil-liste p { margin: 0; color: var(--discret); font-size: .95rem; }
+.accueil-liste li { padding: 12px 0; }
+.accueil-fin { margin: 22px 0 0; }
+@media (min-width: 720px) {
+  .accueil-affiche { padding: 44px 40px 40px; }
+  .accueil-liste { display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; }
+  .accueil-liste li:nth-child(2) { border-top: 0; }
+}

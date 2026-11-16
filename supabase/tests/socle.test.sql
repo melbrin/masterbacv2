@@ -2,7 +2,7 @@
 -- chacun ne lit que ses lignes, le contenu n'est lisible que par le serveur.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(62);
+select plan(66);
 
 -- ---------- catalogue : rien n'échappe aux règles d'accès ----------
 select is(
@@ -122,6 +122,15 @@ select throws_ok($$insert into public.defis (user_id, defi, essais) values ('000
 select throws_ok($$insert into public.memoire (user_id, jeu, score, secondes) values ('00000000-0000-4000-8000-00000000000a', 'Pas un jeu', 10, 10)$$, '23514', null, 'un identifiant de jeu de mémoire mal formé est refusé');
 select throws_ok($$insert into public.tp_essais (user_id, tp, graine) values ('00000000-0000-4000-8000-00000000000a', 'Pas un TP', 1)$$, '23514', null, 'un identifiant de TP mal formé est refusé');
 select throws_ok($$insert into public.tp_essais (user_id, tp, graine, niveaux) values ('00000000-0000-4000-8000-00000000000a', 'detartrant', 1, '{"REA": "A"}')$$, '23514', null, 'des niveaux sans date de fin sont refusés');
+
+-- le test de la page d'accueil : seul le serveur y touche
+set local role anon;
+select throws_ok('select * from public.tests_accueil', '42501', null, 'le visiteur ne lit pas les tests d''accueil');
+select throws_ok($$insert into public.tests_accueil (fiches, questions, graine, limite) values ('{1}', '{A10}', 1, now())$$, '42501', null, 'le visiteur n''écrit pas de test d''accueil');
+set local role authenticated;
+select throws_ok('select * from public.tests_accueil', '42501', null, 'un élève connecté ne lit pas les tests d''accueil');
+reset role;
+select is((select relrowsecurity from pg_class where oid = 'public.tests_accueil'::regclass), true, 'les règles d''accès sont actives sur les tests d''accueil');
 
 select * from finish();
 rollback;

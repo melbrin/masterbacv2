@@ -5,6 +5,7 @@ import { z } from "zod";
 import * as s from "@/lib/commun/schemas";
 import { action, Refus } from "@/lib/serveur/fabriques";
 import { clientAdmin, clientUtilisateur } from "@/lib/serveur/supabase/clients";
+import { rattacheTest } from "@/lib/serveur/test-accueil";
 
 // Les limites de départ (docs/03-securite.md, section 4.1). Supabase applique en plus les siennes.
 export const demanderCode = action({
@@ -38,7 +39,9 @@ export const verifierCode = action({
     // les accès préparés pour cette adresse dans l'administration s'attachent au compte
     const { error: refus } = await admin.rpc("droits_reclame", { p_user: data.user.id });
     if (refus) throw new Error("droits_reclame a échoué");
-    const { data: profil } = await admin.from("profils").select("user_id").eq("user_id", data.user.id).maybeSingle();
+    const { data: profil } = await admin.from("profils").select("user_id, note_visee, etat").eq("user_id", data.user.id).maybeSingle();
+    // un élève qui avait déjà un compte et vient de passer le test de l'accueil retrouve ses résultats dans son parcours
+    if (profil && profil.etat === "actif" && (await rattacheTest(data.user.id, profil.note_visee))) return { suite: "/app/parcours?calibrage=1" };
     return { suite: profil ? "/app" : "/compte/profil" };
   },
 });
@@ -58,7 +61,9 @@ export const creerProfil = action({
       { onConflict: "user_id", ignoreDuplicates: true },
     );
     if (error) throw new Refus("invalide");
-    // à la première connexion, l'élève passe son test de calibrage : il donne son point de départ et son parcours
+    // le test passé sur la page d'accueil devient son premier test de calibrage : il arrive sur ses résultats
+    if (e.quinzeAnsOuPlus && (await rattacheTest(session!.userId, e.noteVisee))) return { suite: "/app/parcours?calibrage=1" };
+    // sinon, à la première connexion, l'élève passe son test de calibrage : il donne son point de départ et son parcours
     return { suite: e.quinzeAnsOuPlus ? "/app/calibrage?bienvenue=1" : "/app" };
   },
 });

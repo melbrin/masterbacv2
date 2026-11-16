@@ -6,15 +6,15 @@ import { saisieDeTrou } from "@/lib/commun/quiz";
 import { repondreQuiz, type RetourQuiz } from "@/lib/serveur/commandes/quiz";
 import Icone from "./Icone";
 
-interface Vue { type: "qcm" | "vrai_faux" | "trou" | "association" | "ordre"; niveau: number; q: string; choix?: string[]; gauches?: string[]; droites?: string[]; elements?: string[] }
-type Reponse =
+export interface Vue { type: "qcm" | "vrai_faux" | "trou" | "association" | "ordre"; niveau: number; q: string; choix?: string[]; gauches?: string[]; droites?: string[]; elements?: string[] }
+export type Reponse =
   | { type: "qcm"; choix: number } | { type: "vrai_faux"; valeur: boolean } | { type: "trou"; texte: string }
   | { type: "association"; droites: string[] } | { type: "ordre"; elements: string[] };
 /** Les signes des formules qu'un clavier de téléphone n'a pas sous la main, avec leur nom pour un lecteur d'écran. */
 const SYMBOLES: [string, string][] = [["×", "Multiplié par"], ["λ", "Lambda"], ["ν", "Nu"], ["Δ", "Delta"], ["Σ", "Sigma"], ["π", "Pi"]];
 const NOMS = { qcm: "QCM", vrai_faux: "Vrai ou faux", trou: "Texte à trous", association: "Association", ordre: "Mise en ordre" };
 
-function Question({ vue, fige, envoie, choisi }: { vue: Vue; fige: boolean; envoie: (r: Reponse) => void; choisi: number | boolean | null }) {
+export function Question({ vue, fige, envoie, choisi }: { vue: Vue; fige: boolean; envoie: (r: Reponse) => void; choisi: number | boolean | null }) {
   const [texte, setTexte] = useState("");
   const [exposant, setExposant] = useState(false);
   const champ = useRef<HTMLInputElement>(null);

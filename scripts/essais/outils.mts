@@ -12,7 +12,7 @@ export const BASE = "http://localhost:3457";
 export const attends = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Le code de connexion reçu par l'adresse dans la boîte locale, après l'instant donné. */
-async function code(adresse: string, apres: number): Promise<string> {
+export async function code(adresse: string, apres: number): Promise<string> {
   // le premier code d'une adresse neuve peut mettre plus de vingt secondes à arriver dans la boîte locale
   for (let i = 0; i < 100; i++) {
     const d = (await (await fetch("http://127.0.0.1:54324/api/v1/messages?limit=8")).json()) as { messages: { ID: string; Created: string; To: { Address: string }[] }[] };
