@@ -6,7 +6,11 @@ import { sessionCourante } from "@/lib/serveur/session";
 
 export const metadata = { title: "Administration" };
 const date = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString("fr-FR", { timeZone: "Europe/Paris", day: "numeric", month: "long", year: "numeric" }) : "sans fin");
-const NOM_OFFRE: Record<string, string> = { pass: "Pass Bac 2027", mensuel: "Mensuel", pack: "Pack BAC", beta: "Bêta", fiches: "Fiches" };
+const NOM_OFFRE: Record<string, string> = { gratuit: "Gratuit", pass: "Pass Bac 2027", mensuel: "Mensuel", pack: "Pack BAC", beta: "Bêta", fiches: "Fiches" };
+/** Ce qu'une offre ouvre, dit en clair. Le calcul est celui de lib/serveur/acces.ts. */
+const ouvre = (d: { tousLesCorriges: boolean; coach: boolean }) =>
+  d.coach ? "tous les corrigés, mode DS sans limite, séance complète, test de passage"
+    : d.tousLesCorriges ? "tous les corrigés des fiches" : "exercice du jour, test de niveau, une préparation de DS offerte";
 
 export default async function Administration({ searchParams }: { searchParams: Promise<{ adresse?: string }> }) {
   const session = await sessionCourante();
@@ -41,6 +45,17 @@ export default async function Administration({ searchParams }: { searchParams: P
               <li>S&apos;il a déjà un compte, l&apos;accès est ouvert tout de suite. Sinon il s&apos;ouvrira à sa première connexion avec cette adresse.</li>
               <li>En cas de remboursement, retire l&apos;accès avec son motif.</li></ol></div>
         </div>
+
+        <div className="section-titre"><h2>Tous les comptes</h2><span className="puce">{t.comptes.length}{t.comptesTronques ? " ou plus" : ""}</span></div>
+        {t.comptes.length ? <ul className="liste" id="comptes">{t.comptes.map((c) => (
+          <li key={c.id}><div className="ligne" style={{ gridTemplateColumns: "1fr" }}><span><span className="tit">{c.adresse}</span>
+            <span className="sous"><span className={`puce ${c.droits.offre === "gratuit" ? "" : "puce-ok"}`}>{NOM_OFFRE[c.droits.offre]}</span>
+              {c.admin && <span className="puce puce-bleu">Administrateur</span>}
+              <span>{c.prenom ? `${c.prenom}${c.etat && c.etat !== "actif" ? `, compte ${c.etat}` : ""}` : "profil non rempli"}</span>
+              <span>créé le {date(c.cree_le)}</span><span>{c.vu_le ? `vu le ${date(c.vu_le)}` : "jamais connecté"}</span></span>
+            <span className="sous"><span>Ouvre : {ouvre(c.droits)}</span></span></span></div></li>
+        ))}</ul> : <p className="vide">Aucun compte.</p>}
+        {t.comptesTronques && <p className="petit discret">Seuls les 200 comptes les plus récents sont listés. Pour un compte plus ancien, cherche son adresse.</p>}
 
         <div className="section-titre"><h2>Accès actifs</h2><span className="puce">{actifs.length}</span></div>
         {actifs.length ? <ul className="liste">{actifs.map((d) => (

@@ -1,6 +1,12 @@
 import "server-only";
+import { droitsDepuis, type Droits } from "@/lib/serveur/acces";
 import { requete } from "@/lib/serveur/fabriques";
 import { clientAdmin } from "@/lib/serveur/supabase/clients";
+
+/** Un compte, tel que l'administration le liste : qui c'est, et ce que son offre lui ouvre. */
+export interface CompteListe { id: string; adresse: string; prenom: string | null; etat: string | null; admin: boolean; cree_le: string; vu_le: string | null; droits: Droits }
+/** Le nombre de comptes listés d'un coup, les plus récents d'abord. */
+const COMPTES_LISTES = 200;
 
 /** Ce que l'administration affiche : accès, accès en attente, signalements, journal. Réservé au rôle administrateur avec double authentification. */
 export const tableauAdmin = requete({ nom: "admin.tableau", acces: "admin" }, async (session, recherche: string) => {
@@ -23,7 +29,23 @@ export const tableauAdmin = requete({ nom: "admin.tableau", acces: "admin" }, as
     await base.from("journal_audit").insert({ acteur: session.userId, action: "compte.consulte", cible: compte ? compte.user_id : null });
   }
   const maintenant = Date.now();
+  // tous les comptes, les plus récents d'abord, avec ce que leur offre ouvre. Les droits se calculent comme pour l'élève.
+  const { data: liste, error: refus } = await base.auth.admin.listUsers({ page: 1, perPage: COMPTES_LISTES });
+  if (refus) throw new Error("La base ne répond pas.");
+  const tous = liste.users;
+  const idsComptes = tous.map((u) => u.id);
+  const [profils, tousDroits] = await Promise.all([
+    base.from("profils").select("user_id, prenom, etat").in("user_id", idsComptes),
+    base.from("droits").select("user_id, offre, debut, fin, retire_le").in("user_id", idsComptes),
+  ]);
+  const profil = new Map((profils.data ?? []).map((x) => [x.user_id, x]));
+  const comptes: CompteListe[] = tous.map((u) => ({
+    id: u.id, adresse: u.email ?? "sans adresse", prenom: profil.get(u.id)?.prenom ?? null, etat: profil.get(u.id)?.etat ?? null,
+    admin: (u.app_metadata as Record<string, unknown> | undefined)?.role === "admin", cree_le: u.created_at, vu_le: u.last_sign_in_at ?? null,
+    droits: droitsDepuis((tousDroits.data ?? []).filter((d) => d.user_id === u.id), maintenant),
+  })).sort((a, b) => b.cree_le.localeCompare(a.cree_le));
   return {
+    comptes, comptesTronques: tous.length >= COMPTES_LISTES,
     droits: (droits.data ?? []).map((d) => ({ ...d, adresse: parId[d.user_id] ?? "compte supprimé" })),
     maintenant, attente: attente.data ?? [], signalements: signalements.data ?? [], journal: journal.data ?? [], compte, recherche,
   };
