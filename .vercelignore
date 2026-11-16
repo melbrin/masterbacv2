@@ -1,10 +1,12 @@
 # Ce qui ne part jamais dans un déploiement : le contenu des fiches, le prototype, la documentation, les tests.
-contenu/
-reference/
-docs/
-tests/
-supabase/
-secrets/
-kit-claude-code/
-.claude/
-CLAUDE.md
+# Chaque ligne commence par « / » : elle ne vise que le dossier à la racine. Sans cela, « contenu/ » retirait aussi
+# lib/serveur/contenu/ et « supabase/ » retirait lib/serveur/supabase/, et la construction échouait sur Vercel.
+/contenu/
+/reference/
+/docs/
+/tests/
+/supabase/
+/secrets/
+/kit-claude-code/
+/.claude/
+/CLAUDE.md
