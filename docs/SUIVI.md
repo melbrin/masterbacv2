@@ -73,6 +73,18 @@ Ce fichier est la mémoire du projet d'une session à l'autre. Il est chargé au
 
 Ordre accepté par Yane le 15 novembre pour la suite : l'entraînement dans le parcours et les progrès (fait) ; rappels par e-mail et application installable ; compte et administration de la bêta ; parents ; solidité, puis mise en ligne. Plan de l'année, bac blanc et nouvelles simulations gardés pour janvier.
 
+## Demandes de Yane du 16 novembre
+
+Dans l'ordre où il les a données, une fois le site en ligne :
+
+1. **Finir la mise en ligne et tout tester** : schéma et fiches sur la base distante, puis le chemin complet, de la création du compte à l'e-mail du code. Yane teste ensuite l'application lui-même, fonction par fonction.
+2. **Une nouvelle page d'accueil**, au nouveau visage de MasterBac : un test d'évaluation unique de 15 minutes, et la création du compte à la fin pour recevoir ses résultats. Plan à lui présenter avant de coder.
+3. **L'adresse de production**, quand tout est bon.
+4. **L'administration** : la tester en ligne. Les ventes restent sur Shopify, les accès payants s'ouvrent à la main. Un compte créé seul n'a que les fonctions gratuites ; l'administration doit pouvoir augmenter ses droits.
+5. **Plus tard, une section « Sujets »** : les sujets de bac des dix dernières années, avec une vraie recherche, des exercices qui entrent dans la préparation des DS de l'offre payante, et nos propres corrigés. À cadrer : la règle du projet interdit de copier un corrigé d'un autre site ; un corrigé « basé sur » une correction existante doit être réécrit par nous et relu par Yane.
+
+Expéditeur des e-mails : `no-reply@masterbac.com`, domaine vérifié dans Resend (dit par Yane). Région des fonctions Vercel : `iad1` au 16 novembre, à passer à Paris (`cdg1`).
+
 ## Les vingt TP (soir du 14 novembre)
 
 L'application propose vingt TP sur dix-sept paillasses, chacune avec son guide. Tous sont des brouillons, visibles en local seulement.
