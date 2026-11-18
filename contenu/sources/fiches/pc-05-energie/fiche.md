@@ -121,13 +121,13 @@ Questions de cours
 Du zinc réagit avec une solution acide dans une enceinte fermée de volume $V$, à la température $T$. La pression dans l'enceinte vaut $P_i$ avant la transformation, $P$ à un instant quelconque et $P_{\text{max}}$ à l'état final. Le tableau d'avancement de la réaction est le suivant.
 :::
 
-<!--colonnes: 16 14 13 19 13 11 14-->
+<!--colonnes: 13 14 17 20 4 10 10 12-->
 
-| État du système | Avancement (mol) | Zn(s) | \+ 2 H~3~O^+^(aq) | → Zn^2+^(aq) | \+ H~2~(g) | \+ 2 H~2~O(l) |
-|---|---|---|---|---|---|---|
-| État initial | $0$ | $n(\text{Zn})_i$ | $n(\text{H}_3\text{O}^{\text{+}})_i$ | $0$ | $0$ | excès |
-| En cours de transformation | $x$ | $n(\text{Zn})_i - x$ | $n(\text{H}_3\text{O}^{\text{+}})_i - 2x$ | $x$ | $x$ | excès |
-| État final | $x_{\text{max}}$ | $n(\text{Zn})_i - x_{\text{max}}$ | $n(\text{H}_3\text{O}^{\text{+}})_i - 2x_{\text{max}}$ | $x_{\text{max}}$ | $x_{\text{max}}$ | excès |
+| État du système | Avancement (mol) | Zn(s) | \+ 2 H~3~O^+^(aq) | → | Zn^2+^(aq) | \+ H~2~(g) | \+ 2 H~2~O(l) |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| État initial | $0$ | $n(\text{Zn})_i$ | $n(\text{H}_3\text{O}^{\text{+}})_i$ | | $0$ | $0$ | excès |
+| En cours | $x$ | $n(\text{Zn})_i - x$ | $n(\text{H}_3\text{O}^{\text{+}})_i - 2x$ | | $x$ | $x$ | excès |
+| État final | $x_{\text{max}}$ | $n(\text{Zn})_i - x_{\text{max}}$ | $n(\text{H}_3\text{O}^{\text{+}})_i - 2x_{\text{max}}$ | | $x_{\text{max}}$ | $x_{\text{max}}$ | excès |
 
 ::: {custom-style="Enonce"}
 On considère que le dihydrogène est un gaz parfait et qu'il est responsable de la surpression $P - P_i$, de sorte que $(P - P_i) \times V = n(\text{H}_2) \times R \times T$.

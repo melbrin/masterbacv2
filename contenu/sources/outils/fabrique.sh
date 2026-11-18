@@ -43,13 +43,17 @@ for V in $VERSIONS; do
   rm -f pages.json
   # premier passage sans numéros de page, puis passages suivants jusqu'à ce que les numéros ne bougent plus
   python3 "$OUTILS/build_fiche.py" "$SRC" reference.docx "$NOM.docx" >/dev/null
-  for PASSE in 1 2 3; do
+  # jusqu'à cinq passes : un numéro de page qui change de largeur peut décaler la mise en page d'une passe à l'autre
+  STABLE=non
+  for PASSE in 1 2 3 4 5; do
     vers_pdf "$NOM.docx"
     python3 -I "$OUTILS/toc_pages.py" "$NOM.pdf" _titres.json pages_new.json >/dev/null
-    if [ -f pages.json ] && cmp -s pages.json pages_new.json; then break; fi
+    if [ -f pages.json ] && cmp -s pages.json pages_new.json; then STABLE=oui; break; fi
     mv pages_new.json pages.json
     python3 "$OUTILS/build_fiche.py" "$SRC" reference.docx "$NOM.docx" pages.json | tail -1
   done
+  # sans stabilité, le PDF est refait à partir du dernier Word : les contrôles signalent alors les renvois faux
+  [ "$STABLE" = oui ] || vers_pdf "$NOM.docx"
   cp "$NOM.docx" "$NOM.pdf" "$SORTIES/"
 done
 

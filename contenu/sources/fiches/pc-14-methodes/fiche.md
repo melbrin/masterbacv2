@@ -13,7 +13,7 @@
 | Notion | Relation | À retenir |
 |---|---|---|
 | Écriture d'un résultat | $x = 9{,}79\ \text{m·s}^{-2}$ et $u(x) = 0{,}10\ \text{m·s}^{-2}$ | $u(x)$ a un ou deux chiffres significatifs ; $x$ s'arrête à la même décimale. |
-| Incertitude-type de type A | $u(\bar{x}) = \dfrac{s}{\sqrt{n}}$ | $s$ : écart-type expérimental de la série de $n$ mesures (calculatrice : $\sigma_{n-1}$). |
+| Incertitude-type de type A | $u(\overline{x}) = \dfrac{s}{\sqrt{n}}$ | $s$ : écart-type expérimental de la série de $n$ mesures (calculatrice : $\sigma_{n-1}$). |
 | Comparaison à une référence | $z = \dfrac{\left|x - x_{\text{réf}}\right|}{u(x)}$ | Compatible si $z \leq 2$. Sinon, chercher une erreur dans le protocole ou le modèle. |
 | Vitesse calculée en Python | `v[i] = (x[i+1] - x[i]) / (t[i+1] - t[i])` | Avec $n$ positions : $n - 1$ vitesses, puis $n - 2$ accélérations. Les indices commencent à 0. |
 | Équation du premier ordre | $\dfrac{\mathrm{d}y}{\mathrm{d}t} + \dfrac{y}{\tau} = \dfrac{y_f}{\tau}$ | $y(t) = y_f + (y_0 - y_f)\, e^{-t/\tau}$ ; $\tau$ en seconde, $y_f$ valeur finale. |
@@ -170,7 +170,7 @@ Masse volumique de l'acier annoncée par le fournisseur : $\rho_{\text{réf}} = 
 ::: {custom-style="Enonce"}
 **1.** Pourquoi le technicien mesure-t-il le diamètre plusieurs fois, en tournant la bille ?
 
-**2.** Calculer le diamètre moyen $\bar{d}$ et son incertitude-type, de type A.
+**2.** Calculer le diamètre moyen $\overline{d}$ et son incertitude-type, de type A.
 
 **3.** Calculer $u(m)$. De quel type est cette évaluation ?
 
@@ -655,15 +655,15 @@ Avec deux chiffres significatifs, $u(T) = 0{,}021\ \text{s}$ s'arrête aux milli
 
 Une évaluation de type A exploite la dispersion d'une série de mesures répétées. La moyenne vaut :
 
-$$\bar{T} = \dfrac{1{,}42 + 1{,}40 + 1{,}45 + 1{,}43 + 1{,}39 + 1{,}44 + 1{,}41 + 1{,}42}{8} = \dfrac{11{,}36}{8} = 1{,}42\ \text{s}$$
+$$\overline{T} = \dfrac{1{,}42 + 1{,}40 + 1{,}45 + 1{,}43 + 1{,}39 + 1{,}44 + 1{,}41 + 1{,}42}{8} = \dfrac{11{,}36}{8} = 1{,}42\ \text{s}$$
 
 Les écarts à la moyenne valent, en seconde : 0 ; −0,02 ; 0,03 ; 0,01 ; −0,03 ; 0,02 ; −0,01 ; 0. La somme de leurs carrés vaut $2{,}8 \times 10^{-3}\ \text{s}^{2}$, d'où l'écart-type expérimental :
 
-$$s = \sqrt{\dfrac{\sum (T_i - \bar{T})^{2}}{n - 1}} = \sqrt{\dfrac{2{,}8 \times 10^{-3}}{7}} = 0{,}020\ \text{s}$$
+$$s = \sqrt{\dfrac{\sum (T_i - \overline{T})^{2}}{n - 1}} = \sqrt{\dfrac{2{,}8 \times 10^{-3}}{7}} = 0{,}020\ \text{s}$$
 
 L'incertitude-type sur la moyenne est plus petite que $s$ :
 
-$$u(\bar{T}) = \dfrac{s}{\sqrt{n}} = \dfrac{0{,}020}{\sqrt{8}} = 7{,}1 \times 10^{-3}\ \text{s}$$
+$$u(\overline{T}) = \dfrac{s}{\sqrt{n}} = \dfrac{0{,}020}{\sqrt{8}} = 7{,}1 \times 10^{-3}\ \text{s}$$
 
 Le résultat de la mesure est la moyenne : on note désormais $u(T)$ son incertitude-type.
 
@@ -765,7 +765,7 @@ Chaque mesure varie : la bille n'est pas parfaitement sphérique et le pied à c
 **2.** Diamètre moyen et incertitude de type A
 :::
 
-$$\bar{d} = \dfrac{76{,}18}{6} = 12{,}697\ \text{mm} \quad ; \quad s = 0{,}023\ \text{mm} \quad ; \quad u(d) = \dfrac{s}{\sqrt{6}} = 0{,}0095\ \text{mm}$$
+$$\overline{d} = \dfrac{76{,}18}{6} = 12{,}697\ \text{mm} \quad ; \quad s = 0{,}023\ \text{mm} \quad ; \quad u(d) = \dfrac{s}{\sqrt{6}} = 0{,}0095\ \text{mm}$$
 
 Le diamètre s'écrit $d = 12{,}70\ \text{mm}$ avec $u(d) = 0{,}01\ \text{mm}$. Dans la calculatrice, on garde la valeur non arrondie de $s$ : $0{,}023\ \text{mm}$ n'en est qu'un arrondi. On garde $12{,}697\ \text{mm}$ pour les calculs suivants.
 

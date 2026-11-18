@@ -269,8 +269,10 @@ for item in zin.infolist():
         page = ('<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1247" w:right="1134" w:bottom="1134" '
                 'w:left="1134" w:header="567" w:footer="510" w:gutter="0"/></w:sectPr>')
         txt = data.decode('utf-8')
-        assert txt.count('<w:sectPr />') + txt.count('<w:sectPr/>') == 1, 'section du modèle introuvable'
-        data = txt.replace('<w:sectPr />', page).replace('<w:sectPr/>', page).encode('utf-8')
+        # pandoc 3.1 écrit une section vide ; les versions récentes y mettent le réglage des notes : on remplace la section entière
+        sections = re.findall(r'<w:sectPr\b[^>]*?(?:/>|>.*?</w:sectPr>)', txt, re.S)
+        assert len(sections) == 1, 'section du modèle introuvable'
+        data = txt.replace(sections[0], page).encode('utf-8')
     out.writestr(item, data)
 out.close(); zin.close()
 import os; os.remove(tmp)

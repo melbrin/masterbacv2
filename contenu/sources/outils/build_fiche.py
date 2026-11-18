@@ -371,9 +371,14 @@ for ti, tbl in enumerate(tables):
                 ppr = p.find(w('pPr'))
                 if ppr is None:
                     ppr = OxmlElement('w:pPr'); p.insert(0, ppr)
+                # l'alignement de colonne écrit dans la source (|:-:| centré, |--:| à droite) est gardé
+                jc = ppr.find(w('jc'))
+                aligne = jc.get(w('val')) if jc is not None else None
                 for ch in list(ppr): ppr.remove(ch)
                 st = OxmlElement('w:pStyle'); st.set(w('val'), 'TableauTete' if ri == 0 else ('TableauSerre' if serre else 'Tableau'))
                 ppr.append(st)
+                if aligne in ('center', 'right', 'end'):
+                    j = OxmlElement('w:jc'); j.set(w('val'), aligne); ppr.append(j)
             if ri == 0:
                 for mr_ in tc.iter(m('r')):
                     for old in mr_.findall(w('rPr')): mr_.remove(old)
@@ -448,6 +453,11 @@ for p in list(body.iter(w('p'))):
     if st not in NIV: continue
     prev = p.getprevious()
     hid = prev.get(w('name')) if (prev is not None and prev.tag == w('bookmarkStart')) else None
+    if hid is None:
+        # pandoc 3.2 et suivants : l'ancre du titre est dans le paragraphe, et son nom commence par « _ »
+        dedans = p.find(w('bookmarkStart'))
+        if dedans is not None and dedans.get(w('name')):
+            hid = dedans.get(w('name'))[1:] if dedans.get(w('name')).startswith('_') else dedans.get(w('name'))
     bid += 1
     name = 'mb_' + re.sub(r'[^A-Za-z0-9_]', '_', hid) if hid else '_Toc%d' % bid
     bs = OxmlElement('w:bookmarkStart'); bs.set(w('id'), str(bid)); bs.set(w('name'), name)
@@ -502,6 +512,51 @@ for r_ in list(body.iter(w('r'))):
     # le numéro de page est écrit en clair (calculé par les passes de fabrication) : un champ serait peint à part, avec un liseré
     x += '<w:r>%s<w:t xml:space="preserve">\u202f%s\u202f%s\u202f</w:t></w:r></w:hyperlink>' % (rp_, esc(LIBELLE[sty]), PAGES.get(name, '0'))
     r_.addprevious(parse_xml(x)); r_.getparent().remove(r_); nbout += 1
+
+# 2e ter. l'air au-dessus d'un bandeau de titre. LibreOffice peint le fond d'un titre jusque sur son espace « avant » :
+# le bandeau d'un corrigé touchait l'encadré qui le précède. Cet espace passe dans un paragraphe vide, sans fond, placé
+# juste avant le titre, et le titre n'a plus d'espace avant. Entre deux paragraphes, LibreOffice ne garde que le plus grand
+# des deux espaces (après le premier, avant le second) : le paragraphe vide mesure donc l'espace avant du titre, moins
+# l'espace après du paragraphe qui précède. La hauteur totale ne change pas, la pagination non plus.
+# Rien n'est ajouté devant un titre qui ouvre une page.
+AVANT_TITRE = {'Heading2': 360, 'Heading3': 360, 'Heading4': 400}
+STYLES_XML = {st.get(w('styleId')): st for st in doc.styles.element.findall(w('style'))}
+def espace_apres(par):
+    """L'espace après un paragraphe, en vingtièmes de point : le sien, sinon celui de son style (et de ses parents)."""
+    ppr_ = par.find(w('pPr'))
+    sp0 = ppr_.find(w('spacing')) if ppr_ is not None else None
+    if sp0 is not None and sp0.get(w('after')) is not None: return int(sp0.get(w('after')))
+    st_ = ppr_.find(w('pStyle')).get(w('val')) if (ppr_ is not None and ppr_.find(w('pStyle')) is not None) else 'Normal'
+    vus = set()
+    while st_ and st_ not in vus:
+        vus.add(st_)
+        el = STYLES_XML.get(st_)
+        if el is None: break
+        sp1 = el.find(w('pPr') + '/' + w('spacing'))
+        if sp1 is not None and sp1.get(w('after')) is not None: return int(sp1.get(w('after')))
+        bo = el.find(w('basedOn'))
+        st_ = bo.get(w('val')) if bo is not None else None
+    return 120   # espace après par défaut de la charte (pPrDefault)
+nair = 0
+for p in list(body.iter(w('p'))):
+    st = pstyle(p)
+    if st not in AVANT_TITRE: continue
+    ppr = p.find(w('pPr'))
+    if ppr.find(w('pageBreakBefore')) is not None: continue
+    prev = p.getprevious()
+    while prev is not None and prev.tag in (w('bookmarkStart'), w('bookmarkEnd')):
+        prev = prev.getprevious()
+    if prev is None or prev.tag != w('p'): continue
+    if any(br.get(w('type')) == 'page' for br in prev.iter(w('br'))): continue
+    hauteur = AVANT_TITRE[st] - espace_apres(prev)
+    sp_ = ppr.find(w('spacing'))
+    if sp_ is None:
+        sp_ = OxmlElement('w:spacing'); ppr.append(sp_)
+    sp_.set(w('before'), '0')
+    if hauteur > 20:
+        p.addprevious(parse_xml('<w:p xmlns:w="%s"><w:pPr><w:spacing w:before="0" w:after="0" w:line="%d" w:lineRule="exact"/>'
+                                '</w:pPr></w:p>' % (W_NS, hauteur)))
+    nair += 1
 
 # 2f. page, en-tête et pied de page
 sec = doc.sections[0]
@@ -605,6 +660,22 @@ def fix_document(root):
         cnt = mcpr.find(m('count'))
         if cnt is not None and mcpr.index(cnt) != 0:
             mcpr.remove(cnt); mcpr.insert(0, cnt)
+    # LibreOffice cale à gauche le numérateur ou le dénominateur d'une fraction qui contient, à son premier niveau, du texte
+    # « normal » (m:nor) : un nombre à virgule (« 25,0 »), un \text{d} de dérivée. Ce contenu est mis dans un groupe sans
+    # délimiteurs (m:d aux caractères vides) : LibreOffice le centre, Word n'affiche rien de plus, et le texte reste droit.
+    for f in root.iter(m('f')):
+        for part in (f.find(m('num')), f.find(m('den'))):
+            if part is None: continue
+            enfants = [c for c in part if c.tag not in (m('ctrlPr'), m('argPr'))]
+            texte_normal = [c for c in enfants if c.tag == m('r') and c.find(m('rPr')) is not None and c.find(m('rPr')).find(m('nor')) is not None]
+            if not texte_normal: continue
+            groupe = etree.SubElement(part, m('d'))
+            dpr = etree.SubElement(groupe, m('dPr'))
+            etree.SubElement(dpr, m('begChr')).set(m('val'), '')
+            etree.SubElement(dpr, m('endChr')).set(m('val'), '')
+            e = etree.SubElement(groupe, m('e'))
+            enfants[0].addprevious(groupe)
+            for c in enfants: e.append(c)
     for rpr in root.iter(m('rPr')):
         if rpr.find(m('nor')) is not None:
             for sty in rpr.findall(m('sty')): rpr.remove(sty)
