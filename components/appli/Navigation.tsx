@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ENTRAINEMENT, dansEntrainement, sectionDe, sectionsOuvertes } from "@/lib/commun/entrainement";
+import type { ChoixTheme } from "@/lib/commun/theme";
+import BoutonTheme from "./BoutonTheme";
 import Icone from "./Icone";
 
 const NAV = [
@@ -17,7 +19,7 @@ const NAV = [
   { href: "/app/profil", nom: "Profil", icone: "profil", bas: false },
 ];
 
-export default function Navigation({ admin, labo, tp }: { admin: boolean; labo: boolean; tp: boolean }) {
+export default function Navigation({ admin, labo, tp, theme }: { admin: boolean; labo: boolean; tp: boolean; theme: ChoixTheme }) {
   const chemin = usePathname();
   const sousSections = sectionsOuvertes({ labo, tp });
   const ici = sectionDe(chemin);
@@ -44,10 +46,12 @@ export default function Navigation({ admin, labo, tp }: { admin: boolean; labo: 
           ) : lien(n, true)))}
           {admin && <><div className="sep" /><Link href="/admin"><Icone nom="cle" /><span>Administration</span></Link></>}
         </nav>
+        <div className="pied"><BoutonTheme initial={theme} libelle className="lateral-theme" /></div>
       </aside>
       <header className="barre-haut">
         <Link className="marque" href="/app"><b>MASTERBAC</b><span>Académie de l&apos;Élite</span></Link>
         <span className="espace" />
+        <BoutonTheme initial={theme} />
         <Link className="btn-texte" href="/app/parcours" aria-label="Mon parcours" aria-current={actif("/app/parcours") ? "page" : undefined}><Icone nom="plan" taille={22} /></Link>
         <Link className="btn-texte" href="/app/carnet" aria-label="Carnet d'erreurs"><Icone nom="carnet" taille={22} /></Link>
         <Link className="btn-texte" href="/app/profil" aria-label="Profil" aria-current={actif("/app/profil") ? "page" : undefined}><Icone nom="profil" taille={22} /></Link>

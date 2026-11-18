@@ -1,8 +1,11 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import * as s from "@/lib/commun/schemas";
+import { COOKIE_THEME, DUREE_COOKIE_THEME, lisChoixTheme } from "@/lib/commun/theme";
+import { env } from "@/lib/serveur/env";
 import { action, Refus } from "@/lib/serveur/fabriques";
 import { clientAdmin, clientUtilisateur } from "@/lib/serveur/supabase/clients";
 import { rattacheTest } from "@/lib/serveur/test-accueil";
@@ -39,7 +42,10 @@ export const verifierCode = action({
     // les accès préparés pour cette adresse dans l'administration s'attachent au compte
     const { error: refus } = await admin.rpc("droits_reclame", { p_user: data.user.id });
     if (refus) throw new Error("droits_reclame a échoué");
-    const { data: profil } = await admin.from("profils").select("user_id, note_visee, etat").eq("user_id", data.user.id).maybeSingle();
+    const { data: profil } = await admin.from("profils").select("user_id, note_visee, etat, theme").eq("user_id", data.user.id).maybeSingle();
+    // le thème choisi sur un autre appareil revient sur celui-ci
+    const theme = lisChoixTheme(profil?.theme);
+    if (theme !== "auto") (await cookies()).set(COOKIE_THEME, theme, { path: "/", sameSite: "lax", maxAge: DUREE_COOKIE_THEME, secure: env().APP_ENV !== "local" });
     // un élève qui avait déjà un compte et vient de passer le test de l'accueil retrouve ses résultats dans son parcours
     if (profil && profil.etat === "actif" && (await rattacheTest(data.user.id, profil.note_visee))) return { suite: "/app/parcours?calibrage=1" };
     return { suite: profil ? "/app" : "/compte/profil" };

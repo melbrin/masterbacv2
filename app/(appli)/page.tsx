@@ -1,6 +1,9 @@
+import { cookies } from "next/headers";
 import Link from "next/link";
+import BoutonTheme from "@/components/appli/BoutonTheme";
 import { redirect } from "next/navigation";
 import { ecartEnJours, jourDeParis } from "@/lib/commun/dates";
+import { COOKIE_THEME, lisChoixTheme } from "@/lib/commun/theme";
 import { BAC } from "@/lib/moteur";
 import { sessionCourante } from "@/lib/serveur/session";
 import { MINUTES_DU_TEST } from "@/lib/serveur/test-accueil";
@@ -24,11 +27,12 @@ const DANS_L_APPLICATION = [
 export default async function Accueil() {
   if (await sessionCourante()) redirect("/app");
   const jours = Math.max(0, ecartEnJours(jourDeParis(new Date()), BAC));
+  const theme = lisChoixTheme((await cookies()).get(COOKIE_THEME)?.value);
   return (
     <main className="accueil">
       <header className="accueil-barre">
         <span className="accueil-marque">MasterBac<small>Académie de l&apos;Élite</small></span>
-        <Link href="/compte/connexion">J&apos;ai déjà un compte</Link>
+        <span className="accueil-barre-droite"><BoutonTheme initial={theme} /><Link href="/compte/connexion">J&apos;ai déjà un compte</Link></span>
       </header>
 
       <section className="accueil-affiche" aria-labelledby="titre-accueil">

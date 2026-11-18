@@ -2,6 +2,7 @@
 .accueil { max-width: 720px; margin: 0 auto; padding: 0 16px 64px; }
 .accueil-barre { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; }
 .accueil-barre a { font-size: .9rem; font-weight: 600; }
+.accueil-barre-droite { display: flex; align-items: center; gap: 6px; }
 .accueil-marque { display: grid; font-family: var(--display); font-weight: 800; font-stretch: 112%; letter-spacing: .22em; text-transform: uppercase; color: var(--cuivre-texte); }
 .accueil-marque small { font-family: inherit; font-weight: 400; font-stretch: 100%; letter-spacing: 0; text-transform: none; color: var(--discret); font-size: .8rem; }
 .accueil-affiche { position: relative; overflow: hidden; display: grid; gap: 14px; justify-items: start; padding: 28px 22px 26px; border-radius: 22px; background: var(--nuit); color: var(--sur-nuit); }

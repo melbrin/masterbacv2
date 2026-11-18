@@ -46,21 +46,21 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --fond: #0A1220; --carte: #111C2E; --carte-2: #172338; --encre: #F3ECE6; --texte: #E2DCD6; --discret: #A1A9B6;
-    --filet: #24324B; --cuivre: #D09A72; --cuivre-texte: #DDAA84; --cuivre-clair: #3A2C22; --nuit: #050B16; --nuit-2: #0E1A2E;
-    --vert: #7CC4A0; --vert-fond: #10261D; --bleu: #8DB6E0; --bleu-fond: #0F2236; --brique: #F0948A; --brique-fond: #2D1513;
-    --ardoise: #B3B9C4; --ardoise-fond: #1A2130; --sable: #E8C9A0; --sable-fond: #2A2216;
-    --n10-fond: #3A2C22; --n10-texte: #F0E2D6; --n14-fond: #C08A63; --n14-texte: #140D08; --n18-fond: #E4DED8; --n18-texte: #111418;
+    --fond: #1E2633; --carte: #283243; --carte-2: #2F3A4D; --encre: #F5EFE9; --texte: #E8E2DC; --discret: #B4BCC8;
+    --filet: #3B485D; --cuivre: #D6A37C; --cuivre-texte: #E2B48F; --cuivre-clair: #4A3A2D; --nuit: #141B27; --nuit-2: #1D2737;
+    --vert: #86CCA8; --vert-fond: #1C3328; --bleu: #9BC0E6; --bleu-fond: #1C2F45; --brique: #F2A096; --brique-fond: #3B2422;
+    --ardoise: #BCC2CC; --ardoise-fond: #2A3343; --sable: #EBCFA8; --sable-fond: #382E21;
+    --n10-fond: #4A3A2D; --n10-texte: #F3E6DA; --n14-fond: #C08A63; --n14-texte: #140D08; --n18-fond: #E4DED8; --n18-texte: #111418;
     --ombre: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --fond: #0A1220; --carte: #111C2E; --carte-2: #172338; --encre: #F3ECE6; --texte: #E2DCD6; --discret: #A1A9B6;
-  --filet: #24324B; --cuivre: #D09A72; --cuivre-texte: #DDAA84; --cuivre-clair: #3A2C22; --nuit: #050B16; --nuit-2: #0E1A2E;
-  --vert: #7CC4A0; --vert-fond: #10261D; --bleu: #8DB6E0; --bleu-fond: #0F2236; --brique: #F0948A; --brique-fond: #2D1513;
-  --ardoise: #B3B9C4; --ardoise-fond: #1A2130; --sable: #E8C9A0; --sable-fond: #2A2216;
-  --n10-fond: #3A2C22; --n10-texte: #F0E2D6; --n14-fond: #C08A63; --n14-texte: #140D08; --n18-fond: #E4DED8; --n18-texte: #111418;
+  --fond: #1E2633; --carte: #283243; --carte-2: #2F3A4D; --encre: #F5EFE9; --texte: #E8E2DC; --discret: #B4BCC8;
+  --filet: #3B485D; --cuivre: #D6A37C; --cuivre-texte: #E2B48F; --cuivre-clair: #4A3A2D; --nuit: #141B27; --nuit-2: #1D2737;
+  --vert: #86CCA8; --vert-fond: #1C3328; --bleu: #9BC0E6; --bleu-fond: #1C2F45; --brique: #F2A096; --brique-fond: #3B2422;
+  --ardoise: #BCC2CC; --ardoise-fond: #2A3343; --sable: #EBCFA8; --sable-fond: #382E21;
+  --n10-fond: #4A3A2D; --n10-texte: #F3E6DA; --n14-fond: #C08A63; --n14-texte: #140D08; --n18-fond: #E4DED8; --n18-texte: #111418;
   --ombre: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
   color-scheme: dark;
 }
@@ -115,6 +115,10 @@ img { max-width: 100%; }
   .lateral nav a[aria-current="page"] svg { color: var(--cuivre-texte); }
   .lateral .sep { height: 1px; background: var(--filet); margin: 10px 8px; }
   .lateral .pied { margin-top: auto; padding: 12px 10px 0; font-size: .82rem; color: var(--discret); display: grid; gap: 8px; }
+  .lateral .lateral-theme { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 9px 0; border: 0; background: none;
+    color: var(--texte); font: inherit; font-size: .92rem; cursor: pointer; text-align: left; }
+  .lateral .lateral-theme svg { width: 20px; height: 20px; color: var(--discret); }
+  .lateral .lateral-theme:hover { color: var(--encre); }
   .principal { padding: 0 32px 64px; }
   .onglets-bas { display: none; }
 }
@@ -411,8 +415,8 @@ img { max-width: 100%; }
 .regularite .j { aspect-ratio: 1; border-radius: 6px; background: var(--carte-2); display: grid; place-items: center; font-size: .66rem; color: var(--discret); }
 .regularite .j.fait { background: var(--vert); color: #FFFFFF; }
 .regularite .j.auj { outline: 2px solid var(--cuivre); outline-offset: 1px; }
-:root[data-theme="dark"] .regularite .j.fait { color: #0A1220; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .regularite .j.fait { color: #0A1220; } }
+:root[data-theme="dark"] .regularite .j.fait { color: #1E2633; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .regularite .j.fait { color: #1E2633; } }
 
 /* offres */
 .offres { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }

@@ -1,6 +1,8 @@
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Navigation from "@/components/appli/Navigation";
+import { COOKIE_THEME, lisChoixTheme } from "@/lib/commun/theme";
 import { sectionsDe } from "@/lib/serveur/entrainement";
 import { profilCourant } from "@/lib/serveur/requetes/profil";
 import { sessionCourante } from "@/lib/serveur/session";
@@ -12,9 +14,10 @@ export default async function Coquille({ children }: { children: React.ReactNode
   const profil = await profilCourant();
   if (!profil) redirect("/compte/profil");
   const ouvertes = sectionsDe(session.admin);
+  const theme = lisChoixTheme((await cookies()).get(COOKIE_THEME)?.value);
   return (
-    <div className="app" data-theme-choisi={profil.theme}>
-      <Navigation admin={session.admin} labo={ouvertes.includes("labo")} tp={ouvertes.includes("tp")} />
+    <div className="app">
+      <Navigation admin={session.admin} labo={ouvertes.includes("labo")} tp={ouvertes.includes("tp")} theme={theme} />
       <main className="principal" id="principal">
         <div className="colonne">
           {profil.etat === "limite" ? (
