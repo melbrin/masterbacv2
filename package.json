@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "node scripts/pyodide.mjs && next dev",
+    "build": "node scripts/pyodide.mjs && next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -12,7 +12,7 @@
     "verif": "npm run lint && npm run typecheck && npm run test",
     "test:couverture": "vitest run --coverage",
     "tout": "npm run lint && npm run typecheck && npm run test:couverture && npm run contenu:verifier && npm run test:db && npm run build",
-    "contenu:verifier": "vitest run --config vitest.contenu.config.mts",
+    "contenu:verifier": "node scripts/pyodide.mjs && vitest run --config vitest.contenu.config.mts",
     "db:demarrer": "PATH=\"$PATH:/Applications/Docker.app/Contents/Resources/bin:$HOME/.docker/bin\" supabase start",
     "db:arreter": "PATH=\"$PATH:/Applications/Docker.app/Contents/Resources/bin:$HOME/.docker/bin\" supabase stop",
     "db:reinitialiser": "PATH=\"$PATH:/Applications/Docker.app/Contents/Resources/bin:$HOME/.docker/bin\" supabase db reset",
@@ -24,11 +24,19 @@
     "db:migrer": "PATH=\"$PATH:/Applications/Docker.app/Contents/Resources/bin:$HOME/.docker/bin\" supabase migration up"
   },
   "dependencies": {
+    "@codemirror/autocomplete": "6.20.4",
+    "@codemirror/commands": "6.11.1",
+    "@codemirror/lang-python": "6.2.1",
+    "@codemirror/language": "6.13.1",
+    "@codemirror/state": "6.7.6",
+    "@codemirror/view": "6.43.15",
+    "@lezer/highlight": "1.2.5",
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.119.0",
     "@vercel/analytics": "1.6.1",
     "katex": "0.19.1",
     "next": "16.4.5",
+    "pyodide": "314.0.7",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "server-only": "0.0.1",
@@ -52,5 +60,8 @@
   },
   "engines": {
     "node": ">=24 <25"
+  },
+  "overrides": {
+    "style-mod": "4.1.4"
   }
 }

@@ -8,8 +8,10 @@ import { COMPETENCES, type Bilan, type Competence, type Niveau } from "@/lib/com
 export interface DefiOffert { id: string; simulation: string; rang: number; fiche: number; niveau: number }
 /** Un TP que la section propose à ce compte. */
 export interface TpOffert { id: string; fiche: number }
+/** Un exercice du hub Python que la section propose à ce compte (décision 0016). */
+export interface PythonOffert { id: string; fiche: number }
 /** Ce que « S'entraîner » propose à ce compte, dans l'ordre de ses pages : seulement ce qu'il a le droit de voir. */
-export interface Offre { defis: DefiOffert[]; tp: TpOffert[] }
+export interface Offre { defis: DefiOffert[]; tp: TpOffert[]; python: PythonOffert[] }
 
 /** Ce que l'élève a fait. Les instants sont en millisecondes. */
 export interface Faits {
@@ -23,6 +25,8 @@ export interface Faits {
   memoire: number[];
   /** l'instant de chaque partie d'un jeu de révision */
   jeux: number[];
+  /** les exercices du hub Python réussis, à l'instant de leur première réussite */
+  python: { id: string; quand: number }[];
 }
 
 const JOUR_MS = 86_400_000;
@@ -88,6 +92,9 @@ export interface EntrainementDuChapitre {
   parNiveau: Map<number, Compte>;
   tp: number;
   tpFinis: number;
+  /** les exercices du hub Python du chapitre, et ceux que l'élève a réussis */
+  python: number;
+  pythonReussis: number;
 }
 
 /** Ce que l'élève a fait, sur une période : depuis lundi, ou depuis le premier du mois. */
@@ -99,6 +106,8 @@ export interface Periode {
   tp: number;
   /** les parties de mémoire et de jeux de révision */
   parties: number;
+  /** les exercices du hub Python réussis pour la première fois dans la période */
+  python: number;
 }
 
 export interface BilanEntrainement {
@@ -108,9 +117,10 @@ export interface BilanEntrainement {
   memoire: { jours: number; parties: number };
   /** les parties de jeux de révision des sept derniers jours */
   jeux: { parties: number };
+  python: { exercices: number; reussis: number };
   semaine: Periode;
   mois: Periode;
-  /** les chapitres qui ont un défi ou un TP offert */
+  /** les chapitres qui ont un défi, un TP ou un exercice Python offert */
   chapitres: Map<number, EntrainementDuChapitre>;
 }
 
@@ -123,13 +133,16 @@ export function bilanEntrainement(offre: Offre, faits: Faits, maintenant: number
   const tp = new Map(offre.tp.map((t) => [t.id, t]));
   const reussis = faits.defis.filter((d) => defi.has(d.id));
   const termines = faits.tp.filter((t) => tp.has(t.tp));
+  const exercices = new Set(offre.python.map((e) => e.id));
+  const codes = faits.python.filter((e) => exercices.has(e.id));
+  const reussiEnPython = new Set(codes.map((e) => e.id));
   const meilleurs = meilleursBilans(termines);
   const etoiles = new Map(reussis.map((d) => [d.id, d.etoiles]));
 
   const chapitres = new Map<number, EntrainementDuChapitre>();
   const chapitre = (fiche: number) => {
     let c = chapitres.get(fiche);
-    if (!c) { c = { fiche, defis: 0, reussis: 0, etoiles: 0, parNiveau: new Map(), tp: 0, tpFinis: 0 }; chapitres.set(fiche, c); }
+    if (!c) { c = { fiche, defis: 0, reussis: 0, etoiles: 0, parNiveau: new Map(), tp: 0, tpFinis: 0, python: 0, pythonReussis: 0 }; chapitres.set(fiche, c); }
     return c;
   };
   const niveaux = new Map<number, Compte>();
@@ -152,6 +165,11 @@ export function bilanEntrainement(offre: Offre, faits: Faits, maintenant: number
     c.tp += 1;
     if (meilleurs.has(t.id)) c.tpFinis += 1;
   }
+  for (const e of offre.python) {
+    const c = chapitre(e.fiche);
+    c.python += 1;
+    if (reussiEnPython.has(e.id)) c.pythonReussis += 1;
+  }
 
   const auj = jourDe(maintenant);
   const depuis = (debut: string): Periode => ({
@@ -159,6 +177,7 @@ export function bilanEntrainement(offre: Offre, faits: Faits, maintenant: number
     defis: reussis.filter((d) => jourDe(d.quand) >= debut).length,
     tp: new Set(termines.filter((t) => jourDe(t.quand) >= debut).map((t) => t.tp)).size,
     parties: [...faits.memoire, ...faits.jeux].filter((q) => jourDe(q) >= debut).length,
+    python: new Set(codes.filter((e) => jourDe(e.quand) >= debut).map((e) => e.id)).size,
   });
   const recentes = (parties: number[]) => parties.filter((q) => q > maintenant - 7 * JOUR_MS && q <= maintenant);
   const memoire = recentes(faits.memoire);
@@ -171,6 +190,7 @@ export function bilanEntrainement(offre: Offre, faits: Faits, maintenant: number
     tp: { tp: offre.tp.length, finis: meilleurs.size, meilleurs, grille: grilleEce(meilleurs) },
     memoire: { jours: new Set(memoire.map(jourDe)).size, parties: memoire.length },
     jeux: { parties: recentes(faits.jeux).length },
+    python: { exercices: offre.python.length, reussis: reussiEnPython.size },
     semaine: depuis(ajouteJours(auj, -((jourDeSemaine(auj) + 6) % 7))),
     mois: depuis(`${auj.slice(0, 7)}-01`),
     chapitres,

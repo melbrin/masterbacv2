@@ -14,8 +14,9 @@ const defis = (simulation: string, fiche: number) => [10, 14, 18].map((niveau, i
 const offre: Offre = {
   defis: [...defis("basket", 1), ...defis("largage", 1), ...defis("titrage", 10)],
   tp: [{ id: "chute", fiche: 1 }, { id: "detartrant", fiche: 10 }, { id: "vinaigre", fiche: 10 }],
+  python: [{ id: "vitesses", fiche: 1 }, { id: "energies", fiche: 1 }, { id: "titrage", fiche: 10 }],
 };
-const rien: Faits = { defis: [], tp: [], reprises: [], memoire: [], jeux: [] };
+const rien: Faits = { defis: [], tp: [], reprises: [], memoire: [], jeux: [], python: [] };
 
 describe("bilans de TP", () => {
   it("un bilan vaut la somme de ses niveaux", () => {
@@ -74,10 +75,11 @@ describe("bilan de l'entraînement", () => {
     expect(b.tp.grille.every((c) => c.niveau === null)).toBe(true);
     expect(b.memoire).toEqual({ jours: 0, parties: 0 });
     expect(b.jeux).toEqual({ parties: 0 });
-    expect(b.semaine).toEqual({ debut: "2026-11-09", defis: 0, tp: 0, parties: 0 });
-    expect(b.mois).toEqual({ debut: "2026-11-01", defis: 0, tp: 0, parties: 0 });
+    expect(b.python).toEqual({ exercices: 3, reussis: 0 });
+    expect(b.semaine).toEqual({ debut: "2026-11-09", defis: 0, tp: 0, parties: 0, python: 0 });
+    expect(b.mois).toEqual({ debut: "2026-11-01", defis: 0, tp: 0, parties: 0, python: 0 });
     expect([...b.chapitres.keys()]).toEqual([1, 10]);
-    expect(b.chapitres.get(1)).toMatchObject({ defis: 6, reussis: 0, etoiles: 0, tp: 1, tpFinis: 0 });
+    expect(b.chapitres.get(1)).toMatchObject({ defis: 6, reussis: 0, etoiles: 0, tp: 1, tpFinis: 0, python: 2, pythonReussis: 0 });
   });
   it("compte les défis réussis par objectif et par chapitre, avec leurs étoiles", () => {
     const b = bilanEntrainement(offre, { ...rien, defis: [
@@ -122,6 +124,17 @@ describe("bilan de l'entraînement", () => {
     expect(b.semaine.parties).toBe(4);
     expect(b.mois.parties).toBe(7);
   });
+  it("compte les exercices Python réussis, par chapitre et par période, sans ce que la section ne propose plus", () => {
+    const b = bilanEntrainement(offre, { ...rien, python: [
+      { id: "vitesses", quand: T - JOUR }, { id: "titrage", quand: T - 20 * JOUR }, { id: "ancien", quand: T },
+    ] }, T);
+    expect(b.python).toEqual({ exercices: 3, reussis: 2 });
+    expect(b.chapitres.get(1)).toMatchObject({ python: 2, pythonReussis: 1 });
+    expect(b.chapitres.get(10)).toMatchObject({ python: 1, pythonReussis: 1 });
+    expect(b.semaine.python).toBe(1);
+    // l'exercice du 24 octobre n'est pas de ce mois-ci
+    expect(b.mois.python).toBe(1);
+  });
   it("une partie datée du futur ne compte pas dans les sept derniers jours", () => {
     expect(bilanEntrainement(offre, { ...rien, memoire: [T + HEURE] }, T).memoire).toEqual({ jours: 0, parties: 0 });
   });
@@ -132,6 +145,7 @@ describe("bilan de l'entraînement", () => {
       tp: fc.array(fc.record({ tp: fc.constantFrom("chute", "detartrant", "vinaigre", "ancien"), bilan: fc.record({ APP: fc.constantFrom<Niveau>("A", "B", "C", "D"), REA: fc.constantFrom<Niveau>("A", "B", "C", "D") }), quand: instant }), { maxLength: 8 }),
       memoire: fc.array(instant, { maxLength: 20 }),
       jeux: fc.array(instant, { maxLength: 20 }),
+      python: fc.uniqueArray(fc.record({ id: fc.constantFrom("vitesses", "energies", "titrage", "ancien"), quand: instant }), { selector: (e) => e.id }),
     });
     fc.assert(fc.property(faits, (f) => {
       const b = bilanEntrainement(offre, { ...f, reprises: [] }, T);
@@ -141,6 +155,9 @@ describe("bilan de l'entraînement", () => {
       expect(chapitres.reduce((s, c) => s + c.reussis, 0)).toBe(b.labo.reussis);
       expect(chapitres.reduce((s, c) => s + c.etoiles, 0)).toBe(b.labo.etoiles);
       expect(chapitres.reduce((s, c) => s + c.tpFinis, 0)).toBe(b.tp.finis);
+      expect(chapitres.reduce((s, c) => s + c.pythonReussis, 0)).toBe(b.python.reussis);
+      expect(b.python.reussis).toBeLessThanOrEqual(b.python.exercices);
+      expect(b.mois.python).toBeLessThanOrEqual(b.python.reussis);
       for (const c of chapitres) expect([...c.parNiveau.values()].reduce((s, n) => s + n.reussis, 0)).toBe(c.reussis);
       expect(b.labo.reussis).toBeLessThanOrEqual(b.labo.defis);
       expect(b.labo.etoiles).toBeLessThanOrEqual(b.labo.etoilesMax);

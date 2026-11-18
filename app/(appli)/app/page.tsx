@@ -57,6 +57,7 @@ export default async function Aujourdhui() {
   const contenu: Record<IdSection, string> = {
     labo: `${pluriel(pratique.labo.etoiles, "étoile", "étoiles")} sur ${pratique.labo.etoilesMax}`,
     tp: `${pratique.tp.finis} ${pratique.tp.finis > 1 ? "terminés" : "terminé"} sur ${pratique.tp.tp}`,
+    python: `${pratique.python.reussis} ${pratique.python.reussis > 1 ? "réussis" : "réussi"} sur ${pratique.python.exercices}`,
     memoire: `${pluriel(pratique.memoire.jours, "jour", "jours")} sur 7`,
     jeux: `${pluriel(pratique.jeux.parties, "partie", "parties")} en 7 jours`,
   };

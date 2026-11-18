@@ -1,11 +1,13 @@
-/* La section « S'entraîner » : le sous-menu de ses quatre pages, ses entrées dans la barre latérale, les portes de sa
+/* La section « S'entraîner » : le sous-menu de ses cinq pages, ses entrées dans la barre latérale, les portes de sa
    page d'accueil, son bloc sur la page « Aujourd'hui ». Les classes des portes commencent par « porte ». */
 
-/* ---------- le sous-menu : Labo, TP, Mémoire, Jeux ----------
+/* ---------- le sous-menu : Labo, TP, Python, Mémoire, Jeux ----------
    Il part des onglets des fiches (.onglets). Sur un téléphone, ses entrées se partagent la largeur de l'écran. */
 .sous-menu { margin-top: 4px; margin-bottom: 0; }
 .sous-menu a { display: grid; place-items: center; min-height: 46px; padding: 8px 14px; font-family: var(--display); font-size: .95rem; }
 @media (max-width: 959px) { .sous-menu a { flex: 1 1 0; } }
+/* cinq entrées sur un téléphone : moins de marge autour de chacune, pour qu'aucune ne sorte de l'écran */
+@media (max-width: 479px) { .sous-menu { gap: 0; } .sous-menu a { padding: 8px 4px; font-size: .9rem; } }
 
 /* ---------- dans la barre latérale : les sous-sections, en retrait sous « S'entraîner » ---------- */
 .lateral-groupe { display: flex; flex-direction: column; gap: 2px; }
@@ -20,8 +22,9 @@
 .portes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
 .porte { position: relative; display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; min-width: 0; overflow: hidden;
   border: 1px solid rgba(141, 182, 224, .26); border-radius: 20px; box-shadow: 0 10px 28px rgba(0, 17, 40, .2); }
-/* une porte seule sur son rang prend toute la largeur */
-.porte:last-child:nth-child(odd) { grid-column: 1 / -1; }
+/* une porte seule sur son rang prend toute la largeur, comme celle du hub Python (la page le calcule) */
+.porte-large { grid-column: 1 / -1; }
+.porte-numero { fill: var(--discret); font-family: var(--mono); font-size: 8.5px; }
 .porte:hover { border-color: color-mix(in srgb, var(--cuivre) 70%, transparent); }
 
 /* la scène grandit avec l'écran, d'un téléphone à une tablette */
@@ -76,6 +79,7 @@
 .entrainement li span { color: color-mix(in srgb, var(--sur-nuit) 82%, transparent); font-size: .78rem; font-variant-numeric: tabular-nums; }
 .entrainement li a:hover b { color: #D7A983; }
 /* sur un écran très étroit, les entrées se rangent deux par deux */
+@media (max-width: 559px) { .entrainement ul:has(> li:nth-child(5)) { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 349px) { .entrainement ul { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -91,6 +95,8 @@
   .porte-lueur { animation: porte-lueur 2.8s ease-in-out infinite alternate; }
   .porte-carte-faux { animation: porte-faux 3.2s ease-in-out infinite alternate; }
   .porte-carte-vrai { animation: porte-vrai 3.2s ease-in-out infinite alternate; }
+  .porte-curseur { animation: porte-curseur 1.1s steps(1) infinite; }
+  @keyframes porte-curseur { 50% { opacity: 0; } }
   @keyframes porte-goutte { 0% { transform: translateY(-6px); opacity: 0; } 12% { opacity: 1; } 78% { transform: translateY(8px); opacity: 1; } 100% { transform: translateY(9px); opacity: 0; } }
   @keyframes porte-lueur { from { opacity: .08; } to { opacity: .42; } }
   @keyframes porte-faux { from { transform: rotate(-17deg); } to { transform: rotate(-22deg); } }

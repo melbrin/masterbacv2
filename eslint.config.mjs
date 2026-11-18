@@ -26,6 +26,8 @@ export default defineConfig([
   globalIgnores([
     ".next/**", "out/**", "build/**", "coverage/**", "next-env.d.ts",
     "kit-claude-code/**", "contenu/**", "reference/**", "docs/**", "supabase/**",
+    // Pyodide, copié depuis node_modules par scripts/pyodide.mjs : ce n'est pas notre code
+    "public/pyodide/**",
   ]),
   {
     files: ["**/*.{ts,tsx,mts,mjs}"],

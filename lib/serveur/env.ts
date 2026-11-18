@@ -10,6 +10,8 @@ const schema = z.object({
   SUPABASE_PUBLISHABLE_KEY: z.string().min(20),
   SUPABASE_SECRET_KEY: z.string().min(20),
   BOITE_LOCALE_URL: z.url().optional(),
+  // l'interrupteur du hub Python (décision 0016) : « ferme » le retire de l'application, pages comprises
+  HUB_PYTHON: z.enum(["ouvert", "ferme"]).default("ouvert"),
 });
 
 export type Env = z.infer<typeof schema>;

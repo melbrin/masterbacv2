@@ -7,6 +7,7 @@ import ContenuHtml from "@/components/socle/ContenuHtml";
 import { etiquetteBac, etiquetteDapres, p2, pluriel, points } from "@/lib/commun/format";
 import * as m from "@/lib/moteur";
 import { ficheComplete, type ItemLeger } from "@/lib/serveur/contenu/lecture";
+import { exercicesVisibles } from "@/lib/serveur/python";
 import { espaceEleve } from "@/lib/serveur/requetes/eleve";
 
 const ONGLETS = [["essentiel", "L'essentiel"], ["questions", "Questions de cours"], ["exercices", "Exercices type BAC"], ["quiz", "Quiz"], ["tombe", "Tombé au BAC"], ["notions", "Notions"]] as const;
@@ -21,7 +22,7 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
   const sp = await searchParams;
   const onglet = ONGLETS.some(([id]) => id === sp.onglet) ? (sp.onglet as string) : "essentiel";
   const jeux = `/app/jeux?fiche=${num}`;
-  const { ctx, catalogue, profil } = await espaceEleve();
+  const { ctx, catalogue, profil, session } = await espaceEleve();
   // les questions s'affichent pour un objectif : viser 14 demande aussi celles de l'objectif 10. Par défaut, l'objectif de l'élève.
   const visee = [10, 14, 18].includes(Number(sp.niveau)) ? Number(sp.niveau) : profil.note_visee;
   const f = catalogue.fiches.find((x) => x.num === num);
@@ -32,6 +33,8 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
   const e = m.etatsFiche(ctx, num);
   const base = `/app/fiche/${p2(num)}`;
   const quiz = catalogue.quiz.filter((q) => q.fiche === num);
+  // les exercices du hub Python sur ce chapitre (décision 0016)
+  const enPython = exercicesVisibles(session.admin).filter((x) => x.fiche === num);
 
   const ligne = (i: ItemLeger) => {
     const k = m.cle(num, i.k, i.n);
@@ -55,6 +58,10 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
         <ul className="contenu">{complet.pieges.map((p, i) => <li key={i}><ContenuHtml html={p} /></li>)}</ul></div>}
       <Link className="carte carte-lien" href={jeux} style={{ marginTop: 14, display: "block" }}><h2>Retiens ces relations en jouant</h2>
         <p className="discret" style={{ margin: 0 }}>Paires, cartes mémoire, pluie de formules : dix jeux sur ce chapitre.</p></Link>
+      {enPython.length > 0 && (
+        <Link className="carte carte-lien" href={`/app/python?fiche=${num}`} style={{ marginTop: 14, display: "block" }}><h2>Programme-le en Python</h2>
+          <p className="discret" style={{ margin: 0 }}>{pluriel(enPython.length, "exercice", "exercices")} du hub Python sur ce chapitre, proches de ceux des sujets du bac : {enPython.map((x) => `« ${x.titre} »`).join(", ")}.</p></Link>
+      )}
     </>;
   } else if (onglet === "questions") {
     const nb = f.items.filter((i) => i.k === "q" && i.niveau <= visee).length;

@@ -21,8 +21,8 @@ export default async function Profil() {
       <FormulaireReglages prenom={profil.prenom} noteVisee={profil.note_visee as 10 | 14 | 18} rappels={profil.rappels} />
       <div className="section-titre"><h2>Ta session</h2></div>
       <div className="carte"><div className="actions">
-        <BoutonAction className="btn btn-ligne" lancer={ici}>Me déconnecter</BoutonAction>
-        <BoutonAction className="btn-texte" lancer={partout} confirmer="Confirmer">Déconnecter tous mes appareils</BoutonAction>
+        <BoutonAction className="btn btn-ligne" lancer={ici} oublier>Me déconnecter</BoutonAction>
+        <BoutonAction className="btn-texte" lancer={partout} confirmer="Confirmer" oublier>Déconnecter tous mes appareils</BoutonAction>
       </div></div>
     </>
   );

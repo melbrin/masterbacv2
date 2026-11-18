@@ -40,11 +40,13 @@ export default async function Progres() {
   const pratiqueDuMois = [
     ...(offre.defis.length ? [{ n: pratique.mois.defis, un: "défi du labo réussi", plusieurs: "défis du labo réussis" }] : []),
     ...(offre.tp.length ? [{ n: pratique.mois.tp, un: "TP terminé", plusieurs: "TP terminés" }] : []),
+    ...(offre.python.length ? [{ n: pratique.mois.python, un: "exercice Python réussi", plusieurs: "exercices Python réussis" }] : []),
     { n: pratique.mois.parties, un: "partie jouée", plusieurs: "parties jouées" },
   ];
   const pratiqueDeLaSemaine = [
     pratique.semaine.defis ? pluriel(pratique.semaine.defis, "défi du labo réussi", "défis du labo réussis") : "",
     pratique.semaine.tp ? pluriel(pratique.semaine.tp, "TP terminé", "TP terminés") : "",
+    pratique.semaine.python ? pluriel(pratique.semaine.python, "exercice Python réussi", "exercices Python réussis") : "",
     pratique.semaine.parties ? pluriel(pratique.semaine.parties, "partie jouée", "parties jouées") : "",
   ].filter(Boolean);
   const grille = pratique.tp.grille.filter((c) => c.niveau);
@@ -132,6 +134,11 @@ export default async function Progres() {
             ) : <p className="discret" style={{ margin: 0 }}>Termine un TP : ton niveau dans chaque compétence de l&apos;épreuve d&apos;ECE s&apos;affichera ici.</p>}
           </section>
         )}
+        {offre.python.length > 0 && (
+          <section className="carte"><div className="tete"><h2>En Python</h2><span className="puce">{pratique.python.reussis} {pratique.python.reussis > 1 ? "réussis" : "réussi"} sur {pratique.python.exercices}</span></div>
+            <p style={{ margin: 0 }}>{pratique.python.reussis === 0 ? "Réussis un exercice du hub Python : il compte ici et dans ton chapitre." : `Ce mois-ci : ${pluriel(pratique.mois.python, "exercice réussi", "exercices réussis")}.`} <Link href="/app/python">Ouvrir le hub Python</Link></p>
+          </section>
+        )}
         <section className="carte"><h2>Mémoire et jeux</h2>
           <p style={{ margin: "0 0 6px" }}>Mémoire : <b>{pluriel(pratique.memoire.jours, "jour", "jours")}</b> d&apos;entraînement sur les 7 derniers, {pluriel(pratique.memoire.parties, "partie", "parties")}.</p>
           <p style={{ margin: 0 }}>Jeux de révision : <b>{pluriel(pratique.jeux.parties, "partie", "parties")}</b> sur les 7 derniers jours.</p>
@@ -159,6 +166,7 @@ export default async function Progres() {
             {labo && <span className="sous"><span>{[
               labo.defis ? `Labo : ${pluriel(labo.etoiles, "étoile", "étoiles")} sur ${3 * labo.defis}` : "",
               labo.tp ? `TP : ${labo.tpFinis} ${labo.tpFinis > 1 ? "terminés" : "terminé"} sur ${labo.tp}` : "",
+              labo.python ? `Python : ${labo.pythonReussis} ${labo.pythonReussis > 1 ? "réussis" : "réussi"} sur ${labo.python}` : "",
             ].filter(Boolean).join(" · ")}</span></span>}
             <span style={{ display: "block", marginTop: 6, maxWidth: 300 }}><BarreEtats e={e} /></span></span>
           <span className="fin"><Icone nom="chevron" /></span></Link></li>

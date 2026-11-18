@@ -159,6 +159,20 @@ export type Database = {
                   Relationships: [
                     
                   ]
+                },"python": {
+                  Row: {
+                    "code": string | null,"essais": number,"exercice": string,"maj_le": string,"reussi_le": string | null,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "code"?: string | null,"essais"?: number,"exercice": string,"maj_le"?: string,"reussi_le"?: string | null,"user_id": string
+                  }
+                  Update: {
+                    "code"?: string | null,"essais"?: number,"exercice"?: string,"maj_le"?: string,"reussi_le"?: string | null,"user_id"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"quiz_sessions": {
                   Row: {
                     "bonnes": number | null,"debut": string,"fiche": number | null,"genre": string,"id": string,"limite": string | null,"niveau": number | null,"questions": (string)[],"reponses": NonNullable<Json>,"secret": NonNullable<Json>,"termine_le": string | null,"user_id": string

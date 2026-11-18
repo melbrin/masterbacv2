@@ -37,6 +37,49 @@ export function IllustrationTp() {
   );
 }
 
+// ---------- Python : un programme, son curseur, et la courbe qu'il trace ----------
+// une ligne de code : son décalage, puis ses morceaux (longueur, couleur), séparés par un espace
+const CODE: [number, [number, string][]][] = [
+  [0, [[30, "var(--cuivre)"], [20, "var(--encre)"]]],
+  [0, [[14, "var(--encre)"], [22, "#8DB6E0"]]],
+  [0, [[12, "var(--cuivre)"], [40, "var(--encre)"]]],
+  [12, [[22, "var(--encre)"], [30, "#86CCA8"]]],
+  [12, [[46, "var(--encre)"]]],
+  [0, [[20, "var(--encre)"]]],
+];
+const TRAJET = [[154, 40], [160, 43], [166, 49], [172, 59], [178, 72], [184, 89], [189.5, 108]];
+
+export function IllustrationPython() {
+  return (
+    <svg {...CADRE}>
+      {/* l'éditeur : sa marge, ses numéros de ligne, son programme */}
+      <rect x={10} y={12} width={124} height={108} rx={7} {...TRAIT} fill="rgba(243, 236, 230, .04)" stroke="var(--discret)" />
+      <path d="M 31 12 V 120" stroke="var(--discret)" strokeWidth={1} opacity={0.5} />
+      {CODE.map(([decalage, morceaux], i) => {
+        const y = 28 + i * 15;
+        let x = 39 + decalage;
+        return (
+          <g key={y}>
+            <text x={25} y={y + 3} textAnchor="end" className="porte-numero">{i + 1}</text>
+            {morceaux.map(([l, c]) => {
+              const debut = x;
+              x += l + 5;
+              return <path key={debut} d={`M ${debut} ${y} H ${debut + l}`} stroke={c} strokeWidth={3.2} strokeLinecap="round" opacity={c === "var(--encre)" ? 0.78 : 1} />;
+            })}
+            {i === CODE.length - 1 && <rect className="porte-curseur" x={x + 1} y={y - 6} width={2.2} height={12} fill="var(--cuivre)" />}
+          </g>
+        );
+      })}
+      {/* ce que le programme trace : une chute, point par point */}
+      <path d="M 141 66 H 147" {...TRAIT} stroke="var(--discret)" />
+      <path d="M 145 63 L 148 66 L 145 69" {...TRAIT} stroke="var(--discret)" />
+      <path d="M 152 30 V 113 H 194" {...TRAIT} stroke="var(--discret)" strokeWidth={1.2} />
+      <path d={`M ${TRAJET.map(([x, y]) => `${x} ${y}`).join(" L ")}`} {...TRAIT} stroke="var(--cuivre)" strokeWidth={1.8} />
+      {TRAJET.map(([x, y]) => <circle key={x} cx={x} cy={y} r={1.8} fill="var(--encre)" />)}
+    </svg>
+  );
+}
+
 // ---------- la mémoire : une grille de cases, dont quelques-unes sont allumées ----------
 const ALLUMEES = new Set([1, 8, 10, 12, 19]); // le rang d'une case : sa ligne fois cinq, plus sa colonne
 

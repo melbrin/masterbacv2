@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Entete } from "@/components/appli/Morceaux";
-import { IllustrationJeux, IllustrationMemoire, IllustrationTp } from "@/components/entrainement/Illustrations";
+import { IllustrationJeux, IllustrationMemoire, IllustrationPython, IllustrationTp } from "@/components/entrainement/Illustrations";
 import Vignette from "@/components/simulations/Vignette";
 import { ENTRAINEMENT, SECTIONS, type IdSection } from "@/lib/commun/entrainement";
 import { JEUX } from "@/lib/commun/jeux";
@@ -33,6 +33,7 @@ export default async function Entrainement() {
   const tpFinis = bilan.tp.finis;
   const jours = bilan.memoire.jours;
   const parties = bilan.jeux.parties;
+  const enPython = bilan.python;
   const portes: Record<IdSection, Porte> = {
     labo: {
       scene: labo[0] ? <Vignette simulation={labo[0].simulation.id} {...apercuDe(labo[0].simulation, labo[0].defis[0])} /> : null,
@@ -44,6 +45,10 @@ export default async function Entrainement() {
       scene: <IllustrationTp />, nombre: tps.length, unite: "TP",
       suite: <><b>{tpFinis}</b> {accord(tpFinis, "terminé", "terminés")}</>,
     },
+    python: {
+      scene: <IllustrationPython />, nombre: enPython.exercices, unite: accord(enPython.exercices, "exercice", "exercices"),
+      suite: <><b>{enPython.reussis}</b> {accord(enPython.reussis, "réussi", "réussis")}</>,
+    },
     memoire: {
       scene: <IllustrationMemoire />, nombre: JEUX_MEMOIRE.length, unite: accord(JEUX_MEMOIRE.length, "jeu", "jeux"),
       suite: <><b>{jours}</b> {accord(jours, "jour", "jours")} sur 7</>,
@@ -54,14 +59,25 @@ export default async function Entrainement() {
     },
   };
 
+  // le hub Python a son rang à lui, sur toute la largeur ; les autres portes vont par deux, et la dernière d'une série
+  // impaire prend aussi toute la largeur
+  const montrees = SECTIONS.filter((s) => ouvertes.includes(s.id));
+  const larges = new Set<IdSection>(["python"]);
+  let serie: IdSection[] = [];
+  for (const s of [...montrees.map((x) => x.id), null]) {
+    if (s && !larges.has(s)) { serie.push(s); continue; }
+    if (serie.length % 2 === 1) larges.add(serie[serie.length - 1]);
+    serie = [];
+  }
+
   return (
     <>
       <Entete titre={ENTRAINEMENT.nom} sous={ENTRAINEMENT.phrase} />
       <ul className="portes">
-        {SECTIONS.filter((s) => ouvertes.includes(s.id)).map((s) => {
+        {montrees.map((s) => {
           const p = portes[s.id];
           return (
-            <li key={s.id} className={`porte porte-${s.id}`}>
+            <li key={s.id} className={`porte porte-${s.id}${larges.has(s.id) ? " porte-large" : ""}`}>
               <div className="porte-scene" aria-hidden="true">{p.scene}</div>
               <h2 className="porte-nom"><Link href={s.href}>{s.nom}</Link></h2>
               <p className="porte-phrase">{s.phrase}</p>

@@ -2,7 +2,7 @@
 -- chacun ne lit que ses lignes, le contenu n'est lisible que par le serveur.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(66);
+select plan(73);
 
 -- ---------- catalogue : rien n'échappe aux règles d'accès ----------
 select is(
@@ -51,6 +51,7 @@ insert into public.parties (user_id, jeu, fiches, score, secondes) values ('0000
 insert into public.defis (user_id, defi, essais, etoiles, reussi_le) values ('00000000-0000-4000-8000-00000000000a', 'basket-1', 2, 2, now());
 insert into public.memoire (user_id, jeu, score, secondes) values ('00000000-0000-4000-8000-00000000000a', 'chiffres', 70, 95);
 insert into public.tp_essais (id, user_id, tp, graine) values ('00000000-0000-4000-8000-0000000000e1', '00000000-0000-4000-8000-00000000000a', 'detartrant', 7);
+insert into public.python (user_id, exercice, essais, reussi_le, code) values ('00000000-0000-4000-8000-00000000000a', 'vitesses-pointage', 3, now(), 'print(1)');
 
 -- ---------- visiteur ----------
 set local role anon;
@@ -60,6 +61,7 @@ select throws_ok('select * from public.parties', '42501', null, 'le visiteur ne 
 select throws_ok('select * from public.defis', '42501', null, 'le visiteur ne lit pas les défis');
 select throws_ok('select * from public.memoire', '42501', null, 'le visiteur ne lit pas les parties de mémoire');
 select throws_ok('select * from public.tp_essais', '42501', null, 'le visiteur ne lit pas les essais de TP');
+select throws_ok('select * from public.python', '42501', null, 'le visiteur ne lit pas les exercices Python');
 select throws_ok('select * from contenu.items', '42501', null, 'le visiteur ne lit pas le contenu');
 select throws_ok('select public.contenu_sommaire()', '42501', null, 'le visiteur n''appelle pas les fonctions de contenu');
 reset role;
@@ -79,6 +81,7 @@ select is((select count(*)::int from public.parties), 0, 'B ne voit pas les part
 select is((select count(*)::int from public.defis), 0, 'B ne voit pas les défis de A');
 select is((select count(*)::int from public.memoire), 0, 'B ne voit pas les parties de mémoire de A');
 select is((select count(*)::int from public.tp_essais), 0, 'B ne voit pas les essais de TP de A');
+select is((select count(*)::int from public.python), 0, 'B ne voit pas les exercices Python de A');
 select throws_ok('select * from public.droits_en_attente', '42501', null, 'un élève ne lit pas les accès en attente');
 select throws_ok('select * from public.journal_audit', '42501', null, 'un élève ne lit pas le journal d''audit');
 select throws_ok('select * from public.limites', '42501', null, 'un élève ne lit pas les compteurs de limite');
@@ -101,6 +104,9 @@ select throws_ok($$update public.memoire set score = 100$$, '42501', null, 'A ne
 select is((select tp from public.tp_essais), 'detartrant', 'A voit ses essais de TP');
 select throws_ok($$insert into public.tp_essais (user_id, tp, graine) values ('00000000-0000-4000-8000-00000000000a', 'detartrant', 1)$$, '42501', null, 'A ne peut pas créer lui-même un essai de TP');
 select throws_ok($$update public.tp_essais set niveaux = '{"REA": "A"}', termine_le = now()$$, '42501', null, 'A ne peut pas se donner un niveau');
+select is((select essais::int from public.python), 3, 'A voit ses exercices Python');
+select throws_ok($$insert into public.python (user_id, exercice, essais, reussi_le) values ('00000000-0000-4000-8000-00000000000a', 'energie-mecanique', 1, now())$$, '42501', null, 'A ne peut pas écrire lui-même un exercice Python réussi');
+select throws_ok($$update public.python set essais = 1$$, '42501', null, 'A ne peut pas changer ses essais en Python');
 select throws_ok('select secret from public.quiz_sessions', '42501', null, 'A ne peut pas lire la partie secrète de sa session de quiz');
 select throws_ok($$insert into public.droits (user_id, offre, origine) values ('00000000-0000-4000-8000-00000000000a', 'pass', 'administration')$$, '42501', null, 'A ne peut pas s''ouvrir un droit');
 select throws_ok($$update public.profils set ds_offertes = 5 where user_id = '00000000-0000-4000-8000-00000000000a'$$, '42501', null, 'A ne peut pas se rendre sa préparation offerte');
@@ -122,6 +128,8 @@ select throws_ok($$insert into public.defis (user_id, defi, essais) values ('000
 select throws_ok($$insert into public.memoire (user_id, jeu, score, secondes) values ('00000000-0000-4000-8000-00000000000a', 'Pas un jeu', 10, 10)$$, '23514', null, 'un identifiant de jeu de mémoire mal formé est refusé');
 select throws_ok($$insert into public.tp_essais (user_id, tp, graine) values ('00000000-0000-4000-8000-00000000000a', 'Pas un TP', 1)$$, '23514', null, 'un identifiant de TP mal formé est refusé');
 select throws_ok($$insert into public.tp_essais (user_id, tp, graine, niveaux) values ('00000000-0000-4000-8000-00000000000a', 'detartrant', 1, '{"REA": "A"}')$$, '23514', null, 'des niveaux sans date de fin sont refusés');
+select throws_ok($$insert into public.python (user_id, exercice, essais) values ('00000000-0000-4000-8000-00000000000a', 'Pas un exercice', 1)$$, '23514', null, 'un identifiant d''exercice Python mal formé est refusé');
+select throws_ok($$insert into public.python (user_id, exercice, essais, code) values ('00000000-0000-4000-8000-00000000000a', 'energie-mecanique', 1, 'print(2)')$$, '23514', null, 'un programme gardé sans réussite est refusé');
 
 -- le test de la page d'accueil : seul le serveur y touche
 set local role anon;

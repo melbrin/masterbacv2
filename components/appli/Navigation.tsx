@@ -19,9 +19,9 @@ const NAV = [
   { href: "/app/profil", nom: "Profil", icone: "profil", bas: false },
 ];
 
-export default function Navigation({ admin, labo, tp, theme }: { admin: boolean; labo: boolean; tp: boolean; theme: ChoixTheme }) {
+export default function Navigation({ admin, labo, tp, python, theme }: { admin: boolean; labo: boolean; tp: boolean; python: boolean; theme: ChoixTheme }) {
   const chemin = usePathname();
-  const sousSections = sectionsOuvertes({ labo, tp });
+  const sousSections = sectionsOuvertes({ labo, tp, python });
   const ici = sectionDe(chemin);
   // en bas du téléphone, les sous-sections de « S'entraîner » n'ont pas d'onglet : on y entre par le sien, qui reste allumé.
   // Dans la barre latérale, chacune a son entrée : c'est elle qui porte la marque.

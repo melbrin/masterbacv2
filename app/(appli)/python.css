@@ -1,0 +1,132 @@
+/* ---------- le hub Python (décision 0016) ----------
+   Un cahier de programmes : le sommaire se lit comme un programme, avec ses numéros de ligne ; l'éditeur, la console
+   et les vérifications gardent la même marge grise. Les couleurs du code reprennent la charte. */
+:root {
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --py-fond: #FFFDFB; --py-marge: #F5F0EB; --py-active: rgba(164, 115, 81, .07); --py-selection: rgba(47, 93, 138, .2);
+  --py-paire: rgba(164, 115, 81, .22);
+  --py-mot: var(--cuivre-texte); --py-chaine: var(--vert); --py-nombre: var(--bleu); --py-fonction: var(--encre);
+  --py-cyan: #1F7A8C; --py-magenta: #8E3B76;
+}
+:root[data-theme="dark"] {
+  --py-fond: #19212E; --py-marge: #1E2735; --py-active: rgba(214, 163, 124, .08); --py-selection: rgba(155, 192, 230, .26);
+  --py-paire: rgba(214, 163, 124, .26); --py-cyan: #7FD0DE; --py-magenta: #E3A2D2;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --py-fond: #19212E; --py-marge: #1E2735; --py-active: rgba(214, 163, 124, .08); --py-selection: rgba(155, 192, 230, .26);
+    --py-paire: rgba(214, 163, 124, .26); --py-cyan: #7FD0DE; --py-magenta: #E3A2D2;
+  }
+}
+
+.py-enonce code, .py-memo code, .py-erreur code, .py-indices code {
+  font-family: var(--mono); font-size: .9em; padding: 1px 5px; border-radius: 4px; background: var(--carte-2); color: var(--encre);
+}
+
+/* ---------- le sommaire ---------- */
+.py-depart { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 6px; }
+.py-sommaire { margin: 0; padding: 0; list-style: none; border: 1px solid var(--filet); border-radius: 4px; background: var(--py-fond); overflow: hidden; }
+.py-sommaire > li { position: relative; display: grid; grid-template-columns: 46px minmax(0, 1fr); }
+.py-sommaire > li + li { border-top: 1px solid var(--filet); }
+.py-sommaire > li:hover { background: var(--py-active); }
+.py-sommaire > li:has(a:focus-visible) { outline: 2px solid var(--cuivre); outline-offset: -2px; }
+.py-sommaire-rang { padding: 15px 10px 0 0; text-align: right; font-family: var(--mono); font-size: .8rem; color: var(--discret); background: var(--py-marge);
+  font-variant-numeric: tabular-nums; }
+.py-sommaire > li.est-reussi .py-sommaire-rang { color: var(--vert); font-weight: 700; }
+.py-sommaire > li > div { min-width: 0; padding: 12px 14px 13px; }
+.py-sommaire-genre { margin: 0; font-family: var(--mono); font-size: .76rem; color: var(--py-mot); }
+.py-sommaire-genre::before { content: "# "; color: var(--discret); }
+.py-sommaire h3 { margin: 3px 0 6px; font-size: 1.02rem; }
+.py-sommaire h3 a { color: var(--encre); text-decoration: none; }
+.py-sommaire h3 a:focus-visible { outline: none; }
+/* toute la ligne ouvre l'exercice */
+.py-sommaire h3 a::after { content: ""; position: absolute; inset: 0; }
+.py-sommaire-suite { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 0; font-size: .84rem; color: var(--discret); }
+.py-memo { margin: 0 0 8px; font-size: .94rem; }
+
+/* ---------- l'exercice ---------- */
+.py-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: -2px 0 14px; font-size: .88rem; color: var(--discret); }
+.py-enonce { margin: 0 0 14px; }
+.py-enonce p { margin: 0 0 10px; }
+.py-voisins { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 20px; margin: 24px 0 6px; padding-top: 14px; border-top: 1px solid var(--filet);
+  font-size: .9rem; }
+/* des liens seuls sur leur ligne : 44 points de haut au moins, pour le doigt */
+.py-voisins a, .py-meta a, .py-filtre a { display: inline-flex; align-items: center; min-height: 44px; }
+.py-filtre { margin: -4px 0 8px; font-size: .9rem; color: var(--discret); }
+/* les boutons de texte du hub : 44 points de haut et de large au moins */
+.py-atelier .btn-texte { min-height: 44px; min-width: 44px; }
+
+/* ---------- l'éditeur ---------- */
+.py-editeur { border: 1px solid var(--filet); border-radius: 6px; overflow: hidden; background: var(--py-fond); }
+.py-editeur:focus-within { border-color: var(--cuivre); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cuivre) 22%, transparent); }
+/* 16 points au moins : en dessous, le téléphone agrandit la page quand on touche l'éditeur */
+.py-code .cm-editor { min-height: 190px; max-height: 64vh; font-size: 16px; }
+.py-code .cm-line.py-ligne-erreur { background: var(--brique-fond); }
+/* le numéro de la ligne fautive, en clair sur fond brique : visible même quand le surlignage l'est peu */
+.py-code .cm-gutterElement.py-marge-erreur { background: var(--brique); color: var(--carte); font-weight: 700; }
+@media (min-width: 720px) { .py-code .cm-editor { font-size: 14.5px; } }
+.py-touches { display: flex; gap: 6px; overflow-x: auto; padding: 7px 8px; border-top: 1px solid var(--filet); background: var(--py-marge); scrollbar-width: thin; }
+.py-touches button { flex: none; min-width: 44px; height: 44px; padding: 0 10px; border: 1px solid var(--filet); border-radius: 8px; background: var(--carte);
+  color: var(--encre); font-family: var(--mono); font-size: 1rem; cursor: pointer; touch-action: manipulation; }
+.py-touches button:active { background: var(--cuivre-clair); }
+
+.py-boutons { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 12px 0 2px; }
+.py-boutons .espace { flex: 1; }
+.py-remise { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0 8px; font-size: .9rem; color: var(--texte); }
+.py-etat { min-height: 1.4em; margin: 6px 0 8px; font-size: .88rem; color: var(--discret); }
+.py-panne { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0 0 12px; padding: 12px 14px; border-radius: 6px; background: var(--brique-fond); }
+.py-panne p { margin: 0; }
+
+/* ---------- ce que le programme a produit ---------- */
+.py-sortie { margin: 4px 0 14px; border: 1px solid var(--filet); border-radius: 6px; background: var(--carte); overflow: hidden; }
+.py-console { margin: 0; padding: 10px 12px; max-height: 320px; overflow: auto; font-family: var(--mono); font-size: .86rem; line-height: 1.5;
+  white-space: pre-wrap; overflow-wrap: anywhere; color: var(--texte); background: var(--py-marge); }
+.py-console-erreur { color: var(--brique); }
+.py-vide { margin: 0; padding: 10px 12px; color: var(--discret); font-size: .9rem; }
+.py-erreur { padding: 12px 14px; background: var(--brique-fond); }
+.py-console + .py-erreur, .py-console + .py-figures { border-top: 1px solid var(--filet); }
+.py-erreur p { margin: 0 0 6px; }
+.py-erreur p:last-child { margin: 0; }
+.py-erreur-titre { font-family: var(--mono); font-weight: 700; color: var(--brique); }
+.py-erreur-message { font-family: var(--mono); font-size: .86rem; overflow-wrap: anywhere; }
+.py-figures { padding: 6px 0 2px; }
+.py-sans-show { padding: 0 12px 10px; }
+.py-figure { display: block; margin: 0 auto 4px; font-family: var(--corps); }
+.py-figure-fond { fill: var(--carte); }
+.py-figure-cadre { fill: none; stroke: var(--discret); stroke-width: 1; }
+.py-figure-grille line { stroke: var(--filet); stroke-width: 1; }
+.py-figure-zero { stroke: var(--discret); stroke-opacity: .45; stroke-width: 1; }
+.py-figure-graduations line { stroke: var(--discret); }
+.py-figure-graduations text { fill: var(--discret); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.py-figure-titre { fill: var(--encre); font-size: 13.5px; font-weight: 700; }
+.py-figure-axe { fill: var(--texte); font-size: 12.5px; }
+.py-figure-texte { fill: var(--texte); font-size: 12px; }
+.py-figure-legende rect { fill: var(--carte); fill-opacity: .92; stroke: var(--filet); }
+.py-figure-legende text { fill: var(--texte); font-size: 12px; }
+
+/* ---------- les vérifications, la réussite, l'aide ---------- */
+.py-verifications { margin: 0 0 14px; }
+.py-verifications h2 { display: flex; align-items: baseline; gap: 10px; margin: 0 0 6px; font-size: 1.02rem; }
+.py-verifications h2 span { font-size: .86rem; font-weight: 600; color: var(--discret); }
+.py-verifications ul { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--filet); }
+.py-verifications li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; padding: 9px 2px; border-bottom: 1px solid var(--filet); }
+.py-verifications li b { font-weight: 600; }
+.py-verifications li p { margin: 3px 0 0; font-size: .9rem; }
+.py-coche { width: 20px; height: 20px; margin-top: 1px; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.py-coche.ok { stroke: var(--vert); }
+.py-coche.ko { stroke: var(--brique); }
+.py-reussite { margin: 0 0 16px; padding: 14px 16px; border: 1px solid color-mix(in srgb, var(--vert) 35%, transparent); border-radius: 6px; background: var(--vert-fond); }
+.py-reussite h2 { margin: 0 0 6px; font-size: 1.05rem; color: var(--vert); }
+.py-reussite p:last-child { margin-bottom: 0; }
+.py-retenir { margin: 6px 0 10px; padding-left: 20px; }
+.py-retenir li { margin: 0 0 4px; }
+.py-aide { display: grid; justify-items: start; gap: 6px; margin: 6px 0 18px; }
+.py-indices { width: 100%; }
+.py-indices p { margin: 0 0 8px; padding: 9px 12px; border-radius: 6px; background: var(--sable-fond); }
+.py-note { margin: 0; font-size: .86rem; color: var(--discret); }
+.py-solution { width: 100%; }
+.py-solution summary { display: flex; align-items: center; min-height: 44px; font-weight: 700; color: var(--cuivre-texte); cursor: pointer; }
+.py-indices p:focus { outline: none; }
+.py-indices p:focus-visible { outline: 2px solid var(--cuivre); outline-offset: 2px; }
+.py-solution pre { margin: 6px 0 8px; padding: 10px 12px; overflow-x: auto; border: 1px solid var(--filet); border-radius: 6px; background: var(--py-marge);
+  font-family: var(--mono); font-size: .86rem; line-height: 1.5; }

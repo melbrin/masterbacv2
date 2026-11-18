@@ -66,3 +66,6 @@ reports/
 
 # films de présentation fabriqués en local
 sorties/
+
+# Python du hub, copié depuis node_modules et préparé à chaque fabrication (scripts/pyodide.mjs)
+/public/pyodide/

@@ -17,7 +17,7 @@ export default async function Coquille({ children }: { children: React.ReactNode
   const theme = lisChoixTheme((await cookies()).get(COOKIE_THEME)?.value);
   return (
     <div className="app">
-      <Navigation admin={session.admin} labo={ouvertes.includes("labo")} tp={ouvertes.includes("tp")} theme={theme} />
+      <Navigation admin={session.admin} labo={ouvertes.includes("labo")} tp={ouvertes.includes("tp")} python={ouvertes.includes("python")} theme={theme} />
       <main className="principal" id="principal">
         <div className="colonne">
           {profil.etat === "limite" ? (

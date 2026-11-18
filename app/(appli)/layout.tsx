@@ -9,6 +9,7 @@ import "./labo.css";
 import "./memoire.css";
 import "./tp.css";
 import "./entrainement.css";
+import "./python.css";
 import { attributTheme, COOKIE_THEME, lisChoixTheme } from "@/lib/commun/theme";
 import "./accueil.css";
 
