@@ -86,6 +86,16 @@ Dans l'ordre où il les a données, une fois le site en ligne :
 
 Expéditeur des e-mails : `no-reply@masterbac.com`, domaine vérifié dans Resend (dit par Yane). Région des fonctions Vercel : `iad1` au 16 novembre, à passer à Paris (`cdg1`).
 
+## Demandes de Yane du 18 novembre
+
+Dans l'ordre où il les a données :
+
+1. **Un mode clair, et un bouton pour passer de l'un à l'autre** (« le mode sombre, je le trouve beaucoup trop sombre ») : fait et poussé le 18 novembre (commit `a79f579`). Bouton en haut à droite sur téléphone, en bas du menu de gauche sur ordinateur, et sur la page d'accueil ; choix gardé dans un cookie et dans le profil ; mode sombre adouci. Essai : `scripts/essais/theme.mts`, sans écart.
+2. **Les fiches 1 à 14 corrigées selon sa relecture** (Word et PDF), avec les ZIP des fiches, des cahiers d'énoncés et des sources. La fabrication a été réparée pour pandoc 3.14 et LibreOffice 26 (commit `bb38ff5`, pas encore poussé) : bandeaux de titre, fractions centrées, tableaux, barre au-dessus d'une lettre (`\overline`), renvois sur cinq passes. Les corrections sont faites fiche par fiche par des agents, vérifiées puis reprises ; une fiche annexe « récap des montages » est demandée. En cours.
+3. **Intégrer les modifications dans l'application**, puis un récapitulatif court de toutes les modifications. Après le point 2.
+4. **Un hub d'entraînement Python** : décision 0016, recette `version-locale-10.md`. Python 3.14 dans le navigateur (Pyodide servi par l'application), un éditeur pour téléphone, des exercices vérifiés par le vrai Python, un atelier libre, des tracés dans la charte. Place : cinquième sous-section de « S'entraîner », porte pleine largeur, entrée sur l'accueil, bloc dans les progrès, carte sur chaque fiche. Une table `python` (migration `20261118120000`, à appliquer en ligne). Les exercices sont écrits par des agents, en brouillon. En cours.
+5. **Les fiches de maths** : plan d'action présenté en page privée (https://claude.ai/artifact/TQiAPmGxEnjLp77moVrYVR) : quatorze fiches de terminale en trois vagues d'ici mars, les maths dans l'application en février, puis ses fiches de première (épreuve anticipée) en avril, avec une section « Contenus » dans l'administration. Six questions lui sont posées, avec une réponse proposée pour chacune.
+
 ## Les vingt TP (soir du 14 novembre)
 
 L'application propose vingt TP sur dix-sept paillasses, chacune avec son guide. Tous sont des brouillons, visibles en local seulement.
@@ -125,9 +135,11 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - Le plan d'un DS est gardé en JSON dans la table `ds`, pas dans une table `ds_seances`. Les étapes de lecture cochées y sont aussi (champ `lues`), écrites en lecture puis écriture, sans verrou.
 - Le droit « fiches » ouvre les corrigés de toutes les fiches, pas seulement de celles achetées.
 - Le score d'un jeu qui tourne dans le navigateur est annoncé par le navigateur (`verifiee` à faux dans `parties`). Il ne sert qu'au record personnel.
-- Les nouvelles commandes (calibrage, jeux, défis du labo, mémoire, TP) n'ont pas encore leurs cas dans la matrice des accès, qui reste à écrire (point 9).
+- Les nouvelles commandes (calibrage, jeux, défis du labo, mémoire, TP, `python.essai`, `python.solution`) n'ont pas encore leurs cas dans la matrice des accès, qui reste à écrire (point 9).
 - `tp.repondre` lit l'essai, puis l'écrit, sans verrou : deux validations envoyées en même temps pour la même étape pourraient s'écrire l'une sur l'autre. Le navigateur bloque le bouton pendant l'envoi. À regrouper dans une fonction de base.
-- Les pages « Aujourd'hui », parcours, progrès, labo, TP et « S'entraîner » font cinq lectures de plus chacune pour l'entraînement (`faitsDe`). À regrouper dans une fonction de base si une page devient lente.
+- Les pages « Aujourd'hui », parcours, progrès, labo, TP et « S'entraîner » font six lectures de plus chacune pour l'entraînement (`faitsDe`, dont la table `python`). À regrouper dans une fonction de base si une page devient lente.
+- Hub Python : la réussite d'un exercice est annoncée par le navigateur (le serveur ne lance jamais de code d'élève) ; elle ne sert qu'au suivi. Les vérifications (avec le calcul attendu) et les indices partent dans la page ; seule la solution reste sur le serveur jusqu'à deux vérifications. À revoir si le hub devient payant.
+- Hub Python : la cage du worker (`public/python/atelier.mjs`) et sa politique de sécurité sont essayées dans Chromium seulement ; Safari et Firefox restent à essayer.
 - Les réglages d'une paillasse de TP (dont la valeur à trouver) sont dans le code envoyé au navigateur, qui dessine la paillasse. Le jugement reste au serveur, qui rejoue les gestes.
 - La marque « le guide a servi » est posée par le navigateur dans la liste des gestes : un élève qui lit le code peut l'enlever et garder le niveau A. Il n'y a ni classement ni récompense derrière.
 - Les vingt-deux plateaux des jeux de mémoire partent ensemble dans la page d'un jeu. À charger à la demande, comme les paillasses.
@@ -136,6 +148,7 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 - Les essais de `scripts/essais/` (`jeux.mts`, `labo.mts`, `tp.mts`, `titrage.mts`, `sections.mts`, `memoire.mts`) jouent avec des comptes locaux inventés (`theo.essai@exemple.fr`, `nina.essai@exemple.fr`, `lea.*@exemple.fr`). `jeux.mts` et `labo.mts` ont reçu leurs nouvelles adresses mais n'ont pas été relancés depuis. Ce sont des essais à la main, à transformer en parcours Playwright (point 9). Celui du labo veut un compte sans ligne dans la table `defis`.
 - Les pages du test d'avant le kit gardent 13 avertissements de lint et des émojis. Elles seront réécrites avec la charte commune.
 - `npm audit` : 9 failles modérées, toutes dans les outils de développement. TypeScript reste en 5.8.3.
+- Le 18 novembre, le test de propriété « un plan de DS : faire chaque étape dans l'ordre termine la séance, pas avant » (`tests/moteur/suivi.test.ts`) a échoué une fois, sur une suite complète. Il n'a pas été reproduit ensuite : six suites, vingt-cinq lancements seuls, puis 4 000 tirages. Le moteur n'avait pas changé. À regarder : un cas rare, peut-être lié à l'heure du lancement.
 
 ## En attente de Yane
 
@@ -157,6 +170,9 @@ Politique de sécurité du contenu avec jeton, vérifications automatiques GitHu
 | Ouvrir Resend et ajouter les enregistrements du domaine d'envoi | les e-mails de connexion en dépendent | section 3.4 | tout de suite |
 | Ouvrir le projet Supabase de recette | la base des essais | section 3.3 | 16 novembre |
 | Vérifier la liste de protection de ses comptes | première menace pour le projet | section 1 | 16 novembre |
+| Essayer le hub Python et répondre aux trois questions de la décision 0016 | place dans l'application, gratuit ou payant, validation des exercices (tous en brouillon) | `docs/recettes/version-locale-10.md` | 21 novembre |
+| Répondre aux six questions du plan maths | liste des fiches, Masterfiches en Word, rythme de relecture, accès, fiches de première, « Tombé au bac » | la page du plan, partie « Ce que j'attends de toi » | 21 novembre |
+| Appliquer les deux migrations sur la base en ligne, avant de déployer le hub | sans la table `python`, plusieurs pages tombent en ligne | `npx supabase db push --linked`, quand Yane le décide | avant le prochain déploiement |
 | Choisir les élèves de la bêta, avec la date et les chapitres de leur prochain DS | fixe l'ordre de préparation du contenu | une liste de prénoms et d'adresses gardée hors du dépôt ; ne donner à Claude Code que les chapitres et les dates | 22 novembre |
 
 ## Décisions récentes
