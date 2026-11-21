@@ -8,21 +8,33 @@
 À connaître par cœur
 :::
 
+<!--colonnes: 22.5 33.5 44-->
+
 | Notion | Relation | À retenir |
 |---|---|---|
 | Gaz parfait | $P \times V = n \times R \times T$ | $P$ en Pa, $V$ en $\text{m}^{3}$, $T$ en K avec $T = \theta + 273{,}15$. |
-| Masse volumique d'un gaz | $\rho = \dfrac{P \times M}{R \times T}$ | $M$ en $\text{kg·mol}^{-1}$. À pression constante, elle diminue quand $T$ augmente. |
 | Premier principe | $\Delta U = W + Q$ | $W$ et $Q$ sont positifs quand le système les reçoit. |
-| Système incompressible | $\Delta U = m \times c \times \Delta\theta$ | $c$ en $\text{J·kg}^{-1}\text{·K}^{-1}$. Un écart est le même en °C et en K. |
+| Système incompressible | $\Delta U = m \times c \times \Delta\theta$ | $c$ en $\text{J·kg}^{-1}\text{·K}^{-1}$ ; $\Delta\theta$ identique en °C et en K. |
 | Flux thermique | $\Phi = \dfrac{Q}{\Delta t}$ | En watt. Le transfert va du corps chaud vers le corps froid. |
-| Paroi plane | $\Phi = \dfrac{\Delta T}{R_{\text{th}}}$ | $R_{\text{th}}$ en $\text{K·W}^{-1}$. En série, les résistances s'ajoutent. |
-| Contact avec un thermostat | $\theta(t) = (\theta_0 - \theta_{\text{th}}) \times e^{-t/\tau} + \theta_{\text{th}}$ | $\tau = \dfrac{m \times c}{h \times S}$. La température tend vers $\theta_{\text{th}}$. |
+| Paroi plane | $\Phi = \dfrac{\Delta T}{R_{\text{th}}}$ | $R_{\text{th}}$ en $\text{K·W}^{-1}$. $\Delta T$ : écart entre la face chaude et la face froide. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 22.5 33.5 44-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Masse volumique d'un gaz | $\rho = \dfrac{P \times M}{R \times T}$ | Dans l'équation d'état, remplacer $n$ par $m / M$, puis utiliser $\rho = m / V$, avec $M$ en $\text{kg·mol}^{-1}$. |
+| Parois en série | $R_{\text{eq}} = R_1 + R_2 + R_3$ | Même flux $\Phi$ : les écarts $\Delta T$ s'ajoutent. |
+| Contact avec un thermostat | $\theta(t) = (\theta_0 - \theta_{\text{th}}) \times e^{-t/\tau} + \theta_{\text{th}}$ avec $\tau = m \times c / (h \times S)$ | Premier principe pendant $\mathrm{d}t$ et loi de Newton, puis résolution : $\theta$ part de $\theta_0$ et tend vers $\theta_{\text{th}}$. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Trois lois sont données dans les sujets : la loi de Newton $\Phi = h \times S \times (\theta_{\text{th}} - \theta)$, la résistance thermique d'une paroi plane $R_{\text{th}} = e / (\lambda \times S)$ et la loi de Stefan-Boltzmann $P = \sigma \times S \times T^{4}$. Il faut savoir les combiner avec le premier principe : équation différentielle, temps caractéristique, comparaison de deux isolants.
+Les sujets donnent la loi de Newton $\Phi = h \times S \times (\theta_{\text{th}} - \theta)$, la résistance thermique d'une paroi plane $R_{\text{th}} = e / (\lambda \times S)$ et la loi de Stefan-Boltzmann $P = \sigma \times S \times T^{4}$, à combiner avec le premier principe.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
@@ -36,6 +48,8 @@ Les pièges qui coûtent des points
 ::: {custom-style="Rubrique"}
 Votre parcours selon votre objectif
 :::
+
+<!--colonnes: 12.5 39 48.5-->
 
 | Objectif | Questions de cours | Exercices |
 |---|---|---|
@@ -1646,7 +1660,11 @@ $$T = \left(\dfrac{0{,}70 \times 1370}{4 \times 5{,}67 \times 10^{-8}}\right)^{1
 
 soit une température d'environ $-18\ \text{°C}$. C'est plutôt froid ! Cela illustre bien la nécessité d'avoir un effet de serre permettant de réguler cette température. Aujourd'hui, l'effet de serre permet de maintenir une température moyenne d'environ $15\ \text{°C}$ à la surface de la Terre.
 
-**Rôle des gaz à effet de serre.** L'atmosphère laisse passer l'essentiel du rayonnement solaire, mais ses gaz à effet de serre (vapeur d'eau, dioxyde de carbone, méthane) absorbent une grande partie du rayonnement infrarouge émis par le sol. Ils en renvoient une partie vers le sol, qui reçoit ainsi plus de puissance : sa température d'équilibre est plus élevée. Supprimer totalement ces gaz ramènerait la température moyenne vers $-18\ \text{°C}$ et l'eau serait gelée sur presque toute la planète. Le problème actuel n'est pas l'existence de l'effet de serre, mais son renforcement par les activités humaines.
+**Rôle des gaz à effet de serre.** L'atmosphère laisse passer l'essentiel du rayonnement solaire, mais ses gaz à effet de serre absorbent une grande partie du rayonnement infrarouge émis par le sol. Ils en renvoient une partie vers le sol, qui reçoit ainsi plus de puissance : sa température d'équilibre est plus élevée. Supprimer totalement ces gaz ramènerait la température moyenne vers $-18\ \text{°C}$ et l'eau serait gelée sur presque toute la planète. Le problème actuel n'est pas l'existence de l'effet de serre, mais son renforcement par les activités humaines.
+
+::: {custom-style="Remarque"}
+[Remarque.]{custom-style="EtiqRemarque"} Les principaux gaz à effet de serre sont la vapeur d'eau $\text{H}_2\text{O}$, qui contribue le plus à l'effet de serre naturel, le dioxyde de carbone $\text{CO}_2$, le méthane $\text{CH}_4$, le protoxyde d'azote $\text{N}_2\text{O}$ et l'ozone $\text{O}_3$. Le diazote et le dioxygène, qui forment 99 % de l'air sec, n'absorbent presque pas l'infrarouge. Les activités humaines (combustion du charbon, du pétrole et du gaz naturel, déforestation, élevage, engrais) augmentent les concentrations de $\text{CO}_2$, de $\text{CH}_4$ et de $\text{N}_2\text{O}$ : celle du dioxyde de carbone a augmenté d'environ 50 % depuis le début de l'ère industrielle. Cet effet de serre additionnel, qui s'ajoute à l'effet de serre naturel, est la principale cause du réchauffement climatique actuel.
+:::
 
 ::: {custom-style="Piege"}
 [Piège.]{custom-style="EtiqPiege"} Le facteur 4 vient du rapport entre l'aire de la sphère qui émet ($4\pi R_T^{2}$) et l'aire du disque qui reçoit ($\pi R_T^{2}$). Si on l'oublie, on trouve $394\ \text{K}$, soit plus de $120\ \text{°C}$ : un résultat absurde, qui doit alerter.

@@ -13,18 +13,27 @@
 | Notion | Relation | À retenir |
 |---|---|---|
 | Travail d'une force constante | $W_{AB}(\vec{F}) = \vec{F} \cdot \overrightarrow{\text{AB}} = F \times \text{AB} \times \cos\alpha$ | En joule. Moteur s'il est positif, résistant s'il est négatif. |
-| Travail du poids | $W_{AB}(\vec{P}) = m \times g \times (z_A - z_B)$ | Il ne dépend pas du chemin suivi : le poids est conservatif. |
 | Énergies | $E_c = \dfrac{1}{2} m v^{2} \quad \text{et} \quad E_{pp} = m g z$ | $E_m = E_c + E_{pp}$. L'origine de $E_{pp}$ est fixée par l'énoncé. |
-| Théorème de l'énergie cinétique | $E_c(B) - E_c(A) = \sum W_{AB}(\vec{F})$ | Somme des travaux de toutes les forces. |
+| Théorème de l'énergie cinétique | $E_c(B) - E_c(A) = \sum W_{AB}(\vec{F})$ | Dans un référentiel galiléen : somme des travaux de toutes les forces. |
 | Énergie mécanique | $\Delta E_m = W_{AB}(\vec{f})$ | $\vec{f}$ : forces non conservatives. Sans frottement, $E_m$ se conserve. |
-| Champ et force électriques | $\vec{F}_e = q \times \vec{E} \quad \text{et} \quad E = \dfrac{U}{d}$ | $\vec{E}$ va de la plaque positive vers la plaque négative. |
-| Particule chargée | $\vec{a} = \dfrac{q}{m}\ \vec{E} \quad \text{et} \quad W = q \times U$ | Poids négligeable : mouvement analogue à celui d'un projectile. |
+| Champ et force électriques | $\vec{F}_e = q \times \vec{E}$ | $\vec{E}$ va de la plaque positive vers la plaque négative. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 21 37 42-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Travail du poids | $W_{AB}(\vec{P}) = m \times g \times (z_A - z_B)$ | Travail d'une force constante : le poids étant vertical, seul compte le dénivelé, pas le chemin. |
+| Particule chargée | $\vec{a} = \dfrac{q}{m}\ \vec{E} \quad \text{et} \quad W_{AB}(\vec{F}_e) = q \times U_{AB}$ | Deuxième loi de Newton, poids négligé ; travail de la force constante $q \times \vec{E}$ entre les plaques. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Les masses, la charge élémentaire, la tension et l'écartement des plaques sont donnés. L'énoncé fournit souvent des courbes d'énergie à identifier ou un programme Python à compléter.
+L'énoncé donne les masses, la charge élémentaire, la tension, l'écartement des plaques et l'expression du champ $E = U / d$, souvent aussi des courbes d'énergie à identifier ou un programme Python à compléter.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
@@ -117,6 +126,10 @@ Identifier chaque courbe. En déduire la vitesse de lancement du ballon et la ha
 ::: {custom-style="Legende"}
 Figure 1. Énergies d'un ballon au cours de son vol
 :::
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
 ## [Q.4]{custom-style="QNum"}\ \ Déterminer la hauteur maximale atteinte à l'aide du graphe de l'énergie potentielle {#q4}
 
@@ -311,7 +324,7 @@ Cible au sol entre $X_1 = 0{,}55\ \text{m}$ et $X_2 = 0{,}60\ \text{m}$, absciss
 
 **Partie A. De A à B**
 
-**1.** Faire l'inventaire des forces qui s'exercent sur le boulet entre A et B et les représenter sans souci d'échelle.
+**1.** Faire l'inventaire des forces que subit le boulet de A à B et les représenter sans souci d'échelle.
 
 **2.** L'origine de l'énergie potentielle de pesanteur est prise au niveau du palier BC. Exprimer l'énergie potentielle du boulet en A en fonction de $m$, $g$, $D$ et $\alpha$, puis vérifier qu'elle vaut $2{,}5 \times 10^{-2}\ \text{J}$.
 
@@ -329,7 +342,7 @@ Entre B et C, le mouvement est rectiligne uniforme : le boulet quitte C avec une
 
 **7.** Calculer la durée de la chute jusqu'au sol, puis l'abscisse du point d'impact. La cible est-elle atteinte ?
 
-**8.** Quelle longueur $D$ faudrait-il choisir pour que le boulet tombe à l'abscisse $0{,}575\ \text{m}$, au milieu de la cible ?
+**8.** Quelle longueur $D$ choisir pour que le boulet tombe à l'abscisse $0{,}575\ \text{m}$, au milieu de la cible ?
 
 **9.** On reprend la longueur $D = 0{,}50\ \text{m}$. Exprimer la vitesse du boulet à son arrivée au sol à l'aide de la conservation de l'énergie mécanique, puis la calculer.
 :::
@@ -368,6 +381,8 @@ Figure 8. Déflecteur d'une imprimante à jet d'encre
 Goutte : $m = 3{,}4 \times 10^{-11}\ \text{kg}$ ; $q = -2{,}0 \times 10^{-13}\ \text{C}$ ; $v_0 = 20\ \text{m·s}^{-1}$ ; $g = 9{,}81\ \text{m·s}^{-2}$
 
 Plaques : $U = 1{,}5\ \text{kV}$ ; $d = 2{,}0\ \text{mm}$ ; $L = 1{,}0\ \text{cm}$ ; distance à l'écran : $D = 2{,}0\ \text{cm}$
+
+Champ électrique entre les plaques : $E = \dfrac{U}{d}$
 :::
 
 ## [Q.9]{custom-style="QNum"}\ \ Indiquer le signe des charges portées par les plaques du déflecteur {#q9}
@@ -395,7 +410,7 @@ Plaques : $U = 1{,}5\ \text{kV}$ ; $d = 2{,}0\ \text{mm}$ ; $L = 1{,}0\ \text{cm
 :::
 
 ::: {custom-style="Enonce"}
-Dans une autre expérience, on ne néglige plus le poids. Une goutte d'huile sphérique, de rayon $r$ et de masse volumique $\rho$, reste immobile entre deux plaques horizontales. Exprimer la valeur $|q|$ de sa charge en fonction de $r$, $\rho$, $g$, $d$ et $U$.
+Dans une autre expérience, on ne néglige plus le poids. Une goutte d'huile sphérique, de rayon $r$ et de masse volumique $\rho$, reste immobile entre deux plaques horizontales distantes de $d$ et soumises à une tension $U$ ; le champ électrique entre les plaques a pour valeur $E = \dfrac{U}{d}$. Exprimer la valeur $|q|$ de sa charge en fonction de $r$, $\rho$, $g$, $d$ et $U$.
 
 Application : $r = 1{,}0\ \text{µm}$ ; $\rho = 9{,}0 \times 10^{2}\ \text{kg·m}^{-3}$ ; $d = 1{,}0\ \text{cm}$ ; $U = 460\ \text{V}$ ; $g = 9{,}81\ \text{m·s}^{-2}$. Comparer $|q|$ à la charge élémentaire $e = 1{,}60 \times 10^{-19}\ \text{C}$.
 :::
@@ -431,7 +446,7 @@ Application : $r = 1{,}0\ \text{µm}$ ; $\rho = 9{,}0 \times 10^{2}\ \text{kg·m
 :::
 
 ::: {custom-style="Enonce"}
-Dans un accélérateur linéaire, un proton (masse $m_p = 1{,}67 \times 10^{-27}\ \text{kg}$, charge $e = 1{,}60 \times 10^{-19}\ \text{C}$) part sans vitesse d'une plaque et est accéléré jusqu'à une seconde plaque ; la tension entre les deux plaques vaut $U = 2{,}0\ \text{kV}$. Exprimer, puis calculer, sa vitesse à la sortie. Le poids est négligeable.
+Dans un accélérateur linéaire, un proton (masse $m_p = 1{,}67 \times 10^{-27}\ \text{kg}$, charge $e = 1{,}60 \times 10^{-19}\ \text{C}$) part sans vitesse d'une plaque et est accéléré jusqu'à une seconde plaque, parallèle à la première et distante de $d$ ; la tension entre les deux plaques vaut $U = 2{,}0\ \text{kV}$, et le champ électrique entre elles $E = \dfrac{U}{d}$. Exprimer, puis calculer, sa vitesse à la sortie. Le poids est négligeable.
 :::
 
 ::: {custom-style="Rubrique"}
@@ -468,6 +483,8 @@ Figure 9. Zone d'accélération entre les deux électrodes
 Proton : $m_p = 1{,}67 \times 10^{-27}\ \text{kg}$ ; $e = 1{,}60 \times 10^{-19}\ \text{C}$ ; $g = 9{,}81\ \text{m·s}^{-2}$
 
 Tension entre les électrodes : $U = 50\ \text{kV}$ ; distance : $d = 4{,}0\ \text{cm}$ ; $1\ \text{eV} = 1{,}60 \times 10^{-19}\ \text{J}$
+
+Champ électrique entre les électrodes : $E = \dfrac{U}{d}$
 :::
 
 ::: {custom-style="Enonce"}
@@ -609,7 +626,7 @@ $$v_0 = \sqrt{\dfrac{2 \times E_c}{m}} = \sqrt{\dfrac{2 \times 30}{0{,}60}} = 10
 $$h_{\text{max}} = \dfrac{E_{pp,\text{max}}}{m \times g} = \dfrac{22{,}5}{0{,}60 \times 9{,}81} = 3{,}8\ \text{m}$$
 
 ::: {custom-style="Methode"}
-[Méthode.]{custom-style="EtiqMethode"} Pour identifier les courbes, partir de la grandeur nulle au départ : une altitude nulle donne $E_{pp} = 0$, une vitesse nulle donne $E_c = 0$. Ici, l'énergie cinétique ne s'annule jamais : au sommet, le ballon garde sa vitesse horizontale.
+[Méthode.]{custom-style="EtiqMethode"} Pour identifier les courbes, partir de la grandeur nulle au départ : une altitude nulle donne $E_{pp} = 0$ et une vitesse nulle donne $E_c = 0$. Ici, l'énergie cinétique ne s'annule jamais : au sommet, le ballon garde sa vitesse horizontale.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.4 · Déterminer la hauteur maximale atteinte à l'aide du graphe de l'énergie potentielle {#c_q4}
@@ -974,6 +991,10 @@ $$v_{\text{sol}} = \sqrt{2 \times 9{,}8 \times (0{,}25 + 0{,}40)} = 3{,}6\ \text
 [Méthode.]{custom-style="EtiqMethode"} Pour calculer une vitesse, la conservation de l'énergie mécanique est plus rapide que les équations horaires : il suffit des altitudes de départ et d'arrivée, sans calculer la durée du mouvement.
 :::
 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 # Corrigés du thème 3 : particule chargée dans un champ électrique uniforme {#c_theme3}
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.9 · Indiquer le signe des charges portées par les plaques du déflecteur {#c_q9}
@@ -1177,7 +1198,9 @@ Le point d'impact est à $2{,}8\ \text{mm}$ au-dessus de l'axe. En réglant la c
 [CIBLE:q17]{custom-style="BoutonEnonce"}
 :::
 
-Le proton n'est soumis qu'à la force électrique, son poids étant négligeable. D'après le théorème de l'énergie cinétique, entre l'entrée A et la sortie B :
+Le proton n'est soumis qu'à la force électrique, son poids étant négligeable. Cette force, $\vec{F}_e = e \times \vec{E}$, est constante. Le proton traverse tout l'espace entre les plaques dans le sens de la force, de l'entrée A à la sortie B, donc le travail de la force électrique vaut $W_{AB}(\vec{F}_e) = e \times E \times d = e \times U$, car $E = \dfrac{U}{d}$.
+
+D'après le théorème de l'énergie cinétique :
 
 $$E_c(B) - E_c(A) = W_{AB}(\vec{F}_e) = e \times U$$
 
@@ -1269,7 +1292,7 @@ $$E_c = \dfrac{1}{2} \times m_p \times v_s^{2} = \dfrac{1}{2} \times 1{,}67 \tim
 **7.** Théorème de l'énergie cinétique
 :::
 
-Seule la force électrique travaille. Le proton part sans vitesse, donc :
+Seule la force électrique travaille. Elle est constante et de même sens que le déplacement, sur toute la distance $d$ : $W(\vec{F}_e) = e \times E \times d = e \times U$. Le proton part sans vitesse, donc :
 
 $$E_c - 0 = W(\vec{F}_e) = e \times U = 1{,}60 \times 10^{-19} \times 50 \times 10^{3} = 8{,}0 \times 10^{-15}\ \text{J}$$
 

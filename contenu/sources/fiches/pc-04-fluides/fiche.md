@@ -11,26 +11,33 @@
 | Notion | Relation | À retenir |
 |---|---|---|
 | Poussée d'Archimède | $\vec{\Pi} = -\rho_{\text{fluide}} \times V_{\text{immergé}} \times \vec{g}$ | Verticale, vers le haut. Sa norme $\Pi = \rho_{\text{fluide}} \times V_{\text{immergé}} \times g$ s'exprime en newton. |
-| Objet immobile ou à vitesse limite | $P = \Pi$ ou $P = \Pi + f$ | Les forces se compensent (principe d'inertie). Frottement $f$ opposé à la vitesse, modèle donné. |
 | Débit volumique | $D = \dfrac{V}{\Delta t} = S \times v$ | En $\text{m}^{3}\text{·s}^{-1}$, avec $S$ en $\text{m}^{2}$ et $v$ en $\text{m·s}^{-1}$. |
 | Conservation du débit | $S_A \times v_A = S_B \times v_B$ | Fluide incompressible en régime permanent : la vitesse augmente quand la section diminue. |
 | Statique des fluides | $P_B - P_A = \rho \times g \times (z_A - z_B)$ | La pression augmente avec la profondeur. |
 
 ::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Repos ou vitesse limite | $P = \Pi$ ou $P = \Pi + f$ | Principe d'inertie : les forces se compensent. |
+
+::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-La relation de Bernoulli est donnée dans les sujets : $P + \dfrac{1}{2}\rho v^{2} + \rho g z = \text{constante}$ le long d'une ligne de courant. Il faut savoir la simplifier (même altitude, fluide au repos, pression atmosphérique) puis l'exploiter. À altitude constante, la pression diminue là où la vitesse augmente : c'est l'effet Venturi.
+La relation de Bernoulli est donnée dans les sujets : $P + \dfrac{1}{2}\rho v^{2} + \rho g z = \text{constante}$ le long d'une ligne de courant. Il faut savoir la simplifier (même altitude, fluide au repos, pression atmosphérique) puis l'exploiter. Le modèle de la force de frottement exercée par un fluide ($f = k \times v$ ou $f = K \times v^{2}$) est lui aussi donné.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
 :::
 
-- Prendre la masse volumique de l'objet au lieu de celle du fluide, ou le volume total au lieu du volume immergé.
+- Confondre la masse volumique de l'objet et celle du fluide, le volume total et le volume immergé.
 - Oublier le signe moins dans l'expression vectorielle de la poussée d'Archimède.
-- Laisser un débit en $\text{L·min}^{-1}$ ou un diamètre en millimètre dans un calcul : tout se convertit en unités SI.
-- Confondre rayon et diamètre dans le calcul d'une section : $S = \pi R^{2} = \dfrac{\pi d^{2}}{4}$.
-- Écrire que la pression augmente quand la vitesse augmente : c'est l'inverse.
+- Laisser un débit en $\text{L·min}^{-1}$ ou un diamètre en millimètre : tout se convertit en unités SI.
+- Confondre rayon et diamètre dans le calcul d'une section : $S = \pi R^{2} = \pi d^{2} / 4$.
+- Écrire que la pression augmente avec la vitesse : à altitude constante, elle diminue (effet Venturi).
 - Appliquer la règle des 63 % à un frottement en $v^{2}$ : seule la tangente à l'origine convient.
 
 ::: {custom-style="Rubrique"}
@@ -645,7 +652,7 @@ Figure 9. Thermomètre de Galilée posé dans une pièce
 ::: {custom-style="EnonceDonnees"}
 Volume de chaque boule, sans l'étiquette : $V = 12{,}00\ \text{cm}^{3}$ ; volume d'une sphère de rayon $R$ : $\dfrac{4}{3}\pi R^{3}$
 
-Masse volumique du liquide à la température $\theta$ exprimée en °C : $\rho(\theta) = 880{,}0 - 0{,}80 \times (\theta - 20)$, en $\text{kg·m}^{-3}$
+Masse volumique du liquide à la température $\theta$ (en °C) : $\rho(\theta) = 880{,}0 - 0{,}80 \times (\theta - 20)$, en $\text{kg·m}^{-3}$
 
 Intensité de la pesanteur : $g = 9{,}81\ \text{m·s}^{-2}$
 
@@ -653,7 +660,7 @@ Force de frottement exercée par le liquide sur une boule en mouvement : opposé
 :::
 
 ::: {custom-style="Enonce"}
-**1.** Faire le bilan des forces sur une boule en équilibre au sein du liquide, sans contact avec le tube ni les autres boules. En déduire que la boule dont l'étiquette indique la température $\theta$ a pour masse $m = \rho(\theta) \times V$.
+**1.** Faire le bilan des forces sur une boule en équilibre au sein du liquide, sans contact avec le tube ni les autres boules. En déduire que la boule dont l'étiquette indique $\theta$ a pour masse $m = \rho(\theta) \times V$.
 
 **2.** Calculer la masse de la boule « 22 °C », puis l'écart de masse entre deux boules voisines. Commenter.
 
@@ -793,13 +800,48 @@ La résultante des forces pressantes est donc verticale et dirigée vers le haut
 Figure 11. Forces pressantes exercées par un fluide au repos sur un solide immergé
 :::
 
-::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} On peut le vérifier sur un solide de section $S$ et de hauteur $h$. La différence de pression entre le bas et le haut vaut $\rho_{\text{fluide}} \times g \times h$ (voir Q.10), donc :
+::: {custom-style="Intertitre"}
+Vérification par le calcul
+:::
+
+Soit un solide de section $S$ et de hauteur $h$ immergé dans un fluide au repos (figure 11). L'axe $(Oz)$ est vertical, vers le haut ; les faces du haut et du bas sont aux altitudes $z_{\text{haut}}$ et $z_{\text{bas}}$, avec $z_{\text{haut}} - z_{\text{bas}} = h$.
+
+**Étape 1 : la différence de pression entre les deux faces.** On applique la loi fondamentale de la statique des fluides (voir Q.10) entre un point de la face du haut et un point de la face du bas :
+
+$$P_{\text{bas}} - P_{\text{haut}} = \rho_{\text{fluide}} \times g \times (z_{\text{haut}} - z_{\text{bas}}) = \rho_{\text{fluide}} \times g \times h$$
+
+Cette différence est positive : la pression est plus forte sur la face du bas.
+
+**Étape 2 : les forces pressantes sur les deux faces.** Sur une face plane de surface $S$, où la pression vaut $P$ en tout point, le fluide exerce une force perpendiculaire à la face, dirigée vers le solide, de norme $F = P \times S$ :
+
+- sur la face du haut, $\vec{F}_{\text{haut}}$ est dirigée vers le bas et $F_{\text{haut}} = P_{\text{haut}} \times S$ ;
+- sur la face du bas, $\vec{F}_{\text{bas}}$ est dirigée vers le haut et $F_{\text{bas}} = P_{\text{bas}} \times S$.
+
+**Étape 3 : la résultante.** Les forces latérales se compensent. La résultante est donc verticale, dirigée vers le haut. Avec $V = S \times h$, le volume du solide, sa norme vaut :
 
 $$F_{\text{bas}} - F_{\text{haut}} = (P_{\text{bas}} - P_{\text{haut}}) \times S = \rho_{\text{fluide}} \times g \times h \times S = \rho_{\text{fluide}} \times V \times g$$
 
 On retrouve la norme de la poussée d'Archimède établie en Q.1.
-:::
+
+**Exemple.** Un cube d'arête $a = 10{,}0\ \text{cm}$ est immergé dans l'eau, sa face du haut à $20{,}0\ \text{cm}$ sous la surface libre, où la pression vaut $P_{\text{atm}} = 1{,}013 \times 10^{5}\ \text{Pa}$. On prend $\rho_{\text{eau}} = 1{,}00 \times 10^{3}\ \text{kg·m}^{-3}$ et $g = 9{,}81\ \text{m·s}^{-2}$.
+
+La loi fondamentale, appliquée entre la surface libre et chaque face, donne :
+
+$$P_{\text{haut}} = P_{\text{atm}} + \rho_{\text{eau}} \times g \times 0{,}200 = 1{,}013 \times 10^{5} + 1{,}00 \times 10^{3} \times 9{,}81 \times 0{,}200 = 1{,}033 \times 10^{5}\ \text{Pa}$$
+
+$$P_{\text{bas}} = P_{\text{atm}} + \rho_{\text{eau}} \times g \times 0{,}300 = 1{,}013 \times 10^{5} + 1{,}00 \times 10^{3} \times 9{,}81 \times 0{,}300 = 1{,}042 \times 10^{5}\ \text{Pa}$$
+
+La pression atmosphérique s'élimine dans la différence, que l'on calcule donc directement :
+
+$$P_{\text{bas}} - P_{\text{haut}} = \rho_{\text{eau}} \times g \times a = 1{,}00 \times 10^{3} \times 9{,}81 \times 0{,}100 = 981\ \text{Pa}$$
+
+Chaque face a pour surface $S = a^{2} = 1{,}00 \times 10^{-2}\ \text{m}^{2}$. Les forces pressantes valent donc environ $1{,}03 \times 10^{3}\ \text{N}$ sur la face du haut et $1{,}04 \times 10^{3}\ \text{N}$ sur la face du bas, mais leur différence est bien plus petite :
+
+$$F_{\text{bas}} - F_{\text{haut}} = (P_{\text{bas}} - P_{\text{haut}}) \times S = 981 \times 1{,}00 \times 10^{-2} = 9{,}81\ \text{N}$$
+
+C'est bien la norme de la poussée d'Archimède, avec le volume du cube $V = a^{3} = 1{,}00 \times 10^{-3}\ \text{m}^{3}$ :
+
+$$\Pi = \rho_{\text{eau}} \times V \times g = 1{,}00 \times 10^{3} \times 1{,}00 \times 10^{-3} \times 9{,}81 = 9{,}81\ \text{N}$$
 
 ::: {custom-style="Redaction"}
 [Rédaction.]{custom-style="EtiqRedaction"} Pour une question « expliquer qualitativement », aucun calcul n'est attendu. Deux ou trois phrases complètes, avec les mots pression, profondeur et résultante, suffisent.
@@ -946,7 +988,7 @@ Soit $\rho_A = 1{,}25 \times 10^{3}\ \text{kg·m}^{-3}$.
 
 Le poids du pèse-sirop ne change pas, donc la poussée d'Archimède nécessaire à l'équilibre non plus. Comme $\Pi = \rho \times V_{\text{immergé}} \times g$, un sirop plus dense fournit la même poussée avec un volume immergé plus petit : le pèse-sirop s'enfonce moins, $h$ diminue.
 
-D'après la question 3, $V_0 + s \times h_B = \dfrac{m}{\rho_B}$, donc :
+D'après la question 3, $V_0 + s \times h_B = \dfrac{m}{\rho_B}$, soit $s \times h_B = \dfrac{m}{\rho_B} - V_0$. On divise par $s$ :
 
 $$h_B = \dfrac{\dfrac{m}{\rho_B} - V_0}{s} = \dfrac{\dfrac{25{,}0}{1{,}32} - 18{,}0}{0{,}200} = 4{,}70\ \text{cm}$$
 
@@ -964,11 +1006,29 @@ L'eau a une masse volumique inférieure à cette valeur. Même entièrement imme
 **7.** Sensibilité
 :::
 
-D'après la question 3 :
+On isole $h$ dans la relation établie à la question 3 :
 
-$$h = \dfrac{1}{s} \times \left(\dfrac{m}{\rho} - V_0\right)$$
+$$\rho = \dfrac{m}{V_0 + s \times h}$$
 
-Pour une même variation de masse volumique, la variation de $h$ est proportionnelle à $\dfrac{1}{s}$. Il faut donc une tige plus fine : avec une section deux fois plus petite, le déplacement de la tige est deux fois plus grand.
+On multiplie les deux membres par $V_0 + s \times h$, puis on les divise par $\rho$ :
+
+$$V_0 + s \times h = \dfrac{m}{\rho}$$
+
+On retranche $V_0$ aux deux membres, puis on les divise par $s$ :
+
+$$s \times h = \dfrac{m}{\rho} - V_0 \quad \text{donc} \quad h = \dfrac{1}{s} \times \left(\dfrac{m}{\rho} - V_0\right)$$
+
+Quand la masse volumique passe de $\rho_1$ à $\rho_2$, la tige se déplace de :
+
+$$h_1 - h_2 = \dfrac{1}{s} \times \left(\dfrac{m}{\rho_1} - V_0\right) - \dfrac{1}{s} \times \left(\dfrac{m}{\rho_2} - V_0\right) = \dfrac{m}{s} \times \left(\dfrac{1}{\rho_1} - \dfrac{1}{\rho_2}\right)$$
+
+Le volume $V_0$ s'élimine : pour une même variation de masse volumique, le déplacement de la tige est proportionnel à $\dfrac{1}{s}$. Il faut donc une tige plus fine : avec une section deux fois plus petite, le déplacement de la tige est deux fois plus grand.
+
+Pour les sirops A et B des questions 4 et 5 :
+
+$$h_A - h_B = \dfrac{25{,}0}{0{,}200} \times \left(\dfrac{1}{1{,}25} - \dfrac{1}{1{,}32}\right) = 5{,}30\ \text{cm}$$
+
+On retrouve bien $h_A - h_B = 10{,}0 - 4{,}70 = 5{,}30\ \text{cm}$.
 
 ::: {custom-style="Redaction"}
 [Rédaction.]{custom-style="EtiqRedaction"} À la question 5, la prévision « sans calcul » doit être justifiée par une phrase qui cite la formule : « La poussée d'Archimède doit rester égale au poids. Comme elle est proportionnelle à la masse volumique du liquide et au volume immergé, un liquide plus dense impose un volume immergé plus petit. »
@@ -1342,7 +1402,7 @@ D'après la question précédente, on a :
 
 $$P_A + \dfrac{1}{2}\rho \cB{v_A^{2}} + \cV{\rho g z_A} = P_B + \dfrac{1}{2}\rho v_B^{2} + \cV{\rho g z_B}$$
 
-L'eau étant au repos au point $A$, on a $v_A = 0$. Par ailleurs, on a $z_A = z_B$. Ainsi, on peut tirer de la relation de Bernoulli :
+L'eau étant au repos au point $A$, on a $v_A = 0$ : le terme $\dfrac{1}{2}\rho v_A^{2}$ est nul. Par ailleurs, $z_A = z_B$ : les termes $\rho g z_A$ et $\rho g z_B$ sont égaux et s'éliminent. Il reste :
 
 $$P_A = P_B + \dfrac{1}{2}\rho v_B^{2}$$
 

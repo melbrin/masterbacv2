@@ -8,31 +8,37 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 18 34 48-->
+<!--colonnes: 19 27 54-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
 | Force gravitationnelle | $\vec{F}_{A/S} = G \times \dfrac{M_A \times M_S}{d^{2}}\ \vec{u}_n$ | Dirigée du système vers l'attracteur. $d$ est la distance entre les centres, en mètre. |
-| Satellite de la Terre | $d = R_T + h$ | L'altitude $h$ se compte depuis la surface, le rayon de l'orbite depuis le centre. |
-| Accélération (Frenet) | $\vec{a} = \dfrac{v^{2}}{R}\ \vec{u}_n + \dfrac{\mathrm{d}v}{\mathrm{d}t}\ \vec{u}_t$ | Mouvement circulaire de rayon $R$ (ici $R = d$). Il est uniforme si $\dfrac{\mathrm{d}v}{\mathrm{d}t} = 0$. |
-| Vitesse | $v = \sqrt{\dfrac{G \times M_A}{R}}$ | Elle ne dépend pas de la masse du système. |
-| Période de révolution | $T = 2\pi \times \sqrt{\dfrac{R^{3}}{G \times M_A}}$ | Durée d'un tour. On l'obtient aussi par $T = \dfrac{2\pi R}{v}$. |
-| Troisième loi de Kepler | $\dfrac{T^{2}}{R^{3}} = \dfrac{4\pi^{2}}{G \times M_A}$ | Même constante pour tout ce qui tourne autour du même attracteur. |
-| Satellite géostationnaire | $T = 86\ 164\ \text{s}$ | Période de rotation de la Terre, donnée par l'énoncé. Orbite circulaire dans le plan de l'équateur, dans le sens de rotation de la Terre. |
+| Satellite de la Terre | $d = R_T + h$ | Ne pas confondre le rayon $d$ de l'orbite et l'altitude $h$. |
+| Accélération (Frenet) | $\vec{a} = \dfrac{v^{2}}{R}\ \vec{u}_n + \dfrac{\mathrm{d}v}{\mathrm{d}t}\ \vec{u}_t$ | Mouvement circulaire de rayon $R$ (ici $R = d$), uniforme si la valeur $v$ de la vitesse est constante. |
+| Troisième loi de Kepler | $\dfrac{T^{2}}{R^{3}} = \text{constante}$ | Même constante pour tout ce qui tourne autour du même attracteur. Les trois lois sont à connaître (Q.5 et Q.6). |
+| Satellite géostationnaire | Période de révolution égale à celle de la rotation de la Terre | Fixe dans le référentiel terrestre : orbite circulaire dans le plan de l'équateur, dans le sens de rotation de la Terre. |
 
-Les énoncés des trois lois de Kepler sont à connaître par cœur (Q.5 et Q.6).
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 19 27 54-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Vitesse | $v = \sqrt{\dfrac{G \times M_A}{R}}$ | Deuxième loi de Newton dans le repère de Frenet, selon $\vec{u}_n$ ; la masse du système se simplifie (Q.3). |
+| Période de révolution | $T = 2\pi \times \sqrt{\dfrac{R^{3}}{G \times M_A}}$ | Durée d'un tour : $T = 2\pi R / v$, où l'on remplace $v$ (Q.4) ; au carré, on obtient la troisième loi, $\dfrac{T^{2}}{R^{3}} = \dfrac{4\pi^{2}}{G \times M_A}$ (Q.6). |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Les masses, les rayons et la constante $G$ sont donnés. L'énoncé fournit souvent un tableau de périodes et de rayons d'orbite, ou un graphe de $T^{2}$ en fonction de $R^{3}$, à exploiter avec la troisième loi.
+Les masses, les rayons, $G$ et la période de rotation de la Terre, $86\ 164\ \text{s}$, sont donnés. Un tableau de périodes et de rayons, ou un graphe de $T^{2}$ en fonction de $R^{3}$, s'exploite avec la troisième loi.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
 :::
 
-- Prendre l'altitude $h$ à la place du rayon $R_T + h$ de l'orbite.
 - Laisser une distance en kilomètre, ou une période en heure ou en jour.
 - Confondre l'attracteur, qui exerce la force, et le système étudié.
 - Oublier de nommer le référentiel et de le supposer galiléen.
@@ -225,7 +231,7 @@ Questions de cours
 ## [Q.7]{custom-style="QNum"}\ \ Exprimer la masse de l'attracteur à partir de la troisième loi de Kepler {#q7}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Application · Notions : calcul littéral, masse d'un astre · Demandée en 2026 (Métropole, jour 2)\ \ \ [CIBLE:c_q7]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Application · Notions : calcul littéral, masse d'un astre · Demandée en 2026 (Métropole,\ jour\ 2)\ \ \ [CIBLE:c_q7]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}

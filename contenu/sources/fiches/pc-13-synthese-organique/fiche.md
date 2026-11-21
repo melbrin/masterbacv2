@@ -8,29 +8,40 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 19 36 45-->
+<!--colonnes: 17 33 50-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
-| Formules | Brute, semi-développée, topologique ; alcane $\text{C}_n\text{H}_{2n+2}$, alcène $\text{C}_n\text{H}_{2n}$ | Topologique : chaque sommet est un carbone ; les H liés au carbone ne sont pas écrits. |
+| Formules | Brute, semi-développée, topologique | Topologique : un carbone par sommet, ses H non écrits. |
 | Groupes caractéristiques | $\text{-OH}$, $\text{C=O}$, $\text{-COOH}$, $\text{-COO-}$, $\text{-NH}_2$, $\text{-CO-N}$, $\text{-Cl}$, $\text{-Br}$ | Alcool, aldéhyde, cétone, acide carboxylique, ester, amine, amide, halogénoalcane. |
-| Nomenclature | Préfixes, chaîne principale, suffixe | Chaîne la plus longue portant le groupe, numérotée pour donner au carbone du groupe le plus petit numéro ; ester : alcanoate d'alkyle. |
-| Isomères | Même formule brute | Constitution : chaîne, position ou famille différente. Complément hors programme : Z/E autour d'une liaison $\text{C=C}$. |
-| Réactions | Substitution, addition, élimination | Aussi acide-base et oxydoréduction ; protéger un groupe, réagir, déprotéger. |
-| Rendement | $\eta = n_\text{obtenue} / n_\text{max}$ | $n_\text{max}$ avec le réactif limitant ; sur plusieurs étapes, les rendements se multiplient. |
-| Analyse | $R_\text{f} = h / H$ ; $\sigma = 1 / \lambda$ | CCM, température de fusion ; IR : $\text{C=O}$ vers $1\,700$, $\text{O-H}$ vers $3\,300\ \text{cm}^{-1}$. |
+| Nomenclature | Préfixes, chaîne principale, suffixe | Chaîne la plus longue portant le groupe ; plus petit numéro au carbone du groupe. |
+| Isomères | Même formule brute | Constitution : chaîne, position ou famille différente. |
+| Réactions | Substitution, addition, élimination | Aussi acide-base, oxydoréduction ; protéger, déprotéger. |
+| Rendement | $\eta = n_\text{obtenue} / n_\text{max}$ | $n_\text{max}$ se calcule avec le réactif limitant. |
+| Analyse | $R_\text{f} = h / H$ | CCM et température de fusion : pureté ; IR : liaisons. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 17 33 50-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Alcane, alcène | $\text{C}_n\text{H}_{2n+2}$ ; $\text{C}_n\text{H}_{2n}$ | Carbone tétravalent ; une double liaison retire deux H. |
+| Plusieurs étapes | $\eta = \eta_1 \times \eta_2$ | Définition du rendement appliquée à chaque étape. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Les tables de spectroscopie infrarouge, les masses molaires, densités, températures de changement d'état et solubilités, la banque de réactions d'une séquence de synthèse.
+Les tables de spectroscopie IR et $\sigma = 1 / \lambda$, la nomenclature des esters, amines, amides et halogénoalcanes, les masses molaires, densités, températures de changement d'état et solubilités, la banque de réactions.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
 :::
 
-- Confondre vitesse et rendement : un catalyseur ne change pas l'état final ; pour une estérification, un chauffage non plus.
+- Croire qu'un catalyseur, ou le chauffage d'une estérification, améliore le rendement.
 - Calculer la masse maximale avec le réactif en excès au lieu du réactif limitant.
 - Placer la phase organique en haut sans comparer les densités.
 - Oublier les atomes d'hydrogène sous-entendus d'une formule topologique.
@@ -102,7 +113,7 @@ Application : la figure 1 représente la formule topologique de l'acide 3-méthy
 :::
 
 ::: {custom-style="Figure"}
-![Formule topologique de l'acide 3-méthylbutanoïque : une chaîne en zigzag de quatre atomes de carbone, un groupe méthyle sur le deuxième carbone en partant de la gauche, et au bout droit un carbone portant un atome d'oxygène doublement lié et un groupe OH](figs/fig_q1.png){width=2.8cm}
+![Formule topologique de l'acide 3-méthylbutanoïque : une chaîne en zigzag de quatre atomes de carbone, un groupe méthyle sur le deuxième carbone en partant de la gauche, et au bout droit un carbone portant un atome d'oxygène doublement lié et un groupe OH](figs/fig_q1.png){width=2.4cm}
 :::
 
 ::: {custom-style="Legende"}
@@ -164,7 +175,7 @@ l. $\text{CH}_3\text{-CHCl-CH}(\text{CH}_3)\text{-CH}_3$
 :::
 
 ::: {custom-style="Figure"}
-![Formule topologique d'un cycle de six atomes de carbone, sans double liaison, portant un groupe méthyle sur deux sommets opposés](figs/fig_cyclo.png){width=2.5cm}
+![Formule topologique d'un cycle de six atomes de carbone, sans double liaison, portant un groupe méthyle sur deux sommets opposés](figs/fig_cyclo.png){width=2.2cm}
 :::
 
 ::: {custom-style="Legende"}
@@ -190,7 +201,7 @@ Figure 4. Six molécules à quatre atomes de carbone
 :::
 
 ::: {custom-style="Figure"}
-![Deux formules topologiques du but-2-ène notées g et h : en g, les deux groupes méthyle sont de part et d'autre de la double liaison ; en h, ils sont du même côté](figs/fig_ze.png){width=4.5cm}
+![Deux formules topologiques du but-2-ène notées g et h : en g, les deux groupes méthyle sont de part et d'autre de la double liaison ; en h, ils sont du même côté](figs/fig_ze.png){width=4.2cm}
 :::
 
 ::: {custom-style="Legende"}
@@ -321,6 +332,12 @@ a. Synthèse d'un ester : $\text{C}_5\text{H}_{12}\text{O} + \text{C}_2\text{H}_
 b. Synthèse de l'aspirine à partir d'acide salicylique et d'anhydride éthanoïque : $\text{C}_7\text{H}_6\text{O}_3 + \text{C}_4\text{H}_6\text{O}_3 \rightarrow \text{C}_9\text{H}_8\text{O}_4 + \text{Y}$
 :::
 
+<!--debut:cahier-->
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+<!--fin:cahier-->
 ## [Q.9]{custom-style="QNum"}\ \ Écrire une estérification, une hydrolyse et une saponification {#q9}
 
 ::: {custom-style="Meta"}
@@ -379,7 +396,7 @@ L'aspartame, deux cents fois plus sucré que le saccharose, se forme par réacti
 :::
 
 ::: {custom-style="Figure"}
-![Équation de formation de l'aspartame en formules topologiques : l'acide aspartique, chaîne portant deux groupes acide et un groupe NH2, plus la phénylalanine méthylée, cycle benzénique relié à une chaîne portant un groupe NH2 et un groupe ester méthylique, donnent l'aspartame, où les deux fragments sont reliés par un groupe NH lié à un carbone doublement lié à un oxygène, et de l'eau](figs/fig_ex2_molecules.png){width=10cm}
+![Équation de formation de l'aspartame en formules topologiques, sur une seule ligne : l'acide aspartique, chaîne portant deux groupes acide et un groupe NH2, son groupe acide voisin du groupe NH2 tourné vers la droite, plus la phénylalanine méthylée, chaîne portant à gauche un groupe NH2, en haut un groupe benzyle et à droite un groupe ester méthylique, donnent l'aspartame, où les deux fragments sont reliés par un groupe NH lié à un carbone doublement lié à un oxygène, et de l'eau](figs/fig_ex2_molecules.png){width=13.4cm}
 :::
 
 ::: {custom-style="Legende"}
@@ -387,7 +404,7 @@ Figure 8. Formation de l'aspartame
 :::
 
 ::: {custom-style="Figure"}
-![Étape 1 en schémas de Lewis : l'amine R1-NH2, dont l'azote porte un doublet non liant, et l'acide R2-COOH, dont le carbone est doublement lié à un oxygène, donnent une espèce où le carbone est lié à l'azote chargé positivement, à un oxygène chargé négativement, à un groupe OH et à R2](figs/fig_ex2_meca.png){width=7.8cm}
+![Étape 1 en schémas de Lewis : l'amine R1-NH2, dont l'azote porte un doublet non liant, et l'acide R2-COOH, dont le carbone est doublement lié à un oxygène et dont chaque atome d'oxygène porte deux doublets non liants, placés à l'écart de ses liaisons, donnent une espèce où le carbone est lié à l'azote chargé positivement, à un oxygène chargé négativement, à un groupe OH et à R2](figs/fig_ex2_meca.png){width=7.8cm}
 :::
 
 ::: {custom-style="Legende"}
@@ -796,6 +813,16 @@ Un alcool est primaire, secondaire ou tertiaire selon que le carbone qui porte l
 | Amine | Alcan-n-amine ; substituant sur N noté N- | Butan-2-amine ; N-méthylpropan-1-amine |
 | Amide | Alcanamide ; substituant sur N noté N- | N-méthyléthanamide |
 
+Les espèces de l'énoncé sont reprises sur la figure 18 en formule topologique, avec la numérotation de leur chaîne principale.
+
+::: {custom-style="Figure"}
+![Douze formules topologiques notées de a à l, chacune avec son nom et les numéros des carbones de sa chaîne principale : a, 3-méthylbutan-1-ol ; b, 3-méthylbutan-2-one ; c, acide 2-méthylbutanoïque ; d, propanal ; e, propanoate de butyle, la partie issue de l'acide et la partie butyle étant indiquées de part et d'autre de l'atome d'oxygène de la chaîne ; f, 2-chlorobutane ; g, N-méthyléthanamide ; h, 2,3-diméthylpentane ; i, 1,4-diméthylcyclohexane, numéroté de 1 à 6 dans le cycle ; j, butan-2-amine ; k, 2-méthylpent-2-ène ; l, 2-chloro-3-méthylbutane](figs/fig_q3_c.png){width=15cm}
+:::
+
+::: {custom-style="Legende"}
+Figure 18. Les espèces à nommer et la numérotation de leur chaîne principale
+:::
+
 a. Chaîne de quatre carbones portant le groupe hydroxyle, numérotée depuis le carbone lié à $\text{-OH}$ ; méthyle en 3 : 3-méthylbutan-1-ol.
 
 b. Chaîne de quatre carbones ; le groupe carbonyle est sur le carbone 2 et le méthyle sur le carbone 3 : 3-méthylbutan-2-one.
@@ -832,7 +859,15 @@ La 4-méthylpentan-2-one a une chaîne de cinq carbones, un groupe carbonyle en 
 [CIBLE:q4]{custom-style="BoutonEnonce"}
 :::
 
-Des isomères ont la même formule brute mais des structures différentes. Les isomères de constitution diffèrent par l'enchaînement des atomes : la chaîne (isomères de chaîne), la position du groupe caractéristique (isomères de position) ou la famille (isomères de fonction).
+Des isomères ont la même formule brute mais des structures différentes. Les isomères de constitution diffèrent par l'enchaînement des atomes : la chaîne (isomères de chaîne), la position du groupe caractéristique (isomères de position) ou la famille (isomères de fonction). Les molécules de l'énoncé sont reprises sur la figure 19, classées par formule brute.
+
+::: {custom-style="Figure"}
+![Huit formules topologiques nommées, en trois groupes de même formule brute : pour C4H10O, a butan-1-ol, b butan-2-ol, c 2-méthylpropan-1-ol et d éthoxyéthane ; pour C4H8O, e butanal et f butanone ; pour C4H8, g (E)-but-2-ène, aux groupes méthyle de part et d'autre de la double liaison, et h (Z)-but-2-ène, aux groupes méthyle du même côté](figs/fig_isomeres_c.png){width=12.7cm}
+:::
+
+::: {custom-style="Legende"}
+Figure 19. Les molécules a à h, classées par formule brute
+:::
 
 Les molécules a (butan-1-ol), b (butan-2-ol), c (2-méthylpropan-1-ol) et d (éthoxyéthane) ont pour formule brute $\text{C}_4\text{H}_{10}\text{O}$ : ce sont des isomères. a et b sont isomères de position : le groupe hydroxyle n'est pas sur le même carbone. a et c sont isomères de chaîne : linéaire pour a, ramifiée pour c. d n'est pas un alcool, son atome d'oxygène est placé entre deux carbones : a et d sont isomères de fonction. Les trois autres paires se classent de même : b et c diffèrent à la fois par la chaîne et par la position du groupe hydroxyle ; d est isomère de fonction de b comme de c. Les molécules e (butanal) et f (butanone) ont pour formule brute $\text{C}_4\text{H}_8\text{O}$ : ce sont deux isomères de fonction, un aldéhyde et une cétone.
 
@@ -896,14 +931,14 @@ Le spectre présente une bande forte et fine vers $1\,740\ \text{cm}^{-1}$ (liai
 **5.** Un isomère à l'odeur de banane
 :::
 
-L'éthanoate de 3-méthylbutyle, $\text{CH}_3\text{-COO-CH}_2\text{-CH}_2\text{-CH}(\text{CH}_3)\text{-CH}_3$, a pour formule brute $\text{C}_7\text{H}_{14}\text{O}_2$ : c'est un isomère de B. Sa partie liée à l'oxygène est ramifiée, celle de B est linéaire : c'est une isomérie de chaîne (figure 18).
+L'éthanoate de 3-méthylbutyle, $\text{CH}_3\text{-COO-CH}_2\text{-CH}_2\text{-CH}(\text{CH}_3)\text{-CH}_3$, a pour formule brute $\text{C}_7\text{H}_{14}\text{O}_2$ : c'est un isomère de B. Sa partie liée à l'oxygène est ramifiée, celle de B est linéaire : c'est une isomérie de chaîne (figure 20).
 
 ::: {custom-style="Figure"}
 ![Formule topologique de l'éthanoate de 3-méthylbutyle : groupe méthyle lié au carbone d'un groupe ester, dont l'oxygène porte une chaîne de quatre carbones ramifiée par un méthyle sur son troisième carbone](figs/fig_ex1_c.png){width=4cm}
 :::
 
 ::: {custom-style="Legende"}
-Figure 18. L'éthanoate de 3-méthylbutyle
+Figure 20. L'éthanoate de 3-méthylbutyle
 :::
 
 ::: {custom-style="QRappel"}
@@ -1071,14 +1106,14 @@ $\chi(\text{O}) - \chi(\text{C}) = 3{,}44 - 2{,}55 = 0{,}89$ : la liaison $\text
 **4.** Flèches courbes
 :::
 
-Une flèche part du doublet non liant de l'azote et pointe vers l'atome de carbone : elle représente la formation de la liaison $\text{N-C}$. Une seconde flèche part de la double liaison $\text{C=O}$ et pointe vers l'atome d'oxygène : un des deux doublets de la liaison devient un doublet non liant de l'oxygène, qui porte alors une charge négative (figure 19).
+Une flèche part du doublet non liant de l'azote et pointe vers l'atome de carbone : elle représente la formation de la liaison $\text{N-C}$. Une seconde flèche part de la double liaison $\text{C=O}$ et pointe vers l'atome d'oxygène : un des deux doublets de la liaison devient un doublet non liant de l'oxygène, qui porte alors une charge négative (figure 21).
 
 ::: {custom-style="Figure"}
 ![Étape 1 avec les flèches courbes : une flèche part du doublet non liant de l'azote et arrive sur l'atome de carbone, chargé partiellement positivement ; une seconde flèche part de la double liaison carbone-oxygène et arrive sur l'atome d'oxygène, chargé partiellement négativement](figs/fig_ex2_meca_c.png){width=8cm}
 :::
 
 ::: {custom-style="Legende"}
-Figure 19. Les flèches courbes de l'étape 1
+Figure 21. Les flèches courbes de l'étape 1
 :::
 
 ::: {custom-style="QRappel"}
@@ -1151,7 +1186,7 @@ $$\eta = \dfrac{2{,}13}{3{,}28} = 0{,}649, \text{ soit } 64{,}9\ \%$$
 [CIBLE:q12]{custom-style="BoutonEnonce"}
 :::
 
-Éléments du montage (figure 20) : 1, réfrigérant à boules ; 2, entrée d'eau ; 3, sortie d'eau ; 4, ballon ; 5, mélange réactionnel et pierre ponce ; 6, chauffe-ballon. L'eau entre par le bas du réfrigérant et sort par le haut, pour que le manchon reste plein.
+Éléments du montage (figure 22) : 1, réfrigérant à boules ; 2, entrée d'eau ; 3, sortie d'eau ; 4, ballon ; 5, mélange réactionnel et pierre ponce ; 6, chauffe-ballon. L'eau entre par le bas du réfrigérant et sort par le haut, pour que le manchon reste plein.
 
 Le chauffage accélère la transformation : la température est un facteur cinétique. Le réfrigérant condense les vapeurs, qui retombent dans le ballon : on chauffe sans perdre de matière. Le haut du réfrigérant reste ouvert, pour que la pression ne monte pas dans le montage. Le chauffe-ballon repose sur un support élévateur, que l'on abaisse pour arrêter rapidement le chauffage. La pierre ponce régularise l'ébullition et évite les projections.
 
@@ -1162,7 +1197,7 @@ Opérations : (1) transformation ; (2) isolement du produit, par extraction ; (3
 :::
 
 ::: {custom-style="Legende"}
-Figure 20. Le montage de chauffage à reflux
+Figure 22. Le montage de chauffage à reflux
 :::
 
 <!--colonnes: 24 32 44-->
@@ -1189,14 +1224,14 @@ c. Un excès d'alcool déplace l'état d'équilibre : le quotient de réaction d
 
 d. Éliminer l'eau maintient le quotient de réaction inférieur à la constante d'équilibre : la transformation se poursuit, le rendement augmente. On peut aussi remplacer l'acide carboxylique par l'anhydride d'acide correspondant, un acide « déshydraté » comme l'anhydride éthanoïque de l'aspirine (Q.8 b et Q.19) : il se forme alors un acide carboxylique à la place de l'eau, et le rendement n'est plus limité par un équilibre.
 
-Avec le catalyseur, l'avancement augmente plus vite au début, mais il tend vers le même avancement final $x_\text{f}$ (figure 21) : le catalyseur ne change pas l'état final.
+Avec le catalyseur, l'avancement augmente plus vite au début, mais il tend vers le même avancement final $x_\text{f}$ (figure 23) : le catalyseur ne change pas l'état final.
 
 ::: {custom-style="Figure"}
 ![Deux courbes de l'avancement en fonction du temps partant de zéro : la courbe avec catalyseur monte plus vite, celle sans catalyseur plus lentement ; toutes deux tendent vers le même avancement final, tracé en pointillés](figs/fig_catalyse.png){width=6.2cm}
 :::
 
 ::: {custom-style="Legende"}
-Figure 21. L'avancement au cours du temps, avec et sans catalyseur
+Figure 23. L'avancement au cours du temps, avec et sans catalyseur
 :::
 
 ::: {custom-style="Remarque"}
@@ -1217,14 +1252,14 @@ Température, catalyseur et concentrations agissent sur la vitesse ; pour une es
 [CIBLE:q14]{custom-style="BoutonEnonce"}
 :::
 
-Un solvant extracteur doit être non miscible avec la phase de départ et dissoudre beaucoup mieux l'espèce à extraire : le cyclohexane est non miscible avec l'eau et l'ester y est très soluble. Le cyclohexane ($d = 0{,}78$) est moins dense que l'eau : la phase organique est au-dessus, elle contient l'ester (figure 22).
+Un solvant extracteur doit être non miscible avec la phase de départ et dissoudre beaucoup mieux l'espèce à extraire : le cyclohexane est non miscible avec l'eau et l'ester y est très soluble. Le cyclohexane ($d = 0{,}78$) est moins dense que l'eau : la phase organique est au-dessus, elle contient l'ester (figure 24).
 
 ::: {custom-style="Figure"}
 ![Ampoule à décanter tenue par un anneau au-dessus d'un bécher : la phase organique, moins dense, contient le cyclohexane et l'ester et se trouve au-dessus de la phase aqueuse, plus dense, qui contient l'eau et les acides ; le robinet est en bas, le bouchon est retiré et posé à côté du col](figs/fig_ampoule.png){width=5.0cm}
 :::
 
 ::: {custom-style="Legende"}
-Figure 22. L'ampoule à décanter
+Figure 24. L'ampoule à décanter
 :::
 
 Une partie de l'acide éthanoïque, soluble dans le cyclohexane, accompagne l'ester. La solution d'hydrogénocarbonate de sodium le transforme en ions éthanoate, qui passent dans la phase aqueuse (à pH supérieur au $\text{p}K_\text{A}$ du couple, la forme basique prédomine : fiche 9, Q.18) :
@@ -1251,14 +1286,14 @@ $$V_\text{min} = \dfrac{5{,}0}{60} = 8{,}3 \times 10^{-2}\ \text{L} = 83\ \text{
 
 $$m_\text{dissoute} = 3{,}0 \times 8{,}3 \times 10^{-2} = 0{,}25\ \text{g} \qquad m_\text{récupérable} = 5{,}0 - 0{,}25 \approx 4{,}8\ \text{g}$$
 
-On récupère au mieux $95\ \%$ du solide : c'est pourquoi on utilise le minimum de solvant chaud. Dans une filtration simple (figure 23, à gauche), on verse le mélange dans un entonnoir garni d'un papier filtre plissé, maintenu par un support à anneau : le liquide traverse le papier sous l'effet de son seul poids et le filtrat est recueilli dans un récipient, tandis que le solide reste sur le papier. La filtration sous vide, sur un entonnoir Büchner (figure 23, à droite), aspire le liquide : elle est plus rapide et donne un solide plus sec. On lave les cristaux à l'eau glacée pour entraîner la solution qui les imprègne, et l'impureté qu'elle contient, sans redissoudre P.
+On récupère au mieux $95\ \%$ du solide : c'est pourquoi on utilise le minimum de solvant chaud. Dans une filtration simple (figure 25, à gauche), on verse le mélange dans un entonnoir garni d'un papier filtre plissé, maintenu par un support à anneau : le liquide traverse le papier sous l'effet de son seul poids et le filtrat est recueilli dans un récipient, tandis que le solide reste sur le papier. La filtration sous vide, sur un entonnoir Büchner (figure 25, à droite), aspire le liquide : elle est plus rapide et donne un solide plus sec. On lave les cristaux à l'eau glacée pour entraîner la solution qui les imprègne, et l'impureté qu'elle contient, sans redissoudre P.
 
 ::: {custom-style="Figure"}
 ![Deux filtrations côte à côte. À gauche, filtration simple : un bécher verse le mélange dans un entonnoir garni d'un papier filtre plissé, maintenu par un support à anneau ; le solide reste sur le papier et le filtrat tombe dans un récipient. À droite, filtration sous vide : entonnoir Büchner contenant un papier filtre et le solide, posé par un joint conique sur une fiole à vide reliée à une trompe à eau ; le filtrat est recueilli dans la fiole](figs/fig_buchner.png){width=15.5cm}
 :::
 
 ::: {custom-style="Legende"}
-Figure 23. La filtration simple et la filtration sous vide
+Figure 25. La filtration simple et la filtration sous vide
 :::
 
 ::: {custom-style="Retenir"}
@@ -1273,17 +1308,17 @@ Une recristallisation exige un solvant qui dissout bien le produit à chaud, mal
 
 L'espèce la plus volatile, celle dont la température d'ébullition est la plus basse, distille la première : c'est le cyclohexane. Tant qu'il distille, le thermomètre indique $81\ \text{°C}$ ; la température monte ensuite vers $111\ \text{°C}$ quand le toluène commence à passer.
 
-Dans la colonne de Vigreux (figure 24), la vapeur se condense et se vaporise plusieurs fois : elle s'enrichit en espèce la plus volatile en montant. Une distillation est commode quand les températures d'ébullition sont assez éloignées ; sinon, il faut une colonne de Vigreux plus haute. Le réservoir du thermomètre est placé à la hauteur du bras latéral, pour mesurer la température de la vapeur qui part vers le réfrigérant.
+Dans la colonne de Vigreux (figure 26), les pointes de verre augmentent la surface de contact : la vapeur s'y condense en partie, puis se vaporise de nouveau, plusieurs fois de suite ; elle s'enrichit ainsi en espèce la plus volatile en montant. Une distillation est commode quand les températures d'ébullition sont assez éloignées ; sinon, il faut une colonne de Vigreux plus haute. Le réservoir du thermomètre est placé à la hauteur du bras latéral, pour mesurer la température de la vapeur qui part vers le réfrigérant.
 
 ::: {custom-style="Figure"}
-![Montage de distillation fractionnée : ballon dans un chauffe-ballon, surmonté d'une colonne de Vigreux et d'un thermomètre dont le réservoir est à la hauteur du bras latéral ; le bras mène à un réfrigérant droit incliné, alimenté en eau par le bas, qui conduit le distillat dans un erlenmeyer](figs/fig_distillation.png){width=7.2cm}
+![Montage de distillation fractionnée : ballon dans un chauffe-ballon, surmonté d'une colonne de Vigreux, tube dont la paroi est enfoncée vers l'axe en pointes de verre inclinées vers le bas, par paires, à six hauteurs, et d'un thermomètre dont le réservoir est à la hauteur du bras latéral ; le bras mène à un réfrigérant droit incliné, alimenté en eau par le bas, qui conduit le distillat dans un erlenmeyer](figs/fig_distillation.png){width=8cm}
 :::
 
 ::: {custom-style="Legende"}
-Figure 24. La distillation fractionnée
+Figure 26. La distillation fractionnée
 :::
 
-Dans une hydrodistillation, le ballon contient la plante et de l'eau ; le montage est celui de la figure 24, sans colonne de Vigreux. La vapeur d'eau entraîne les espèces volatiles de la plante, et le distillat recueilli se sépare en deux phases. L'huile essentielle, de densité $0{,}89$ et très peu soluble dans l'eau, forme la phase supérieure ; on la sépare par décantation.
+Dans une hydrodistillation, le ballon contient la plante et de l'eau ; le montage est celui de la figure 26, sans colonne de Vigreux. La vapeur d'eau entraîne les espèces volatiles de la plante, et le distillat recueilli se sépare en deux phases. L'huile essentielle, de densité $0{,}89$ et très peu soluble dans l'eau, forme la phase supérieure ; on la sépare par décantation.
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.17 · Contrôler la pureté : température de fusion et CCM {#c_q17}
 
@@ -1291,7 +1326,7 @@ Dans une hydrodistillation, le ballon contient la plante et de l'eau ; le montag
 [CIBLE:q17]{custom-style="BoutonEnonce"}
 :::
 
-Le rapport frontal est le quotient de la distance parcourue par l'espèce, $h$, par celle parcourue par l'éluant, $H$, mesurées depuis la ligne de dépôt (figure 25) :
+Le rapport frontal est le quotient de la distance parcourue par l'espèce, $h$, par celle parcourue par l'éluant, $H$, mesurées depuis la ligne de dépôt (figure 27) :
 
 $$R_\text{f}(\text{aspirine}) = \dfrac{4{,}2}{6{,}0} = 0{,}70 \qquad R_\text{f}(\text{acide salicylique}) = \dfrac{1{,}8}{6{,}0} = 0{,}30$$
 
@@ -1302,7 +1337,7 @@ Le produit brut C donne deux taches, à la hauteur de l'aspirine et de l'acide s
 :::
 
 ::: {custom-style="Legende"}
-Figure 25. Mesure des rapports frontaux
+Figure 27. Mesure des rapports frontaux
 :::
 
 ::: {custom-style="Piege"}

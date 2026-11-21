@@ -53,9 +53,8 @@ export default async function Fiche({ params, searchParams }: { params: Promise<
   let corps: React.ReactNode;
   if (onglet === "essentiel") {
     corps = <>
+      {/* L'essentiel de la fiche contient déjà ses pièges : ils ne se répètent pas dans une carte à part */}
       <ContenuHtml bloc className="carte contenu" html={complet.essentiel_html} />
-      {complet.pieges.length > 0 && <div className="carte" style={{ marginTop: 14 }}><h2>Les pièges qui coûtent des points</h2>
-        <ul className="contenu">{complet.pieges.map((p, i) => <li key={i}><ContenuHtml html={p} /></li>)}</ul></div>}
       <Link className="carte carte-lien" href={jeux} style={{ marginTop: 14, display: "block" }}><h2>Retiens ces relations en jouant</h2>
         <p className="discret" style={{ margin: 0 }}>Paires, cartes mémoire, pluie de formules : dix jeux sur ce chapitre.</p></Link>
       {enPython.length > 0 && (

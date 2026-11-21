@@ -14,18 +14,27 @@
 |---|---|---|
 | Intensité | $i = \dfrac{\mathrm{d}q}{\mathrm{d}t}$ | Débit de charges : $q$ en coulomb (C), $i$ en ampère (A). |
 | Condensateur | $q_A = C \times u_C \quad \text{et} \quad i = C \times \dfrac{\mathrm{d}u_C}{\mathrm{d}t}$ | Convention récepteur : $i$ et $u_C$ fléchés en sens opposés. $q_B = -q_A$. |
-| Condensateur plan | $C = \dfrac{\varepsilon_0 \times \varepsilon_r \times S}{e}$ | Donnée par l'énoncé. $C$ augmente si $S$ ou $\varepsilon_r$ augmente, ou si $e$ diminue. |
-| Charge sous $E$ | $\dfrac{\mathrm{d}u_C}{\mathrm{d}t} + \dfrac{u_C}{\tau} = \dfrac{E}{\tau} \quad \text{et} \quad u_C = E\left(1 - e^{-t/\tau}\right)$ | $\tau = RC$, constante de temps (ou temps caractéristique), en seconde. $u_C(\tau) = 0{,}63\,E$ ; charge terminée vers $5\tau$. |
-| Décharge | $\dfrac{\mathrm{d}u_C}{\mathrm{d}t} + \dfrac{u_C}{\tau} = 0 \quad \text{et} \quad u_C = U_0\, e^{-t/\tau}$ | $u_C(\tau) = 0{,}37\,U_0$. L'intensité est négative : le courant circule dans l'autre sens. |
-| Intensité pendant la charge | $i = \dfrac{E}{R}\, e^{-t/\tau} \quad \text{et} \quad u_R = E\, e^{-t/\tau}$ | Maximale à la fermeture, nulle en régime permanent. |
-| Instant d'un seuil $U_s$ | $t_s = \tau \ln\left(\dfrac{E}{E - U_s}\right) \quad \text{ou} \quad t_s = \tau \ln\left(\dfrac{U_0}{U_s}\right)$ | Charge, puis décharge. Isolez l'exponentielle, puis prenez le logarithme. |
-| Énergie stockée | $E_{\text{cond}} = \dfrac{1}{2}\, C\, U^2$ | Donnée par l'énoncé. En joule, avec $C$ en farad. |
+| Constante de temps | $\tau = R \times C$ | Temps caractéristique, en seconde (s). |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 20 42 38-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Charge sous $E$ | $\dfrac{\mathrm{d}u_C}{\mathrm{d}t} + \dfrac{u_C}{\tau} = \dfrac{E}{\tau} \quad \text{et} \quad u_C = E\left(1 - e^{-t/\tau}\right)$ | Loi des mailles et relations des dipôles, puis $u_C(0) = 0$ et valeur finale $E$. |
+| Décharge | $\dfrac{\mathrm{d}u_C}{\mathrm{d}t} + \dfrac{u_C}{\tau} = 0 \quad \text{et} \quad u_C = U_0\, e^{-t/\tau}$ | Même démarche sans générateur, avec $u_C(0) = U_0$ et valeur finale nulle. |
+| Valeurs remarquables | $u_C(\tau) = 0{,}63\,E$ (charge), $0{,}37\,U_0$ (décharge) | Remplacez $t$ par $\tau$, puis par $5\tau$ (fin). |
+| Intensité pendant la charge | $i = \dfrac{E}{R}\, e^{-t/\tau} \quad \text{et} \quad u_R = E\, e^{-t/\tau}$ | Dérivez $u_C$ (relation du condensateur), puis appliquez la loi d'Ohm. |
+| Instant d'un seuil $U_s$ | $t_s = \tau \ln \dfrac{E}{E - U_s}$ (charge), $\tau \ln \dfrac{U_0}{U_s}$ (décharge) | Écrivez $u_C(t_s) = U_s$, isolez l'exponentielle, puis prenez le logarithme. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Permittivité $\varepsilon_0$, capacité d'un condensateur plan, énergie stockée, souvent la forme de la solution.
+Condensateur plan ($C$ croît avec $S$ et $\varepsilon_r$, décroît avec $e$), $\varepsilon_0$, énergie stockée, souvent la solution.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
@@ -1192,7 +1201,7 @@ $$R \times C \times \dfrac{\mathrm{d}u_C}{\mathrm{d}t} + u_C = 0 \quad \text{soi
 **2.** Solution
 :::
 
-$\dfrac{\mathrm{d}u_C}{\mathrm{d}t} = -\dfrac{A}{\tau}\, e^{-t/\tau}$, donc $\dfrac{\mathrm{d}u_C}{\mathrm{d}t} + \dfrac{u_C}{\tau} = -\dfrac{A}{\tau}\, e^{-t/\tau} + \dfrac{A}{\tau}\, e^{-t/\tau} = 0$ : l'équation est vérifiée à chaque instant. À $t = 0$, $u_C(0) = A = U_0 = 5{,}0\ \text{V}$.
+$\dfrac{\mathrm{d}u_C}{\mathrm{d}t} = -\dfrac{A}{\tau}\, e^{-t/\tau}$, donc $\dfrac{\mathrm{d}u_C}{\mathrm{d}t} + \dfrac{u_C}{\tau} = -\dfrac{A}{\tau}\, e^{-t/\tau} + \dfrac{A}{\tau}\, e^{-t/\tau} = 0$ : l'équation est vérifiée à chaque instant. À la date $t = 0$, $u_C(0) = A = U_0 = 5{,}0\ \text{V}$.
 
 ::: {custom-style="QRappel"}
 **3.** Durée de rotation

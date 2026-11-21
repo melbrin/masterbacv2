@@ -2,7 +2,7 @@
 # usage : pc-13-synthese-organique.py <dossier de sortie, en général fiches/pc-13-synthese-organique/figs>
 # Formules topologiques : liaison de longueur 1, angles de 120°, même échelle pour toutes les molécules (ECH pouces par unité).
 # Flèches courbes des mécanismes : arcs de Bézier tracés à la main (fleche_bezier), pointe orientée selon la tangente à l'arrivée.
-import sys
+import sys, re
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -47,7 +47,7 @@ def zigzag(n, x0=0.0, y0=0.0, haut=True):
     # n sommets d'une chaîne en zigzag, le deuxième plus haut que le premier si haut=True
     return [(x0 + k * C30, y0 + (0.5 if (k % 2 == 1) == haut else 0.0)) for k in range(n)]
 DECAL = {'O': 0.0, 'OH': 0.15, 'HO': -0.15, 'NH2': 0.15, 'H2N': -0.24, 'Cl': 0.0, 'N': 0.0, 'NH': 0.0, 'Br': 0.0, 'O⁻': 0.0}
-def mol(ax, at, li, fs=11.5, color=ANTH, lw=1.45, r=0.27, dbl=0.15):
+def mol(ax, at, li, fs=11.5, color=ANTH, lw=1.45, r=0.27, dbl=0.15, dnh=0.42):
     # at : {nom: (x, y, étiquette)} ; '' pour un carbone (sommet non écrit)
     # li : [(a, b, ordre, côté)] ; côté +1 ou -1 : trait intérieur d'une double liaison C=C du côté gauche (+1) ou droit (-1) du sens a -> b ;
     #      côté 0 : double liaison centrée (C=O)
@@ -70,7 +70,7 @@ def mol(ax, at, li, fs=11.5, color=ANTH, lw=1.45, r=0.27, dbl=0.15):
         if not e: continue
         if e == 'NH':      # azote avec son hydrogène écrit en dessous
             ax.text(x, y, 'N', fontsize=fs, color=color, ha='center', va='center', zorder=6)
-            ax.text(x, y - 0.42, 'H', fontsize=fs, color=color, ha='center', va='center', zorder=6)
+            ax.text(x, y - dnh, 'H', fontsize=fs, color=color, ha='center', va='center', zorder=6)
             continue
         lab = {'NH2': 'NH$_2$', 'H2N': 'H$_2$N'}.get(e, e)
         ha = 'left' if e in ('OH', 'NH2') else ('right' if e in ('HO', 'H2N') else 'center')
@@ -115,6 +115,43 @@ def fleche_reaction(ax, x0, x1, y, haut=None, bas=None, fs=9.5):
     if haut: texte(ax, (x0 + x1) / 2, y + 0.38, haut, fs=fs)
     if bas: texte(ax, (x0 + x1) / 2, y - 0.38, bas, fs=fs)
 def etiq(ax, x, y, t, fs=10.5, color=CUIVRE, **kw): texte(ax, x, y, t, fs=fs, color=color, **kw)
+
+# contrôle des molécules dessinées : la formule brute lue sur le dessin (sommets sans étiquette = carbones, hydrogènes implicites
+# par la tétravalence du carbone) doit être celle de la formule semi-développée écrite à côté ; chaque hétéroatome garde sa valence
+VALENCE = {'C': 4, 'O': 2, 'N': 3, 'Cl': 1, 'Br': 1}
+def compo(f):
+    s = f.replace('-', '').replace('=', '')
+    pos = 0
+    def groupe():
+        nonlocal pos
+        comp = {}
+        while pos < len(s) and s[pos] != ')':
+            if s[pos] == '(':
+                pos += 1; sous = groupe(); pos += 1
+                k = re.match(r'\d*', s[pos:]).group(); pos += len(k)
+                for e, n in sous.items(): comp[e] = comp.get(e, 0) + int(k or 1) * n
+            else:
+                m = re.match(r'([A-Z][a-z]?)(\d*)', s[pos:]); pos += len(m.group())
+                comp[m.group(1)] = comp.get(m.group(1), 0) + int(m.group(2) or 1)
+        return comp
+    return groupe()
+def formule_dessin(at, li):
+    deg = {k: 0 for k in at}
+    for l in li: deg[l[0]] += l[2]; deg[l[1]] += l[2]
+    comp = {}
+    for k, (x, y, e) in at.items():
+        if not e:
+            if deg[k] > 4: raise SystemExit('carbone %s : %d liaisons' % (k, deg[k]))
+            els = {'C': 1, 'H': 4 - deg[k]}
+        else:
+            els = {}
+            for el, n in re.findall(r'([A-Z][a-z]?)(\d*)', e): els[el] = els.get(el, 0) + int(n or 1)
+            lourd = next(el for el in els if el != 'H')
+            if deg[k] + els.get('H', 0) != VALENCE[lourd]: raise SystemExit('valence de %s (%s) : %d liaisons' % (k, e, deg[k] + els.get('H', 0)))
+        for el, n in els.items(): comp[el] = comp.get(el, 0) + n
+    return {e: n for e, n in comp.items() if n}
+def verifie(at, li, semi):
+    if formule_dessin(at, li) != compo(semi): raise SystemExit('dessin différent de %s : %s' % (semi, formule_dessin(at, li)))
 
 # --- Q.1 : acide 3-méthylbutanoïque (énoncé) et butan-2-ol (corrigé)
 def fig_q1():
@@ -169,10 +206,11 @@ def glutamine(x0, y0):
     li = [('n1', 'c5', 1), ('c5', 'c4', 1), ('c4', 'c3', 1), ('c3', 'c2', 1), ('c2', 'c1', 1), ('c5', 'o5', 2), ('c2', 'n2', 1), ('c1', 'o1', 2), ('c1', 'oh', 1)]
     return at, li
 def fig_groupes(corrige):
-    fig, ax = toile((-0.9, 20.9), (-2.6, 2.75))
-    at, li = lactique(0.0, 0.0); mol(ax, at, li); etiq(ax, 1.2, -2.25, 'acide lactique')
-    at2, li2 = paracetamol(6.9, 0.0); mol(ax, at2, li2); etiq(ax, 7.6, -2.25, 'paracétamol')
-    at3, li3 = glutamine(14.2, 0.2); mol(ax, at3, li3); etiq(ax, 16.0, -2.25, 'glutamine')
+    # noms des molécules à la même distance des dessins que les lettres des figures 4 et 5
+    fig, ax = toile((-0.9, 20.9), (-2.3, 2.75))
+    at, li = lactique(0.0, 0.0); mol(ax, at, li); etiq(ax, 1.2, -1.9, 'acide lactique')
+    at2, li2 = paracetamol(6.9, 0.0); mol(ax, at2, li2); etiq(ax, 7.6, -1.9, 'paracétamol')
+    at3, li3 = glutamine(14.2, 0.2); mol(ax, at3, li3); etiq(ax, 16.0, -1.9, 'glutamine')
     if corrige:
         entoure_pts(ax, at, ['oh1'], VERT, 'hydroxyle', 'haut')
         entoure_pts(ax, at, ['c', 'o', 'oh2'], CUIVRE, 'carboxyle', 'droite', decal=-0.6)
@@ -185,38 +223,39 @@ def fig_groupes(corrige):
 
 # --- Q.4 : six molécules de formule C4H10O ou C4H8O, puis le but-2-ène
 def fig_isomeres():
-    fig, ax = toile((-0.7, 26.5), (-2.0, 2.05))
+    fig, ax = toile((-0.7, 26.5), (-1.5, 2.05))
+    YL = -1.05      # lettres sous les molécules, à la même distance que dans la figure 5
     def lettre(x, y, s): texte(ax, x, y, s, fs=10.5, color=CUIVRE)
     x = 0.0
     # a : butan-1-ol
     z = zigzag(4, x, 0.0)
     at = {'1': z[0] + ('',), '2': z[1] + ('',), '3': z[2] + ('',), '4': z[3] + ('',), 'o': pas(z[3], -30) + ('OH',)}
-    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('4', 'o', 1)]); lettre(x + 1.7, -1.55, 'a')
+    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('4', 'o', 1)]); lettre(x + 1.7, YL, 'a')
     x += 5.2
     # b : butan-2-ol
     z = zigzag(4, x, 0.0)
     at = {'1': z[0] + ('',), '2': z[1] + ('',), '3': z[2] + ('',), '4': z[3] + ('',), 'o': pas(z[1], 90) + ('OH',)}
-    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'o', 1)]); lettre(x + 1.3, -1.55, 'b')
+    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'o', 1)]); lettre(x + 1.3, YL, 'b')
     x += 3.9
     # c : 2-méthylpropan-1-ol
     z = zigzag(3, x, 0.0)
     at = {'1': z[0] + ('',), '2': z[1] + ('',), '3': z[2] + ('',), 'm': pas(z[1], 90) + ('',), 'o': pas(z[2], 30) + ('OH',)}
-    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('2', 'm', 1), ('3', 'o', 1)]); lettre(x + 1.3, -1.55, 'c')
+    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('2', 'm', 1), ('3', 'o', 1)]); lettre(x + 1.3, YL, 'c')
     x += 4.4
     # d : éthoxyéthane
     z = zigzag(5, x, 0.0)
     at = {'1': z[0] + ('',), '2': z[1] + ('',), 'o': z[2] + ('O',), '4': z[3] + ('',), '5': z[4] + ('',)}
-    mol(ax, at, [('1', '2', 1), ('2', 'o', 1), ('o', '4', 1), ('4', '5', 1)]); lettre(x + 1.7, -1.55, 'd')
+    mol(ax, at, [('1', '2', 1), ('2', 'o', 1), ('o', '4', 1), ('4', '5', 1)]); lettre(x + 1.7, YL, 'd')
     x += 4.6
     # e : butanal
     z = zigzag(4, x, 0.0)
     at = {'1': z[0] + ('',), '2': z[1] + ('',), '3': z[2] + ('',), '4': z[3] + ('',), 'o': pas(z[3], -30) + ('O',)}
-    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('4', 'o', 2)]); lettre(x + 1.7, -1.55, 'e')
+    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('4', 'o', 2)]); lettre(x + 1.7, YL, 'e')
     x += 4.8
     # f : butanone
     z = zigzag(4, x, 0.0)
     at = {'1': z[0] + ('',), '2': z[1] + ('',), '3': z[2] + ('',), '4': z[3] + ('',), 'o': pas(z[1], 90) + ('O',)}
-    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'o', 2)]); lettre(x + 1.3, -1.55, 'f')
+    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'o', 2)]); lettre(x + 1.3, YL, 'f')
     save(fig, 'fig_isomeres')
 def fig_ze():
     fig, ax = toile((-0.6, 9.6), (-1.6, 1.6))
@@ -230,6 +269,129 @@ def fig_ze():
     mol(ax, at, [('c1', 'c2', 1), ('c2', 'c3', 2, 1), ('c3', 'c4', 1)])
     texte(ax, x0 + 1.4, -1.35, 'h', fs=10.5, color=CUIVRE)
     save(fig, 'fig_ze')
+
+# --- corrigés de Q.3 et de Q.4 : les espèces de l'énoncé redessinées, avec leur nom (et, pour Q.3, la chaîne principale numérotée)
+# Chaque espèce : (lettre, formule semi-développée de l'énoncé, nom donné par le corrigé, dessin). Le dessin rend (atomes, liaisons, numéros),
+# numéros = [(atome, chiffre, 'b' sous l'atome, 'h' au-dessus, 'in' à l'intérieur du cycle)] ; verifie() contrôle que le dessin a la formule brute de l'énoncé.
+def q3_a(x, y):   # 3-méthylbutan-1-ol
+    z = zigzag(4, x, y)
+    at = {'4': z[0] + ('',), '3': z[1] + ('',), '2': z[2] + ('',), '1': z[3] + ('',), 'm': pas(z[1], 90) + ('',), 'o': pas(z[3], -30) + ('OH',)}
+    return at, [('4', '3', 1), ('3', '2', 1), ('2', '1', 1), ('3', 'm', 1), ('1', 'o', 1)], [(k, k, 'b') for k in '4321']
+def q3_b(x, y):   # 3-méthylbutan-2-one
+    z = zigzag(4, x, y)
+    at = {'1': z[0] + ('',), '2': z[1] + ('',), '3': z[2] + ('',), '4': z[3] + ('',), 'o': pas(z[1], 90) + ('O',), 'm': pas(z[2], 270) + ('',)}
+    return at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'o', 2), ('3', 'm', 1)], [('1', '1', 'b'), ('2', '2', 'b'), ('3', '3', 'h'), ('4', '4', 'b')]
+def q3_c(x, y):   # acide 2-méthylbutanoïque
+    z = zigzag(4, x, y)
+    at = {'4': z[0] + ('',), '3': z[1] + ('',), '2': z[2] + ('',), '1': z[3] + ('',), 'm': pas(z[2], 270) + ('',), 'o': pas(z[3], 90) + ('O',), 'oh': pas(z[3], -30) + ('OH',)}
+    return at, [('4', '3', 1), ('3', '2', 1), ('2', '1', 1), ('2', 'm', 1), ('1', 'o', 2), ('1', 'oh', 1)], [('4', '4', 'b'), ('3', '3', 'b'), ('2', '2', 'h'), ('1', '1', 'b')]
+def q3_d(x, y):   # propanal
+    z = zigzag(3, x, y)
+    at = {'3': z[0] + ('',), '2': z[1] + ('',), '1': z[2] + ('',), 'o': pas(z[2], 30) + ('O',)}
+    return at, [('3', '2', 1), ('2', '1', 1), ('1', 'o', 2)], [(k, k, 'b') for k in '321']
+def q3_e(x, y):   # propanoate de butyle : partie issue de l'acide à gauche, partie liée à l'oxygène à droite
+    z = zigzag(8, x, y, haut=False)
+    at = {'a3': z[0] + ('',), 'a2': z[1] + ('',), 'a1': z[2] + ('',), 'o': z[3] + ('O',), 'b1': z[4] + ('',), 'b2': z[5] + ('',), 'b3': z[6] + ('',), 'b4': z[7] + ('',),
+          'od': pas(z[2], 90) + ('O',)}
+    li = [('a3', 'a2', 1), ('a2', 'a1', 1), ('a1', 'od', 2), ('a1', 'o', 1), ('o', 'b1', 1), ('b1', 'b2', 1), ('b2', 'b3', 1), ('b3', 'b4', 1)]
+    return at, li, []
+def q3_f(x, y):   # 2-chlorobutane
+    z = zigzag(4, x, y)
+    at = {'1': z[0] + ('',), '2': z[1] + ('',), '3': z[2] + ('',), '4': z[3] + ('',), 'cl': pas(z[1], 90) + ('Cl',)}
+    return at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'cl', 1)], [(k, k, 'b') for k in '1234']
+def q3_g(x, y):   # N-méthyléthanamide
+    z = zigzag(4, x, y)
+    at = {'2': z[0] + ('',), '1': z[1] + ('',), 'n': z[2] + ('NH',), 'm': z[3] + ('',), 'o': pas(z[1], 90) + ('O',)}
+    return at, [('2', '1', 1), ('1', 'n', 1), ('n', 'm', 1), ('1', 'o', 2)], [('2', '2', 'b'), ('1', '1', 'b')]
+def q3_h(x, y):   # 2,3-diméthylpentane
+    z = zigzag(5, x, y)
+    at = {'1': z[0] + ('',), '2': z[1] + ('',), '3': z[2] + ('',), '4': z[3] + ('',), '5': z[4] + ('',), 'm2': pas(z[1], 90) + ('',), 'm3': pas(z[2], 270) + ('',)}
+    li = [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('4', '5', 1), ('2', 'm2', 1), ('3', 'm3', 1)]
+    return at, li, [('1', '1', 'b'), ('2', '2', 'b'), ('3', '3', 'h'), ('4', '4', 'b'), ('5', '5', 'b')]
+def q3_i(x, y):   # 1,4-diméthylcyclohexane, numéros à l'intérieur du cycle
+    c = (x + 2.0, y + 0.25); pts = cycle6(c, 0)
+    at = {'r%d' % k: (p[0], p[1], '') for k, p in enumerate(pts)}
+    at['m0'] = pas(pts[0], 0) + ('',); at['m3'] = pas(pts[3], 180) + ('',)
+    li = [('r%d' % k, 'r%d' % ((k + 1) % 6), 1) for k in range(6)] + [('r0', 'm0', 1), ('r3', 'm3', 1)]
+    return at, li, [('r%d' % k, str(k + 1), 'in') for k in range(6)]
+def q3_j(x, y):   # butan-2-amine
+    z = zigzag(4, x, y)
+    at = {'4': z[0] + ('',), '3': z[1] + ('',), '2': z[2] + ('',), '1': z[3] + ('',), 'n': pas(z[2], 270) + ('NH2',)}
+    return at, [('4', '3', 1), ('3', '2', 1), ('2', '1', 1), ('2', 'n', 1)], [('4', '4', 'b'), ('3', '3', 'b'), ('2', '2', 'h'), ('1', '1', 'b')]
+def q3_k(x, y):   # 2-méthylpent-2-ène
+    z = zigzag(5, x, y)
+    at = {'1': z[0] + ('',), '2': z[1] + ('',), '3': z[2] + ('',), '4': z[3] + ('',), '5': z[4] + ('',), 'm': pas(z[1], 90) + ('',)}
+    li = [('1', '2', 1), ('2', '3', 2, 1), ('3', '4', 1), ('4', '5', 1), ('2', 'm', 1)]
+    return at, li, [(k, k, 'b') for k in '12345']
+def q3_l(x, y):   # 2-chloro-3-méthylbutane
+    z = zigzag(4, x, y)
+    at = {'1': z[0] + ('',), '2': z[1] + ('',), '3': z[2] + ('',), '4': z[3] + ('',), 'cl': pas(z[1], 90) + ('Cl',), 'm': pas(z[2], 270) + ('',)}
+    return at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'cl', 1), ('3', 'm', 1)], [('1', '1', 'b'), ('2', '2', 'b'), ('3', '3', 'h'), ('4', '4', 'b')]
+Q3_ESPECES = [('a', 'CH3-CH(CH3)-CH2-CH2-OH', '3-méthylbutan-1-ol', q3_a), ('b', 'CH3-CO-CH(CH3)-CH3', '3-méthylbutan-2-one', q3_b),
+              ('c', 'CH3-CH2-CH(CH3)-COOH', 'acide 2-méthylbutanoïque', q3_c), ('d', 'CH3-CH2-CHO', 'propanal', q3_d),
+              ('e', 'CH3-CH2-COO-CH2-CH2-CH2-CH3', 'propanoate de butyle', q3_e), ('f', 'CH3-CHCl-CH2-CH3', '2-chlorobutane', q3_f),
+              ('g', 'CH3-CO-NH-CH3', 'N-méthyléthanamide', q3_g), ('h', 'CH3-CH(CH3)-CH(CH3)-CH2-CH3', '2,3-diméthylpentane', q3_h),
+              ('i', 'C6H10(CH3)2', '1,4-diméthylcyclohexane', q3_i), ('j', 'CH3-CH2-CH(NH2)-CH3', 'butan-2-amine', q3_j),
+              ('k', 'CH3-C(CH3)=CH-CH2-CH3', '2-méthylpent-2-ène', q3_k), ('l', 'CH3-CHCl-CH(CH3)-CH3', '2-chloro-3-méthylbutane', q3_l)]
+def etendue(at):
+    # étendue horizontale d'une molécule, étiquettes comprises
+    bord = {'OH': (0.2, 1.0), 'NH2': (0.2, 1.3), 'HO': (1.0, 0.2), 'H2N': (1.2, 0.2), 'O': (0.3, 0.3), 'Cl': (0.35, 0.45), 'NH': (0.3, 0.3), '': (0.05, 0.05)}
+    return min(x - bord[e][0] for x, y, e in at.values()), max(x + bord[e][1] for x, y, e in at.values())
+def fig_q3_c():
+    CW, RH = 7.6, 4.35
+    fig, ax = toile((0.0, 4 * CW), (-3 * RH + 1.95, 2.45), ech=0.235)
+    for k, (lettre, semi, nom, dessin) in enumerate(Q3_ESPECES):
+        cx, y = (k % 4 + 0.5) * CW, -(k // 4) * RH
+        at, li, nums = dessin(0.0, 0.0)
+        x0, x1 = etendue(at)
+        at, li, nums = dessin(cx - (x0 + x1) / 2, y)
+        verifie(at, li, semi); mol(ax, at, li)
+        for cle, t, pos in nums:
+            px, py = at[cle][:2]
+            if pos == 'in':
+                c = np.mean([at['r%d' % j][:2] for j in range(6)], axis=0); px, py = c + 0.62 * (np.array([px, py]) - c)
+                texte(ax, px, py, t, fs=8, color=CUIVRE)
+            else: texte(ax, px, py + (0.4 if pos == 'h' else -0.4), t, fs=8, color=CUIVRE)
+        if lettre == 'e':
+            xa = np.mean([at[c][0] for c in ('a3', 'a2', 'a1')]); xb = np.mean([at[c][0] for c in ('b1', 'b2', 'b3', 'b4')])
+            texte(ax, xa, y - 0.5, 'propanoate', fs=8, color=GRIS); texte(ax, xb, y - 0.5, 'butyle', fs=8, color=GRIS)
+        etiq(ax, cx, y - 1.75, '%s. %s' % (lettre, nom), fs=9.5)
+    save(fig, 'fig_q3_c')
+
+Q4_ESPECES = [('a', 'CH3-CH2-CH2-CH2-OH', 'butan-1-ol'), ('b', 'CH3-CH(OH)-CH2-CH3', 'butan-2-ol'), ('c', 'CH3-CH(CH3)-CH2-OH', '2-méthylpropan-1-ol'),
+              ('d', 'CH3-CH2-O-CH2-CH3', 'éthoxyéthane'), ('e', 'CH3-CH2-CH2-CHO', 'butanal'), ('f', 'CH3-CO-CH2-CH3', 'butanone'),
+              ('g', 'CH3-CH=CH-CH3', '(E)-but-2-ène'), ('h', 'CH3-CH=CH-CH3', '(Z)-but-2-ène')]
+def q4_dessin(lettre, x, y):
+    # mêmes dessins que les figures 4 et 5 de l'énoncé (fig_isomeres, fig_ze)
+    if lettre in 'abcdef':
+        n = 3 if lettre == 'c' else (5 if lettre == 'd' else 4)
+        z = zigzag(n, x, y); at = {str(k): z[k] + ('',) for k in range(n)}; li = [(str(k), str(k + 1), 1) for k in range(n - 1)]
+        if lettre == 'a': at['o'] = pas(z[3], -30) + ('OH',); li.append(('3', 'o', 1))
+        if lettre == 'b': at['o'] = pas(z[1], 90) + ('OH',); li.append(('1', 'o', 1))
+        if lettre == 'c': at['m'] = pas(z[1], 90) + ('',); at['o'] = pas(z[2], 30) + ('OH',); li += [('1', 'm', 1), ('2', 'o', 1)]
+        if lettre == 'd': at['2'] = z[2] + ('O',)
+        if lettre == 'e': at['o'] = pas(z[3], -30) + ('O',); li.append(('3', 'o', 2))
+        if lettre == 'f': at['o'] = pas(z[1], 90) + ('O',); li.append(('1', 'o', 2))
+        return at, li
+    if lettre == 'g':   # méthyles de part et d'autre de la double liaison
+        at = {'c1': (x, y - 0.5, ''), 'c2': (x + C30, y, ''), 'c3': (x + 2 * C30, y - 0.5, ''), 'c4': (x + 3 * C30, y, '')}
+        return at, [('c1', 'c2', 1), ('c2', 'c3', 2, -1), ('c3', 'c4', 1)]
+    at = {'c2': (x + 0.5, y - 0.2, ''), 'c3': (x + 1.5, y - 0.2, ''), 'c1': (x, y + 0.67, ''), 'c4': (x + 2.0, y + 0.67, '')}   # h : méthyles du même côté
+    return at, [('c1', 'c2', 1), ('c2', 'c3', 2, 1), ('c3', 'c4', 1)]
+def fig_isomeres_c():
+    CW, RH = 6.4, 4.9
+    fig, ax = toile((-0.2, 4 * CW + 0.2), (-RH - 2.3, 2.75), ech=0.235)
+    for k, (lettre, semi, nom) in enumerate(Q4_ESPECES):
+        cx, y = (k % 4 + 0.5) * CW, -(k // 4) * RH
+        at, li = q4_dessin(lettre, 0.0, 0.0); x0, x1 = etendue(at)
+        at, li = q4_dessin(lettre, cx - (x0 + x1) / 2, y)
+        verifie(at, li, semi); mol(ax, at, li)
+        etiq(ax, cx, y - 1.25, '%s. %s' % (lettre, nom), fs=9.5)
+    # en-têtes : groupes d'isomères de même formule brute
+    for g0, g1, y, t in ((0, 4, 2.25, 'formule brute C$_4$H$_{10}$O'), (0, 2, 2.25 - RH, 'formule brute C$_4$H$_8$O'), (2, 4, 2.25 - RH, 'formule brute C$_4$H$_8$')):
+        ax.plot([g0 * CW + 0.5, g1 * CW - 0.5], [y - 0.38, y - 0.38], color=GRISC, lw=1.0, zorder=2)
+        texte(ax, (g0 + g1) / 2 * CW, y, t, fs=9.5)
+    save(fig, 'fig_isomeres_c')
 
 # --- Exercice 1 : deux esters isomères (énoncé) et l'éthanoate de 3-méthylbutyle (corrigé)
 def ethanoate(x0, y0, n_alkyle, branche=None):
@@ -291,13 +453,15 @@ def fig_ex2_meca(corrige):
     dN = doublet(ax, xn, 0, 0)
     at_(ax, 2.35, -0.05, '+', fs=14)
     # acide carboxylique R2-COOH : C trigonal, O du groupe C=O en haut, R2 en bas à gauche, O-H en bas à droite
+    # doublets non liants placés loin des liaisons : à 120° de la double liaison pour l'oxygène du groupe C=O (à 30° et 150°),
+    # dans les deux secteurs libres pour l'oxygène du groupe O-H, dont les liaisons partent vers C (150°) et vers H (321°)
     xc = 3.95
     at_(ax, xc, 0, 'C'); at_(ax, xc, 0.95, 'O'); liaison(ax, (xc, 0), (xc, 0.95), ordre=2)
-    doublet(ax, xc, 0.95, 60); doublet(ax, xc, 0.95, 120)
+    doublet(ax, xc, 0.95, 30); doublet(ax, xc, 0.95, 150)
     at_(ax, xc - 0.9, -0.5, 'R$_2$', fs=12); liaison(ax, (xc, 0), (xc - 0.9, -0.5), rb=0.32)
     xo, yo = xc + 0.82, -0.47
     at_(ax, xo, yo, 'O'); at_(ax, xo + 0.62, yo - 0.5, 'H'); liaison(ax, (xc, 0), (xo, yo)); liaison(ax, (xo, yo), (xo + 0.62, yo - 0.5))
-    doublet(ax, xo, yo, 90 + 15); doublet(ax, xo, yo, 270 - 15)
+    doublet(ax, xo, yo, 60); doublet(ax, xo, yo, 240)
     ax.annotate('', xy=(6.75, 0.0), xytext=(5.75, 0.0), arrowprops=dict(arrowstyle='-|>', color=ANTH, lw=1.3, mutation_scale=13))
     # intermédiaire tétraédrique : N chargé +, O chargé -
     xc2, xn2 = 9.6, 8.65
@@ -312,44 +476,51 @@ def fig_ex2_meca(corrige):
     charge(ax, xn2 - 0.36, 0.4, +1)
     at_(ax, xn2 - 0.95, 0, 'R$_1$', fs=12); liaison(ax, (xn2 - 0.95, 0), (xn2, 0), ra=0.3)
     if corrige:
-        texte(ax, xc + 0.36, -0.02, 'δ+', fs=9, color=BLEU); texte(ax, xc - 0.42, 1.2, 'δ−', fs=9, color=BLEU)
-        # flèche 1 : du doublet de N vers l'atome de carbone ; flèche 2 : de la double liaison C=O vers l'atome d'oxygène
+        texte(ax, xc + 0.38, 0.1, 'δ+', fs=9, color=BLEU); texte(ax, xc - 0.62, 0.86, 'δ−', fs=9, color=BLEU)
+        # flèche 1 : du doublet de N vers l'atome de carbone ; flèche 2 : de la double liaison C=O vers l'atome d'oxygène (côté droit, sous le doublet à 30°)
         fleche_bezier(ax, (dN[0] + 0.06, dN[1] + 0.1), (2.6, 1.15), (xc - 0.21, 0.16))
-        fleche_bezier(ax, (xc + 0.12, 0.45), (xc + 0.75, 0.62), (xc + 0.27, 0.98))
+        fleche_bezier(ax, (xc + 0.12, 0.42), (xc + 0.78, 0.5), (xc + 0.3, 0.84))
     save(fig, 'fig_ex2_meca' + ('_c' if corrige else ''))
 
 # --- Exercice 2 : formation de l'aspartame
 def plus(ax, x, y): texte(ax, x, y, '+', fs=15)
-def fig_ex2_molecules():
-    fig, ax = toile((-1.9, 19.2), (-6.6, 2.3), ech=0.30)
-    # acide aspartique : HOOC-CH2-CH(NH2)-COOH
-    z = zigzag(4, 0.0, 0.0)
+def acide_aspartique(x0, y0):
+    # HOOC-CH2-CH(NH2)-COOH, le groupe carboxyle voisin du groupe amine (c1) tourné vers la droite
+    z = zigzag(4, x0, y0)
     at = {'c4': z[0] + ('',), 'c3': z[1] + ('',), 'c2': z[2] + ('',), 'c1': z[3] + ('',)}
     at['o4'] = pas(z[0], 270) + ('O',); at['oh4'] = pas(z[0], 150) + ('HO',); at['n'] = pas(z[2], 270) + ('NH2',)
     at['o1'] = pas(z[3], 90) + ('O',); at['oh1'] = pas(z[3], -30) + ('OH',)
-    mol(ax, at, [('c4', 'c3', 1), ('c3', 'c2', 1), ('c2', 'c1', 1), ('c4', 'o4', 2), ('c4', 'oh4', 1), ('c2', 'n', 1), ('c1', 'o1', 2), ('c1', 'oh1', 1)])
-    etiq(ax, 1.3, -1.95, 'acide aspartique', fs=10)
-    plus(ax, 5.3, 0.25)
-    # phénylalanine méthylée : C6H5-CH2-CH(NH2)-CO-O-CH3
-    at, li = {}, []
-    pts = benzene(at, li, 'r', (7.5, 0.0), ang0=0)
-    b = pas(pts[0], 30); a_ = pas(b, -30); c = pas(a_, 30); o = pas(c, -30); m = pas(o, 30)
-    at.update({'b': b + ('',), 'a': a_ + ('',), 'c': c + ('',), 'o': o + ('O',), 'm': m + ('',), 'od': pas(c, 90) + ('O',), 'n': pas(a_, 270) + ('NH2',)})
-    li += [('r0', 'b', 1), ('b', 'a', 1), ('a', 'c', 1), ('c', 'od', 2), ('c', 'o', 1), ('o', 'm', 1), ('a', 'n', 1)]
-    mol(ax, at, li); etiq(ax, 10.2, -1.95, 'phénylalanine méthylée', fs=10)
-    ax.annotate('', xy=(16.2, 0.25), xytext=(14.7, 0.25), arrowprops=dict(arrowstyle='-|>', color=ANTH, lw=1.3, mutation_scale=13))
-    # ligne 2 : aspartame + eau
-    y = -4.3
-    z = zigzag(9, 0.0, y)
+    li = [('c4', 'c3', 1), ('c3', 'c2', 1), ('c2', 'c1', 1), ('c4', 'o4', 2), ('c4', 'oh4', 1), ('c2', 'n', 1), ('c1', 'o1', 2), ('c1', 'oh1', 1)]
+    return at, li
+def phe_methylee(x0, y0):
+    # H2N-CH(CH2-C6H5)-CO-O-CH3, dessinée comme dans l'aspartame : groupe amine à gauche, groupe benzyle vers le haut, ester à droite
+    n = (x0, y0); ca = pas(n, 30); cc = pas(ca, -30); o = pas(cc, 30); m = pas(o, -30); cb = pas(ca, 90)
+    at = {'n': n + ('H2N',), 'ca': ca + ('',), 'cc': cc + ('',), 'o': o + ('O',), 'm': m + ('',), 'od': pas(cc, 270) + ('O',), 'cb': cb + ('',)}
+    li = [('n', 'ca', 1), ('ca', 'cc', 1), ('cc', 'o', 1), ('o', 'm', 1), ('cc', 'od', 2), ('ca', 'cb', 1)]
+    benzene(at, li, 'r', pas(pas(cb, 30), 30), ang0=210); li.append(('cb', 'r0', 1))
+    return at, li
+def aspartame(x0, y0):
+    # la liaison amide relie le groupe carboxyle c1 de l'acide aspartique au groupe amine de la phénylalanine méthylée
+    z = zigzag(9, x0, y0)
     at = {'c4': z[0] + ('',), 'c3': z[1] + ('',), 'c2': z[2] + ('',), 'c1': z[3] + ('',), 'n': z[4] + ('NH',), 'ca': z[5] + ('',), 'cc': z[6] + ('',), 'o': z[7] + ('O',), 'm': z[8] + ('',)}
     at['o4'] = pas(z[0], 270) + ('O',); at['oh4'] = pas(z[0], 150) + ('HO',); at['n2'] = pas(z[2], 270) + ('NH2',); at['o1'] = pas(z[3], 90) + ('O',)
     at['od'] = pas(z[6], 270) + ('O',); at['cb'] = pas(z[5], 90) + ('',)
     li = [('c4', 'c3', 1), ('c3', 'c2', 1), ('c2', 'c1', 1), ('c1', 'n', 1), ('n', 'ca', 1), ('ca', 'cc', 1), ('cc', 'o', 1), ('o', 'm', 1),
           ('c4', 'o4', 2), ('c4', 'oh4', 1), ('c2', 'n2', 1), ('c1', 'o1', 2), ('cc', 'od', 2), ('ca', 'cb', 1)]
-    r = pas(at['cb'][:2], 30); centre = pas(r, 30)
-    benzene(at, li, 'r', centre, ang0=210); li.append(('cb', 'r0', 1))
-    mol(ax, at, li); etiq(ax, 3.6, y - 1.95, 'aspartame', fs=10)
-    plus(ax, 9.0, y + 0.25); texte(ax, 10.3, y + 0.25, 'H$_2$O', fs=12)
+    benzene(at, li, 'r', pas(pas(at['cb'][:2], 30), 30), ang0=210); li.append(('cb', 'r0', 1))
+    return at, li
+def fig_ex2_molecules():
+    # équation sur une seule ligne : réactifs, flèche, produits ; même échelle que les figures des exercices 3 et 5
+    fig, ax = toile((-1.9, 24.6), (-2.45, 3.75), ech=0.235)
+    at, li = acide_aspartique(0.0, 0.0); verifie(at, li, 'HOOC-CH2-CH(NH2)-COOH'); mol(ax, at, li, r=0.3)
+    etiq(ax, 1.3, -1.95, 'acide aspartique', fs=10)
+    plus(ax, 5.0, 0.25)
+    at, li = phe_methylee(6.85, 0.0); verifie(at, li, 'H2N-CH(CH2-C6H5)-COO-CH3'); mol(ax, at, li, r=0.3)
+    etiq(ax, 8.0, -1.95, 'phénylalanine méthylée', fs=10)
+    fleche_reaction(ax, 10.95, 12.85, 0.25)
+    at, li = aspartame(14.95, 0.0); verifie(at, li, 'HOOC-CH2-CH(NH2)-CO-NH-CH(CH2-C6H5)-COO-CH3'); mol(ax, at, li, r=0.3, dnh=0.5)
+    etiq(ax, 18.4, -1.95, 'aspartame', fs=10)
+    plus(ax, 22.55, 0.25); texte(ax, 23.75, 0.25, 'H$_2$O', fs=12)
     save(fig, 'fig_ex2_molecules')
 
 # --- Exercice 3 : de l'aldéhyde A à la frambinone
@@ -595,32 +766,44 @@ def fig_buchner():
         ax = fig.add_axes(rect); ax.set_xlim(*xlim); ax.set_ylim(*yl); ax.set_aspect('equal'); ax.axis('off'); fn(ax)
     fig.add_artist(matplotlib.lines.Line2D([wl / (wl + wr)] * 2, [0.03, 0.97], color=GRISC, lw=1.0))
     save(fig, 'fig_buchner')
+def paroi_vigreux(x, y_bas, y_haut, sgn, niveaux, W, creux, h_haut=0.24, h_bas=0.04, chute=0.24):
+    # profil d'une paroi de la colonne (sgn = -1 à gauche, +1 à droite), du haut vers le bas : à chaque niveau, le verre est enfoncé
+    # vers l'axe en une pointe inclinée vers le bas (bord supérieur raide, bord inférieur presque horizontal), qui s'arrête à creux de l'axe
+    pts = [(x + sgn * W, y_haut)]
+    for y in sorted(niveaux, reverse=True):
+        pts += [(x + sgn * W, y + h_haut), (x + sgn * creux, y - chute), (x + sgn * W, y - h_bas)]
+    pts.append((x + sgn * W, y_bas))
+    return pts
 def fig_distillation():
-    fig, ax = toile((-10.2, 15.8), (-3.6, 10.2), ech=0.22)
+    fig, ax = toile((-10.8, 16.4), (-3.6, 11.9), ech=0.22)
     cx, cy, r = 0.0, 0.0, 1.25
     chauffe_ballon(ax, cx, cy, r)
     xt, yt = ballon(ax, cx, cy, r, 0.45, 0.1)
-    # colonne de Vigreux : tube avec pointes intérieures
-    y0, y1 = yt, yt + 4.6
-    courbe(ax, [(-0.32, y0), (-0.32, y1)]); courbe(ax, [(0.32, y0), (0.32, y1)])
-    for k, y in enumerate(np.linspace(y0 + 0.5, y1 - 0.5, 8)):
-        sgn = -1 if k % 2 == 0 else 1
-        courbe(ax, [(sgn * 0.32, y + 0.15), (sgn * 0.08, y - 0.05), (sgn * 0.32, y - 0.25)], lw=1.0)
-    # tête de colonne et thermomètre
-    yh = y1 + 0.9
-    courbe(ax, [(-0.32, y1), (-0.32, yh)]); courbe(ax, [(0.32, y1), (0.32, y1 + 0.35)])
-    courbe(ax, [(0.32, yh - 0.25), (0.32, yh)])
-    courbe(ax, [(-0.32, yh), (0.32, yh)])
-    ax.add_patch(Rectangle((-0.06, y1 + 0.35), 0.12, 2.6, fc='white', ec=ANTH, lw=1.0, zorder=5))
-    ax.add_patch(Circle((0.0, y1 + 0.4), 0.13, fc=BRIQUE, ec=ANTH, lw=0.8, zorder=5.1))
-    # bras latéral vers le réfrigérant droit, incliné vers le bas
+    # colonne de Vigreux : tube plus large que le col, raccordé par un cône ; six rangées de pointes de verre, enfoncées par paires
+    # jusqu'à près de l'axe et inclinées vers le bas (le liquide condensé s'écoule par leur extrémité)
+    W, creux = 0.5, 0.07
+    yc0 = yt + 0.5                                   # début de la partie droite de la colonne
+    y1 = yc0 + 5.0                                   # fin de la partie à pointes
+    niveaux = list(np.linspace(yc0 + 0.6, y1 - 0.45, 6))
+    ybras = y1 + 0.8                                 # axe du bras latéral, à la hauteur du réservoir du thermomètre
+    yh = ybras + 0.75                                # haut de la tête de colonne
     ang = np.radians(-22); u = np.array([np.cos(ang), np.sin(ang)]); nrm = np.array([-u[1], u[0]])
-    a0 = np.array([0.32, y1 + 0.55]); L = 6.4
-    for d in (0.18, -0.18):
-        p0 = a0 + d * nrm; p1 = a0 + L * u + d * nrm; courbe(ax, [p0, p1])
+    a0 = np.array([W, ybras]); L = 6.4; e = 0.18      # demi-épaisseur du bras
+    yb_h, yb_b = ybras + e / np.cos(ang), ybras - e / np.cos(ang)   # bords du bras sur la paroi droite
+    gauche = [(-W, yh)] + paroi_vigreux(0.0, yc0, y1, -1, niveaux, W, creux)[1:] + [(-0.24, yt + 0.2), (-0.24, yt - 0.02)]
+    droite = [(W, yb_b)] + paroi_vigreux(0.0, yc0, y1, 1, niveaux, W, creux) + [(0.24, yt + 0.2), (0.24, yt - 0.02)]
+    ax.add_patch(Polygon(gauche + droite[::-1], closed=True, fc='white', ec='none', zorder=2.8))
+    courbe(ax, gauche); courbe(ax, droite); courbe(ax, [(W, yb_h), (W, yh)])
+    # bouchon de la tête de colonne et thermomètre, réservoir à la hauteur du bras latéral
+    ax.add_patch(Rectangle((-W - 0.08, yh), 2 * W + 0.16, 0.42, fc=GRISC, ec=ANTH, lw=1.2, zorder=4))
+    ax.add_patch(Rectangle((-0.07, ybras), 0.14, yh + 2.4 - ybras, fc='white', ec=ANTH, lw=1.0, zorder=5))
+    ax.add_patch(Circle((0.0, ybras), 0.14, fc=BRIQUE, ec=ANTH, lw=0.8, zorder=5.1))
+    # bras latéral vers le réfrigérant droit, incliné vers le bas
+    for d in (e, -e):
+        p0 = np.array([W, ybras + d / np.cos(ang)]); courbe(ax, [p0, a0 + L * u + d * nrm])
     j0, j1 = a0 + 1.4 * u, a0 + 5.6 * u                      # manchon du réfrigérant
     ax.add_patch(Polygon([j0 + 0.5 * nrm, j1 + 0.5 * nrm, j1 - 0.5 * nrm, j0 - 0.5 * nrm], closed=True, fc=EAU, ec=ANTH, lw=1.3, zorder=2.5))
-    for d in (0.18, -0.18):
+    for d in (e, -e):
         courbe(ax, [j0 + d * nrm, j1 + d * nrm], z=4)
     ein = j1 - 0.5 * nrm - 0.4 * u; sout = j0 + 0.5 * nrm + 0.4 * u
     courbe(ax, [ein, ein - 0.7 * nrm]); eau_fleche(ax, *(ein - 1.6 * nrm), *(ein - 0.75 * nrm))
@@ -630,9 +813,10 @@ def fig_distillation():
     xe, ye = bout[0] + 0.1, bout[1] - 0.6
     contour_ouvert(ax, [(xe - 0.35, ye + 0.3), (xe - 0.35, ye - 0.4), (xe - 1.4, ye - 2.9), (xe + 1.4, ye - 2.9), (xe + 0.35, ye - 0.4), (xe + 0.35, ye + 0.3)], fc='white', z=2)
     ax.add_patch(Polygon([(xe - 1.07, ye - 2.1), (xe + 1.07, ye - 2.1), (xe + 1.37, ye - 2.85), (xe - 1.37, ye - 2.85)], closed=True, fc=ORGA, ec='none', zorder=2.2))
-    repere(ax, 0.07, y1 + 2.2, -2.6, y1 + 2.6, 'thermomètre', ha='right')
-    repere(ax, 0.13, y1 + 0.4, -2.6, y1 + 0.9, 'réservoir à la hauteur\ndu bras latéral', ha='right')
-    repere(ax, -0.32, y0 + 2.2, -2.6, y0 + 2.2, 'colonne de Vigreux', ha='right')
+    repere(ax, 0.07, yh + 1.7, -2.6, yh + 2.0, 'thermomètre', ha='right')
+    repere(ax, -0.12, ybras, -2.6, ybras + 0.45, 'réservoir à la hauteur\ndu bras latéral', ha='right')
+    repere(ax, -W, niveaux[4] + 0.5, -2.6, niveaux[4] + 0.5, 'colonne de Vigreux', ha='right')
+    repere(ax, -0.25, niveaux[2] - 0.15, -2.6, niveaux[2] - 0.6, 'pointes de verre', ha='right')
     repere(ax, -1.15, 0.5, -2.6, 0.9, 'ballon', ha='right')
     repere(ax, -1.6, -0.9, -2.6, -1.4, 'chauffe-ballon', ha='right')
     mid = a0 + 3.5 * u + 0.5 * nrm
@@ -764,7 +948,7 @@ def fig_catalyse():
     save(fig, 'fig_catalyse')
 
 # ---------------------------------------------------------------- production
-fig_q1(); fig_q1_c(); fig_groupes(False); fig_groupes(True); fig_isomeres(); fig_ze(); fig_cyclo(); fig_catalyse()
+fig_q1(); fig_q1_c(); fig_groupes(False); fig_groupes(True); fig_isomeres(); fig_ze(); fig_cyclo(); fig_catalyse(); fig_q3_c(); fig_isomeres_c()
 fig_ex1_esters(); fig_ex1_c(); fig_spectres('fig_ex1_ir', ['ester'], [None])
 fig_ex2_molecules(); fig_ex2_meca(False); fig_ex2_meca(True); fig_ex3_sequence()
 fig_reflux(False); fig_reflux(True); fig_ampoule(); fig_buchner(); fig_distillation()

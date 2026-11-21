@@ -187,11 +187,22 @@ axes_style(ax,'$U$ (V)','$P$ (W)'); ax.grid(which='minor',color='#EFEBE7',lw=0.3
 ax.tick_params(labelsize=9.5); ax.xaxis.label.set_size(10.5); ax.yaxis.label.set_size(10.5)
 p=f'{out}/fig_panneaux.png'; fig.savefig(p,facecolor='white'); plt.close(fig); print('fig_panneaux',rogne(p))
 
-# ---------------------------------------------------------------- 10. Q.18 : bilan d'énergie de l'effet photoélectrique
+# ---------------------------------------------------------------- 10. Q.19 : bilan d'énergie de l'effet photoélectrique
 fig,ax=new(6.2,2.6,(-0.4,12.6),(-0.6,4.8))
 ax.add_patch(Rectangle((0,0),4.6,1.2,fc=GRISC,ec=ANTH,lw=1.0)); ax.text(2.3,0.6,'métal',fontsize=10,ha='center',va='center')
-xs=np.linspace(0,1,200); px=0.4+2.2*xs; py=4.2-3.0*xs+0.12*np.sin(2*np.pi*xs*6)
-ax.plot(px,py,color=BRIQUE,lw=1.4); arrow(ax,px[-8],py[-8],px[-1],py[-1],color=BRIQUE,lw=1.4,head=5)
+# photon : une onde qui avance le long de sa direction de propagation, puis un segment droit dont la pointe
+# touche l'électron à la surface du métal. La pointe suit la direction de propagation, pas la pente locale de l'onde.
+S=np.array([0.45,4.15]); I=np.array([2.75,1.2]); r_e=0.16
+u=(I-S)/np.linalg.norm(I-S); nrm=np.array([-u[1],u[0]])
+tip=I-u*(r_e+0.03)                          # pointe au bord de l'électron
+lam_w=0.5; Lw=6*lam_w                       # six ondulations, puis le segment droit jusqu'à la pointe
+s=np.linspace(0,Lw,600); env=np.clip((Lw-s)/(0.5*lam_w),0,1)
+pts=S[None,:]+s[:,None]*u[None,:]+(0.12*np.sin(2*np.pi*s/lam_w)*env)[:,None]*nrm[None,:]
+ax.plot(pts[:,0],pts[:,1],color=BRIQUE,lw=1.4)
+fin=S+u*Lw
+arrow(ax,fin[0],fin[1],tip[0],tip[1],color=BRIQUE,lw=1.4,head=6)
+print('Q.19 photon : pointe en (%.2f ; %.2f), direction (%.2f ; %.2f), vers le métal : %s'
+      % (tip[0],tip[1],u[0],u[1],'oui' if u[1]<0 and tip[1]>1.2 else 'NON'))
 ax.text(0.5,4.45,'photon d’énergie $h\\nu$',fontsize=10,color=BRIQUE)
 ax.add_patch(Circle((2.75,1.2),0.16,fc=BLEU,ec='none',zorder=6))
 arrow(ax,2.75,1.2,4.3,3.2,color=BLEU,lw=1.4,head=5); ax.text(4.0,3.5,'électron éjecté',fontsize=10,color=BLEU,ha='center')

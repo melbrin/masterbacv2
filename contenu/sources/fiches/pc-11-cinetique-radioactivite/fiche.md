@@ -8,29 +8,40 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 19 40 41-->
+<!--colonnes: 15 37 48-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
-| Vitesse volumique | $v_\text{app}(\text{P}) = \dfrac{\text{d}[\text{P}]}{\text{d}t}$ ; $v_\text{disp}(\text{R}) = -\dfrac{\text{d}[\text{R}]}{\text{d}t}$ | En $\text{mol·L}^{-1}\text{·s}^{-1}$ : pente de la tangente à la courbe $[\text{P}](t)$, opposé de la pente pour $[\text{R}](t)$. Elle diminue quand les réactifs s'épuisent. |
-| Temps de demi-réaction | $x(t_{1/2}) = \dfrac{x_\text{f}}{2}$ | Lu sur la courbe $x(t)$ ou $[\text{P}](t)$ ; ce n'est pas la moitié de la durée de la transformation. |
-| Loi d'ordre 1 | $v = k\,[\text{A}]$ et $[\text{A}](t) = [\text{A}]_0\,\text{e}^{-kt}$ | $\ln[\text{A}]$ est affine en $t$, de pente $-k$ ; $t_{1/2} = \ln 2 / k$ ne dépend pas de $[\text{A}]_0$. |
+| Vitesse volumique | $v_\text{app}(\text{P}) = \dfrac{\text{d}[\text{P}]}{\text{d}t}$ ; $v_\text{disp}(\text{R}) = -\dfrac{\text{d}[\text{R}]}{\text{d}t}$ | En $\text{mol·L}^{-1}\text{·s}^{-1}$ : pente de la tangente à la courbe $[\text{P}](t)$, opposé de la pente pour $[\text{R}](t)$. |
+| Temps de demi-réaction | $x(t_{1/2}) = x_\text{f} / 2$ | Lu sur la courbe $x(t)$ ou $[\text{P}](t)$ ; ce n'est pas la moitié de la durée de la transformation. |
+| Loi d'ordre 1 | $v_\text{disp}(\text{A}) = k\,[\text{A}]$ | Constante de vitesse $k$ en $\text{s}^{-1}$. |
 | Mécanisme | Flèche courbe : d'un doublet vers l'atome qui le reçoit | Intermédiaire : formé puis consommé. Catalyseur : consommé puis régénéré. |
-| Désintégration | La somme des $A$ et la somme des $Z$ se conservent | $\alpha$ : ${}^{4}_{2}\text{He}$ ; $\beta^-$ : ${}^{0}_{-1}\text{e}$ ; $\beta^{\text{+}}$ : ${}^{0}_{1}\text{e}$ ; émission $\gamma$ : désexcitation du noyau fils. |
-| Décroissance | $N(t) = N_0\,\text{e}^{-\lambda t}$ et $A = \lambda N$ | $t_{1/2} = \ln 2 / \lambda$ ; au bout de $n$ demi-vies, il reste $N_0 / 2^n$ noyaux. |
+| Désintégration | Sommes des $A$ et des $Z$ conservées | $\alpha$ : ${}^{4}_{2}\text{He}$ ; $\beta^-$ : ${}^{0}_{-1}\text{e}$ ; $\beta^{\text{+}}$ : ${}^{0}_{1}\text{e}$ ; $\gamma$ : désexcitation du noyau. |
+| Activité | $A = -\text{d}N/\text{d}t = \lambda N$ | En becquerels (désintégrations par seconde) ; $\lambda$ en $\text{s}^{-1}$. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 14 34 52-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Ordre 1 | $[\text{A}](t) = [\text{A}]_0\,\text{e}^{-kt}$ ; $t_{1/2} = \ln 2 / k$ | Résoudre $\text{d}[\text{A}]/\text{d}t = -k\,[\text{A}]$ ; à $t_{1/2}$, $[\text{A}] = [\text{A}]_0 / 2$ ; $\ln[\text{A}]$ est affine en $t$, de pente $-k$. |
+| Décroissance | $N(t) = N_0\,\text{e}^{-\lambda t}$ ; $t_{1/2} = \ln 2 / \lambda$ | Résoudre $\text{d}N/\text{d}t = -\lambda N$ ; à $t_{1/2}$, $N = N_0 / 2$. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Les courbes de suivi cinétique, les étapes d'un mécanisme, les électronégativités, les extraits de diagramme (N, Z) et de classification périodique, les demi-vies.
+Courbes de suivi, mécanismes, électronégativités, diagramme (N, Z), classification périodique, demi-vies.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
 :::
 
 - Prendre la moitié de $x_\text{max}$ au lieu de la moitié de $x_\text{f}$ pour une transformation non totale.
-- Faire partir une flèche courbe d'un atome ou d'une charge positive : elle part toujours d'un doublet d'électrons.
+- Faire partir une flèche courbe d'un atome ou d'une charge positive, et non d'un doublet.
 - Confondre catalyseur et intermédiaire réactionnel.
 - Mélanger les unités de temps, par exemple $\lambda$ en $\text{an}^{-1}$ avec $t$ en secondes.
 
@@ -364,6 +375,12 @@ $M(\text{P}) = 151\ \text{g·mol}^{-1}$. En dessous de $c_\text{lim} = 8{,}0\ \t
 [CIBLE:c_ex2]{custom-style="BoutonCorrige"}
 :::
 
+<!--debut:cahier-->
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+<!--fin:cahier-->
 # Thème 3 : mécanisme réactionnel {#theme3}
 
 ::: {custom-style="Rubrique"}
@@ -377,7 +394,9 @@ Questions de cours
 :::
 
 ::: {custom-style="Enonce"}
-Application : parmi les liaisons $\text{C-H}$, $\text{C-O}$, $\text{O-H}$, $\text{C-Cl}$ et $\text{C=O}$, lesquelles sont polarisées ? Indiquer les charges partielles portées par les atomes. Électronégativités : $\chi(\text{H}) = 2{,}20$ ; $\chi(\text{C}) = 2{,}55$ ; $\chi(\text{O}) = 3{,}44$ ; $\chi(\text{Cl}) = 3{,}16$.
+Application : parmi les liaisons $\text{C-H}$, $\text{C-O}$, $\text{O-H}$, $\text{C-Cl}$ et $\text{C=O}$, lesquelles sont polarisées ? Indiquer les charges partielles portées par les atomes.
+
+Électronégativités : $\chi(\text{H}) = 2{,}20$ ; $\chi(\text{C}) = 2{,}55$ ; $\chi(\text{O}) = 3{,}44$ ; $\chi(\text{Cl}) = 3{,}16$.
 :::
 
 ## [Q.13]{custom-style="QNum"}\ \ Identifier les sites donneur et accepteur de doublet d'électrons {#q13}
@@ -408,6 +427,12 @@ Application : recopier les deux actes élémentaires de la figure 5 et les compl
 Figure 5. Deux actes élémentaires, sans leurs flèches courbes
 :::
 
+<!--debut:cahier-->
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+<!--fin:cahier-->
 ## [Q.15]{custom-style="QNum"}\ \ Identifier intermédiaire réactionnel et catalyseur dans un mécanisme {#q15}
 
 ::: {custom-style="Meta"}
@@ -823,7 +848,7 @@ Ici, la concentration en diiode est proportionnelle à l'avancement et tend vers
 Figure 12. Lecture du temps de demi-réaction
 :::
 
-À $2\ \%$ près, la concentration vaut $0{,}98 \times 5{,}0 = 4{,}9\ \text{mmol·L}^{-1}$ : la courbe atteint cette valeur vers $40\ \text{min}$, soit près de six $t_{1/2}$. En pratique, on considère qu'une transformation est terminée au bout de quelques $t_{1/2}$.
+À $2\ \%$ près, la concentration vaut $0{,}98 \times 5{,}0 = 4{,}9\ \text{mmol·L}^{-1}$ : la courbe atteint cette valeur vers $40\ \text{min}$, soit près de six $t_{1/2}$. En pratique, on considère qu'une transformation est terminée au bout de quelques temps de demi-réaction.
 
 ::: {custom-style="Piege"}
 [Piège.]{custom-style="EtiqPiege"} Prendre pour $t_{1/2}$ la moitié de la durée de la transformation, ou, pour une transformation non totale, la date à laquelle $x = \dfrac{x_\text{max}}{2}$ : c'est la moitié de l'avancement final $x_\text{f}$ qui compte.
@@ -1034,9 +1059,21 @@ $$k = -\dfrac{0{,}92 - 3{,}00}{24 - 0} = 8{,}7 \times 10^{-2}\ \text{min}^{-1}, 
 [CIBLE:q11]{custom-style="BoutonEnonce"}
 :::
 
-Quand $90\ \%$ du cristal violet ont été consommés, il en reste $10\ \%$ : $\text{e}^{-kt} = \dfrac{1}{10}$, soit $t = \dfrac{\ln 10}{k}$. Avec $k = \dfrac{\ln 2}{t_{1/2}}$, on obtient :
+La décoloration suit une loi d'ordre 1 (Q.10) : la concentration en cristal violet est donc la solution de l'équation différentielle établie à la Q.8,
 
-$$t_{90\ \%} = \dfrac{\ln 10}{\ln 2}\,t_{1/2} = 3{,}32 \times 8{,}0 = 27\ \text{min} \qquad t_{99\ \%} = \dfrac{\ln 100}{\ln 2}\,t_{1/2} = 6{,}64 \times 8{,}0 = 53\ \text{min}$$
+$$[\text{CV}](t) = [\text{CV}]_0\,\text{e}^{-kt}$$
+
+Quand $90\ \%$ du cristal violet ont été consommés, il n'en reste que $10\ \%$ : le volume étant constant, la concentration ne vaut plus que le dixième de sa valeur initiale. À cette date, notée $t_{90\ \%}$, $[\text{CV}](t_{90\ \%}) = \dfrac{[\text{CV}]_0}{10}$. On remplace dans la solution, puis on divise les deux membres par $[\text{CV}]_0$, qui se simplifie :
+
+$$[\text{CV}]_0\,\text{e}^{-k\,t_{90\ \%}} = \dfrac{[\text{CV}]_0}{10} \qquad \text{soit} \qquad \text{e}^{-k\,t_{90\ \%}} = \dfrac{1}{10}$$
+
+En composant par la fonction logarithme, $-k\,t_{90\ \%} = \ln\dfrac{1}{10} = -\ln 10$, d'où $t_{90\ \%} = \dfrac{\ln 10}{k}$. Avec $k = \dfrac{\ln 2}{t_{1/2}}$ (Q.9) et $t_{1/2} = 8{,}0\ \text{min}$ (Q.10) :
+
+$$t_{90\ \%} = \dfrac{\ln 10}{\ln 2}\,t_{1/2} = 3{,}32 \times 8{,}0 = 27\ \text{min}$$
+
+De même, quand $99\ \%$ du cristal violet ont été consommés, il en reste $1\ \%$ : $\text{e}^{-k\,t_{99\ \%}} = \dfrac{1}{100}$, d'où :
+
+$$t_{99\ \%} = \dfrac{\ln 100}{k} = \dfrac{\ln 100}{\ln 2}\,t_{1/2} = 6{,}64 \times 8{,}0 = 53\ \text{min}$$
 
 Il faut environ $3{,}3$ temps de demi-réaction pour consommer $90\ \%$ du réactif, et $6{,}6$ pour en consommer $99\ \%$, quelle que soit la transformation d'ordre 1.
 
@@ -1456,9 +1493,9 @@ $N(t) = N_0\,\text{e}^{-\lambda t}$, avec $\lambda$ en $\text{s}^{-1}$ si $t$ es
 [CIBLE:q22]{custom-style="BoutonEnonce"}
 :::
 
-La demi-vie $t_{1/2}$ d'un noyau radioactif est la durée au bout de laquelle la moitié des noyaux d'un échantillon s'est désintégrée. À $t = t_{1/2}$ : $\dfrac{N_0}{2} = N_0\,\text{e}^{-\lambda t_{1/2}}$, donc $\text{e}^{-\lambda t_{1/2}} = \dfrac{1}{2}$, et en composant par le logarithme, $\lambda\,t_{1/2} = \ln 2$, d'où la demi-vie :
+La demi-vie $t_{1/2}$ d'un noyau radioactif est la durée au bout de laquelle la moitié des noyaux d'un échantillon s'est désintégrée. À $t = t_{1/2}$ : $\dfrac{N_0}{2} = N_0\,\text{e}^{-\lambda t_{1/2}}$, donc $\text{e}^{-\lambda t_{1/2}} = \dfrac{1}{2}$. En composant par le logarithme :
 
-$$t_{1/2} = \dfrac{\ln 2}{\lambda}$$
+$$\lambda\,t_{1/2} = \ln 2 \qquad \text{d'où la demi-vie} \qquad t_{1/2} = \dfrac{\ln 2}{\lambda}$$
 
 Sur la figure 19, il reste $50\ \%$ des noyaux à $t_{1/2} = 6{,}0\ \text{h}$.
 

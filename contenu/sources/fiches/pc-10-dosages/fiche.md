@@ -8,22 +8,32 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 20 40 40-->
+<!--colonnes: 19 33 48-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
 | Loi de Beer-Lambert | $A = k \times C$ | Mesure à $\lambda_\text{max}$, après avoir fait le blanc ; solutions diluées, dans le domaine de la gamme d'étalonnage. |
-| Loi de Kohlrausch | $\sigma = \sum \lambda_i\, [X_i]$ | $\sigma$ en $\text{S·m}^{-1}$, $\lambda_i$ en $\text{S·m}^{2}\text{·mol}^{-1}$, $[X_i]$ en $\text{mol·m}^{-3}$ : $1\ \text{mol·L}^{-1} = 1\,000\ \text{mol·m}^{-3}$. |
+| Loi de Kohlrausch | $\sigma = \sum \lambda_i\, [X_i]$ | Solutions diluées ; $\sigma$ en $\text{S·m}^{-1}$, $\lambda_i$ en $\text{S·m}^{2}\text{·mol}^{-1}$, $[X_i]$ en $\text{mol·m}^{-3}$ : $1\ \text{mol·L}^{-1} = 1\,000\ \text{mol·m}^{-3}$. |
 | Équivalence | $a\,\text{A} + b\,\text{B} \rightarrow \ldots$ : $\dfrac{n_\text{A}}{a} = \dfrac{n_{\text{B,E}}}{b}$ | Réactifs introduits dans les proportions stœchiométriques : le réactif limitant change. |
-| Titrage pH-métrique | $V_\text{E}$ : saut de pH, extremum de $\dfrac{\text{dpH}}{\text{d}V}$ | Acide faible titré : $\text{pH} = \text{p}K_\text{A}$ à la demi-équivalence. |
+| Titrage pH-métrique | $V_\text{E}$ : saut de pH, extremum de $\dfrac{\text{dpH}}{\text{d}V}$ | Méthode des tangentes ou de la dérivée : maximum de la dérivée si le pH augmente, minimum s'il diminue. |
 | Titrage conductimétrique | $V_\text{E}$ : intersection des deux segments | Ajouter beaucoup d'eau à la solution titrée pour que la courbe soit formée de deux segments de droite. |
 | Titrage colorimétrique | Indicateur : zone de virage contenant le pH à l'équivalence | Ou espèce colorée qui disparaît ou persiste à l'équivalence. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 19 33 48-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Demi-équivalence | Acide faible titré : $\text{pH} = \text{p}K_\text{A}$ pour $V = V_\text{E}/2$ | Relation $\text{pH} = \text{p}K_\text{A} + \log([\text{A}^-]/[\text{AH}])$ avec $[\text{A}^-] = [\text{AH}]$ : la moitié de l'acide a réagi (Q.12). |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Les couples ou l'équation d'une réaction support d'oxydoréduction, les conductivités molaires ioniques, les spectres d'absorption, les zones de virage et les courbes de titrage. L'équation d'un titrage acide-base ou par précipitation est en revanche souvent à écrire (Q.7, Ex. 3, Ex. 4).
+Couples ou équation d'oxydoréduction, conductivités molaires ioniques, spectres, zones de virage, courbes de titrage. Les équations acide-base et de précipitation sont souvent à écrire (Q.7, Ex. 3, Ex. 4).
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
@@ -214,7 +224,7 @@ $M(\text{Fe}_2\text{O}_3) = 159{,}7\ \text{g·mol}^{-1}$. La solution S, diluée
 
 **2.** À l'aide de la figure 1, choisir la longueur d'onde de travail du spectrophotomètre. Justifier.
 
-**3.** Indiquer la verrerie et le volume de solution mère à prélever pour préparer l'étalon de concentration $40\ \text{µmol·L}^{-1}$.
+**3.** Indiquer la verrerie et le volume de solution mère à prélever pour préparer l'étalon à $40\ \text{µmol·L}^{-1}$.
 
 **4.** Montrer que la figure 2 est en accord avec la loi de Beer-Lambert et déterminer le coefficient $k$.
 
@@ -320,6 +330,10 @@ $M(\text{Cu}) = 63{,}5\ \text{g·mol}^{-1}$. Teneur limite retenue dans cet exer
 ::: {custom-style="Renvoi"}
 [CIBLE:c_ex2]{custom-style="BoutonCorrige"}
 :::
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
 # Thème 3 : titrage avec suivi pH-métrique {#theme3}
 
@@ -446,6 +460,10 @@ $M(\text{aspirine}) = 180{,}2\ \text{g·mol}^{-1}$. Critère retenu dans cet exe
 ::: {custom-style="Renvoi"}
 [CIBLE:c_ex3]{custom-style="BoutonCorrige"}
 :::
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
 # Thème 4 : titrage avec suivi conductimétrique {#theme4}
 
@@ -643,7 +661,7 @@ $\sigma = \sum \lambda_i\, [X_i]$, avec $\lambda_i$ en $\text{S·m}^{2}\text{·m
 :::
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} La loi s'utilise aussi à l'envers : une solution d'acide chlorhydrique de conductivité $128\ \text{mS·m}^{-1}$ a pour concentration $C = \dfrac{\sigma}{\lambda(\text{H}_3\text{O}^{\text{+}}) + \lambda(\text{Cl}^-)} = \dfrac{128}{35{,}0 + 7{,}63} = 3{,}00\ \text{mol·m}^{-3}$, soit $3{,}00 \times 10^{-3}\ \text{mol·L}^{-1}$. Pour un acide faible AH, les ions sont $\text{A}^-$ et $\text{H}_3\text{O}^{\text{+}}$ en même concentration : $[\text{H}_3\text{O}^{\text{+}}]_\text{f} = \dfrac{\sigma}{\lambda(\text{A}^-) + \lambda(\text{H}_3\text{O}^{\text{+}})}$, d'où l'avancement final et le taux d'avancement.
+[Remarque.]{custom-style="EtiqRemarque"} La loi s'utilise aussi à l'envers : une solution d'acide chlorhydrique de conductivité $128\ \text{mS·m}^{-1}$ a pour concentration $C = \dfrac{\sigma}{\lambda(\text{H}_3\text{O}^{\text{+}}) + \lambda(\text{Cl}^-)} = \dfrac{128}{35{,}0 + 7{,}63} = 3{,}00\ \text{mol·m}^{-3}$, soit $3{,}00 \times 10^{-3}\ \text{mol·L}^{-1}$. Pour un acide faible AH, les ions $\text{A}^-$ et $\text{H}_3\text{O}^{\text{+}}$ ont la même concentration, $[\text{H}_3\text{O}^{\text{+}}]_\text{f} = \dfrac{\sigma}{\lambda(\text{A}^-) + \lambda(\text{H}_3\text{O}^{\text{+}})}$ : on en déduit l'avancement final et le taux d'avancement.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.5 · Réaliser un dosage par étalonnage conductimétrique {#c_q5}

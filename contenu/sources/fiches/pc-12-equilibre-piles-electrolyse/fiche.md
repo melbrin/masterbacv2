@@ -8,36 +8,47 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 16 31 53-->
+<!--colonnes: 19 26 55-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
 | Quotient de réaction | $Q_\text{r} = \dfrac{[\text{C}]^c\,[\text{D}]^d}{[\text{A}]^a\,[\text{B}]^b}$ | Concentrations en $\text{mol·L}^{-1}$, sans le solvant ni les solides. À l'équilibre, $Q_\text{r} = K$, qui ne dépend que de la température. |
-| Sens d'évolution | $Q_\text{r,i} < K$ : sens direct ; $Q_\text{r,i} > K$ : sens indirect | $Q_\text{r}$ évolue vers $K$. Si $K > 10^4$, la transformation est considérée comme totale. |
+| Sens d'évolution | $Q_\text{r,i} < K$ : sens direct ; $Q_\text{r,i} > K$ : sens indirect | $Q_\text{r}$ évolue vers $K$. Si $Q_\text{r,i} = K$, le système est à l'équilibre : il n'évolue pas. |
 | Taux d'avancement | $\tau = x_\text{f} / x_\text{max}$ | Un réactif en excès ou l'élimination d'un produit augmente $\tau$. |
 | Oxydoréduction | $\text{Ox} + n\,\text{e}^- = \text{Red}$ | Oxydation : perte d'électrons, à l'anode. Réduction : gain d'électrons, à la cathode. |
 | Pile | $Q = n(\text{e}^-) \times F = I \times \Delta t$ | Transformation spontanée ; l'anode est la borne négative. $F$, charge d'une mole d'électrons, est donnée par l'énoncé. |
-| Électrolyse | $Q = n(\text{e}^-) \times F = I \times \Delta t$ | Transformation forcée ; l'anode est reliée à la borne positive du générateur. Accumulateur : pile en décharge, électrolyseur en charge. |
-| Énergie électrique | $E = U \times I \times \Delta t = U \times Q$ | Avec $Q$ en $\text{A·h}$, $E$ est en $\text{W·h}$. $1\ \text{A·h} = 3\,600\ \text{C}$ ; $1\ \text{W·h} = 3\,600\ \text{J}$. |
+| Électrolyse | $Q = n(\text{e}^-) \times F = I \times \Delta t$ | Transformation forcée ; l'anode est reliée à la borne positive. Accumulateur : pile en décharge, électrolyseur en charge. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 19 26 55-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Énergie électrique | $E = U \times I \times \Delta t = U \times Q$ | Combiner $E = P \times \Delta t$, $P = U \times I$ et $Q = I \times \Delta t$ ; $\Delta t$ en heures, avec $1\ \text{h} = 3\,600\ \text{s}$, donne $Q$ en $\text{A·h}$ et $E$ en $\text{W·h}$. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Les valeurs de $K$, les couples oxydant/réducteur, les schémas de piles et d'électrolyseurs, la constante de Faraday ($F = 9{,}65 \times 10^{4}\ \text{C·mol}^{-1}$), le volume molaire des gaz.
+Les valeurs de $K$, le seuil $K > 10^4$ d'une transformation totale, les couples oxydant/réducteur, les schémas de piles et d'électrolyseurs, la constante de Faraday $F = 9{,}65 \times 10^{4}\ \text{C·mol}^{-1}$, le volume molaire des gaz.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
 :::
 
 - Écrire l'eau solvant ou un solide dans le quotient de réaction.
-- Croire que l'anode est toujours la borne négative : dans une électrolyse, elle est reliée à la borne positive.
-- Oublier le nombre d'électrons de la demi-équation : deux moles d'électrons pour une mole de nickel.
+- Croire que l'anode est toujours négative : en électrolyse, elle est reliée à la borne positive.
+- Oublier le nombre d'électrons de la demi-équation : deux moles d'électrons par mole de nickel.
 - Exprimer la constante de Faraday en coulombs : elle s'exprime en $\text{C·mol}^{-1}$.
 
 ::: {custom-style="Rubrique"}
 Votre parcours selon votre objectif
 :::
+
+<!--colonnes: 14 41 45-->
 
 | Objectif | Questions de cours | Exercices |
 |---|---|---|
@@ -143,7 +154,7 @@ Application : dans un bécher contenant une lame de zinc et une lame de fer, on 
 :::
 
 ::: {custom-style="Enonce"}
-Application : on mélange $0{,}50\ \text{mol}$ d'acide éthanoïque et $0{,}50\ \text{mol}$ d'éthanol. L'estérification, de constante $K = 4{,}0$, forme de l'éthanoate d'éthyle et de l'eau. Dresser le tableau d'avancement, exprimer $K$ en fonction de l'avancement final $x_\text{f}$, puis calculer $x_\text{f}$ et le taux d'avancement final. La transformation est-elle totale ? Que peut-on dire de celle de Q.3, de constante $K = 10^{11}$ ?
+Application : on mélange $0{,}50\ \text{mol}$ d'acide éthanoïque et $0{,}50\ \text{mol}$ d'éthanol. L'estérification, de constante $K = 4{,}0$, forme de l'éthanoate d'éthyle et de l'eau. Dresser le tableau d'avancement, exprimer $K$ en fonction de l'avancement final $x_\text{f}$, puis calculer $x_\text{f}$ et le taux d'avancement final. La transformation est-elle totale ? Que peut-on dire de celle de Q.3, de constante $K = 10^{11}$ ? Donnée : on considère qu'une transformation est totale lorsque $K > 10^4$.
 :::
 
 ## [Q.5]{custom-style="QNum"}\ \ Améliorer un rendement en déplaçant l'état d'équilibre {#q5}
@@ -263,6 +274,10 @@ Application : dans la pile de la figure 1, un pont salin au chlorure de potassiu
 ::: {custom-style="Legende"}
 Figure 1. La pile cuivre-aluminium
 :::
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
 ## [Q.10]{custom-style="QNum"}\ \ Décrire le déplacement des porteurs de charge {#q10}
 
@@ -422,6 +437,12 @@ Pour une cellule : tension $U = 3{,}6\ \text{V}$, capacité $Q = 3{,}0\ \text{A�
 [CIBLE:c_ex3]{custom-style="BoutonCorrige"}
 :::
 
+<!--debut:cahier-->
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+<!--fin:cahier-->
 # Thème 3 : électrolyse et accumulateurs {#theme3}
 
 ::: {custom-style="Rubrique"}
@@ -707,12 +728,13 @@ Un système évolue spontanément de façon que son quotient de réaction se rap
 [CIBLE:q4]{custom-style="BoutonEnonce"}
 :::
 
-<!--colonnes: 16 20 16 16 16 16-->
+<!--colonnes: 14 14 16 16 5 19 16-->
 
-| État | Avancement (mol) | Acide (mol) | Éthanol (mol) | Ester (mol) | Eau (mol) |
-|---|---|---|---|---|---|
-| Initial | 0 | 0,50 | 0,50 | 0 | 0 |
-| Final | $x_\text{f}$ | $0{,}50 - x_\text{f}$ | $0{,}50 - x_\text{f}$ | $x_\text{f}$ | $x_\text{f}$ |
+| État du système | Avancement (mol) | CH~3~COOH(ℓ) | \+ C~2~H~5~OH(ℓ) | ⇄ | CH~3~COOC~2~H~5~(ℓ) | \+ H~2~O(ℓ) |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|
+| État initial | $0$ | $0{,}50$ | $0{,}50$ | | $0$ | $0$ |
+| En cours | $x$ | $0{,}50 - x$ | $0{,}50 - x$ | | $x$ | $x$ |
+| État final | $x_\text{f}$ | $0{,}50 - x_\text{f}$ | $0{,}50 - x_\text{f}$ | | $x_\text{f}$ | $x_\text{f}$ |
 
 Le volume se simplifie (Q.1, cas c) :
 

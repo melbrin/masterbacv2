@@ -117,10 +117,61 @@ phrases = ['au moins sept exercices des sessions 2025 et 2026', 'six de ces sept
            'Au moins cinq sujets en 2025 et 2026',
            # corrections de relecture : milieu de la cible, g à trois chiffres, listes Python, tension entre deux plaques
            'à l\'abscisse $0{,}575\\ \\text{m}$', '\\dfrac{0{,}575}{0{,}286}', 'Epp.append(m\\*g\\*(0.30 - h\\[i\\]))', 'Em.append(Ec\\[i\\] + Epp\\[i\\])',
-           'la tension entre les deux plaques vaut', 'Hauteur maximale | Q.3 à Q.5']
+           'la tension entre les deux plaques vaut', 'Hauteur maximale | Q.3 à Q.5',
+           # relecture du 18 novembre 2026, deuxième tour : le champ entre deux plaques est donné par les énoncés ; le poids est conservatif
+           'Champ électrique entre les plaques : $E = \\dfrac{U}{d}$', 'Champ électrique entre les électrodes : $E = \\dfrac{U}{d}$',
+           'seul compte le dénivelé, pas le chemin']
 perdues = [p for p in phrases if p not in src]
 for p in perdues: print('   PHRASE INTROUVABLE :', p)
 print('--- phrases de synthèse : %d suivies, %d introuvable(s)' % (len(phrases), len(perdues)))
-if ecarts or absents or mauvais or perdues:
+
+# L'essentiel (relecture du 18 novembre 2026) : « À connaître par cœur » ne garde que les définitions et les lois du programme ;
+# les relations à établir passent dans « À savoir retrouver », placée juste après, avec la démarche qui les donne.
+ess = src[src.index("# L'essentiel en une page"):src.index('# Ce qui est tombé')]
+morceaux = re.split(r'::: \{custom-style="Rubrique"\}\n(.*?)\n:::', ess)
+rubriques = [morceaux[k] for k in range(1, len(morceaux), 2)]
+corps = {morceaux[k]: morceaux[k + 1] for k in range(1, len(morceaux), 2)}
+def notions(titre):
+    return [l.split('|')[1].strip() for l in corps.get(titre, '').splitlines() if l.startswith('| ') and not l.startswith('| Notion')]
+attendu = {'À connaître par cœur': ("| Notion | Relation | À retenir |", ["Travail d'une force constante", 'Énergies', "Théorème de l'énergie cinétique", 'Énergie mécanique', 'Champ et force électriques']),
+           'À savoir retrouver': ('| Notion | Relation | Comment la retrouver |', ['Travail du poids', 'Particule chargée'])}
+defauts = [t for t, (entete, liste) in attendu.items() if entete not in corps.get(t, '') or notions(t) != liste]
+if rubriques[:2] != ['À connaître par cœur', 'À savoir retrouver']:
+    defauts.append('ordre des rubriques : ' + ' ; '.join(rubriques))
+# le champ entre deux plaques : le programme de terminale le veut « son expression étant donnée » ; il passe donc dans
+# « Fourni par l'énoncé, à savoir exploiter » et ne figure plus dans « À connaître par cœur »
+fourni = corps.get("Fourni par l'énoncé, à savoir exploiter", '')
+if 'E = U / d' not in fourni:
+    defauts.append("E = U / d absent de « Fourni par l'énoncé »")
+if 'dfrac{U}{d}' in corps.get('À connaître par cœur', '') or 'E = U / d' in corps.get('À connaître par cœur', ''):
+    defauts.append('E = U / d encore dans « À connaître par cœur »')
+for t in defauts: print('   ESSENTIEL :', t, '->', notions(t) if t in corps else '')
+print("--- L'essentiel : %d relation(s) par cœur, %d à savoir retrouver, %d écart(s)" % (len(notions('À connaître par cœur')), len(notions('À savoir retrouver')), len(defauts)))
+
+# E = U / d donné par l'énoncé (relecture du 18 novembre 2026, deuxième tour) : « Fourni par l'énoncé » l'annonce, donc chaque
+# énoncé dont le corrigé s'en sert, directement ou pour retrouver W = q × U (« À savoir retrouver »), doit la donner.
+# Les questions du déflecteur (Q.9 à Q.11, Q.13 à Q.16) partagent les données placées en tête du thème 3.
+champ_donne = r'E = \dfrac{U}{d}'
+enonces3 = src[src.index('# Thème 3'):src.index('<!--debut:complet-->')]
+blocs_e = re.split(r'\n(?=#{2,3} \[)', enonces3)
+deflecteur = ['q9', 'q10', 'q11', 'q13', 'q14', 'q15', 'q16']
+def enonce_de(ident):
+    return blocs_e[0] if ident in deflecteur else next(b for b in blocs_e if '{#%s}' % ident in b)
+corriges3 = src[src.index('# Corrigés du thème 3'):src.index('# Index des notions')]
+blocs_c = re.split(r'\n(?=#### \[Corrigé\])', corriges3)[1:]
+utilisent = [re.search(r'\{#c_(\w+)\}', b).group(1) for b in blocs_c if re.search(r'\\dfrac\{U\}\{d\}|q\| \\times U|e \\times U', b)]
+sans_champ = [i for i in utilisent if champ_donne not in enonce_de(i)]
+for i in sans_champ: print('   E = U / d ABSENT de l\'énoncé de', i)
+# les corrigés qui écrivent W = e × U le retrouvent à partir du champ donné
+derivation = r'e \times E \times d = e \times U'
+sans_derivation = []
+for b in blocs_c:
+    ecrit_w = r'W_{AB}(\vec{F}_e) = e \times U' in b or r'W(\vec{F}_e) = e \times U' in b
+    if ecrit_w and derivation not in b:
+        sans_derivation.append(re.search(r'\{#c_(\w+)\}', b).group(1))
+for i in sans_derivation: print('   W = e × U sans démarche dans le corrigé de', i)
+print('--- E = U / d : %d corrigé(s) s\'en servent (%s), %d énoncé(s) sans la relation, %d corrigé(s) sans la démarche'
+      % (len(utilisent), ', '.join(utilisent), len(sans_champ), len(sans_derivation)))
+if ecarts or absents or mauvais or perdues or defauts or sans_champ or sans_derivation or len(utilisent) < 4:
     raise SystemExit(1)
 print('--- tout est bon')

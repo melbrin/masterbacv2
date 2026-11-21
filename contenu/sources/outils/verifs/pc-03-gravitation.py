@@ -1,4 +1,4 @@
-# Recalcul indépendant des résultats numériques de la fiche 2 (Gravitation : satellites et lois de Kepler).
+# Recalcul indépendant des résultats numériques de la fiche 3 (Gravitation : satellites et lois de Kepler).
 # usage : python3 outils/verifs/pc-03-gravitation.py
 # Le script recalcule chaque valeur imprimée à partir des seules données des énoncés, vérifie que la valeur
 # contrôlée figure bien telle quelle dans la fiche, puis recompte le tableau des sujets 2025 et 2026
@@ -133,6 +133,9 @@ controles = [
     ('Ex.2 vitesse de e (km/s)', ve / 1e3, 52.2, 0.05, r'52{,}2\ \text{km·s}^{-1}'),
     ('Ex.2 rapport des vitesses', 52.2 / 29.8, 1.75, 0.005, 'va 1,75 fois plus vite que la Terre'),
     ('Ex.2 rapport des rayons d\'orbite', R_terre / Rm['e'], 34, 0.5, '34 fois plus petit'),
+    ('Q.11 période de rotation de la Terre, 23 h 56 min 4 s (s)', 23 * 3600 + 56 * 60 + 4, SIDERAL, 0.5, 'soit 23 h 56 min 4 s'),
+    ('L\'essentiel, rubrique « Fourni par l\'énoncé » : période de rotation de la Terre (s)', SIDERAL, 86164, 0.5,
+     r'la période de rotation de la Terre, $86\ 164\ \text{s}$, sont donnés'),
     ('Q.11 rayon de l\'orbite géostationnaire (m)', Rgeo, 4.215e7, 5e3, r'= 4{,}215 \times 10^{7}\ \text{m}$$'),
     ('Q.11 altitude (m)', hgeo, 3.58e7, 5e4, r'= 3{,}58 \times 10^{7}\ \text{m}'),
     ('Q.11 altitude, soustraction imprimée (m)', 4.215e7 - 0.638e7, 3.58e7, 5e4, r'4{,}215 \times 10^{7} - 0{,}638 \times 10^{7} = 3{,}58 \times 10^{7}'),
@@ -218,6 +221,31 @@ for c in orphelins: print('   SUJET CITÉ ABSENT DU TABLEAU :', c)
 print('--- phrases de synthèse : %d suivies, %d introuvable(s) ; sujets cités : %d suivis, %d absent(s) du tableau'
       % (len(phrases), len(perdues), len(cites), len(orphelins)))
 
-if ecarts or absents or manques or hors or mauvais or perdues or orphelins or ecart_tab > 0.03:
+# ---------------------------------------------------------------- L'essentiel : les tableaux que lit l'application
+# Le premier tableau (« À connaître par cœur ») nourrit les jeux et les rappels des défis du labo : au moins cinq lignes,
+# dont quatre avec une formule, et les notions que rappellent les défis du satellite (satellite-1 à satellite-3).
+# « Vitesse » et « Période de révolution », relations à établir, sont dans « À savoir retrouver », juste après.
+ess = src[src.index("# L'essentiel en une page"):src.index('# Ce qui est tombé')]
+def tableau(entete):
+    lignes_t = []
+    for l in ess[ess.index(entete):].splitlines()[2:]:
+        if not l.startswith('| '): break
+        lignes_t.append([c.strip() for c in l.strip().strip('|').split('|')])
+    return lignes_t
+TETE_COEUR, TETE_RETROUVER = '| Notion | Relation | À retenir |', '| Notion | Relation | Comment la retrouver |'
+coeur, retrouver = tableau(TETE_COEUR), tableau(TETE_RETROUVER)
+formules = [l for l in coeur if '$' in l[1]]
+ordre_ok = (ess.index(TETE_COEUR) == ess.index('| ') and ess.index(TETE_COEUR) < ess.index('À savoir retrouver')
+            < ess.index(TETE_RETROUVER) < ess.index('Fourni par l\'énoncé'))
+attendues = [('Satellite de la Terre', coeur), ('Troisième loi de Kepler', coeur), ('Satellite géostationnaire', coeur),
+             ('Vitesse', retrouver), ('Période de révolution', retrouver)]
+sans_ligne = [n for n, t in attendues if n not in [l[0] for l in t]]
+essentiel_ko = len(coeur) < 5 or len(formules) < 4 or not ordre_ok or sans_ligne or any(len(l) != 3 for l in coeur + retrouver)
+print('--- L\'essentiel : « À connaître par cœur » %d lignes dont %d avec formule (au moins 5 et 4), « À savoir retrouver » %d lignes ; '
+      'ordre des rubriques %s ; notions des défis du satellite : %d absente(s)'
+      % (len(coeur), len(formules), len(retrouver), 'bon' if ordre_ok else 'FAUX', len(sans_ligne)))
+for n in sans_ligne: print('   NOTION SANS LIGNE :', n)
+
+if ecarts or absents or manques or hors or mauvais or perdues or orphelins or essentiel_ko or ecart_tab > 0.03:
     raise SystemExit(1)
 print('--- tout est bon')

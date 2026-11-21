@@ -1,16 +1,22 @@
 // Le socle commun des jeux (décision 0010).
-// Les jeux qui tournent dans le navigateur ne reçoivent que ce que l'élève peut déjà lire : le tableau
-// « À connaître par cœur » de l'onglet L'essentiel, les titres des questions, les noms des notions.
+// Les jeux qui tournent dans le navigateur ne reçoivent que ce que l'élève peut déjà lire : les tableaux de l'onglet
+// L'essentiel (« À connaître par cœur » et « À savoir retrouver »), les titres des questions, les noms des notions.
 // Les jeux sur les questions de quiz passent par le serveur, qui garde les bonnes réponses.
 
-/** Une ligne du tableau « À connaître par cœur » d'une fiche. Les trois textes sont du HTML déjà nettoyé. */
+/**
+ * Une ligne d'un tableau de L'essentiel d'une fiche. Les trois textes sont du HTML déjà nettoyé.
+ * Depuis la relecture de Yane du 18 novembre, L'essentiel a deux tableaux : « À connaître par cœur » (ce qu'il faut
+ * savoir réciter) et « À savoir retrouver » (ce qu'on redémontre, dont la troisième colonne dit comment).
+ */
 export interface LigneEssentiel {
   /** identifiant stable dans la partie : « fiche-rang » */
   id: string;
   fiche: number;
   notion: string;
   relation: string;
+  /** la troisième colonne : ce qu'il faut retenir, ou comment retrouver la relation */
   retenir: string;
+  nature: "coeur" | "retrouver";
 }
 
 /** Une question de cours et le chapitre où elle se range. Le titre est du HTML déjà nettoyé. */
@@ -79,19 +85,26 @@ export const tire = <T>(liste: readonly T[], n: number, graine: number): T[] => 
 const sansBalise = (html: string) => html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
 
 /**
- * Les lignes du tableau « À connaître par cœur » d'une fiche, lues dans le HTML nettoyé de l'onglet L'essentiel :
- * le premier tableau, une ligne par notion, trois cellules. Une ligne incomplète est écartée.
+ * Les lignes des tableaux de relations de L'essentiel d'une fiche, lues dans le HTML nettoyé de l'onglet : ceux dont
+ * l'en-tête a une colonne « Relation ». « À connaître par cœur » d'abord, puis « À savoir retrouver » (reconnu à sa
+ * troisième colonne, « Comment la retrouver »). Les autres tableaux (le parcours par objectif) sont ignorés.
+ * Une ligne par notion, trois cellules ; une ligne incomplète est écartée.
  */
 export function lignesEssentiel(html: string, fiche: number): LigneEssentiel[] {
-  const debut = html.indexOf("<table");
-  if (debut < 0) return [];
-  const fin = html.indexOf("</table>", debut);
-  const tableau = html.slice(debut, fin < 0 ? undefined : fin);
   const lignes: LigneEssentiel[] = [];
-  for (const rangee of tableau.split(/<tr[\s>]/).slice(1)) {
-    const cellules = rangee.split(/<td[^>]*>/).slice(1).map((c) => c.split("</td>")[0].trim());
-    if (cellules.length !== 3 || cellules.some((c) => !sansBalise(c))) continue;
-    lignes.push({ id: `${fiche}-${lignes.length + 1}`, fiche, notion: cellules[0], relation: cellules[1], retenir: cellules[2] });
+  for (let debut = html.indexOf("<table"); debut >= 0; debut = html.indexOf("<table", debut + 6)) {
+    const fin = html.indexOf("</table>", debut);
+    const tableau = html.slice(debut, fin < 0 ? undefined : fin);
+    const tete = tableau.includes("<thead") ? sansBalise(tableau.split(/<\/thead>/)[0]) : "";
+    if (fin < 0 && !tete) break;
+    if (!/relation/i.test(tete)) continue;
+    const nature = /retrouver/i.test(tete) ? "retrouver" : "coeur";
+    for (const rangee of tableau.split(/<tr[\s>]/).slice(1)) {
+      const cellules = rangee.split(/<td[^>]*>/).slice(1).map((c) => c.split("</td>")[0].trim());
+      if (cellules.length !== 3 || cellules.some((c) => !sansBalise(c))) continue;
+      lignes.push({ id: `${fiche}-${lignes.length + 1}`, fiche, notion: cellules[0], relation: cellules[1], retenir: cellules[2], nature });
+    }
+    if (fin < 0) break;
   }
   return lignes;
 }

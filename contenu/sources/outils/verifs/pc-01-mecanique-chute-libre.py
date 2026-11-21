@@ -23,6 +23,15 @@ a1 = v01 / dt1; F1 = m1 * (a1 + g); P1 = m1 * g
 tS1 = v01 / g; hmax1 = v01 ** 2 / (2 * g); tvol1 = 2 * v01 / g
 print(' a = %.1f m/s2 (%.1f g) ; F = %.4f N ; P = %.5f N ; F/P = %.1f' % (a1, a1 / g, F1, P1, F1 / P1))
 print(' t_S = %.4f s ; h_max = %.4f m ; t_vol = %.4f s ; v_y(t_vol) = %.2f m/s' % (tS1, hmax1, tvol1, -g * tvol1 + v01))
+# question 6 : la descente est une chute sans vitesse initiale depuis h_max (Q.6 avec H = h_max) ; elle dure autant que la montée
+tdesc1 = sqrt(2 * hmax1 / g)
+ident_desc = all(abs(sqrt(2 * (v ** 2 / (2 * g)) / g) - v / g) < 1e-12 for v in (0.5, 3.0, 7.0, 12.0, 340.0))
+# la même descente, recalculée pas à pas sur l'équation horaire : premier instant après t_S où y repasse par 0
+def y1(t): return -0.5 * g * t * t + v01 * t
+pas, t_pas = 1e-6, tS1
+while y1(t_pas) > 0: t_pas += pas
+print(' descente depuis h_max : %.4f s ; t_vol - t_S = %.4f s ; pas à pas : %.4f s ; identité littérale vérifiée : %s'
+      % (tdesc1, tvol1 - tS1, t_pas - tS1, ident_desc))
 
 print('--- Q.13 et Q.14 : portée, exemple numérique (g = 10 m/s2)')
 def racines(a, b, c):
@@ -91,6 +100,19 @@ print(' avec les valeurs lues (2,9 cm ; 3,2 cm ; 0,8 cm) : V9 = %.2f ; V11 = %.2
       % (2.9 * 2 / 100 / (2 * tau), 3.2 * 2 / 100 / (2 * tau), 0.8 * 0.5, 0.8 * 0.5 / (2 * tau)))
 tSc = v0c * sin(alc) / g
 print(' sommet : t = %.4f s (entre G7 et G8) ; x = %.4f m ; y = %.4f m' % (tSc, v0c * cos(alc) * tSc, (v0c * sin(alc)) ** 2 / (2 * g)))
+# L'essentiel, ligne « Mesures sur document » : sur une trajectoire courbe, Delta v est la norme du vecteur v11 - v9,
+# pas la différence des normes v11 - v9 ; d'où l'écriture vectorielle a = Delta v / Delta t (avec des flèches)
+dV_normes = hypot(*vit(11)) - hypot(*vit(9))
+print(' norme du vecteur Delta v = %.3f m/s ; différence des normes v11 - v9 = %.3f m/s' % (dV, dV_normes))
+
+print('--- L\'essentiel, ligne « Sommet » : norme de la vitesse au sommet, recalculée sur les équations horaires')
+def vitesse_sommet(v0, alpha_deg, gg=g):
+    al = radians(alpha_deg); ts = v0 * sin(al) / gg
+    return hypot(v0 * cos(al), -gg * ts + v0 * sin(al))
+sommets = [(v0s, als, vitesse_sommet(v0s, als)) for v0s, als in ((3.0, 90), (7.0, 40), (10.0, 45), (4.0, 60), (2.0, 45))]
+for v0s, als, vs in sommets:
+    print(' v0 = %.1f m/s ; alpha = %d degrés : vitesse au sommet = %.3f m/s (v0 cos(alpha) = %.3f m/s)' % (v0s, als, vs, v0s * cos(radians(als))))
+sommet_nul_si_vertical = all((vs < 1e-9) == (als == 90) for _, als, vs in sommets)
 
 print('--- Exercice 3 : la balle du jongleur')
 tj = 0.050
@@ -124,6 +146,9 @@ controles = [
     ('Ex.1 poids (N)', P1, 2.0e-2, 5e-4), ('Ex.1 force en multiples du poids', F1 / P1, 13, 0.5),
     ('Ex.1 t_S (s)', tS1, 0.31, 0.005), ('Ex.1 h_max (m)', hmax1, 0.46, 0.005), ('Ex.1 durée du vol (s)', tvol1, 0.61, 0.005),
     ('Ex.1 durée du vol / t_S', tvol1 / tS1, 2, 1e-9), ('Ex.1 vitesse à l\'atterrissage (m/s)', -g * tvol1 + v01, -3.0, 0.05),
+    ('Ex.1 descente = t_vol - t_S = t_S', tvol1 - tS1, tS1, 1e-12), ('Ex.1 descente depuis h_max = t_S', tdesc1, tS1, 1e-12),
+    ('Ex.1 descente pas à pas sur y(t) = t_S', t_pas - tS1, tS1, 2e-6), ('Ex.1 identité racine(2 h_max / g) = v0 / g', float(ident_desc), 1, 0),
+    ('Ex.1 hauteur pour v0 = 2,8 m/s (m)', 2.8 ** 2 / (2 * g), 0.40, 0.005),
     ('Q.13 a (m-1)', a13, -0.10, 0.005), ('Q.13 b', b13, 1.0, 0.05), ('Q.13 delta', D13, 1.4, 0.05),
     ('Q.13 x1 (m)', x1_13, -0.92, 0.005), ('Q.13 x2 (m)', x2_13, 11, 0.5),
     ('Q.13 x1 avec les valeurs imprimées', (-1.0 + sqrt(1.4)) / (2 * -0.10), -0.92, 0.005),
@@ -156,6 +181,9 @@ controles = [
     ('Q.17 a10 (m/s2)', 0.40 / (2 * tau), 10, 1e-9), ('Q.17 a10 exact, proche de g (m/s2)', dV / (2 * tau), 9.8, 0.05),
     ('Q.17 longueur de a10 (cm)', 10 / 5, 2.0, 1e-9), ('Q.17 effet de 1 mm sur delta V (%)', 0.1 / 0.8 * 100, 12.5, 1e-9),
     ('Q.17 a10 pour 0,7 cm (m/s2)', 0.7 * 0.5 / (2 * tau), 9, 0.5), ('Q.17 a10 pour 0,9 cm (m/s2)', 0.9 * 0.5 / (2 * tau), 11, 0.5),
+    ('Essentiel : la différence des normes ne donne pas Delta v (écart > 0,2 m/s)', float(dV - dV_normes > 0.2), 1, 0),
+    ('Essentiel : vitesse au sommet nulle seulement pour un lancer vertical', float(sommet_nul_si_vertical), 1, 0),
+    ('Essentiel : vitesse au sommet = v0 cos(alpha)', max(abs(vs - v0s * cos(radians(als))) for v0s, als, vs in sommets), 0, 1e-9),
     ('Ex.3 tableau conforme au modèle (m)', ecart_tableau, 0, 1e-9),
     ('Ex.3 v_x (m/s)', 0.100 / tj, 2.00, 1e-9),
     ('Ex.3 v3x', v3[0], 2.00, 0.005), ('Ex.3 v3y', v3[1], 2.00, 0.005), ('Ex.3 norme de v3', hypot(*v3), 2.83, 0.005),
@@ -187,8 +215,15 @@ print('--- tableau des sujets 2025 et 2026 : ' + ' ; '.join('%s : %d' % (n, v) f
 # ---------------------------------------------------------------- précision affichée et notations dans le texte de la fiche
 attendus = ['x_p = x_2 = 11\\ \\text{m}', 'elle renvoie ici $9{,}5\\ \\text{m}$', '= 12\\ \\text{m·s}^{-1}$$',
             'x_p = 6{,}0\\ \\text{m}$. Le cochonnet', '= 1{,}60\\ \\text{m·s}^{-1}$$', '\\Delta v = 0{,}8 \\times 0{,}5 = 0{,}4\\ \\text{m·s}^{-1}$',
-            '[\\ Objectif 14\\ ]{custom-style="Niv14"}\\ \\ Application · Notions : équation du second degré']
-interdits = ['10{,}9\\ \\text{m}$', '11{,}9\\ \\text{m·s}', '9{,}52', '5{,}99\\ \\text{m}', '\\vec{V}', 'v_{\\text{son}}']
+            '[\\ Objectif 14\\ ]{custom-style="Niv14"}\\ \\ Application · Notions : équation du second degré',
+            # L'essentiel : ce qui est appris par cœur doit rester juste dans tous les cas traités par la fiche
+            '| Seul le poids agit (deuxième loi de Newton), quelle que soit la masse. |',
+            '| La vitesse y est horizontale ; elle n\'est nulle que pour un lancer vertical. |',
+            '\\vec{a} \\approx \\dfrac{\\Delta \\vec{v}}{\\Delta t}$', 'Mouvement rectiligne : $a$ est la pente de $v(t)$.',
+            # Ex. 1, question 6 : la relation de la question de cours Q.6 est rappelée et nommée comme telle
+            'avec la relation $t_{\\text{sol}} = \\sqrt{\\dfrac{2H}{g}}$ de la question de cours Q.6, en remplaçant $H$ par $h_{\\text{max}}$']
+interdits = ['10{,}9\\ \\text{m}$', '11{,}9\\ \\text{m·s}', '9{,}52', '5{,}99\\ \\text{m}', '\\vec{V}', 'v_{\\text{son}}',
+             'horizontale, pas nulle', 'a = \\dfrac{\\Delta v}{\\Delta t}$ |', 'Sa durée s\'obtient comme en Q.6']
 manques = [a for a in attendus if a not in src]
 presents = [a for a in interdits if a in src]
 print('--- précision et notations dans la fiche : %d motif(s) attendu(s) absent(s), %d motif(s) périmé(s) présent(s)' % (len(manques), len(presents)))

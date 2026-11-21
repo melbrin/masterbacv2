@@ -19,6 +19,8 @@ const CLASSES = new Set([
 const classePermise = (c: string) => CLASSES.has(c) || /^cs-etiq[a-z]+$/.test(c);
 
 const LARGEUR = /^width:\s*(\d{1,3}(?:\.\d+)?)%;?$/;
+// l'alignement d'une colonne de tableau (les tableaux d'avancement centrent leurs colonnes), rien d'autre
+const ALIGNEMENT = /^text-align:\s*(left|center|right);?$/;
 const LARGEUR_IMAGE = /^--w:\s*(\d{1,3}(?:\.\d+)?)%;?$/;
 const FIGURE = /^figs\/([a-z0-9-]+)\/([A-Za-z0-9_.-]+\.webp)$/;
 const TYPES_LISTE = new Set(["1", "a", "A", "i", "I"]);
@@ -111,6 +113,9 @@ export function nettoie(source: string, options: Options = {}): Nettoyage {
       else if (a === "style" && (nom === "col" || nom === "table")) {
         const l = v.trim().match(LARGEUR);
         if (l && Number(l[1]) <= 100) garde = `width: ${l[1]}%`;
+      } else if (a === "style" && (nom === "th" || nom === "td")) {
+        const al = v.trim().match(ALIGNEMENT);
+        if (al) garde = `text-align: ${al[1]}`;
       } else if (a === "style" && nom === "img") {
         const l = v.trim().match(LARGEUR_IMAGE);
         if (l && Number(l[1]) <= 100) garde = `--w:${l[1]}%`;

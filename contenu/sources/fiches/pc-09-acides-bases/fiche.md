@@ -8,16 +8,27 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 20 40 40-->
+<!--colonnes: 22.5 31 46.5-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
-| Quantité de matière | $n = \dfrac{m}{M} = C \times V$ ; gaz : $n = \dfrac{V_\text{gaz}}{V_\text{m}}$ | $C_\text{m} = C \times M$ ; le titre massique, rapport de deux masses, est sans unité. |
-| Dilution | $C_\text{mère} \times V_\text{mère} = C_\text{fille} \times V_\text{fille}$ | Facteur $F = V_\text{fille}/V_\text{mère}$ ; pipette jaugée, puis fiole jaugée. |
-| pH | $\text{pH} = -\log\dfrac{[\text{H}_3\text{O}^{\text{+}}]}{c^\circ}$ | $c^\circ = 1\ \text{mol·L}^{-1}$ (concentration standard) ; $[\text{H}_3\text{O}^{\text{+}}] = c^\circ \times 10^{-\text{pH}}$ ; à 25 °C, $[\text{H}_3\text{O}^{\text{+}}] \times [\text{HO}^-] = K_\text{e}\, c^{\circ 2}$, $K_\text{e} = 10^{-14}$ (valeur rappelée par l'énoncé). |
-| Taux d'avancement final | $\tau = \dfrac{x_\text{f}}{x_\text{max}}$ | $\tau = 1$ : transformation totale ; acide AH : $\tau = [\text{H}_3\text{O}^{\text{+}}]_\text{f}/C$. |
+| Quantité de matière | $n = m/M = C \times V$ ; gaz : $n = V_\text{gaz}/V_\text{m}$ | $C_\text{m} = C \times M$ ; titre massique : rapport de masses. |
+| Dilution | $C_\text{mère} \times V_\text{mère} = C_\text{fille} \times V_\text{fille}$ | Facteur $F = V_\text{fille}/V_\text{mère}$ ; pipette puis fiole jaugées. |
+| pH | $\text{pH} = -\log([\text{H}_3\text{O}^{\text{+}}]/c^\circ)$ | $c^\circ = 1\ \text{mol·L}^{-1}$ ; $[\text{H}_3\text{O}^{\text{+}}] = c^\circ \times 10^{-\text{pH}}$ ; produit ionique de l'eau : $[\text{H}_3\text{O}^{\text{+}}] \times [\text{HO}^-] = K_\text{e}\, c^{\circ 2}$. |
+| Taux d'avancement final | $\tau = x_\text{f}/x_\text{max}$ | $\tau = 1$ : transformation totale ; $\tau < 1$ : non totale. |
 | Constante d'acidité | $K_\text{A} = \dfrac{[\text{A}^-]_\text{éq} \times [\text{H}_3\text{O}^{\text{+}}]_\text{éq}}{[\text{AH}]_\text{éq} \times c^\circ}$ | $\text{p}K_\text{A} = -\log K_\text{A}$ : plus il est petit, plus l'acide est fort et sa base conjuguée faible. |
-| Prédominance | $\text{pH} = \text{p}K_\text{A} + \log\dfrac{[\text{A}^-]}{[\text{AH}]}$ | AH si $\text{pH} < \text{p}K_\text{A}$, $\text{A}^-$ si $\text{pH} > \text{p}K_\text{A}$. Un indicateur vire autour de son $\text{p}K_\text{A}$. |
+| Prédominance | AH si $\text{pH} < \text{p}K_\text{A}$, $\text{A}^-$ au-delà | Un indicateur coloré vire autour de son $\text{p}K_\text{A}$. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 19 34 47-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Acide AH dans l'eau | $\tau = [\text{H}_3\text{O}^{\text{+}}]_\text{f}/C$ | Tableau d'avancement de l'acide avec l'eau (Q.14). |
+| pH et $\text{p}K_\text{A}$ | $\text{pH} = \text{p}K_\text{A} + \log([\text{A}^-]/[\text{AH}])$ | Logarithme de l'expression de $K_\text{A}$ (Q.20). |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
@@ -40,8 +51,8 @@ Votre parcours selon votre objectif
 
 | Objectif | Questions de cours | Exercices |
 |---|---|---|
-| [\ Objectif 10\ ]{custom-style="Niv10"} | Q.1, Q.2, Q.4, Q.6, Q.8 à Q.10, Q.13, Q.15, Q.18, Q.21, Q.23 | Ex. 1 (questions 2 à 4 et 6), Ex. 2 (questions 1 à 3) |
-| [\ Objectif 14\ ]{custom-style="Niv14"} | Plus Q.3, Q.5, Q.7, Q.11, Q.12, Q.14, Q.16, Q.19, Q.20, Q.22 | Ex. 1 et Ex. 2, Ex. 3 et Ex. 4 (questions 1 à 5) |
+| [\ Objectif 10\ ]{custom-style="Niv10"} | Q.1, Q.2, Q.4, Q.6, Q.7, Q.9 à Q.11, Q.14, Q.16, Q.19, Q.22, Q.24 | Ex. 1 (questions 2 à 4 et 6), Ex. 2 (questions 1 à 3) |
+| [\ Objectif 14\ ]{custom-style="Niv14"} | Plus Q.3, Q.5, Q.8, Q.12, Q.13, Q.15, Q.17, Q.20, Q.21, Q.23 | Ex. 1 et Ex. 2, Ex. 3 et Ex. 4 (questions 1 à 5) |
 | [\ Objectif 18\ ]{custom-style="Niv18"} | Toutes | Tous |
 
 ```{=openxml}
@@ -56,30 +67,30 @@ Ces notions sont tombées dans au moins quinze exercices des sessions 2025 et 20
 
 | Session | Exercice | Notions de cette fiche | Pour s'y préparer |
 |---|---|---|---|
-| Amérique du Nord 2026, jour 1 | Valorisation du dioxyde de carbone dans les cimenteries | Concentration d'une solution à 20 % en masse, diagramme de prédominance, base faible, taux d'avancement final à partir du pH | Q.3, Q.14, Q.18, Ex. 3 |
-| Amérique du Nord 2026, jour 2 | La lessive de cendre | Base au sens de Brønsted, concentration d'une solution, base faible | Q.1, Q.8, Q.14, Ex. 2 |
-| Antilles-Guyane 2026, jour 2 | Traitement de l'eau d'une piscine | Acide au sens de Brønsted, constante d'acidité, lien entre pH et rapport des concentrations | Q.8, Q.15, Q.19, Ex. 4 |
-| Asie 2026, jour 1 | Acidité des sols | Diagramme de distribution, espèce amphotère, forme prédominante | Q.8, Q.18, Q.20 |
+| Amérique du Nord 2026, jour 1 | Valorisation du dioxyde de carbone dans les cimenteries | Concentration d'une solution à 20 % en masse, diagramme de prédominance, base faible, taux d'avancement final à partir du pH | Q.3, Q.15, Q.19, Ex. 3 |
+| Amérique du Nord 2026, jour 2 | La lessive de cendre | Base au sens de Brønsted, concentration d'une solution, base faible | Q.1, Q.9, Q.15, Ex. 2 |
+| Antilles-Guyane 2026, jour 2 | Traitement de l'eau d'une piscine | Acide au sens de Brønsted, constante d'acidité, lien entre pH et rapport des concentrations | Q.9, Q.16, Q.20, Ex. 4 |
+| Asie 2026, jour 1 | Acidité des sols | Diagramme de distribution, espèce amphotère, forme prédominante | Q.9, Q.19, Q.21 |
 | Centres étrangers 2026, jour 1 | Analyse d'un comprimé | Facteur de dilution, choix de la verrerie | Q.4 |
-| Métropole, septembre 2026, jour 1 | Loi de dilution d'Ostwald | Forme prédominante selon le pH, constante d'acidité, force d'un acide | Q.15, Q.18 |
-| Métropole, septembre 2026, jour 2 | De l'acide salicylique à l'aspirine | Espèce amphotère, acide faible, constante d'acidité et $\text{p}K_\text{A}$, diagramme de prédominance | Q.8, Q.15, Q.18 |
-| Métropole, juin 2025, jour 1 | Un emballage intelligent au rayon poissonnerie | Indicateur coloré, espèce amphotère, concentration d'une solution commerciale | Q.3, Q.8, Q.21 |
-| Métropole, septembre 2025, jour 1 | Étude d'une lessive « multi-usages » | Propriétés acido-basiques de l'ion carbonate, équation de réaction | Q.8, Q.9 |
-| Métropole, septembre 2025, jour 2 | Les pluies acides | Diagramme de distribution, constante d'acidité et pH, réactif limitant | Q.6, Q.16, Q.20 |
-| Amérique du Nord 2025, jour 2 | Le Schweppes® : un bon antipaludique sans risque pour la santé ? | Prédominance avec deux $\text{p}K_\text{A}$, indicateur coloré, dilution | Q.4, Q.18, Q.21, Q.22 |
-| Amérique du Nord 2025, jour 2 (sujet de secours) | L'atropine | Forme acide ou basique selon le pH | Q.18 |
-| Amérique du Sud 2025, jour 2 | Infusion à la framboise | Acide au sens de Brønsted, diagramme de prédominance, titre massique et densité d'un détartrant, dilution | Q.2 à Q.4, Q.8, Q.18, Ex. 1 |
-| Asie 2025, jour 1 | Pollution ammoniacale | Acide au sens de Brønsted | Q.8 |
-| Nouvelle-Calédonie 2025, jour 1 | De l'aspirine pour favoriser l'écoulement sanguin | Forme prédominante dans l'estomac | Q.18 |
+| Métropole, septembre 2026, jour 1 | Loi de dilution d'Ostwald | Forme prédominante selon le pH, constante d'acidité, force d'un acide | Q.16, Q.19 |
+| Métropole, septembre 2026, jour 2 | De l'acide salicylique à l'aspirine | Espèce amphotère, acide faible, constante d'acidité et $\text{p}K_\text{A}$, diagramme de prédominance | Q.9, Q.16, Q.19 |
+| Métropole, juin 2025, jour 1 | Un emballage intelligent au rayon poissonnerie | Indicateur coloré, espèce amphotère, concentration d'une solution commerciale | Q.3, Q.9, Q.22 |
+| Métropole, septembre 2025, jour 1 | Étude d'une lessive « multi-usages » | Propriétés acido-basiques de l'ion carbonate, équation de réaction | Q.9, Q.10 |
+| Métropole, septembre 2025, jour 2 | Les pluies acides | Diagramme de distribution, constante d'acidité et pH, réactif limitant | Q.6, Q.17, Q.21 |
+| Amérique du Nord 2025, jour 2 | Le Schweppes® : un bon antipaludique sans risque pour la santé ? | Prédominance avec deux $\text{p}K_\text{A}$, indicateur coloré, dilution | Q.4, Q.19, Q.22, Q.23 |
+| Amérique du Nord 2025, jour 2 (sujet de secours) | L'atropine | Forme acide ou basique selon le pH | Q.19 |
+| Amérique du Sud 2025, jour 2 | Infusion à la framboise | Acide au sens de Brønsted, diagramme de prédominance, titre massique et densité d'un détartrant, dilution | Q.2 à Q.4, Q.9, Q.19, Ex. 1 |
+| Asie 2025, jour 1 | Pollution ammoniacale | Acide au sens de Brønsted | Q.9 |
+| Nouvelle-Calédonie 2025, jour 1 | De l'aspirine pour favoriser l'écoulement sanguin | Forme prédominante dans l'estomac | Q.19 |
 
 ::: {custom-style="Intertitre"}
 Ce qu'il faut en retenir
 :::
 
-- La forme prédominante selon le pH revient dans au moins dix des quinze exercices : c'est la priorité (Q.18 à Q.20, Q.22, Ex. 3, Ex. 4).
-- La définition de Brønsted, avec le couple à écrire, est demandée dans au moins huit exercices (Q.8).
+- La forme prédominante selon le pH revient dans au moins dix des quinze exercices : c'est la priorité (Q.19 à Q.21, Q.23, Ex. 3, Ex. 4).
+- La définition de Brønsted, avec le couple à écrire, est demandée dans au moins huit exercices (Q.9).
 - Les calculs de concentration (titre massique, densité, dilution) accompagnent au moins six exercices (Q.1 à Q.5, Ex. 1).
-- Le taux d'avancement final et le $\text{p}K_\text{A}$ comparent la force des acides et des bases dans au moins six exercices (Q.13 à Q.17, Ex. 2, Ex. 3).
+- Le taux d'avancement final et le $\text{p}K_\text{A}$ comparent la force des acides et des bases dans au moins six exercices (Q.14 à Q.18, Ex. 2, Ex. 3).
 
 ::: {custom-style="Surtitre"}
 Énoncés
@@ -163,10 +174,20 @@ Déterminer le réactif limitant et l'avancement maximal, puis calculer le volum
 Données : $M(\text{CaCO}_3) = 100{,}1\ \text{g·mol}^{-1}$ ; $V_\text{m} = 24{,}0\ \text{L·mol}^{-1}$.
 :::
 
-## [Q.7]{custom-style="QNum"}\ \ Calculer un taux d'avancement final et conclure sur le caractère total de la transformation {#q7}
+## [Q.7]{custom-style="QNum"}\ \ Distinguer l'avancement final de l'avancement maximal {#q7}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : avancement final, avancement maximal, taux d'avancement final\ \ \ [CIBLE:c_q7]{custom-style="BoutonCorrige"}
+[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : avancement maximal, avancement final, transformation totale ou non totale\ \ \ [CIBLE:c_q7]{custom-style="BoutonCorrige"}
+:::
+
+::: {custom-style="Enonce"}
+Application : expliquer simplement ce qui distingue l'avancement maximal $x_\text{max}$ de l'avancement final $x_\text{f}$ d'une réaction : comment obtient-on chacun d'eux, et dans quel cas sont-ils égaux ? On dissout ensuite $1{,}0 \times 10^{-3}\ \text{mol}$ d'acide éthanoïque $\text{CH}_3\text{COOH}$ dans de l'eau. Chaque molécule d'acide qui réagit avec l'eau forme un ion oxonium $\text{H}_3\text{O}^{\text{+}}$. Quand le système n'évolue plus, la solution contient $4{,}0 \times 10^{-5}\ \text{mol}$ d'ions oxonium formés par cette réaction. Déterminer $x_\text{max}$ et $x_\text{f}$, puis conclure sur le caractère total ou non de la transformation.
+:::
+
+## [Q.8]{custom-style="QNum"}\ \ Calculer un taux d'avancement final et conclure sur le caractère total de la transformation {#q8}
+
+::: {custom-style="Meta"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : avancement final, avancement maximal, taux d'avancement final\ \ \ [CIBLE:c_q8]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
@@ -229,56 +250,60 @@ Taux d'avancement final de la réaction d'un acide AH avec l'eau : $\tau = \dfra
 [CIBLE:c_ex1]{custom-style="BoutonCorrige"}
 :::
 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 # Thème 2 : acides, bases et pH {#theme2}
 
 ::: {custom-style="Rubrique"}
 Questions de cours
 :::
 
-## [Q.8]{custom-style="QNum"}\ \ Définir un acide et une base au sens de Brønsted et écrire un couple acide-base {#q8}
+## [Q.9]{custom-style="QNum"}\ \ Définir un acide et une base au sens de Brønsted et écrire un couple acide-base {#q9}
 
 ::: {custom-style="Meta"}
-[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : couple acide-base, demi-équation, espèce amphotère · Demandé dans au moins huit exercices en 2025 et 2026\ \ \ [CIBLE:c_q8]{custom-style="BoutonCorrige"}
+[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : couple acide-base, demi-équation, espèce amphotère · Demandé dans au moins huit exercices en 2025 et 2026\ \ \ [CIBLE:c_q9]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : définir un acide et une base au sens de Brønsted. Écrire le couple de l'acide butanoïque $\text{C}_3\text{H}_7\text{COOH}$ (odeur du beurre rance) et sa demi-équation, puis les deux couples de l'eau. Les couples $\text{CO}_2,\text{H}_2\text{O}/\text{HCO}_3^-$ et $\text{HCO}_3^-/\text{CO}_3^{2-}$ contiennent tous deux l'ion hydrogénocarbonate : comment qualifier cette espèce ?
 :::
 
-## [Q.9]{custom-style="QNum"}\ \ Écrire l'équation d'une réaction acide-base à partir de deux couples {#q9}
+## [Q.10]{custom-style="QNum"}\ \ Écrire l'équation d'une réaction acide-base à partir de deux couples {#q10}
 
 ::: {custom-style="Meta"}
-[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : demi-équations, transfert d'un proton · Demandé en 2025 (Métropole, septembre)\ \ \ [CIBLE:c_q9]{custom-style="BoutonCorrige"}
+[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : demi-équations, transfert d'un proton · Demandé en 2025 (Métropole, septembre)\ \ \ [CIBLE:c_q10]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : écrire l'équation de la réaction de l'ammoniac $\text{NH}_3$ avec l'eau, puis de l'acide éthanoïque $\text{CH}_3\text{COOH}$ avec les ions hydroxyde $\text{HO}^-$. Couples : $\text{NH}_4^{\text{+}}/\text{NH}_3$ ; $\text{CH}_3\text{COOH}/\text{CH}_3\text{COO}^-$ ; $\text{H}_3\text{O}^{\text{+}}/\text{H}_2\text{O}$ ; $\text{H}_2\text{O}/\text{HO}^-$. Identifier enfin les couples de la réaction $\text{HCOOH}(\text{aq}) + \text{NH}_3(\text{aq}) \rightarrow \text{HCOO}^-(\text{aq}) + \text{NH}_4^{\text{+}}(\text{aq})$.
 :::
 
-## [Q.10]{custom-style="QNum"}\ \ Calculer un pH ou une concentration en ions oxonium {#q10}
+## [Q.11]{custom-style="QNum"}\ \ Calculer un pH ou une concentration en ions oxonium {#q11}
 
 ::: {custom-style="Meta"}
-[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : définition du pH, logarithme décimal, chiffres significatifs\ \ \ [CIBLE:c_q10]{custom-style="BoutonCorrige"}
+[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : définition du pH, logarithme décimal, chiffres significatifs\ \ \ [CIBLE:c_q11]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : le pH d'un jus de citron vaut $2{,}70$ ; calculer sa concentration en ions oxonium. Une solution d'hydrogénocarbonate de sodium contient des ions oxonium à la concentration $4{,}0 \times 10^{-9}\ \text{mol·L}^{-1}$ ; calculer son pH. Ces deux solutions sont-elles acides, neutres ou basiques à $25\ \text{°C}$ ?
 :::
 
-## [Q.11]{custom-style="QNum"}\ \ Utiliser le produit ionique de l'eau {#q11}
+## [Q.12]{custom-style="QNum"}\ \ Utiliser le produit ionique de l'eau {#q12}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Cours · Notions : autoprotolyse de l'eau, $K_\text{e}$, solution neutre\ \ \ [CIBLE:c_q11]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Cours · Notions : autoprotolyse de l'eau, $K_\text{e}$, solution neutre\ \ \ [CIBLE:c_q12]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : écrire l'équation de l'autoprotolyse de l'eau et l'expression de son produit ionique $K_\text{e}$. À $25\ \text{°C}$, où $K_\text{e} = 1{,}0 \times 10^{-14}$, calculer la concentration en ions hydroxyde d'une solution de pH $11{,}20$, puis de pH $3{,}50$. À $37\ \text{°C}$, $K_\text{e} = 2{,}4 \times 10^{-14}$ : quel est le pH d'une solution neutre à cette température ?
 :::
 
-## [Q.12]{custom-style="QNum"}\ \ Calculer le pH d'une solution d'acide fort ou de base forte {#q12}
+## [Q.13]{custom-style="QNum"}\ \ Calculer le pH d'une solution d'acide fort ou de base forte {#q13}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : acide fort, base forte, effet d'une dilution\ \ \ [CIBLE:c_q12]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : acide fort, base forte, effet d'une dilution\ \ \ [CIBLE:c_q13]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
@@ -339,50 +364,50 @@ Couples : $\text{HCO}_3^-(\text{aq})/\text{CO}_3^{2-}(\text{aq})$ ; $\text{H}_2\
 Questions de cours
 :::
 
-## [Q.13]{custom-style="QNum"}\ \ Distinguer un acide fort d'un acide faible par une mesure de pH {#q13}
+## [Q.14]{custom-style="QNum"}\ \ Distinguer un acide fort d'un acide faible par une mesure de pH {#q14}
 
 ::: {custom-style="Meta"}
-[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : acide fort, acide faible, taux d'avancement final\ \ \ [CIBLE:c_q13]{custom-style="BoutonCorrige"}
+[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : acide fort, acide faible, taux d'avancement final\ \ \ [CIBLE:c_q14]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : on mesure à $25\ \text{°C}$ le pH de deux solutions d'acides de même concentration apportée $C = 1{,}0 \times 10^{-2}\ \text{mol·L}^{-1}$ : l'acide chlorhydrique a un pH de $2{,}00$, l'acide éthanoïque un pH de $3{,}40$. Calculer le taux d'avancement final de la réaction de chaque acide avec l'eau, puis conclure.
 :::
 
-## [Q.14]{custom-style="QNum"}\ \ Calculer le taux d'avancement final de la réaction d'une base avec l'eau {#q14}
+## [Q.15]{custom-style="QNum"}\ \ Calculer le taux d'avancement final de la réaction d'une base avec l'eau {#q15}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : base faible, produit ionique de l'eau · Demandé en 2026 (Amérique du Nord)\ \ \ [CIBLE:c_q14]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : base faible, produit ionique de l'eau · Demandé en 2026 (Amérique du Nord)\ \ \ [CIBLE:c_q15]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : une solution d'ammoniac de concentration apportée $C = 1{,}0 \times 10^{-2}\ \text{mol·L}^{-1}$ a un pH de $10{,}60$ à $25\ \text{°C}$. Écrire l'équation de la réaction de l'ammoniac avec l'eau, calculer le taux d'avancement final de cette réaction et conclure sur la force de cette base. Donnée : $K_\text{e} = 1{,}0 \times 10^{-14}$.
 :::
 
-## [Q.15]{custom-style="QNum"}\ \ Associer constante d'acidité et $\text{p}K_\text{A}$, et classer des acides selon leur force {#q15}
+## [Q.16]{custom-style="QNum"}\ \ Associer constante d'acidité et $\text{p}K_\text{A}$, et classer des acides selon leur force {#q16}
 
 ::: {custom-style="Meta"}
-[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : constante d'acidité, $\text{p}K_\text{A}$, base conjuguée · Demandé en 2026 (Antilles-Guyane, Métropole)\ \ \ [CIBLE:c_q15]{custom-style="BoutonCorrige"}
+[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : constante d'acidité, $\text{p}K_\text{A}$, base conjuguée · Demandé en 2026 (Antilles-Guyane, Métropole)\ \ \ [CIBLE:c_q16]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : écrire l'expression de la constante d'acidité $K_\text{A}$ du couple $\text{HClO}(\text{aq})/\text{ClO}^-(\text{aq})$, puis calculer sa valeur sachant que son $\text{p}K_\text{A}$ vaut $7{,}5$. Classer ensuite par force croissante les acides suivants, puis leurs bases conjuguées : acide méthanoïque $\text{HCOOH}$ ($\text{p}K_\text{A} = 3{,}8$) ; acide éthanoïque $\text{CH}_3\text{COOH}$ ($\text{p}K_\text{A} = 4{,}8$) ; acide hypochloreux $\text{HClO}$ ($\text{p}K_\text{A} = 7{,}5$) ; ion ammonium $\text{NH}_4^{\text{+}}$ ($\text{p}K_\text{A} = 9{,}2$).
 :::
 
-## [Q.16]{custom-style="QNum"}\ \ Déterminer une constante d'acidité à partir d'une mesure de pH {#q16}
+## [Q.17]{custom-style="QNum"}\ \ Déterminer une constante d'acidité à partir d'une mesure de pH {#q17}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : état final, concentrations à l'équilibre, $K_\text{A}$ · Demandé en 2025 (Métropole, septembre)\ \ \ [CIBLE:c_q16]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : état final, concentrations à l'équilibre, $K_\text{A}$ · Demandé en 2025 (Métropole, septembre)\ \ \ [CIBLE:c_q17]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : une solution d'acide éthanoïque de concentration apportée $C = 1{,}0 \times 10^{-2}\ \text{mol·L}^{-1}$ a un pH de $3{,}40$ à $25\ \text{°C}$. Déterminer les concentrations de l'acide éthanoïque et de l'ion éthanoate à l'état final, puis calculer la constante d'acidité et le $\text{p}K_\text{A}$ du couple $\text{CH}_3\text{COOH}/\text{CH}_3\text{COO}^-$.
 :::
 
-## [Q.17]{custom-style="QNum"}\ \ Prévoir l'état final d'une solution d'acide faible : équation du second degré, pH et taux d'avancement {#q17}
+## [Q.18]{custom-style="QNum"}\ \ Prévoir l'état final d'une solution d'acide faible : équation du second degré, pH et taux d'avancement {#q18}
 
 ::: {custom-style="Meta"}
-[\ Objectif 18\ ]{custom-style="Niv18"}\ \ Méthode · Notions : état final, constante d'acidité, équation du second degré, taux d'avancement final\ \ \ [CIBLE:c_q17]{custom-style="BoutonCorrige"}
+[\ Objectif 18\ ]{custom-style="Niv18"}\ \ Méthode · Notions : état final, constante d'acidité, équation du second degré, taux d'avancement final\ \ \ [CIBLE:c_q18]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
@@ -433,36 +458,42 @@ $\text{p}K_\text{A}(\text{BH}^{\text{+}}/\text{B}) = 9{,}5$ ; $\text{p}K_\text{A
 [CIBLE:c_ex3]{custom-style="BoutonCorrige"}
 :::
 
+<!--debut:complet-->
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
+<!--fin:complet-->
 # Thème 4 : diagrammes, indicateurs colorés et solutions tampons {#theme4}
 
 ::: {custom-style="Rubrique"}
 Questions de cours
 :::
 
-## [Q.18]{custom-style="QNum"}\ \ Tracer un diagramme de prédominance et en déduire la forme prédominante {#q18}
+## [Q.19]{custom-style="QNum"}\ \ Tracer un diagramme de prédominance et en déduire la forme prédominante {#q19}
 
 ::: {custom-style="Meta"}
-[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : $\text{p}K_\text{A}$, forme acide, forme basique · Demandé dans au moins huit exercices en 2025 et 2026\ \ \ [CIBLE:c_q18]{custom-style="BoutonCorrige"}
+[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : $\text{p}K_\text{A}$, forme acide, forme basique · Demandé dans au moins huit exercices en 2025 et 2026\ \ \ [CIBLE:c_q19]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : l'ibuprofène, principe actif de nombreux anti-inflammatoires, est un acide carboxylique noté AH ; le $\text{p}K_\text{A}$ du couple $\text{AH}/\text{A}^-$ vaut $4{,}4$. Tracer le diagramme de prédominance de ce couple. Sous quelle forme l'ibuprofène se trouve-t-il majoritairement dans l'estomac, où le pH vaut environ 2, puis dans l'intestin, où il vaut environ 8 ?
 :::
 
-## [Q.19]{custom-style="QNum"}\ \ Relier le pH, le $\text{p}K_\text{A}$ et le rapport des concentrations des deux formes {#q19}
+## [Q.20]{custom-style="QNum"}\ \ Relier le pH, le $\text{p}K_\text{A}$ et le rapport des concentrations des deux formes {#q20}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : constante d'acidité, rapport des concentrations, pourcentage d'une forme · Demandé en 2026 (Antilles-Guyane)\ \ \ [CIBLE:c_q19]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : constante d'acidité, rapport des concentrations, pourcentage d'une forme · Demandé en 2026 (Antilles-Guyane)\ \ \ [CIBLE:c_q20]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : dans le sang, le pH vaut $7{,}40$ et le couple $\text{CO}_2,\text{H}_2\text{O}/\text{HCO}_3^-$ a un $\text{p}K_\text{A}$ de $6{,}10$ à $37\ \text{°C}$. À partir de l'expression de la constante d'acidité, établir la relation entre le pH, le $\text{p}K_\text{A}$ et le rapport $[\text{HCO}_3^-]/[\text{CO}_2]$, puis calculer ce rapport. Quel pourcentage du carbone dissous de ce couple se trouve sous forme $\text{HCO}_3^-$ ?
 :::
 
-## [Q.20]{custom-style="QNum"}\ \ Exploiter un diagramme de distribution {#q20}
+## [Q.21]{custom-style="QNum"}\ \ Exploiter un diagramme de distribution {#q21}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : courbes de distribution, lecture des $\text{p}K_\text{A}$, espèce amphotère · Demandé en 2025 et 2026\ \ \ [CIBLE:c_q20]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : courbes de distribution, lecture des $\text{p}K_\text{A}$, espèce amphotère · Demandé en 2025 et 2026\ \ \ [CIBLE:c_q21]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
@@ -477,10 +508,10 @@ Application : la figure 1 donne le pourcentage de chacune des trois espèces $\t
 Figure 1. Diagramme de distribution des espèces issues du dioxyde de carbone dissous
 :::
 
-## [Q.21]{custom-style="QNum"}\ \ Choisir un indicateur coloré de fin de titrage {#q21}
+## [Q.22]{custom-style="QNum"}\ \ Choisir un indicateur coloré de fin de titrage {#q22}
 
 ::: {custom-style="Meta"}
-[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : zone de virage, teinte acide, teinte basique · Demandé en 2025 (Métropole, Amérique du Nord)\ \ \ [CIBLE:c_q21]{custom-style="BoutonCorrige"}
+[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : zone de virage, teinte acide, teinte basique · Demandé en 2025 (Métropole, Amérique du Nord)\ \ \ [CIBLE:c_q22]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
@@ -495,20 +526,20 @@ Application : on dispose des trois indicateurs colorés du tableau ci-dessous. D
 | Bleu de bromothymol | jaune | 6,0 à 7,6 | bleu |
 | Phénolphtaléine | incolore | 8,2 à 10,0 | rose |
 
-## [Q.22]{custom-style="QNum"}\ \ Exploiter un diagramme de prédominance à deux $\text{p}K_\text{A}$ {#q22}
+## [Q.23]{custom-style="QNum"}\ \ Exploiter un diagramme de prédominance à deux $\text{p}K_\text{A}$ {#q23}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : acide α-aminé, amphion, espèce amphotère · Demandé en 2025 (Amérique du Nord)\ \ \ [CIBLE:c_q22]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : acide α-aminé, amphion, espèce amphotère · Demandé en 2025 (Amérique du Nord)\ \ \ [CIBLE:c_q23]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
 Application : la glycine, le plus simple des acides α-aminés, existe sous trois formes en solution aqueuse : un cation $\text{H}_3\text{N}^{\text{+}}\text{-CH}_2\text{-COOH}$, un amphion $\text{H}_3\text{N}^{\text{+}}\text{-CH}_2\text{-COO}^-$ et un anion $\text{H}_2\text{N-CH}_2\text{-COO}^-$. Les deux couples qu'elles forment ont pour $\text{p}K_\text{A}$ $2{,}3$ et $9{,}6$. Associer chaque $\text{p}K_\text{A}$ à un couple, tracer le diagramme de prédominance, puis indiquer la forme prédominante à pH 1, à pH 6 et à pH 12.
 :::
 
-## [Q.23]{custom-style="QNum"}\ \ Citer les propriétés d'une solution tampon {#q23}
+## [Q.24]{custom-style="QNum"}\ \ Citer les propriétés d'une solution tampon {#q24}
 
 ::: {custom-style="Meta"}
-[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : solution tampon, mélange d'un acide et de sa base conjuguée\ \ \ [CIBLE:c_q23]{custom-style="BoutonCorrige"}
+[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : solution tampon, mélange d'un acide et de sa base conjuguée\ \ \ [CIBLE:c_q24]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
@@ -591,7 +622,7 @@ $$n = 2{,}00 \times 10^{-2} \times 0{,}2500 = 5{,}00 \times 10^{-3}\ \text{mol} 
 Pour un gaz, $n = \dfrac{V}{V_\text{m}}$, donc $V = n \times V_\text{m} = 1{,}0 \times 10^{-2} \times 24{,}0 = 0{,}24\ \text{L}$.
 
 ::: {custom-style="Retenir"}
-$n = \dfrac{m}{M} = C \times V = \dfrac{V_\text{gaz}}{V_\text{m}}$, avec les volumes en litre et $V_\text{m}$ en $\text{L·mol}^{-1}$
+$n = \dfrac{m}{M} = C \times V$ ; pour un gaz, $n = \dfrac{V_\text{gaz}}{V_\text{m}}$, avec les volumes en litre et $V_\text{m}$ en $\text{L·mol}^{-1}$
 :::
 
 ::: {custom-style="Piege"}
@@ -704,13 +735,15 @@ $$n(\text{CaCO}_3) = \dfrac{2{,}0}{100{,}1} = 2{,}0 \times 10^{-2}\ \text{mol} \
 
 Si le calcaire était limitant, on aurait $x_\text{max} = 2{,}0 \times 10^{-2}\ \text{mol}$ ; si les ions oxonium l'étaient, $2{,}5 \times 10^{-2} - 2\,x_\text{max} = 0$, soit $x_\text{max} = 1{,}25 \times 10^{-2}\ \text{mol}$. L'avancement maximal est la plus petite de ces deux valeurs : les ions oxonium sont le réactif limitant et $x_\text{max} = 1{,}25 \times 10^{-2}\ \text{mol}$. L'eau, solvant, est en excès : on ne suit pas sa quantité.
 
-<!--colonnes: 13 25 17 17 14 14-->
+Le tableau d'avancement résume l'évolution du système.
 
-| État | Avancement (mol) | n(CaCO~3~) (mol) | n(H~3~O^+^) (mol) | n(Ca^2+^) (mol) | n(CO~2~) (mol) |
-|---|---|---|---|---|---|
-| Initial | $0$ | $2{,}0 \times 10^{-2}$ | $2{,}5 \times 10^{-2}$ | $0$ | $0$ |
-| En cours | $x$ | $2{,}0 \times 10^{-2} - x$ | $2{,}5 \times 10^{-2} - 2x$ | $x$ | $x$ |
-| Final | $x_\text{max} = 1{,}25 \times 10^{-2}$ | $7{,}5 \times 10^{-3}$ | $0$ | $1{,}25 \times 10^{-2}$ | $1{,}25 \times 10^{-2}$ |
+<!--colonnes: 10.5 12.8 16.4 17.6 4.1 13 13 12.6-->
+
+| État du système | Avancement (mol) | CaCO~3~(s) | \+ 2 H~3~O^+^(aq) | → | Ca^2+^(aq) | \+ CO~2~(g) | \+ 3 H~2~O(ℓ) |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| État initial | $0$ | $2{,}0 \times 10^{-2}$ | $2{,}5 \times 10^{-2}$ | | $0$ | $0$ | excès |
+| En cours | $x$ | $2{,}0 \times 10^{-2} - x$ | $2{,}5 \times 10^{-2} - 2x$ | | $x$ | $x$ | excès |
+| État final | $x_\text{max}$ | $7{,}5 \times 10^{-3}$ | $0$ | | $1{,}25 \times 10^{-2}$ | $1{,}25 \times 10^{-2}$ | excès |
 
 Le volume de gaz dégagé et la masse de calcaire restante valent :
 
@@ -728,10 +761,49 @@ Le réactif limitant est celui qui conduit à la plus petite valeur de $x_\text{
 [Remarque.]{custom-style="EtiqRemarque"} Un mélange est stœchiométrique quand les réactifs sont dans les proportions de l'équation : ils disparaissent alors ensemble, et $x_\text{max}$ est le même pour chacun. Il ne faut pas le confondre avec un mélange équimolaire, où les quantités initiales sont égales. Ici, le mélange stœchiométrique demanderait $n(\text{H}_3\text{O}^{\text{+}}) = 2\,n(\text{CaCO}_3)$.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.7 · Calculer un taux d'avancement final et conclure sur le caractère total de la transformation {#c_q7}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.7 · Distinguer l'avancement final de l'avancement maximal {#c_q7}
 
 ::: {custom-style="Renvoi"}
 [CIBLE:q7]{custom-style="BoutonEnonce"}
+:::
+
+L'avancement $x$ compte, en mole, combien de fois la réaction s'est produite telle que l'écrit son équation. Deux valeurs sont à distinguer :
+
+- l'avancement maximal $x_\text{max}$ est la valeur qu'atteindrait $x$ si la réaction ne s'arrêtait qu'à l'épuisement du réactif limitant. Il se calcule sur le papier, avant toute mesure, à partir des quantités initiales et de l'équation (Q.6) ;
+- l'avancement final $x_\text{f}$ est la valeur réellement atteinte quand le système n'évolue plus. Il se déduit d'une mesure faite dans l'état final (pH, titrage, volume de gaz, masse de produit), ou se calcule avec la constante d'équilibre (Q.18).
+
+Une réaction ne peut pas consommer plus de réactif qu'il n'y en a : $x_\text{f} \leq x_\text{max}$. Si $x_\text{f} = x_\text{max}$, le réactif limitant a disparu : la transformation est totale. Si $x_\text{f} < x_\text{max}$, la transformation s'arrête alors qu'il reste de chaque réactif : elle est non totale, et l'état final contient tous les réactifs et tous les produits.
+
+Une image aide à retenir la différence. Pour un sandwich, il faut deux tranches de pain et une tranche de jambon. Avec dix tranches de pain et trois de jambon, on peut en faire trois au plus : le jambon est le « réactif limitant », et ce maximum, connu avant de commencer, joue le rôle de $x_\text{max}$. Le nombre de sandwichs vraiment prêts à la fin, que l'on compte, joue le rôle de $x_\text{f}$. S'il y en a trois, il ne reste plus de jambon : la transformation est totale. S'il n'y en a que deux alors qu'il reste du pain et du jambon, elle est non totale. Imaginez un second cuisinier chargé de défaire les sandwichs : une fois deux sandwichs prêts, il en défait autant que le premier en prépare, et leur nombre ne bouge plus. En chimie, à l'état final, la réaction inverse défait les produits au même rythme que la réaction directe les forme : l'avancement reste égal à $x_\text{f}$.
+
+Pour l'acide éthanoïque, l'eau est le solvant, en excès : l'acide est le réactif limitant, et $x_\text{max}$ est la quantité d'acide apportée. Chaque molécule d'acide qui réagit forme un ion oxonium : $x_\text{f}$ est la quantité d'ions oxonium formés.
+
+$$x_\text{max} = n_\text{i}(\text{CH}_3\text{COOH}) = 1{,}0 \times 10^{-3}\ \text{mol} \qquad x_\text{f} = n_\text{f}(\text{H}_3\text{O}^{\text{+}}) = 4{,}0 \times 10^{-5}\ \text{mol}$$
+
+L'avancement final est 25 fois plus petit que l'avancement maximal : il reste $1{,}0 \times 10^{-3} - 4{,}0 \times 10^{-5} = 9{,}6 \times 10^{-4}\ \text{mol}$ d'acide, presque tout l'acide apporté. La transformation n'est pas totale et son équation s'écrit avec le symbole $\rightleftarrows$. Le tableau d'avancement place côte à côte l'état final observé et celui qu'atteindrait une transformation totale.
+
+<!--colonnes: 12 19 16 12 5 18 18-->
+
+| État du système | Avancement (mol) | CH~3~COOH(aq) | \+ H~2~O(ℓ) | ⇄ | CH~3~COO^−^(aq) | \+ H~3~O^+^(aq) |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|
+| État initial | $0$ | $1{,}0 \times 10^{-3}$ | excès | | $0$ | $0$ |
+| État final | $x_\text{f} = 4{,}0 \times 10^{-5}$ | $9{,}6 \times 10^{-4}$ | excès | | $4{,}0 \times 10^{-5}$ | $4{,}0 \times 10^{-5}$ |
+| Si totale | $x_\text{max} = 1{,}0 \times 10^{-3}$ | $0$ | excès | | $1{,}0 \times 10^{-3}$ | $1{,}0 \times 10^{-3}$ |
+
+Le rapport $\dfrac{x_\text{f}}{x_\text{max}} = 0{,}040$ est le taux d'avancement final (Q.8) : seules $4{,}0\ \%$ des molécules d'acide ont réagi avec l'eau.
+
+::: {custom-style="Retenir"}
+$x_\text{max}$ se calcule à partir de l'état initial, en supposant le réactif limitant épuisé ; $x_\text{f}$ décrit l'état final réellement atteint. On a toujours $x_\text{f} \leq x_\text{max}$ ; l'égalité n'a lieu que pour une transformation totale.
+:::
+
+::: {custom-style="Piege"}
+[Piège.]{custom-style="EtiqPiege"} Confondre « non totale » et « lente ». Une transformation lente mais totale finit par atteindre $x_\text{max}$ ; une transformation non totale s'arrête à $x_\text{f} < x_\text{max}$, et attendre plus longtemps n'y change rien.
+:::
+
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.8 · Calculer un taux d'avancement final et conclure sur le caractère total de la transformation {#c_q8}
+
+::: {custom-style="Renvoi"}
+[CIBLE:q8]{custom-style="BoutonEnonce"}
 :::
 
 L'acide éthanoïque apporte $n_0 = \dfrac{9{,}0}{60{,}0} = 0{,}15\ \text{mol}$. Les deux réactifs réagissent mole à mole et sont apportés en quantités égales : aucun n'est en excès et $x_\text{max} = 0{,}15\ \text{mol}$.
@@ -778,15 +850,15 @@ La dose est diluée 20 fois dans la bouilloire.
 **3.** Le tartre peut-il être entièrement dissous ?
 :::
 
-Le tartre apporte $n(\text{CaCO}_3) = \dfrac{15{,}0}{100{,}1} = 0{,}150\ \text{mol}$. Le tableau ne reprend que les espèces utiles.
+Le tartre apporte $n(\text{CaCO}_3) = \dfrac{15{,}0}{100{,}1} = 0{,}150\ \text{mol}$. Le tableau d'avancement de la réaction de détartrage est le suivant.
 
-<!--colonnes: 16 22 20 22 20-->
+<!--colonnes: 10.3 12.6 14.1 15.6 4.1 10.3 11.5 10.6 10.9-->
 
-| État | Avancement (mol) | n(CaCO~3~) (mol) | n(AH) (mol) | n(CO~2~) (mol) |
-|---|---|---|---|---|
-| Initial | $0$ | $0{,}150$ | $0{,}382$ | $0$ |
-| En cours | $x$ | $0{,}150 - x$ | $0{,}382 - 2x$ | $x$ |
-| Final | $x_\text{max}$ | $0{,}150 - x_\text{max}$ | $0{,}382 - 2x_\text{max}$ | $x_\text{max}$ |
+| État du système | Avancement (mol) | CaCO~3~(s) | \+ 2 AH(aq) | → | Ca^2+^(aq) | \+ 2 A^−^(aq) | \+ CO~2~(g) | \+ H~2~O(ℓ) |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| État initial | $0$ | $0{,}150$ | $0{,}382$ | | $0$ | $0$ | $0$ | excès |
+| En cours | $x$ | $0{,}150 - x$ | $0{,}382 - 2x$ | | $x$ | $2x$ | $x$ | excès |
+| État final | $x_\text{max}$ | $0{,}150 - x_\text{max}$ | $0{,}382 - 2x_\text{max}$ | | $x_\text{max}$ | $2x_\text{max}$ | $x_\text{max}$ | excès |
 
 Si le tartre est limitant, $x_\text{max} = 0{,}150\ \text{mol}$ ; si l'acide l'est, $x_\text{max} = \dfrac{0{,}382}{2} = 0{,}191\ \text{mol}$. La plus petite valeur l'emporte : le tartre est le réactif limitant, $x_\text{max} = 0{,}150\ \text{mol}$, et il est entièrement dissous. Il reste $0{,}382 - 2 \times 0{,}150 = 0{,}082\ \text{mol}$ d'acide lactique.
 
@@ -822,10 +894,10 @@ Seules $2{,}1\ \%$ des molécules d'acide lactique ont réagi avec l'eau : la tr
 
 # Corrigés du thème 2 : acides, bases et pH {#c_theme2}
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.8 · Définir un acide et une base au sens de Brønsted et écrire un couple acide-base {#c_q8}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.9 · Définir un acide et une base au sens de Brønsted et écrire un couple acide-base {#c_q9}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q8]{custom-style="BoutonEnonce"}
+[CIBLE:q9]{custom-style="BoutonEnonce"}
 :::
 
 Au sens de Brønsted, un acide est une espèce chimique capable de céder un proton $\text{H}^{\text{+}}$ ; une base est une espèce chimique capable de capter un proton $\text{H}^{\text{+}}$. Un acide AH et sa base conjuguée $\text{A}^-$ forment un couple acide-base, noté $\text{AH}/\text{A}^-$, et sont reliés par une demi-équation.
@@ -846,10 +918,10 @@ Couple $\text{AH}/\text{A}^-$ : $\text{AH} = \text{A}^- + \text{H}^{\text{+}}$. 
 [Piège.]{custom-style="EtiqPiege"} Juger l'acidité au nombre d'atomes d'hydrogène. L'acide butanoïque en compte huit mais n'en cède qu'un, celui du groupe $\text{-COOH}$ ; le méthane $\text{CH}_4$ n'est pas un acide. La force d'un acide se compare avec son $\text{p}K_\text{A}$ (thème 3).
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.9 · Écrire l'équation d'une réaction acide-base à partir de deux couples {#c_q9}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.10 · Écrire l'équation d'une réaction acide-base à partir de deux couples {#c_q10}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q9]{custom-style="BoutonEnonce"}
+[CIBLE:q10]{custom-style="BoutonEnonce"}
 :::
 
 ::: {custom-style="Methode"}
@@ -869,17 +941,17 @@ $$\text{CH}_3\text{COOH}(\text{aq}) + \text{HO}^-(\text{aq}) \rightarrow \text{C
 Pour retrouver les couples d'une équation donnée, on part d'un réactif et l'on cherche, parmi les produits, l'espèce qu'il donne en perdant ou en gagnant un proton. L'acide méthanoïque $\text{HCOOH}$ perd un proton pour donner $\text{HCOO}^-$, qui figure parmi les produits : couple $\text{HCOOH}/\text{HCOO}^-$. L'ammoniac $\text{NH}_3$ gagne un proton pour donner $\text{NH}_4^{\text{+}}$, lui aussi présent parmi les produits : couple $\text{NH}_4^{\text{+}}/\text{NH}_3$.
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} Le symbole $\rightleftarrows$ signale une transformation non totale : l'ammoniac est une base faible (Q.14). La réaction d'un acide avec les ions hydroxyde est au contraire totale, ce qui permet de l'utiliser pour un titrage.
+[Remarque.]{custom-style="EtiqRemarque"} Le symbole $\rightleftarrows$ signale une transformation non totale : l'ammoniac est une base faible (Q.15). La réaction d'un acide avec les ions hydroxyde est au contraire totale, ce qui permet de l'utiliser pour un titrage.
 :::
 
 ::: {custom-style="Piege"}
 [Piège.]{custom-style="EtiqPiege"} Laisser des protons $\text{H}^{\text{+}}$ dans l'équation finale : ils doivent disparaître quand on additionne les deux demi-équations.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.10 · Calculer un pH ou une concentration en ions oxonium {#c_q10}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.11 · Calculer un pH ou une concentration en ions oxonium {#c_q11}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q10]{custom-style="BoutonEnonce"}
+[CIBLE:q11]{custom-style="BoutonEnonce"}
 :::
 
 Avec la concentration standard $c^\circ = 1\ \text{mol·L}^{-1}$ :
@@ -898,10 +970,10 @@ Le pH s'écrit avec autant de décimales que la concentration en ions oxonium a 
 [Méthode.]{custom-style="EtiqMethode"} À la calculatrice, la touche $10^x$ donne la concentration à partir du pH, la touche log donne le pH à partir de la concentration ; on n'oublie pas le signe moins.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.11 · Utiliser le produit ionique de l'eau {#c_q11}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.12 · Utiliser le produit ionique de l'eau {#c_q12}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q11]{custom-style="BoutonEnonce"}
+[CIBLE:q12]{custom-style="BoutonEnonce"}
 :::
 
 $$2\,\text{H}_2\text{O}(\ell) \rightleftarrows \text{H}_3\text{O}^{\text{+}}(\text{aq}) + \text{HO}^-(\text{aq}) \qquad K_\text{e} = \dfrac{[\text{H}_3\text{O}^{\text{+}}] \times [\text{HO}^-]}{c^{\circ 2}}$$
@@ -920,10 +992,10 @@ $$[\text{H}_3\text{O}^{\text{+}}] = \sqrt{2{,}4 \times 10^{-14}} = 1{,}55 \times
 À $25\ \text{°C}$ : $[\text{HO}^-] = c^\circ \times 10^{\text{pH} - 14}$. Le pH d'une solution neutre ne vaut 7 qu'à $25\ \text{°C}$.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.12 · Calculer le pH d'une solution d'acide fort ou de base forte {#c_q12}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.13 · Calculer le pH d'une solution d'acide fort ou de base forte {#c_q13}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q12]{custom-style="BoutonEnonce"}
+[CIBLE:q13]{custom-style="BoutonEnonce"}
 :::
 
 Le chlorure d'hydrogène, acide fort, réagit totalement avec l'eau : $[\text{H}_3\text{O}^{\text{+}}] = C$.
@@ -1000,23 +1072,27 @@ Seuls $4{,}0\ \%$ des ions carbonate ont réagi : la transformation n'est pas to
 [Rédaction.]{custom-style="EtiqRedaction"} « Le taux d'avancement final vaut $4{,}0\ \%$ : l'ion carbonate est une base faible. Presque tous les ions carbonate restent sous cette forme, et la lessive peut être assimilée à une solution d'ions carbonate. »
 :::
 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 # Corrigés du thème 3 : force des acides et des bases {#c_theme3}
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.13 · Distinguer un acide fort d'un acide faible par une mesure de pH {#c_q13}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.14 · Distinguer un acide fort d'un acide faible par une mesure de pH {#c_q14}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q13]{custom-style="BoutonEnonce"}
+[CIBLE:q14]{custom-style="BoutonEnonce"}
 :::
 
 Pour un acide AH apporté à la concentration $C$ dans un volume $V$, la réaction avec l'eau s'écrit $\text{AH} + \text{H}_2\text{O} \rightleftarrows \text{A}^- + \text{H}_3\text{O}^{\text{+}}$. Si elle était totale, tout l'acide réagirait : $x_\text{max} = C \times V$. L'avancement final vaut $x_\text{f} = [\text{H}_3\text{O}^{\text{+}}]_\text{f} \times V$, donc $\tau = \dfrac{x_\text{f}}{x_\text{max}} = \dfrac{[\text{H}_3\text{O}^{\text{+}}]_\text{f}}{C}$.
 
-<!--colonnes: 25 21 18 18 18-->
+<!--colonnes: 12 19 17 13 5 16 18-->
 
-| État | Avancement (mol) | n(AH) (mol) | n(A^-^) (mol) | n(H~3~O^+^) (mol) |
-|---|---|---|---|---|
-| Initial | $0$ | $C \times V$ | $0$ | $0$ |
-| Final observé | $x_\text{f}$ | $C \times V - x_\text{f}$ | $x_\text{f}$ | $x_\text{f}$ |
-| Si la réaction était totale | $x_\text{max} = C \times V$ | $0$ | $C \times V$ | $C \times V$ |
+| État du système | Avancement (mol) | AH(aq) | \+ H~2~O(ℓ) | ⇄ | A^−^(aq) | \+ H~3~O^+^(aq) |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|
+| État initial | $0$ | $C \times V$ | excès | | $0$ | $0$ |
+| État final | $x_\text{f}$ | $C \times V - x_\text{f}$ | excès | | $x_\text{f}$ | $x_\text{f}$ |
+| Si totale | $x_\text{max} = C \times V$ | $0$ | excès | | $C \times V$ | $C \times V$ |
 
 On en tire $[\text{A}^-]_\text{f} = [\text{H}_3\text{O}^{\text{+}}]_\text{f}$ et $[\text{AH}]_\text{f} = C - [\text{H}_3\text{O}^{\text{+}}]_\text{f}$.
 
@@ -1036,10 +1112,10 @@ Acide fort : réaction totale avec l'eau et $\text{pH} = -\log\dfrac{C}{c^\circ}
 [Remarque.]{custom-style="EtiqRemarque"} On néglige ici les ions oxonium apportés par l'autoprotolyse de l'eau, ce qui est légitime tant que le pH reste nettement inférieur à 7. À volume constant, on peut aussi raisonner avec l'avancement volumique $y = x/V$, en $\text{mol·L}^{-1}$ : $y_\text{f} = [\text{H}_3\text{O}^{\text{+}}]_\text{f}$ et $y_\text{max} = C$.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.14 · Calculer le taux d'avancement final de la réaction d'une base avec l'eau {#c_q14}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.15 · Calculer le taux d'avancement final de la réaction d'une base avec l'eau {#c_q15}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q14]{custom-style="BoutonEnonce"}
+[CIBLE:q15]{custom-style="BoutonEnonce"}
 :::
 
 $$\text{NH}_3(\text{aq}) + \text{H}_2\text{O}(\ell) \rightleftarrows \text{NH}_4^{\text{+}}(\text{aq}) + \text{HO}^-(\text{aq})$$
@@ -1058,10 +1134,10 @@ Base apportée à la concentration $C$ : $\tau = \dfrac{[\text{HO}^-]_\text{f}}{
 [Piège.]{custom-style="EtiqPiege"} Diviser $[\text{H}_3\text{O}^{\text{+}}]$ par $C$. Pour une base, ce sont les ions hydroxyde qui se forment, et il faut passer par $K_\text{e}$ pour obtenir leur concentration.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.15 · Associer constante d'acidité et $\text{p}K_\text{A}$, et classer des acides selon leur force {#c_q15}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.16 · Associer constante d'acidité et $\text{p}K_\text{A}$, et classer des acides selon leur force {#c_q16}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q15]{custom-style="BoutonEnonce"}
+[CIBLE:q16]{custom-style="BoutonEnonce"}
 :::
 
 $$K_\text{A} = \dfrac{[\text{ClO}^-]_\text{éq} \times [\text{H}_3\text{O}^{\text{+}}]_\text{éq}}{[\text{HClO}]_\text{éq} \times c^\circ} \qquad K_\text{A} = 10^{-\text{p}K_\text{A}} = 10^{-7{,}5} = 3{,}2 \times 10^{-8}$$
@@ -1082,10 +1158,10 @@ $\text{p}K_\text{A} = -\log K_\text{A}$ et $K_\text{A} = 10^{-\text{p}K_\text{A}
 [Remarque.]{custom-style="EtiqRemarque"} $K_\text{A}$ est sans unité, car les concentrations y sont divisées par $c^\circ = 1\ \text{mol·L}^{-1}$. Sa valeur ne dépend que de la température. Un $\text{p}K_\text{A}$ donné avec une décimale ne fixe $K_\text{A}$ qu'à un chiffre significatif ; on en garde deux dans les calculs.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.16 · Déterminer une constante d'acidité à partir d'une mesure de pH {#c_q16}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.17 · Déterminer une constante d'acidité à partir d'une mesure de pH {#c_q17}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q16]{custom-style="BoutonEnonce"}
+[CIBLE:q17]{custom-style="BoutonEnonce"}
 :::
 
 ::: {custom-style="Methode"}
@@ -1106,10 +1182,10 @@ Soit $\text{p}K_\text{A} = 4{,}8$ avec deux chiffres significatifs.
 [Piège.]{custom-style="EtiqPiege"} Prendre $[\text{CH}_3\text{COOH}]_\text{éq} = C$ sans le dire. Cette approximation n'est acceptable que si l'acide a très peu réagi, et elle doit être signalée.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.17 · Prévoir l'état final d'une solution d'acide faible : équation du second degré, pH et taux d'avancement {#c_q17}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.18 · Prévoir l'état final d'une solution d'acide faible : équation du second degré, pH et taux d'avancement {#c_q18}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q17]{custom-style="BoutonEnonce"}
+[CIBLE:q18]{custom-style="BoutonEnonce"}
 :::
 
 ::: {custom-style="Methode"}
@@ -1118,12 +1194,12 @@ Soit $\text{p}K_\text{A} = 4{,}8$ avec deux chiffres significatifs.
 
 La réaction de l'acide avec l'eau, $\text{CH}_3\text{COOH} + \text{H}_2\text{O} \rightleftarrows \text{CH}_3\text{COO}^- + \text{H}_3\text{O}^{\text{+}}$, aurait pour avancement maximal, si elle était totale, $x_\text{max} = C \times V = 1{,}0 \times 10^{-2} \times 0{,}1000 = 1{,}0 \times 10^{-3}\ \text{mol}$ ; l'eau, solvant, est en excès.
 
-<!--colonnes: 20 20 20 20 20-->
+<!--colonnes: 13 15 18 13 5 19 17-->
 
-| État | Avancement (mol) | n(CH~3~COOH) (mol) | n(CH~3~COO^-^) (mol) | n(H~3~O^+^) (mol) |
-|---|---|---|---|---|
-| Initial | $0$ | $C \times V$ | $0$ | $0$ |
-| Final | $x_\text{f}$ | $C \times V - x_\text{f}$ | $x_\text{f}$ | $x_\text{f}$ |
+| État du système | Avancement (mol) | CH~3~COOH(aq) | \+ H~2~O(ℓ) | ⇄ | CH~3~COO^−^(aq) | \+ H~3~O^+^(aq) |
+|:--|:-:|:-:|:-:|:-:|:-:|:-:|
+| État initial | $0$ | $C \times V$ | excès | | $0$ | $0$ |
+| État final | $x_\text{f}$ | $C \times V - x_\text{f}$ | excès | | $x_\text{f}$ | $x_\text{f}$ |
 
 Les ions de l'autoprotolyse de l'eau sont négligeables : $[\text{CH}_3\text{COO}^-]_\text{éq} = [\text{H}_3\text{O}^{\text{+}}]_\text{éq} = \dfrac{x_\text{f}}{V}$ et $[\text{CH}_3\text{COOH}]_\text{éq} = \dfrac{C \times V - x_\text{f}}{V}$. En exprimant $C$ en $\text{mol·L}^{-1}$ et $V$ en litre, ce qui revient à diviser les concentrations par $c^\circ = 1\ \text{mol·L}^{-1}$, l'expression de $K_\text{A}$ devient :
 
@@ -1137,7 +1213,9 @@ Avec les données, $K_\text{A} \times V = 1{,}7 \times 10^{-6}$ et $K_\text{A} \
 
 $$x_\text{f}^2 + 1{,}7 \times 10^{-6}\, x_\text{f} - 1{,}7 \times 10^{-9} = 0 \qquad \Delta = \left(1{,}7 \times 10^{-6}\right)^2 + 4 \times 1{,}7 \times 10^{-9} = 6{,}80 \times 10^{-9}$$
 
-$$x_1 = \dfrac{-1{,}7 \times 10^{-6} + \sqrt{6{,}80 \times 10^{-9}}}{2} = 4{,}04 \times 10^{-5}\ \text{mol} \qquad x_2 = \dfrac{-1{,}7 \times 10^{-6} - \sqrt{6{,}80 \times 10^{-9}}}{2} = -4{,}21 \times 10^{-5}\ \text{mol}$$
+$$x_1 = \dfrac{-1{,}7 \times 10^{-6} + \sqrt{6{,}80 \times 10^{-9}}}{2} = 4{,}04 \times 10^{-5}\ \text{mol}$$
+
+$$x_2 = \dfrac{-1{,}7 \times 10^{-6} - \sqrt{6{,}80 \times 10^{-9}}}{2} = -4{,}21 \times 10^{-5}\ \text{mol}$$
 
 Un avancement final est positif et inférieur à $x_\text{max}$ : seule la racine $x_1$ convient, donc $x_\text{f} = 4{,}04 \times 10^{-5}\ \text{mol}$. On garde ici un chiffre significatif de plus dans les résultats intermédiaires.
 
@@ -1145,7 +1223,7 @@ $$[\text{H}_3\text{O}^{\text{+}}]_\text{éq} = \dfrac{x_\text{f}}{V} = \dfrac{4{
 
 $$\tau = \dfrac{x_\text{f}}{x_\text{max}} = \dfrac{4{,}04 \times 10^{-5}}{1{,}0 \times 10^{-3}} = 4{,}0 \times 10^{-2}$$
 
-Le taux d'avancement final vaut $4{,}0\ \%$ : la transformation n'est pas totale. On retrouve, à l'arrondi de $K_\text{A}$ près, le pH de $3{,}40$ et le taux de $4{,}0\ \%$ de l'acide éthanoïque à la même concentration (Q.13 et Q.16).
+Le taux d'avancement final vaut $4{,}0\ \%$ : la transformation n'est pas totale. On retrouve, à l'arrondi de $K_\text{A}$ près, le pH de $3{,}40$ et le taux de $4{,}0\ \%$ de l'acide éthanoïque à la même concentration (Q.14 et Q.17).
 
 ::: {custom-style="Retenir"}
 Acide faible AH de concentration apportée $C$, avec $h = [\text{H}_3\text{O}^{\text{+}}]_\text{éq}$ : $K_\text{A} = \dfrac{h^2}{(C - h)\,c^\circ}$, d'où $h^2 + K_\text{A}\,c^\circ\,h - K_\text{A}\,c^\circ\,C = 0$ ; on garde la racine positive, puis $\text{pH} = -\log\dfrac{h}{c^\circ}$ et $\tau = \dfrac{h}{C}$
@@ -1207,7 +1285,7 @@ $$K_\text{A} = \dfrac{[\text{B}]_\text{éq} \times [\text{H}_3\text{O}^{\text{+}
 **4.** Espèce prédominante dans la solution S
 :::
 
-En prenant le logarithme de l'expression de $K_\text{A}$, on obtient $\text{pH} = \text{p}K_\text{A} + \log\dfrac{[\text{B}]}{[\text{BH}^{\text{+}}]}$, d'où :
+En prenant le logarithme de l'expression de $K_\text{A}$ (étapes détaillées en Q.20), on obtient $\text{pH} = \text{p}K_\text{A} + \log\dfrac{[\text{B}]}{[\text{BH}^{\text{+}}]}$, d'où :
 
 $$\dfrac{[\text{B}]}{[\text{BH}^{\text{+}}]} = 10^{\text{pH} - \text{p}K_\text{A}} = 10^{11{,}25 - 9{,}5} = 10^{1{,}75} = 56$$
 
@@ -1228,7 +1306,7 @@ Figure 3. Diagrammes de prédominance des couples de l'éthanolamine et du dioxy
 :::
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} Le diagramme du haut ne décrit que le couple $\text{CO}_2,\text{H}_2\text{O}/\text{HCO}_3^-$. Au-delà de pH $10{,}3$, l'ion $\text{HCO}_3^-$ cède à son tour un proton et c'est $\text{CO}_3^{2-}$ qui prédomine (Q.20).
+[Remarque.]{custom-style="EtiqRemarque"} Le diagramme du haut ne décrit que le couple $\text{CO}_2,\text{H}_2\text{O}/\text{HCO}_3^-$. Au-delà de pH $10{,}3$, l'ion $\text{HCO}_3^-$ cède à son tour un proton et c'est $\text{CO}_3^{2-}$ qui prédomine (Q.21).
 :::
 
 ::: {custom-style="QRappel"}
@@ -1245,10 +1323,10 @@ $$\text{CO}_2(\text{aq}) + \text{H}_2\text{O}(\ell) + \text{B}(\text{aq}) \right
 
 # Corrigés du thème 4 : diagrammes, indicateurs colorés et solutions tampons {#c_theme4}
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.18 · Tracer un diagramme de prédominance et en déduire la forme prédominante {#c_q18}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.19 · Tracer un diagramme de prédominance et en déduire la forme prédominante {#c_q19}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q18]{custom-style="BoutonEnonce"}
+[CIBLE:q19]{custom-style="BoutonEnonce"}
 :::
 
 Pour $\text{pH} < \text{p}K_\text{A} = 4{,}4$, la forme acide AH prédomine ; pour $\text{pH} > 4{,}4$, c'est la forme basique $\text{A}^-$ (figure 4).
@@ -1271,19 +1349,37 @@ $\text{pH} < \text{p}K_\text{A}$ : la forme acide prédomine ; $\text{pH} > \tex
 [Rédaction.]{custom-style="EtiqRedaction"} « Dans l'estomac, le pH, voisin de 2, est inférieur au $\text{p}K_\text{A}$ du couple, égal à 4,4 : la forme acide AH de l'ibuprofène prédomine. »
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.19 · Relier le pH, le $\text{p}K_\text{A}$ et le rapport des concentrations des deux formes {#c_q19}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.20 · Relier le pH, le $\text{p}K_\text{A}$ et le rapport des concentrations des deux formes {#c_q20}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q19]{custom-style="BoutonEnonce"}
+[CIBLE:q20]{custom-style="BoutonEnonce"}
 :::
 
-On prend le logarithme de l'expression de la constante d'acidité :
+On part de l'expression de la constante d'acidité et on l'écrit comme le produit de deux rapports, celui des concentrations des deux formes du couple et celui qui contient les ions oxonium :
 
-$$K_\text{A} = \dfrac{[\text{HCO}_3^-] \times [\text{H}_3\text{O}^{\text{+}}]}{[\text{CO}_2] \times c^\circ} \quad \text{donc} \quad \log K_\text{A} = \log\dfrac{[\text{HCO}_3^-]}{[\text{CO}_2]} + \log\dfrac{[\text{H}_3\text{O}^{\text{+}}]}{c^\circ}$$
+$$K_\text{A} = \dfrac{[\text{HCO}_3^-] \times [\text{H}_3\text{O}^{\text{+}}]}{[\text{CO}_2] \times c^\circ} = \dfrac{[\text{HCO}_3^-]}{[\text{CO}_2]} \times \dfrac{[\text{H}_3\text{O}^{\text{+}}]}{c^\circ}$$
 
-soit $-\text{p}K_\text{A} = \log\dfrac{[\text{HCO}_3^-]}{[\text{CO}_2]} - \text{pH}$, d'où :
+On prend le logarithme décimal des deux membres. Le logarithme d'un produit est la somme des logarithmes, $\log(a \times b) = \log a + \log b$ :
 
-$$\text{pH} = \text{p}K_\text{A} + \log\dfrac{[\text{HCO}_3^-]}{[\text{CO}_2]} \qquad \dfrac{[\text{HCO}_3^-]}{[\text{CO}_2]} = 10^{\text{pH} - \text{p}K_\text{A}} = 10^{1{,}30} = 20$$
+$$\log K_\text{A} = \log\dfrac{[\text{HCO}_3^-]}{[\text{CO}_2]} + \log\dfrac{[\text{H}_3\text{O}^{\text{+}}]}{c^\circ}$$
+
+On fait alors apparaître le $\text{p}K_\text{A}$ et le pH. Leurs définitions contiennent toutes deux un signe moins, et c'est de là que viennent les termes $-\text{p}K_\text{A}$ et $-\text{pH}$ :
+
+$$\text{p}K_\text{A} = -\log K_\text{A} \quad \text{donc} \quad \log K_\text{A} = -\text{p}K_\text{A}$$
+
+$$\text{pH} = -\log\dfrac{[\text{H}_3\text{O}^{\text{+}}]}{c^\circ} \quad \text{donc} \quad \log\dfrac{[\text{H}_3\text{O}^{\text{+}}]}{c^\circ} = -\text{pH}$$
+
+En remplaçant ces deux termes dans l'égalité précédente :
+
+$$-\text{p}K_\text{A} = \log\dfrac{[\text{HCO}_3^-]}{[\text{CO}_2]} - \text{pH}$$
+
+On isole le pH en ajoutant $\text{pH} + \text{p}K_\text{A}$ aux deux membres :
+
+$$\text{pH} = \text{p}K_\text{A} + \log\dfrac{[\text{HCO}_3^-]}{[\text{CO}_2]}$$
+
+Le rapport s'en déduit : $\log\dfrac{[\text{HCO}_3^-]}{[\text{CO}_2]} = \text{pH} - \text{p}K_\text{A}$, et comme $\log y = a$ équivaut à $y = 10^a$ :
+
+$$\dfrac{[\text{HCO}_3^-]}{[\text{CO}_2]} = 10^{\text{pH} - \text{p}K_\text{A}} = 10^{7{,}40 - 6{,}10} = 10^{1{,}30} = 20$$
 
 Le sang contient 20 ions $\text{HCO}_3^-$ pour une molécule de $\text{CO}_2$ : la forme $\text{HCO}_3^-$ représente $\dfrac{20}{20 + 1} = 0{,}95$, soit $95\ \%$ du carbone dissous de ce couple.
 
@@ -1295,10 +1391,10 @@ $\text{pH} = \text{p}K_\text{A} + \log\dfrac{[\text{A}^-]}{[\text{AH}]}$ ; pourc
 [Piège.]{custom-style="EtiqPiege"} Confondre rapport et pourcentage : un rapport de 20 ne signifie pas $20\ \%$, mais 20 parts de $\text{HCO}_3^-$ pour une part de $\text{CO}_2$.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.20 · Exploiter un diagramme de distribution {#c_q20}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.21 · Exploiter un diagramme de distribution {#c_q21}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q20]{custom-style="BoutonEnonce"}
+[CIBLE:q21]{custom-style="BoutonEnonce"}
 :::
 
 La forme la plus acide, $\text{CO}_2(\text{aq})$, prédomine aux faibles pH : c'est la courbe 1. La forme la plus basique, $\text{CO}_3^{2-}$, prédomine aux pH élevés : c'est la courbe 3. L'ion $\text{HCO}_3^-$, amphotère, prédomine entre les deux : c'est la courbe 2.
@@ -1323,10 +1419,10 @@ Sur un diagramme de distribution, un $\text{p}K_\text{A}$ se lit à l'intersecti
 [Piège.]{custom-style="EtiqPiege"} Lire un $\text{p}K_\text{A}$ au sommet de la courbe de $\text{HCO}_3^-$ : ce maximum, vers pH 8,3, se situe entre les deux $\text{p}K_\text{A}$.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.21 · Choisir un indicateur coloré de fin de titrage {#c_q21}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.22 · Choisir un indicateur coloré de fin de titrage {#c_q22}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q21]{custom-style="BoutonEnonce"}
+[CIBLE:q22]{custom-style="BoutonEnonce"}
 :::
 
 À pH $5{,}0$ : l'hélianthine est jaune, car ce pH est supérieur à 4,4, fin de sa zone de virage ; le bleu de bromothymol est jaune, car le pH est inférieur à 6,0 ; la phénolphtaléine est incolore, car le pH est inférieur à 8,2.
@@ -1341,10 +1437,10 @@ On choisit un indicateur coloré dont la zone de virage contient le pH à l'équ
 [Remarque.]{custom-style="EtiqRemarque"} Dans sa zone de virage, l'indicateur prend une teinte intermédiaire, mélange des deux autres : orange pour l'hélianthine, vert pour le bleu de bromothymol. Cette zone encadre le $\text{p}K_\text{A}$ de l'indicateur ; elle s'étend sur une à deux unités de pH. Pour une indication rapide du pH, par exemple pendant une synthèse, on utilise du papier pH.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.22 · Exploiter un diagramme de prédominance à deux $\text{p}K_\text{A}$ {#c_q22}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.23 · Exploiter un diagramme de prédominance à deux $\text{p}K_\text{A}$ {#c_q23}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q22]{custom-style="BoutonEnonce"}
+[CIBLE:q23]{custom-style="BoutonEnonce"}
 :::
 
 Le cation, qui porte le plus de protons, est la forme la plus acide ; l'anion est la forme la plus basique. Le cation cède d'abord le proton de son groupe carboxyle, puis l'amphion cède celui de son groupe $\text{-NH}_3^{\text{+}}$ :
@@ -1368,10 +1464,10 @@ Figure 6. Diagramme de prédominance de la glycine
 Pour une espèce à deux $\text{p}K_\text{A}$, la forme intermédiaire, amphotère, prédomine entre $\text{p}K_\text{A1}$ et $\text{p}K_\text{A2}$
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.23 · Citer les propriétés d'une solution tampon {#c_q23}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.24 · Citer les propriétés d'une solution tampon {#c_q24}
 
 ::: {custom-style="Renvoi"}
-[CIBLE:q23]{custom-style="BoutonEnonce"}
+[CIBLE:q24]{custom-style="BoutonEnonce"}
 :::
 
 Les deux solutions ont la même concentration et le même volume ; l'acide éthanoïque et l'ion éthanoate réagissant très peu avec l'eau, le mélange contient autant de l'un que de l'autre. Donc :
@@ -1426,7 +1522,7 @@ Sur un axe gradué en pH, on repère $\text{p}K_\text{A} = 7{,}5$ : $\text{HClO}
 **4.** Pourcentage de HClO à pH 7,8
 :::
 
-En prenant le logarithme de l'expression de $K_\text{A}$ : $\log K_\text{A} = \log\dfrac{[\text{ClO}^-]}{[\text{HClO}]} + \log\dfrac{[\text{H}_3\text{O}^{\text{+}}]}{c^\circ}$, soit $-\text{p}K_\text{A} = \log\dfrac{[\text{ClO}^-]}{[\text{HClO}]} - \text{pH}$, ce qui donne la relation demandée. À pH $7{,}8$ :
+En prenant le logarithme de l'expression de $K_\text{A}$ : $\log K_\text{A} = \log\dfrac{[\text{ClO}^-]}{[\text{HClO}]} + \log\dfrac{[\text{H}_3\text{O}^{\text{+}}]}{c^\circ}$. Comme $\log K_\text{A} = -\text{p}K_\text{A}$ et $\log\dfrac{[\text{H}_3\text{O}^{\text{+}}]}{c^\circ} = -\text{pH}$, il vient $-\text{p}K_\text{A} = \log\dfrac{[\text{ClO}^-]}{[\text{HClO}]} - \text{pH}$ ; en ajoutant $\text{pH} + \text{p}K_\text{A}$ aux deux membres, on obtient la relation demandée (étapes détaillées en Q.20). À pH $7{,}8$ :
 
 $$\dfrac{[\text{ClO}^-]}{[\text{HClO}]} = 10^{7{,}8 - 7{,}5} = 10^{0{,}3} = 2{,}0 \qquad \text{part de HClO} : \dfrac{1}{1 + 2{,}0} = 0{,}33$$
 
@@ -1476,24 +1572,25 @@ Chaque notion renvoie aux questions de cours (Q) et aux exercices (Ex.) où elle
 
 | Notion | Où la travailler |
 |---|---|
-| Acide fort, base forte | Q.12, Q.13 |
-| Acide ou base au sens de Brønsted, couple acide-base | Q.8, Ex. 2, Ex. 3, Ex. 4 |
-| Autoprotolyse de l'eau, produit ionique $K_\text{e}$ | Q.11, Q.12, Q.14, Ex. 2, Ex. 3 |
+| Acide fort, base forte | Q.13, Q.14 |
+| Acide ou base au sens de Brønsted, couple acide-base | Q.9, Ex. 2, Ex. 3, Ex. 4 |
+| Autoprotolyse de l'eau, produit ionique $K_\text{e}$ | Q.12, Q.13, Q.15, Ex. 2, Ex. 3 |
+| Avancement final et avancement maximal, transformation totale ou non totale | Q.7, Q.8, Q.14, Q.18 |
 | Concentration en quantité de matière, concentration massique (concentration en masse) | Q.1, Q.2, Ex. 2 |
-| Constante d'acidité $K_\text{A}$, $\text{p}K_\text{A}$ | Q.15, Q.16, Q.17, Ex. 3, Ex. 4 |
-| Diagramme de distribution | Q.20, Ex. 4 |
-| Diagramme de prédominance | Q.18, Q.22, Ex. 3, Ex. 4 |
+| Constante d'acidité $K_\text{A}$, $\text{p}K_\text{A}$ | Q.16, Q.17, Q.18, Ex. 3, Ex. 4 |
+| Diagramme de distribution | Q.21, Ex. 4 |
+| Diagramme de prédominance | Q.19, Q.23, Ex. 3, Ex. 4 |
 | Dilution, facteur de dilution, verrerie | Q.4, Q.5, Ex. 1 |
-| Équation d'une réaction acide-base | Q.9, Ex. 2, Ex. 3, Ex. 4 |
-| Équation du second degré, état final d'un acide faible | Q.17 |
-| Espèce amphotère | Q.8, Q.20, Q.22 |
-| Indicateur coloré | Q.21 |
-| pH, concentration en ions oxonium | Q.10, Q.12, Q.17 |
-| Python : taux d'avancement final d'un acide faible | Q.17 |
-| Réactif limitant, avancement maximal | Q.6, Q.7, Ex. 1 |
-| Relation entre pH, $\text{p}K_\text{A}$ et rapport des concentrations | Q.19, Ex. 3, Ex. 4 |
-| Solution tampon | Q.23 |
-| Taux d'avancement final | Q.7, Q.13, Q.14, Q.17, Ex. 1, Ex. 2, Ex. 3 |
+| Équation d'une réaction acide-base | Q.10, Ex. 2, Ex. 3, Ex. 4 |
+| Équation du second degré, état final d'un acide faible | Q.18 |
+| Espèce amphotère | Q.9, Q.21, Q.23 |
+| Indicateur coloré | Q.22 |
+| pH, concentration en ions oxonium | Q.11, Q.13, Q.18 |
+| Python : taux d'avancement final d'un acide faible | Q.18 |
+| Réactif limitant, avancement maximal | Q.6, Q.7, Q.8, Ex. 1 |
+| Relation entre pH, $\text{p}K_\text{A}$ et rapport des concentrations | Q.20, Ex. 3, Ex. 4 |
+| Solution tampon | Q.24 |
+| Taux d'avancement final | Q.7, Q.8, Q.14, Q.15, Q.18, Ex. 1, Ex. 2, Ex. 3 |
 | Titre massique, densité | Q.2, Q.3, Ex. 1 |
 | Volume molaire d'un gaz | Q.1, Q.6, Ex. 1 |
 

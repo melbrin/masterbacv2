@@ -8,7 +8,7 @@ RACINE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file_
 src = open(os.path.join(RACINE, 'fiches', 'pc-13-synthese-organique', 'fiche.md'), encoding='utf-8').read()
 figsrc = open(os.path.join(RACINE, 'outils', 'figures', 'pc-13-synthese-organique.py'), encoding='utf-8').read()
 enonces = src[:src.index('<!--debut:complet-->')]
-NQ, NEX, NFIG = 20, 5, 25
+NQ, NEX, NFIG = 20, 5, 27
 MA = {'H': 1.0, 'C': 12.0, 'N': 14.0, 'O': 16.0, 'S': 32.1}
 
 def compo(f):
@@ -121,8 +121,8 @@ controles = [
     ('Q.15 masse restée dissoute', 3.0 * 5.0 / 60, 0.25, 0.005, r'm_\text{dissoute} = 3{,}0 \times 8{,}3 \times 10^{-2} = 0{,}25\ \text{g}'),
     ('Q.15 masse récupérable', 5.0 - 3.0 * 5.0 / 60, 4.8, 0.05, r'm_\text{récupérable} = 5{,}0 - 0{,}25 \approx 4{,}8\ \text{g}$$'),
     ('Q.15 fraction récupérée', (5.0 - 3.0 * 5.0 / 60) / 5.0, 0.95, 0.005, r'On récupère au mieux $95\ \%$ du solide'),
-    ('Q.17 rapport frontal de l\'aspirine (figure 11)', dA[0] / front, 0.70, 0.005, r'R_\text{f}(\text{aspirine}) = \dfrac{4{,}2}{6{,}0} = 0{,}70'),
-    ('Q.17 rapport frontal de l\'acide salicylique (figure 11)', dB[0] / front, 0.30, 0.005, r'R_\text{f}(\text{acide salicylique}) = \dfrac{1{,}8}{6{,}0} = 0{,}30$$'),
+    ('Q.17 rapport frontal de l\'aspirine (figure 12)', dA[0] / front, 0.70, 0.005, r'R_\text{f}(\text{aspirine}) = \dfrac{4{,}2}{6{,}0} = 0{,}70'),
+    ('Q.17 rapport frontal de l\'acide salicylique (figure 12)', dB[0] / front, 0.30, 0.005, r'R_\text{f}(\text{acide salicylique}) = \dfrac{1{,}8}{6{,}0} = 0{,}30$$'),
     ('Q.17 produit brut : deux taches, celles de A et B', sorted(dC) == sorted(dA + dB), True, 0, 'Le produit brut C donne deux taches, à la hauteur de l\'aspirine et de l\'acide salicylique'),
     ('Q.17 produit recristallisé : la seule tache de A', dD == dA, True, 0, 'Le produit recristallisé D ne donne qu\'une tache, à la hauteur de l\'aspirine'),
     ('Q.18 nombre d\'onde', 1 / 5.85e-4, 1.71e3, 0.005e3, r'= \dfrac{1}{5{,}85 \times 10^{-4}\ \text{cm}} = 1{,}71 \times 10^{3}\ \text{cm}^{-1}$$'),
@@ -151,8 +151,8 @@ controles = [
     ('Ex. 4 masse molaire imprimée', masse('C8H16O'), 128, 1e-9, r'Alcool de champignon : $M = 128\ \text{g·mol}^{-1}$'),
     ('Ex. 4 ordre de distillation', sorted([(35, 'éther'), (53, 'acroléine'), (175, 'alcool')]) == [(35, 'éther'), (53, 'acroléine'), (175, 'alcool')], True, 0,
      r"l'éther ($35\ \text{°C}$), puis l'acroléine qui reste ($53\ \text{°C}$), enfin l'alcool de champignon"),
-    ('Ex. 4 rapport frontal du produit (figure 13)', d3[0] / front4, 0.44, 0.005, r'R_\text{f} = \dfrac{h}{H} = \dfrac{2{,}2}{5{,}0} = 0{,}44$$'),
-    ('Ex. 4 dépôts 2 et 3 (figure 13)', (sorted(d2) == sorted(d1 + d3), d3 != d1), (True, True), None, 'Le dépôt 2 donne deux taches : l\'une à la hauteur de l\'acroléine'),
+    ('Ex. 4 rapport frontal du produit (figure 14)', d3[0] / front4, 0.44, 0.005, r'R_\text{f} = \dfrac{h}{H} = \dfrac{2{,}2}{5{,}0} = 0{,}44$$'),
+    ('Ex. 4 dépôts 2 et 3 (figure 14)', (sorted(d2) == sorted(d1 + d3), d3 != d1), (True, True), None, 'Le dépôt 2 donne deux taches : l\'une à la hauteur de l\'acroléine'),
     ('Ex. 4 quantité d\'organomagnésien', 2.00 * 10.0e-3, 2.00e-2, 1e-12, r'n = 2{,}00 \times 10{,}0 \times 10^{-3} = 2{,}00 \times 10^{-2}\ \text{mol}'),
     ('Ex. 4 masse maximale', 2.00e-2 * 128, 2.56, 1e-9, r'm_\text{max} = 2{,}00 \times 10^{-2} \times 128 = 2{,}56\ \text{g}'),
     ('Ex. 4 rendement', 2.25 / 2.56, 0.879, 0.0005, r'\eta = \dfrac{2{,}25}{2{,}56} = 0{,}879$$'),
@@ -221,41 +221,97 @@ dmanque = [d for d in donnees if d not in enonces]
 num = {re.sub(r'\\n', ' ', t).replace("\\'", "'"): int(k) for t, k in re.findall(r"repere\(ax, [^']*'((?:[^'\\]|\\.)+)', n\((\d)\)", figsrc)}
 phrase_montage = re.search(r'Éléments du montage \(figure \d+\) : (.*?)\. L\'eau', src)
 num_c = {t.strip(): int(k) for k, t in re.findall(r'(\d), ([^;]+)', phrase_montage.group(1))} if phrase_montage else {}
-textes = [('Figures 10 et 19 : numéros du montage à reflux et corrigé de Q.12', num == num_c and len(num) == 6),
-          ('Figures 10 et 19 : entrée d\'eau en bas du réfrigérant, sortie en haut', "repere(ax, 2.6, yt + 0.875, 3.0, yt + 1.6, 'entrée d\\'eau', n(2))" in figsrc
+textes = [('Figures 11 et 22 : numéros du montage à reflux et corrigé de Q.12', num == num_c and len(num) == 6),
+          ('Figures 11 et 22 : entrée d\'eau en bas du réfrigérant, sortie en haut', "repere(ax, 2.6, yt + 0.875, 3.0, yt + 1.6, 'entrée d\\'eau', n(2))" in figsrc
            and "repere(ax, -2.6, yt + 6.525, -2.9, yt + 7.3, 'sortie d\\'eau', n(3), ha='right')" in figsrc),
-          ('Figures 11 et 23 : mêmes dépôts et même front', ccm17 == ccm17c),
-          ('Figure 23 : mesures portées sur les taches de A et de B', "[(0.95 + 0.42, 4.2, '4,2 cm', -1), (2.25 + 0.42, 1.8, '1,8 cm', 1)]" in figsrc and dA == [4.2] and dB == [1.8]),
-          ('Figure 12 : spectre 1 du butan-1-ol, spectre 2 de la butanone', "fig_spectres_cote('fig_ir', ['butanol', 'butanone'], ['spectre 1', 'spectre 2'])" in figsrc),
-          ('Figures 6 et 13 : spectres de l\'ester et de l\'alcool de champignon', "fig_spectres('fig_ex1_ir', ['ester'], [None])" in figsrc and "transmittance(sig, SPECTRES['octenol'])" in figsrc),
+          ('Figures 12 et 27 : mêmes dépôts et même front', ccm17 == ccm17c),
+          ('Figure 27 : mesures portées sur les taches de A et de B', "[(0.95 + 0.42, 4.2, '4,2 cm', -1), (2.25 + 0.42, 1.8, '1,8 cm', 1)]" in figsrc and dA == [4.2] and dB == [1.8]),
+          ('Figure 13 : spectre 1 du butan-1-ol, spectre 2 de la butanone', "fig_spectres_cote('fig_ir', ['butanol', 'butanone'], ['spectre 1', 'spectre 2'])" in figsrc),
+          ('Figures 7 et 14 : spectres de l\'ester et de l\'alcool de champignon', "fig_spectres('fig_ex1_ir', ['ester'], [None])" in figsrc and "transmittance(sig, SPECTRES['octenol'])" in figsrc),
           ('Figure 16 : butan-2-ol, panneau de formule développée (10 H, O-H compris)', "texte(ax, x0 + 1.5 * L, -1.75, 'formule développée'" in figsrc and "d['HO'] = (d['C2'][0], y0 + 2 * L, 'H')" in figsrc),
-          ('Figure 23 : deux panneaux, filtration simple et filtration sous vide', "panneau_simple" in figsrc and "panneau_sous_vide" in figsrc and "'papier filtre plissé'" in figsrc),
+          ('Figure 25 : deux panneaux, filtration simple et filtration sous vide', "panneau_simple" in figsrc and "panneau_sous_vide" in figsrc and "'papier filtre plissé'" in figsrc),
           ('Figure 1 : acide 3-méthylbutanoïque', "at['m'] = pas(z[1], 90) + ('',); at['o'] = pas(z[3], 90) + ('O',); at['oh'] = pas(z[3], -30) + ('OH',)" in figsrc),
-          ('Figure 3 : molécules a à f dans l\'ordre du corrigé', re.findall(r'# ([a-f]) : (.+)', figsrc[figsrc.index('def fig_isomeres'):figsrc.index('def fig_ze')]) ==
+          ('Figure 4 : molécules a à f dans l\'ordre du corrigé', re.findall(r'# ([a-f]) : (.+)', figsrc[figsrc.index('def fig_isomeres'):figsrc.index('def fig_ze')]) ==
            [('a', 'butan-1-ol'), ('b', 'butan-2-ol'), ('c', '2-méthylpropan-1-ol'), ('d', 'éthoxyéthane'), ('e', 'butanal'), ('f', 'butanone')]
-           and "'o': pas(z[3], -30) + ('OH',)}\n    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('4', 'o', 1)]); lettre(x + 1.7, -1.55, 'a')" in figsrc
-           and "'o': pas(z[1], 90) + ('OH',)}\n    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'o', 1)]); lettre(x + 1.3, -1.55, 'b')" in figsrc
-           and "mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('4', 'o', 2)]); lettre(x + 1.7, -1.55, 'e')" in figsrc
-           and "mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'o', 2)]); lettre(x + 1.3, -1.55, 'f')" in figsrc),
-          ('Figure 4 : méthyles de part et d\'autre en g (E), du même côté en h (Z)', "at = {'c1': (0.0, -0.5, ''), 'c2': (C30, 0.0, ''), 'c3': (2 * C30, -0.5, ''), 'c4': (3 * C30, 0.0, '')}" in figsrc
+           and "'o': pas(z[3], -30) + ('OH',)}\n    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('4', 'o', 1)]); lettre(x + 1.7, YL, 'a')" in figsrc
+           and "'o': pas(z[1], 90) + ('OH',)}\n    mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'o', 1)]); lettre(x + 1.3, YL, 'b')" in figsrc
+           and "mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('4', 'o', 2)]); lettre(x + 1.7, YL, 'e')" in figsrc
+           and "mol(ax, at, [('1', '2', 1), ('2', '3', 1), ('3', '4', 1), ('2', 'o', 2)]); lettre(x + 1.3, YL, 'f')" in figsrc),
+          ('Figure 5 : méthyles de part et d\'autre en g (E), du même côté en h (Z)', "at = {'c1': (0.0, -0.5, ''), 'c2': (C30, 0.0, ''), 'c3': (2 * C30, -0.5, ''), 'c4': (3 * C30, 0.0, '')}" in figsrc
            and "at = {'c2': (x0 + 0.9, -0.2, ''), 'c3': (x0 + 1.9, -0.2, ''), 'c1': (x0 + 0.4, 0.67, ''), 'c4': (x0 + 2.4, 0.67, '')}" in figsrc
            and 'En h, les méthyles sont du même côté, c\'est le (Z)-but-2-ène ; en g, ils sont de part et d\'autre, c\'est le (E)-but-2-ène.' in src),
-          ('Figures 5 et 17 : A pentanoate d\'éthyle, B éthanoate de pentyle, corrigé ramifié en 3', "at = {'c5': z[0] + ('',), 'c4': z[1] + ('',), 'c3': z[2] + ('',), 'c2': z[3] + ('',), 'c1': z[4] + ('',), 'o': z[5] + ('O',), 'e1': z[6] + ('',), 'e2': z[7] + ('',)}" in figsrc
+          ('Figures 6 et 20 : A pentanoate d\'éthyle, B éthanoate de pentyle, corrigé ramifié en 3', "at = {'c5': z[0] + ('',), 'c4': z[1] + ('',), 'c3': z[2] + ('',), 'c2': z[3] + ('',), 'c1': z[4] + ('',), 'o': z[5] + ('O',), 'e1': z[6] + ('',), 'e2': z[7] + ('',)}" in figsrc
            and 'at, li = ethanoate(8.6, 0.0, 5); mol(ax, at, li)' in figsrc and 'at, li = ethanoate(0.0, 0.0, 4, branche=2); mol(ax, at, li)' in figsrc),
-          ('Figure 18 : flèche du doublet de N vers C, puis de C=O vers O', 'fleche_bezier(ax, (dN[0] + 0.06, dN[1] + 0.1), (2.6, 1.15), (xc - 0.21, 0.16))' in figsrc
-           and 'fleche_bezier(ax, (xc + 0.12, 0.45), (xc + 0.75, 0.62), (xc + 0.27, 0.98))' in figsrc),
-          ('Figures 8 et 18 : intermédiaire avec N chargé + et O chargé −', 'charge(ax, xc2 + 0.62, 1.22, -1)' in figsrc and 'charge(ax, xn2 - 0.36, 0.4, +1)' in figsrc
+          ('Figure 21 : flèche du doublet de N vers C, puis de C=O vers O', 'fleche_bezier(ax, (dN[0] + 0.06, dN[1] + 0.1), (2.6, 1.15), (xc - 0.21, 0.16))' in figsrc
+           and 'fleche_bezier(ax, (xc + 0.12, 0.42), (xc + 0.78, 0.5), (xc + 0.3, 0.84))' in figsrc),
+          ('Figures 9 et 21 : intermédiaire avec N chargé + et O chargé −', 'charge(ax, xc2 + 0.62, 1.22, -1)' in figsrc and 'charge(ax, xn2 - 0.36, 0.4, +1)' in figsrc
            and 'for a in (30, 90, 150): doublet(ax, xc2, 0.95, a)' in figsrc),
-          ('Figure 20 : phase organique (cyclohexane et ester) au-dessus, phase aqueuse au-dessous, bouchon retiré', "'phase organique,\\nla moins dense :\\ncyclohexane et ester'" in figsrc and "'phase aqueuse,\\nla plus dense :\\neau et acides'" in figsrc and "'bouchon retiré'" in figsrc),
-          ('Figure 22 : réservoir du thermomètre au niveau du bras latéral', 'ax.add_patch(Circle((0.0, y1 + 0.4), 0.13' in figsrc and 'a0 = np.array([0.32, y1 + 0.55])' in figsrc),
+          ('Figure 24 : phase organique (cyclohexane et ester) au-dessus, phase aqueuse au-dessous, bouchon retiré', "'phase organique,\\nla moins dense :\\ncyclohexane et ester'" in figsrc and "'phase aqueuse,\\nla plus dense :\\neau et acides'" in figsrc and "'bouchon retiré'" in figsrc),
+          ('Figure 26 : réservoir du thermomètre au niveau du bras latéral', 'ax.add_patch(Circle((0.0, ybras), 0.14' in figsrc and 'a0 = np.array([W, ybras])' in figsrc),
           ('Figure 3 : cycle à six carbones, liaisons simples, méthyles sur deux sommets opposés', "li = [('r%d' % k, 'r%d' % ((k + 1) % 6), 1) for k in range(6)]" in figsrc
            and "at['m0'] = pas(pts[0], 0) + ('',); at['m3'] = pas(pts[3], 180) + ('',)" in figsrc),
-          ('Figure 21 : même avancement final, atteint plus vite avec le catalyseur', re.search(r'TAU_AVEC, TAU_SANS = ([\d.]+), ([\d.]+)', figsrc) is not None
+          ('Figure 23 : même avancement final, atteint plus vite avec le catalyseur', re.search(r'TAU_AVEC, TAU_SANS = ([\d.]+), ([\d.]+)', figsrc) is not None
            and float(re.search(r'TAU_AVEC, TAU_SANS = ([\d.]+), ([\d.]+)', figsrc).group(1)) < float(re.search(r'TAU_AVEC, TAU_SANS = ([\d.]+), ([\d.]+)', figsrc).group(2))
            and 'ax.plot(t, 1 - np.exp(-t / TAU_AVEC), color=BLEU' in figsrc and 'ax.plot(t, 1 - np.exp(-t / TAU_SANS), color=CUIVRE' in figsrc
            and "'avec catalyseur', color=BLEU" in figsrc and "'sans catalyseur', color=CUIVRE" in figsrc),
           ('Corrigé de Q.12 : les trois pictogrammes de l\'énoncé', all(r in src for r in ('| Flamme | Espèce inflammable |', '| Corrosion : un liquide ronge une main et une surface |', "| Point d'exclamation | Irritant ou nocif |"))),
-          ('Figure 14 : eau et espèce X formées', "texte(ax, 21.75, 0.0, 'H$_2$O', fs=12); plus(ax, 23.1, 0.0); texte(ax, 24.1, 0.0, 'X', fs=12)" in figsrc)]
+          ('Figure 15 : eau et espèce X formées', "texte(ax, 21.75, 0.0, 'H$_2$O', fs=12); plus(ax, 23.1, 0.0); texte(ax, 24.1, 0.0, 'X', fs=12)" in figsrc)]
+# figures redessinées après la relecture : équation de l'aspartame sur une ligne (figure 8), doublets de l'acide (figures 9 et 21),
+# colonne de Vigreux (figure 26), espèces de Q.3 et de Q.4 reprises dans les corrigés (figures 18 et 19)
+import math
+bloc8 = figsrc[figsrc.index('def fig_ex2_molecules'):figsrc.index('# --- Exercice 3')]
+lignes8 = [re.search(r'%s\(([\d.]+), ([\d.-]+)\)' % f, bloc8) for f in ('acide_aspartique', 'phe_methylee', 'aspartame')]
+formules8 = re.findall(r"verifie\(at, li, '([^']+)'\)", bloc8)
+controles.append(('Figure 8 : formules brutes des trois molécules dessinées', tuple(brute(f) for f in formules8), ('C4H7NO4', 'C10H13NO2', 'C14H18N2O5'), None,
+                  r'acide aspartique $\text{C}_4\text{H}_7\text{NO}_4$ ; phénylalanine méthylée $\text{C}_{10}\text{H}_{13}\text{NO}_2$ ; aspartame $\text{C}_{14}\text{H}_{18}\text{N}_2\text{O}_5$'))
+textes.append(('Figure 8 : réactifs, flèche et produits sur une seule ligne', all(lignes8) and len({m.group(2) for m in lignes8}) == 1
+               and float(lignes8[0].group(1)) < float(lignes8[1].group(1)) < float(lignes8[2].group(1)) and 'fleche_reaction(ax, ' in bloc8))
+def ecart_angle(a, b): return abs((a - b + 180) % 360 - 180)
+d_co = [int(a) for a in re.findall(r'doublet\(ax, xc, 0\.95, (\d+)\)', figsrc)]
+d_oh = [int(a) for a in re.findall(r'doublet\(ax, xo, yo, (\d+)\)', figsrc)]
+geo = 'xo, yo = xc + 0.82, -0.47' in figsrc and "at_(ax, xo + 0.62, yo - 0.5, 'H')" in figsrc and "at_(ax, xc, 0.95, 'O'); liaison(ax, (xc, 0), (xc, 0.95), ordre=2)" in figsrc
+liaisons_oh = [math.degrees(math.atan2(0.47, -0.82)), math.degrees(math.atan2(-0.5, 0.62))]
+textes.append(('Figures 9 et 21 : deux doublets par oxygène de l\'acide, à 60° au moins de ses liaisons', geo and len(d_co) == 2 and len(d_oh) == 2
+               and min(ecart_angle(a, 270) for a in d_co) >= 90 and min(ecart_angle(a, b) for a in d_oh for b in liaisons_oh) >= 60 and ecart_angle(*d_co) >= 90 and ecart_angle(*d_oh) >= 90))
+m_vig = re.search(r'W, creux = ([\d.]+), ([\d.]+)', figsrc)
+textes.append(('Figure 26 : pointes de verre par paires, enfoncées jusqu\'à près de l\'axe', m_vig is not None and float(m_vig.group(2)) <= 0.2 * float(m_vig.group(1))
+               and 'paroi_vigreux(0.0, yc0, y1, -1, niveaux, W, creux)' in figsrc and 'paroi_vigreux(0.0, yc0, y1, 1, niveaux, W, creux)' in figsrc
+               and 'pointes de verre' in src[src.index('{#c_q16}'):src.index('{#c_q17}')]))
+def clair(t): return re.sub(r'\\text\{([^{}]*)\}', r'\1', t).replace('_', '').replace('{', '').replace('}', '')
+q3 = re.findall(r"\('([a-l])', '([^']+)', '([^']+)', q3_[a-l]\)", figsrc)
+enonce_q3 = src[src.index('{#q3}'):src.index('{#q4}')]
+corrige_q3 = src[src.index('{#c_q3}'):src.index('{#c_q4}')]
+q3_ko = [l for l, semi, nom in q3 if (l != 'i' and not re.search(r'^%s\. \$%s\$$' % (l, re.escape(semi)), '\n'.join(clair(x) for x in enonce_q3.splitlines()), re.M))
+         or not re.search(r'^%s\. .*%s' % (l, re.escape(nom)), corrige_q3, re.M)]
+textes.append(('Figure 18 : les douze espèces de Q.3, formules de l\'énoncé et noms du corrigé', len(q3) == 12 and [l for l, _, _ in q3] == list('abcdefghijkl') and not q3_ko
+               and brute(dict((l, s) for l, s, _ in q3)['i']) == 'C8H16'))
+bloc4 = figsrc[figsrc.index('Q4_ESPECES = '):figsrc.index('def q4_dessin')]
+q4 = re.findall(r"\('([a-h])', '([^']+)', '([^']+)'\)", bloc4)
+corrige_q4 = src[src.index('{#c_q4}'):src.index('{#c_q5}')]
+q4_ko = [l for l, semi, nom in q4 if brute(semi) != {'a': 'C4H10O', 'b': 'C4H10O', 'c': 'C4H10O', 'd': 'C4H10O', 'e': 'C4H8O', 'f': 'C4H8O', 'g': 'C4H8', 'h': 'C4H8'}[l]
+         or ('%s (%s)' % (l, nom) not in corrige_q4 if l in 'abcdef' else "en %s, ils sont de part et d'autre, c'est le %s" % (l, nom) not in corrige_q4 and "En %s, les méthyles sont du même côté, c'est le %s" % (l, nom) not in corrige_q4)]
+textes.append(('Figure 19 : les huit molécules de Q.4, formules brutes et noms du corrigé', len(q4) == 8 and not q4_ko
+               and "at = {'c1': (x, y - 0.5, ''), 'c2': (x + C30, y, ''), 'c3': (x + 2 * C30, y - 0.5, ''), 'c4': (x + 3 * C30, y, '')}" in figsrc
+               and "at = {'c2': (x + 0.5, y - 0.2, ''), 'c3': (x + 1.5, y - 0.2, ''), 'c1': (x, y + 0.67, ''), 'c4': (x + 2.0, y + 0.67, '')}" in figsrc))
+# figures 1 à 5 (thème 1) : même échelle à l'impression, une liaison mesurant entre 0,50 et 0,59 cm
+# (dessin à ECH pouces par unité de liaison, 300 points par pouce, image insérée à la largeur écrite dans la fiche)
+from PIL import Image
+ECH = float(re.search(r'^ECH = ([\d.]+)', figsrc, flags=re.M).group(1))
+liaisons = {}
+for nom in ('fig_q1', 'fig_groupes', 'fig_cyclo', 'fig_isomeres', 'fig_ze'):
+    largeur = float(re.search(r'figs/%s\.png\)\{width=([\d.]+)cm\}' % nom, src).group(1))
+    liaisons[nom] = largeur * ECH * 300 / Image.open(os.path.join(RACINE, 'fiches', 'pc-13-synthese-organique', 'figs', nom + '.png')).size[0]
+textes.append(('Figures 1 à 5 : même échelle, liaison de 0,50 à 0,59 cm (%s)' % ', '.join('%.3f' % v for v in liaisons.values()),
+               all(0.50 <= v <= 0.59 for v in liaisons.values())))
+# « L'essentiel en une page » : rubriques dans l'ordre, premier tableau inchangé pour l'application, rien de hors programme
+ess = src[src.index('# L\'essentiel en une page'):src.index('# Ce qui est tombé')]
+rubriques = re.findall(r'::: \{custom-style="Rubrique"\}\n(.+)\n:::', ess)
+tableaux = re.findall(r'^\| (Notion \| Relation \| .+) \|$', ess, flags=re.M)
+textes.append(('L\'essentiel : rubriques, en-têtes des deux tableaux, rien de hors programme', rubriques[:3] == ['À connaître par cœur', 'À savoir retrouver', "Fourni par l'énoncé, à savoir exploiter"]
+               and tableaux == ['Notion | Relation | À retenir', 'Notion | Relation | Comment la retrouver'] and 'hors programme' not in ess and 'Z/E' not in ess))
+controles.append(('L\'essentiel : rendement de deux étapes, comme en Q.19', 0.800 * 0.75, 0.60, 0.005, r'| Plusieurs étapes | $\eta = \eta_1 \times \eta_2$ |'))
+controles.append(('L\'essentiel : alcane et alcène', all(brute('CH3' + 'CH2' * (n - 2) + 'CH3') == 'C%dH%d' % (n, 2 * n + 2) and brute('CH2=CH' + 'CH2' * (n - 3) + 'CH3') == 'C%dH%d' % (n, 2 * n) for n in range(3, 10)), True, 0,
+                  r'| Alcane, alcène | $\text{C}_n\text{H}_{2n+2}$ ; $\text{C}_n\text{H}_{2n}$ | Carbone tétravalent ; une double liaison retire deux H. |'))
 def ko(c):
     n, cc, i, t, _ = c
     return cc != i if t is None or isinstance(cc, (bool, str, tuple, set)) else abs(float(cc) - float(i)) > t

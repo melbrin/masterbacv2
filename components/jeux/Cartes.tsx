@@ -39,7 +39,7 @@ function CarteMemoire({ ligne, chapitre, suite, repond }: {
             <ContenuHtml className="jeu-fiche-rappel" html={ligne.notion} />
             <span className="jeu-etiquette">Relation</span>
             <ContenuHtml bloc className="jeu-formule" html={ligne.relation} />
-            <span className="jeu-etiquette">À retenir</span>
+            <span className="jeu-etiquette">{ligne.nature === "retrouver" ? "Comment la retrouver" : "À retenir"}</span>
             <ContenuHtml bloc className="jeu-fiche-retenir" html={ligne.retenir} />
           </div>
         </div>

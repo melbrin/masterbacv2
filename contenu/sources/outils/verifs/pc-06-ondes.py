@@ -2,8 +2,8 @@
 # usage : python3 outils/verifs/pc-06-ondes.py
 # Chaque valeur imprimée est recalculée à partir des seules données des énoncés, puis on vérifie que son écriture
 # figure telle quelle dans la fiche. Les données des graphiques sont reprises du script des figures.
-import os
-from math import pi, sqrt, log10, degrees
+import os, re
+from math import pi, sqrt, log10, degrees, tan
 RACINE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 src = open(os.path.join(RACINE, 'fiches', 'pc-06-ondes', 'fiche.md'), encoding='utf-8').read()
 c, I0 = 3.00e8, 1.0e-12
@@ -55,6 +55,9 @@ lam_k = 343 / 2500; D4_prevu = 2 * 343 / 2500; v_k = 2500 * 0.275 / 2
 f_app = 900 * 340 / (340 - 25); f_elo = 900 * 340 / (340 + 25); f_approx = 900 * 25 / 340
 v27 = c * 2.40e3 / (2 * 24.0e9)
 v28 = c * (662.9 - 656.3) / 656.3; d28 = v28 / 1e3 / 70
+# mégaparsec : 1 pc = 1 ua / tan(1 seconde d'arc) ; année-lumière : distance parcourue par la lumière en une année julienne
+unite_astro = 1.495978707e11; Mpc = 1e6 * unite_astro / tan(pi / 648000); al = 299792458 * 365.25 * 86400
+d28_m = d28 * Mpc; d28_al = d28_m / al
 # Exercice 5
 cel = {th: 331.3 * sqrt((th + 273.15) / 273.15) for th in range(15, 21)}
 cel_imp = {15: 340.3, 16: 340.9, 17: 341.5, 18: 342.0, 19: 342.6, 20: 343.2}
@@ -107,7 +110,7 @@ controles = [
     ('Ex.2 tour et perceuse, intensité', 5.0e-4 + I2, 6.6e-4, 5e-6, r'6{,}6 \times 10^{8}'),
     ('Ex.2 presse au poste', L3, 90, 0.5, r'= 90\ \text{dB}'),
     ('Ex.2 rapport des distances', q5, 8.9, 0.05, r'= 8{,}9'),
-    ('Ex.2 distance minimale', dmin5, 45, 0.5, r"d' > 45\ \text{m}"),
+    ('Ex.2 distance minimale', dmin5, 45, 0.5, r'd\text{′} > 45\ \text{m}'),
     ('Ex.2 intensité de la presse', I3, 1.0e-3, 5e-5, r'= 1{,}0 \times 10^{-3}\ \text{W·m}^{-2}'),
     ('Ex.2 niveau total', Ltot, 92, 0.5, r'= 92\ \text{dB}'),
     ('Ex.2 intensité totale', 5.0e-4 + 1.6e-4 + 1.0e-3, 1.66e-3, 5e-6, r'1{,}66 \times 10^{9}'),
@@ -154,6 +157,11 @@ controles = [
     ('Q.28 décalage (nm)', 662.9 - 656.3, 6.6, 1e-9, r'= 6{,}6\ \text{nm}'),
     ('Q.28 vitesse', v28, 3.0e6, 5e4, r'= 3{,}0 \times 10^{6}\ \text{m·s}^{-1}'),
     ('Q.28 distance (Mpc)', d28, 43, 0.5, r'= 43\ \text{Mpc}'),
+    ('Q.28 mégaparsec en mètre', Mpc, 3.09e22, 5e19, r'1\ \text{Mpc} \approx 3{,}09 \times 10^{22}\ \text{m}'),
+    ('Q.28 mégaparsec en millions d\'années-lumière', Mpc / al / 1e6, 3.26, 0.005, r"soit environ 3,26 millions d'années-lumière"),
+    ('Q.28 distance en mètre, valeurs arrondies', 43 * 3.09e22, 1.3e24, 5e22, r'43 \times 3{,}09 \times 10^{22} = 1{,}3 \times 10^{24}\ \text{m}'),
+    ('Q.28 distance en mètre, sans arrondi', d28_m, 1.3e24, 5e22, r'= 1{,}3 \times 10^{24}\ \text{m}'),
+    ('Q.28 distance en millions d\'années-lumière', d28_al / 1e6, 140, 5, r"environ 140 millions d'années-lumière"),
     ('Ex.5 fréquence émise', fE, 4.00e4, 1e-9, r'= 4{,}00 \times 10^{4}\ \text{Hz} = 40{,}0\ \text{kHz}'),
     ('Ex.5 vitesse par effet Doppler', vch, 0.41, 0.005, r'= 0{,}41\ \text{m·s}^{-1}'),
     ('Ex.5 vitesse par les positions', v_pos, 0.41, 1e-9, r'{0{,}200} = 0{,}41\ \text{m·s}^{-1}'),
@@ -193,6 +201,11 @@ phrases = ['Au moins treize exercices des sessions 2025 et 2026', 'cinq exercice
 perdues = [p for p in phrases if p not in src]
 for p in perdues: print('   PHRASE INTROUVABLE :', p)
 print('--- phrases de synthèse : %d suivies, %d introuvable(s)' % (len(phrases), len(perdues)))
-if ecarts or absents or mauvais or perdues:
+
+# primes : écrits x' dans une formule, ils sortent minuscules dans le PDF ; la convention du LISEZMOI est x\text{′} (et x\text{″})
+primes = [(i, f) for i, l in enumerate(src.split('\n'), 1) for f in re.findall(r'\$\$.+?\$\$|\$.+?\$', l) if "'" in f]
+for i, f in primes: print('   PRIME À APOSTROPHE, ligne %d :' % i, f[:100])
+print('--- primes : %d formule(s) avec une apostrophe' % len(primes))
+if ecarts or absents or mauvais or perdues or primes:
     raise SystemExit(1)
 print('--- tout est bon')

@@ -60,6 +60,9 @@ dC_ex4 = 1e-6 / 330e3; C80 = C0_et + pente_et * 80; dh_ex4 = dC_ex4 * 1e12 / ((C
 dV_ex4 = pi * 0.580 ** 2 / 4 * dh_ex4 / 100 * 1000
 
 controles = [
+    ('Essentiel : u_C(tau) en charge, fraction de E', 1 - exp(-1), 0.63, 0.005, r'| $u_C(\tau) = 0{,}63\,E$ (charge), $0{,}37\,U_0$ (décharge) |'),
+    ('Essentiel : u_C(tau) en décharge, fraction de U0', exp(-1), 0.37, 0.005, r'| $u_C(\tau) = 0{,}63\,E$ (charge), $0{,}37\,U_0$ (décharge) |'),
+    ('Essentiel : écart restant à 5 tau, en % (moins de 1 %)', 100 * exp(-5), 0.7, 0.3, r'| Remplacez $t$ par $\tau$, puis par $5\tau$ (fin). |'),
     ('Q.1 intensité de la foudre', I1, 2.5e4, 1e-9, r'= 2{,}5 \times 10^{4}\ \text{A}'),
     ('Q.2 charge de l\'armature A', qA2, 2.8e-3, 5e-5, r'= 2{,}8 \times 10^{-3}\ \text{C} \qquad q_B = -2{,}8 \times 10^{-3}\ \text{C}'),
     ('Q.3 tension au bout de 2,0 s', u3, 9.1, 0.05, r'{22 \times 10^{-6}} = 9{,}1\ \text{V}'),
@@ -158,6 +161,51 @@ controles = [
     ('Ex.4 erreur en litres', dV_ex4, 3, 0.5, r'soit environ $3\ \text{L}$'),
 ]
 
+# relations de L'essentiel (« À connaître par cœur », « À savoir retrouver » et « Fourni par l'énoncé ») : vérifiées
+# numériquement sur des valeurs quelconques, avec une dérivée calculée par différence finie, puis cherchées telles
+# quelles dans la fiche
+def derivee(f, t, h=1e-6):
+    return (f(t + h) - f(t - h)) / (2 * h)
+rel_faux = []
+for E, U0, R, C, Us in ((5.0, 6.0, 10e3, 2.0e-6, 4.0), (12.0, 9.0, 470.0, 4.7e-3, 3.0)):
+    tau = R * C
+    uc = lambda t: E * (1 - exp(-t / tau))                       # charge sous E, condensateur déchargé à t = 0
+    ud = lambda t: U0 * exp(-t / tau)                            # décharge depuis U0
+    for t in (0.3 * tau, tau, 2.7 * tau):
+        if abs(derivee(uc, t) + uc(t) / tau - E / tau) > 1e-6 * E / tau: rel_faux.append('équation de la charge')
+        if abs(derivee(ud, t) + ud(t) / tau) > 1e-6 * U0 / tau: rel_faux.append('équation de la décharge')
+        i = C * derivee(uc, t)                                   # relation du condensateur
+        if abs(i - E / R * exp(-t / tau)) > 1e-6 * E / R: rel_faux.append('intensité pendant la charge')
+        if abs(R * i - E * exp(-t / tau)) > 1e-6 * E or abs(R * i - (E - uc(t))) > 1e-6 * E: rel_faux.append('u_R pendant la charge')
+    if uc(0) != 0 or abs(uc(50 * tau) - E) > 1e-9 or ud(0) != U0 or ud(50 * tau) > 1e-9: rel_faux.append('valeurs initiale et finale')
+    if abs(uc(tau) / E - 0.63) > 0.005 or abs(ud(tau) / U0 - 0.37) > 0.005 or abs(uc(5 * tau) - E) > 0.01 * E or ud(5 * tau) > 0.01 * U0:
+        rel_faux.append('valeurs remarquables')
+    if abs(uc(tau * log(E / (E - Us))) - Us) > 1e-9 or abs(ud(tau * log(U0 / Us)) - Us) > 1e-9: rel_faux.append("instant d'un seuil")
+    # chaque étiquette va avec la bonne phase : la formule « charge » ne convient pas à la décharge, et inversement
+    if abs(ud(tau * log(E / (E - Us))) - Us) < 1e-3 or abs(uc(tau * log(U0 / Us)) - Us) < 1e-3: rel_faux.append("étiquettes charge et décharge")
+    if abs(ud(tau) / U0 - 0.63) < 0.005 or abs(uc(tau) / E - 0.37) < 0.005: rel_faux.append("étiquettes charge et décharge")
+# rubrique « Fourni par l'énoncé » : sens de variation de la capacité d'un condensateur plan, C = e0 * er * S / e,
+# vérifié en faisant varier une seule grandeur à la fois autour de plusieurs situations
+plan = lambda er, S, e: e0 * er * S / e
+for er, S, e in ((1.0, 6.0e-2, 1.0e-4), (2.2, 1.13e-4, 25e-6), (3.0, 2.0e-3, 0.40e-3)):
+    for k in (0.5, 1.1, 3.0):
+        plus = k > 1
+        if (plan(er, k * S, e) > plan(er, S, e)) != plus: rel_faux.append('condensateur plan : sens de variation avec S')
+        if (plan(k * er, S, e) > plan(er, S, e)) != plus: rel_faux.append('condensateur plan : sens de variation avec er')
+        if (plan(er, S, k * e) < plan(er, S, e)) != plus: rel_faux.append('condensateur plan : sens de variation avec e')
+ecritures = [r'$\tau = R \times C$',
+             r'$\dfrac{\mathrm{d}u_C}{\mathrm{d}t} + \dfrac{u_C}{\tau} = \dfrac{E}{\tau} \quad \text{et} \quad u_C = E\left(1 - e^{-t/\tau}\right)$',
+             r'$\dfrac{\mathrm{d}u_C}{\mathrm{d}t} + \dfrac{u_C}{\tau} = 0 \quad \text{et} \quad u_C = U_0\, e^{-t/\tau}$',
+             r'$i = \dfrac{E}{R}\, e^{-t/\tau} \quad \text{et} \quad u_R = E\, e^{-t/\tau}$',
+             r'$u_C(\tau) = 0{,}63\,E$ (charge), $0{,}37\,U_0$ (décharge)',
+             r'$t_s = \tau \ln \dfrac{E}{E - U_s}$ (charge), $\tau \ln \dfrac{U_0}{U_s}$ (décharge)',
+             r'Condensateur plan ($C$ croît avec $S$ et $\varepsilon_r$, décroît avec $e$), $\varepsilon_0$, énergie stockée, souvent la solution.']
+essentiel = src[src.index('# L\'essentiel'):src.index('# Ce qui est tombé')]
+rel_absentes = [w for w in ecritures if w not in essentiel]
+print('--- relations de L\'essentiel : %d écriture(s) suivie(s), %d erreur(s), %d introuvable(s)' % (len(ecritures), len(set(rel_faux)), len(rel_absentes)))
+for n in sorted(set(rel_faux)): print('   RELATION FAUSSE :', n)
+for w in rel_absentes: print('   RELATION INTROUVABLE :', w)
+
 ecarts = [(n, cc, i) for n, cc, i, t, _ in controles if abs(cc - i) > t]
 absents = [(n, w) for n, _, _, _, w in controles if w not in src]
 print('--- comparaison avec la fiche : %d valeurs contrôlées, %d écart(s), %d écriture(s) introuvable(s)' % (len(controles), len(ecarts), len(absents)))
@@ -197,6 +245,6 @@ phrases = ['au moins sept exercices des sessions 2025 et 2026', 'sont demandées
 perdues = [p for p in phrases if p not in src]
 for p in perdues: print('   PHRASE INTROUVABLE :', p)
 print('--- phrases de synthèse : %d suivies, %d introuvable(s)' % (len(phrases), len(perdues)))
-if ecarts or absents or faux_niv or manque or perdus or mauvais or perdues:
+if ecarts or absents or faux_niv or manque or perdus or mauvais or perdues or rel_faux or rel_absentes:
     raise SystemExit(1)
 print('--- tout est bon')

@@ -8,23 +8,35 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 21 37 42-->
+<!--colonnes: 18 36 46-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
-| Onde progressive | $v = \dfrac{d}{\Delta t} \quad \text{et} \quad \lambda = v \times T = \dfrac{v}{f}$ | Retard $\tau = \frac{d}{v}$, écho : $2d = v \times \Delta t$, et $f = \frac{1}{T}$. |
-| Lumière | $c = 3{,}00 \times 10^{8}\ \text{m·s}^{-1} \quad \text{et} \quad v = \dfrac{c}{n}$ | Elle se propage aussi dans le vide. |
-| Son | $I = \dfrac{P}{4\pi d^{2}} \quad \text{et} \quad L = 10 \log\left(\dfrac{I}{I_0}\right)$ | $I_0 = 1{,}0 \times 10^{-12}\ \text{W·m}^{-2}$. Les intensités s'additionnent, pas les niveaux. |
-| Diffraction | $\theta = \dfrac{\lambda}{a} \quad \text{et} \quad L = \dfrac{2\lambda D}{a}$ | Car $\theta \approx \frac{L}{2D}$ (petits angles, en radian). Marquée si $a$ est de l'ordre de $\lambda$ ou plus petit. |
-| Interférences | $\delta = k\lambda \quad \text{ou} \quad \delta = \left(k + \dfrac{1}{2}\right)\lambda$ | Constructives, puis destructives. Ondes cohérentes, $k$ entier relatif. |
-| Fentes d'Young | $\delta = \dfrac{b \times x}{D} \quad \text{et} \quad i = \dfrac{\lambda D}{b}$ | $b$ : écart des fentes, $D$ : distance fentes-écran. $\delta$ est en général fournie, mais $i$ est à savoir établir. |
-| Effet Doppler | $f_R = f_E \times \dfrac{c}{c - v} \quad \text{et} \quad \dfrac{\Delta\lambda}{\lambda} = \dfrac{v}{c}$ | Émetteur qui approche : $f_R > f_E$. Seconde relation : astronomie. |
+| Onde progressive | $v = d/\Delta t \quad \text{et} \quad \lambda = v \times T = v/f$ | Retard $\tau = d/v$ et $f = 1/T$. |
+| Lumière | $c = 3{,}00 \times 10^{8}\ \text{m·s}^{-1} \quad \text{et} \quad v = c/n$ | Elle se propage aussi dans le vide. |
+| Son | $I = P/S \quad \text{et} \quad L = 10 \log(I/I_0)$ | Les intensités s'additionnent, pas les niveaux. |
+| Diffraction | $\theta = \lambda/a$, en radian | Marquée si $a$ est de l'ordre de $\lambda$ ou plus petit. |
+| Interférences | $\delta = k\lambda \quad \text{ou} \quad (k + 1/2)\lambda$, $k$ entier | Constructives, puis destructives ; ondes cohérentes. |
+| Décalage Doppler | $\Delta f = f_R - f_E$ | Positif à l'approche, négatif à l'éloignement. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 17 27 56-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Écho | $2d = v \times \Delta t$ | L'onde parcourt l'aller et le retour, $2d$, pendant $\Delta t$. |
+| Tache centrale | $L = 2\lambda D/a$ | Tache de largeur $L$, ouverture de taille $a$, écran à la distance $D$ : $\tan\theta = L/(2D) \approx \theta$ en radian, et $\theta = \lambda/a$. |
+| Interfrange | $i = \lambda D/b$ | Fentes distantes de $b$, écran à la distance $D$ : d'une frange brillante à la suivante, $\delta = bx/D$ augmente de $\lambda$. |
+| Effet Doppler | $f_R = f_E \times c/(c - v)$ | Émetteur qui approche : $\lambda\text{′} = \lambda - v \times T_E$, puis $f_R = c/\lambda\text{′}$. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Relations du radar, différence de chemin optique, atténuation géométrique, $I_0$ et célérités : en général données.
+Relations du radar et du décalage vers le rouge, différence de chemin optique, intensité sonore d'une source ponctuelle, atténuation géométrique, $I_0$ et célérités : en général données.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
@@ -37,6 +49,8 @@ Les pièges qui coûtent des points
 ::: {custom-style="Rubrique"}
 Votre parcours selon votre objectif
 :::
+
+<!--colonnes: 13 49 38-->
 
 | Objectif | Questions de cours | Exercices |
 |---|---|---|
@@ -194,7 +208,7 @@ Figure 1. Salve émise (voie 1) et écho reçu (voie 2), 2 ms par division
 Énoncés
 :::
 
-# Thème 2 : le son, intensité et niveau d'intensité sonore {#theme2}
+# Thème 2 : le son et le niveau d'intensité sonore {#theme2}
 
 ::: {custom-style="Rubrique"}
 Questions de cours
@@ -247,7 +261,7 @@ Application : un marteau-piqueur produit un niveau de $96\ \text{dB}$ à $2{,}0\
 :::
 
 ::: {custom-style="Enonce"}
-Application : le bruit d'une rue atteint $74\ \text{dB}$ devant une fenêtre. Derrière le double vitrage, on mesure $42\ \text{dB}$. Calculer l'atténuation du vitrage. Un casque antibruit atténue de $28\ \text{dB}$ : quel niveau perçoit un ouvrier exposé à $98\ \text{dB}$ ?
+Application : un double vitrage réduit le bruit d'une rue de $74\ \text{dB}$ à $42\ \text{dB}$. Calculer son atténuation. Un casque antibruit atténue de $28\ \text{dB}$ : quel niveau perçoit un ouvrier exposé à $98\ \text{dB}$ ?
 :::
 
 ## [Q.12]{custom-style="QNum"}\ \ Citer des ordres de grandeur sur le son : domaine audible, hauteur, niveaux {#q12}
@@ -279,7 +293,7 @@ Dans un atelier de mécanique, un ouvrier travaille sur un tour. La réglementat
 :::
 
 ::: {custom-style="EnonceDonnees"}
-Données : $L = 10 \log\left(\dfrac{I}{I_0}\right)$ avec $I_0 = 1{,}0 \times 10^{-12}\ \text{W·m}^{-2}$ ; pour une source ponctuelle, entre les distances $d$ et $d'$ : $L' = L - 20 \log\left(\dfrac{d'}{d}\right)$.
+Données : $L = 10 \log\left(\dfrac{I}{I_0}\right)$ avec $I_0 = 1{,}0 \times 10^{-12}\ \text{W·m}^{-2}$ ; pour une source ponctuelle, entre les distances $d$ et $d\text{′}$ : $L\text{′} = L - 20 \log\left(\dfrac{d\text{′}}{d}\right)$.
 :::
 
 ::: {custom-style="Figure"}
@@ -626,7 +640,7 @@ Un radar fixe émet une onde de fréquence $f_E$ vers un véhicule qui s'approch
 :::
 
 ::: {custom-style="Enonce"}
-Application : au laboratoire, la raie H$\alpha$ de l'hydrogène a pour longueur d'onde $\lambda_0 = 656{,}3\ \text{nm}$. Dans le spectre d'une galaxie, on la mesure à $\lambda = 662{,}9\ \text{nm}$. L'énoncé donne $\dfrac{\lambda - \lambda_0}{\lambda_0} = \dfrac{v}{c}$. La galaxie s'approche-t-elle ou s'éloigne-t-elle ? Calculer sa vitesse, puis sa distance avec la loi de Hubble-Lemaître $v = H_0 \times d$, où $H_0 = 70\ \text{km·s}^{-1}\text{·Mpc}^{-1}$.
+Application : au laboratoire, la raie H$\alpha$ de l'hydrogène a pour longueur d'onde $\lambda_0 = 656{,}3\ \text{nm}$. Dans le spectre d'une galaxie, on la mesure à $\lambda = 662{,}9\ \text{nm}$. L'énoncé donne $\dfrac{\lambda - \lambda_0}{\lambda_0} = \dfrac{v}{c}$. La galaxie s'approche-t-elle ou s'éloigne-t-elle ? Calculer sa vitesse, puis sa distance avec la loi de Hubble-Lemaître $v = H_0 \times d$, où $H_0 = 70\ \text{km·s}^{-1}\text{·Mpc}^{-1}$. Le mégaparsec (Mpc) est une unité de longueur utilisée en astronomie : $1\ \text{Mpc} \approx 3{,}09 \times 10^{22}\ \text{m}$, soit environ 3,26 millions d'années-lumière.
 :::
 
 ::: {custom-style="Rubrique"}
@@ -940,7 +954,7 @@ Le module ne mesure pas les distances inférieures à $3{,}4\ \text{cm}$ environ
 [Rédaction.]{custom-style="EtiqRedaction"} Écrivez la relation littérale avant le calcul, $d = \frac{v \times \Delta t}{2}$, puis remplacez par les valeurs converties en unités du Système international : la moitié des erreurs vient des millisecondes non converties.
 :::
 
-# Corrigés du thème 2 : le son, intensité et niveau d'intensité sonore {#c_theme2}
+# Corrigés du thème 2 : le son et le niveau d'intensité sonore {#c_theme2}
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.7 · Exprimer l'intensité sonore à la distance d d'une source de puissance P {#c_q7}
 
@@ -1028,20 +1042,20 @@ Doubler l'intensité ajoute $10 \log 2 = 3\ \text{dB}$. Une source dix fois moin
 
 En s'éloignant de la source, la puissance se répartit sur une surface de plus en plus grande : l'intensité sonore diminue comme $\dfrac{1}{d^{2}}$. C'est l'atténuation géométrique.
 
-Aux distances $d$ et $d'$ de la source, $L = 10 \log\left(\dfrac{P}{4\pi d^{2} I_0}\right)$ et $L' = 10 \log\left(\dfrac{P}{4\pi d'^{2} I_0}\right)$. Avec $\log a - \log b = \log\dfrac{a}{b}$ et $\log a^{2} = 2 \log a$ :
+Aux distances $d$ et $d\text{′}$ de la source, $L = 10 \log\left(\dfrac{P}{4\pi d^{2} I_0}\right)$ et $L\text{′} = 10 \log\left(\dfrac{P}{4\pi d\text{′}^{2} I_0}\right)$. Avec $\log a - \log b = \log\dfrac{a}{b}$ et $\log a^{2} = 2 \log a$ :
 
-$$L - L' = 10 \log\left(\dfrac{d'^{2}}{d^{2}}\right) = 20 \log\left(\dfrac{d'}{d}\right)$$
+$$L - L\text{′} = 10 \log\left(\dfrac{d\text{′}^{2}}{d^{2}}\right) = 20 \log\left(\dfrac{d\text{′}}{d}\right)$$
 
 ::: {custom-style="Retenir"}
-$A_{\text{géo}} = L - L' = 20 \log\left(\dfrac{d'}{d}\right)$
+$A_{\text{géo}} = L - L\text{′} = 20 \log\left(\dfrac{d\text{′}}{d}\right)$
 :::
 
 **Application numérique.**
 
-$$A_{\text{géo}} = 20 \log\left(\dfrac{10}{2{,}0}\right) = 20 \log 5 = 14\ \text{dB} \qquad L' = 96 - 14 = 82\ \text{dB}$$
+$$A_{\text{géo}} = 20 \log\left(\dfrac{10}{2{,}0}\right) = 20 \log 5 = 14\ \text{dB} \qquad L\text{′} = 96 - 14 = 82\ \text{dB}$$
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} Doubler la distance fait perdre $20 \log 2 = 6\ \text{dB}$. Certains sujets écrivent la relation dans l'autre sens, $L' - L = 20 \log\left(\dfrac{d}{d'}\right)$ : c'est la même, avec un résultat négatif quand on s'éloigne. Au BAC 2026 (Asie, jour 1), l'énoncé fournissait $L' = L - 10 \log\left(\dfrac{d'}{d}\right)$, avec le coefficient 10 : quand l'énoncé donne une relation, c'est elle qu'il faut appliquer, même si elle diffère de celle d'une source ponctuelle.
+[Remarque.]{custom-style="EtiqRemarque"} Doubler la distance fait perdre $20 \log 2 = 6\ \text{dB}$. Certains sujets écrivent la relation dans l'autre sens, $L\text{′} - L = 20 \log\left(\dfrac{d}{d\text{′}}\right)$ : c'est la même, avec un résultat négatif quand on s'éloigne. Au BAC 2026 (Asie, jour 1), l'énoncé fournissait $L\text{′} = L - 10 \log\left(\dfrac{d\text{′}}{d}\right)$, avec le coefficient 10 : quand l'énoncé donne une relation, c'est elle qu'il faut appliquer, même si elle diffère de celle d'une source ponctuelle.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.11 · Définir l'atténuation par absorption et l'exploiter {#c_q11}
@@ -1135,9 +1149,9 @@ $$L_3 = 104 - 20 \log\left(\dfrac{25}{5{,}0}\right) = 104 - 14 = 90\ \text{dB}$$
 **5.** Distance pour passer sous 85 dB
 :::
 
-Il faut $104 - 20 \log\left(\dfrac{d'}{5{,}0}\right) < 85$, soit $20 \log\left(\dfrac{d'}{5{,}0}\right) > 19$ :
+Il faut $104 - 20 \log\left(\dfrac{d\text{′}}{5{,}0}\right) < 85$, soit $20 \log\left(\dfrac{d\text{′}}{5{,}0}\right) > 19$ :
 
-$$\dfrac{d'}{5{,}0} > 10^{19/20} = 8{,}9 \quad \text{donc} \quad d' > 45\ \text{m}$$
+$$\dfrac{d\text{′}}{5{,}0} > 10^{19/20} = 8{,}9 \quad \text{donc} \quad d\text{′} > 45\ \text{m}$$
 
 L'atelier ne mesure que $30\ \text{m}$ : on ne peut pas s'éloigner assez de la presse. S'éloigner ne suffit pas, une protection est indispensable.
 
@@ -1659,15 +1673,15 @@ Figure 14. Fronts d'onde d'un émetteur immobile, puis en mouvement
 
 Pendant une période $T_E$, le front émis au début parcourt $c \times T_E = \lambda$, et l'émetteur avance de $v \times T_E$ vers R. Le front suivant part donc de plus près. Devant l'émetteur, deux fronts successifs sont séparés de :
 
-$$\lambda' = \lambda - v \times T_E = \dfrac{c - v}{f_E}$$
+$$\lambda\text{′} = \lambda - v \times T_E = \dfrac{c - v}{f_E}$$
 
-Le récepteur perçoit la fréquence $f_R = \dfrac{c}{\lambda'}$ :
+Le récepteur perçoit la fréquence $f_R = \dfrac{c}{\lambda\text{′}}$ :
 
 ::: {custom-style="Retenir"}
 Émetteur qui approche : $f_R = f_E \times \dfrac{c}{c - v}$, donc $f_R > f_E$
 :::
 
-Quand l'émetteur s'éloigne, les fronts sont plus espacés derrière lui : $\lambda'' = \lambda + v \times T_E = \dfrac{c + v}{f_E}$.
+Quand l'émetteur s'éloigne, les fronts sont plus espacés derrière lui : $\lambda\text{″} = \lambda + v \times T_E = \dfrac{c + v}{f_E}$.
 
 ::: {custom-style="Retenir"}
 Émetteur qui s'éloigne : $f_R = f_E \times \dfrac{c}{c + v}$, donc $f_R < f_E$
@@ -1736,6 +1750,8 @@ $v$ est la vitesse radiale, c'est-à-dire la vitesse le long de la ligne de vis�
 $$v = c \times \dfrac{\lambda - \lambda_0}{\lambda_0} = 3{,}00 \times 10^{8} \times \dfrac{6{,}6}{656{,}3} = 3{,}0 \times 10^{6}\ \text{m·s}^{-1} = 3{,}0 \times 10^{3}\ \text{km·s}^{-1}$$
 
 $$d = \dfrac{v}{H_0} = \dfrac{3{,}0 \times 10^{3}}{70} = 43\ \text{Mpc}$$
+
+Soit $d \approx 43 \times 3{,}09 \times 10^{22} = 1{,}3 \times 10^{24}\ \text{m}$, environ 140 millions d'années-lumière.
 
 ::: {custom-style="Remarque"}
 [Remarque.]{custom-style="EtiqRemarque"} Toutes les raies sont décalées de la même fraction de leur longueur d'onde : on reconnaît la série de raies, simplement déplacée. Pour les galaxies les plus lointaines, le décalage est si grand que des raies visibles au laboratoire arrivent dans l'infrarouge.

@@ -62,6 +62,9 @@ Si le titre d'une fiche est long, l'en-tête des pages du cahier d'énoncés pas
 - Valeur d'un réglage : `{{site}}`, `{{compte}}`, `{{edition}}`, etc.
 - Bloc commun : `<!--inclure:ouverture-->`.
 - Le tiret long est interdit : la fabrication s'arrête si elle en trouve un.
+- L'essentiel a trois rubriques (relecture de Yane du 18 novembre 2026) : « À connaître par cœur » (tableau Notion | Relation | À retenir : seulement ce que le programme demande de savoir sans qu'on le donne), « À savoir retrouver » (tableau Notion | Relation | Comment la retrouver) et « Fourni par l'énoncé, à savoir exploiter » (un paragraphe). Une notion n'apparaît qu'une fois dans les deux tableaux : l'application s'en sert comme nom unique dans ses jeux et dans les rappels des défis du labo.
+- Un tableau d'avancement suit le modèle de la fiche 5, question 5 : colonnes État du système, Avancement, puis les espèces avec la flèche dans une colonne étroite à part ; lignes État initial, En cours, État final ; colonnes centrées (`|:-:|`).
+- Une barre au-dessus d'une lettre (une moyenne) s'écrit `\overline{x}`, jamais `\bar{x}` : LibreOffice compose `\bar` comme un accent posé de travers.
 - Les couleurs dans les formules apparaissent dans le fichier Word. Le PDF d'aperçu fabriqué ici ne les montre pas (LibreOffice ne les reprend pas). Le texte ne désigne donc jamais un terme par sa couleur.
 - Une question de cours sans texte d'énoncé (titre et ligne d'information seulement) est autorisée : la fabrication évite qu'elle entraîne les suivantes sur une autre page.
 - Un axe s'écrit `$(Oy)$` : la fabrication le compose en italique de texte, car LibreOffice sépare les deux lettres à l'intérieur d'une formule. Pour la même raison, un nom de point ou de triangle s'écrit `$\text{AMB}$`.
@@ -92,10 +95,12 @@ Si le titre d'une fiche est long, l'en-tête des pages du cahier d'énoncés pas
 
 ## Ce qu'il faut sur la machine
 
-- pandoc 3.1 ou plus récent ;
+- pandoc 3.1 ou plus récent (essayé jusqu'à la 3.14) ;
 - LibreOffice avec son module Math (pour le PDF et le calcul des numéros de page) ;
 - Python 3 avec `python-docx`, `lxml`, `pymupdf`, `matplotlib` et `Pillow` ;
 - la police Carlito, équivalent libre de Calibri, pour que la mise en page calculée soit la même que dans Word.
+
+La police, le 21 novembre 2026 : sur l'ordinateur de travail (LibreOffice 26.2 pour Mac), deux Carlito sont visibles, celle que fournit LibreOffice (1.103, nom « Carlito ») et celle du dossier des polices (1.104, nom « Carlito-Regular », celle des PDF d'origine faits avec LibreOffice 24.2). LibreOffice choisit l'une ou l'autre au hasard. Avec la 1.103, la pagination est celle des PDF d'origine mais les formules dans le texte descendent de 2 points (un point qui suit une formule paraît à mi-hauteur) ; avec la 1.104, les formules sont bien placées mais certaines pages s'allongent. `outils/fabrique.sh` refait donc la conversion jusqu'à obtenir la police de la variable `POLICE_PDF` (« Carlito » par défaut : celle avec laquelle les quatorze fiches ont été mises en page le 18 novembre) ; `outils/police_pdf.py` dit laquelle un PDF embarque. Les fichiers Word ne sont pas touchés : Word les affiche avec Calibri, formules bien placées.
 
 Dans une conversation avec Claude, la fabrication repère seule l'outil Word de Claude (compétence docx) et s'en sert pour convertir en PDF et pour valider le fichier Word. Son emplacement peut aussi être donné par la variable `DOCX_SKILL`.
 

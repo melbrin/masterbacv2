@@ -8,24 +8,34 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 20 40 40-->
+<!--colonnes: 21 32 47-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
-| Lentille convergente | $\dfrac{1}{\overline{\text{OA′}}} - \dfrac{1}{\overline{\text{OA}}} = \dfrac{1}{f\text{′}} \quad \text{et} \quad \gamma = \dfrac{\overline{\text{OA′}}}{\overline{\text{OA}}}$ | Distances algébriques, orientées dans le sens de la lumière. $\gamma < 0$ : image renversée. |
-| Objet à l'infini | $\text{A′B′} = f\text{′} \times \theta$ | Image dans le plan focal image. Angle en radian, $\tan\theta \approx \theta$. |
 | Lunette afocale | $\text{F′}_1 = \text{F}_2 \quad \text{et} \quad \text{O}_1\text{O}_2 = f\text{′}_1 + f\text{′}_2$ | Objet à l'infini, image à l'infini : l'œil n'accommode pas. |
-| Grossissement | $G = \dfrac{\theta\text{′}}{\theta} = \dfrac{f\text{′}_1}{f\text{′}_2}$ | Détail vu si $\theta\text{′} > \varepsilon$, pouvoir séparateur de l'œil. |
-| Photon | $E = h\nu = \dfrac{hc}{\lambda}$ | $h = 6{,}63 \times 10^{-34}\ \text{J·s}$ et $1\ \text{eV} = 1{,}60 \times 10^{-19}\ \text{J}$. |
-| Transition atomique | $\Delta E = E_{\text{haut}} - E_{\text{bas}} = \dfrac{hc}{\lambda}$ | Absorption seulement si le photon apporte exactement un écart entre niveaux, ou au moins l'énergie d'ionisation. |
-| Effet photoélectrique | $E_{\text{c}} = h\nu - W \quad \text{et} \quad W = h\nu_{\text{s}}$ | Aucun électron extrait si $\nu < \nu_{\text{s}}$, même avec une lumière intense. |
-| Cellule photovoltaïque | $\eta = \dfrac{P_{\text{él}}}{E_{\text{e}} \times S}$ | $E_{\text{e}}$ : éclairement, en $\text{W·m}^{-2}$. Énergie : $E_{\text{él}} = P_{\text{él}} \times \Delta t$. |
+| Grossissement | $G = \theta\text{′} / \theta$ | $\theta$ : angle à l'œil nu ; $\theta\text{′}$ : angle à travers la lunette. |
+| Photon | $E = h\nu = hc / \lambda$ | $E$ en joule, $\nu$ en hertz, $\lambda$ en mètre. |
+| Transition atomique | $\Delta E = E_{\text{haut}} - E_{\text{bas}} = hc / \lambda$ | Photon absorbé seulement si $h\nu$ est exactement un écart entre niveaux, ou au moins l'énergie d'ionisation. |
+| Effet photoélectrique | $h\nu \geq W$ | Condition pour qu'un photon extraie un électron. Sinon, aucun électron, même avec une lumière intense. |
+| Cellule photovoltaïque | $\eta = P_{\text{él}} / P_{\text{lum}}$ | Rendement, sans unité. Énergie : $E = P \times \Delta t$. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 21 32 47-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Objet à l'infini | $\text{A′B′} = f\text{′} \times \theta$ | Image dans le plan focal image : triangle $\text{OF′B′}$ rectangle en $\text{F′}$, puis $\tan\theta \approx \theta$. |
+| Rapport des focales | $G = f\text{′}_1 / f\text{′}_2$ | Petits angles : $\theta \approx \text{A}_1\text{B}_1 / f\text{′}_1$ et $\theta\text{′} \approx \text{A}_1\text{B}_1 / f\text{′}_2$. |
+| Électron extrait | $E_{\text{c}} = h\nu - W \quad \text{et} \quad W = h\nu_{\text{s}}$ | Bilan d'énergie : $h\nu = W + E_{\text{c}}$ ; au seuil, $E_{\text{c}} = 0$. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Constantes $h$ et $c$, électronvolt, diagramme d'énergie, travail d'extraction, critère de diffraction : en général donnés.
+En général donnés : relations de conjugaison et de grandissement d'une lentille mince (distances algébriques), constantes $h$ et $c$, électronvolt, diagramme d'énergie, travail d'extraction, éclairement $E_{\text{e}}$ (puissance reçue $P_{\text{lum}} = E_{\text{e}} \times S$), pouvoir séparateur de l'œil, critère de diffraction.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points

@@ -8,28 +8,38 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 20 40 40-->
+<!--colonnes: 16 46 38-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
 | Écriture d'un résultat | $x = 9{,}79\ \text{m·s}^{-2}$ et $u(x) = 0{,}10\ \text{m·s}^{-2}$ | $u(x)$ a un ou deux chiffres significatifs ; $x$ s'arrête à la même décimale. |
-| Incertitude-type de type A | $u(\overline{x}) = \dfrac{s}{\sqrt{n}}$ | $s$ : écart-type expérimental de la série de $n$ mesures (calculatrice : $\sigma_{n-1}$). |
+| Incertitude-type de type A | $u(\overline{x}) = \dfrac{s}{\sqrt{n}}$ | $s$ : écart-type expérimental des $n$ mesures, noté $\sigma_{n-1}$ ; $\overline{x}$ : leur moyenne. |
 | Comparaison à une référence | $z = \dfrac{\left|x - x_{\text{réf}}\right|}{u(x)}$ | Compatible si $z \leq 2$. Sinon, chercher une erreur dans le protocole ou le modèle. |
-| Vitesse calculée en Python | `v[i] = (x[i+1] - x[i]) / (t[i+1] - t[i])` | Avec $n$ positions : $n - 1$ vitesses, puis $n - 2$ accélérations. Les indices commencent à 0. |
-| Équation du premier ordre | $\dfrac{\mathrm{d}y}{\mathrm{d}t} + \dfrac{y}{\tau} = \dfrac{y_f}{\tau}$ | $y(t) = y_f + (y_0 - y_f)\, e^{-t/\tau}$ ; $\tau$ en seconde, $y_f$ valeur finale. |
-| Date d'un seuil | $t = \tau \ln\left(\dfrac{y_0 - y_f}{y - y_f}\right)$ | Demi-vie ou temps de demi-réaction : $t_{1/2} = \tau \ln 2$. |
+| Vitesse calculée en Python | `v[i] = (x[i+1]-x[i]) / (t[i+1]-t[i])` | Avec $n$ positions : $n - 1$ vitesses, puis $n - 2$ accélérations ; le premier indice est 0. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 16 36 48-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Équation du premier ordre | $\dfrac{\mathrm{d}y}{\mathrm{d}t} + \dfrac{y}{\tau} = \dfrac{y_f}{\tau}$ ($\tau$ en s, $y_f$ valeur finale) | Loi des mailles, premier principe, loi de vitesse, loi de décroissance radioactive ou deuxième loi de Newton. |
+| Solution | $y(t) = y_f + (y_0 - y_f)\, e^{-t/\tau}$ | Reporter $A\, e^{-t/\tau} + B$ dans l'équation, puis $y(0) = y_0$. |
+| Date d'un seuil, demi-vie | $t = \tau \ln \dfrac{y_0 - y_f}{y - y_f}$ et $t_{1/2} = \tau \ln 2$ | Isoler l'exponentielle, puis prendre le logarithme népérien. $t_{1/2}$ : demi-vie ou temps de demi-réaction. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Les relations des incertitudes-types de type B et composées, la loi de Newton d'un transfert thermique, le modèle d'une force de frottement et le programme Python, dont il faut seulement compléter ou expliquer quelques lignes.
+Les relations des incertitudes-types de type B et composées, la loi de Newton d'un transfert thermique, le modèle d'une force de frottement et le programme Python, dont on complète ou explique quelques lignes.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
 :::
 
-- Recopier $u(x)$ avec tous les chiffres de la calculatrice, ou arrondir $x$ à une autre décimale que $u(x)$.
+- Recopier $u(x)$ avec tous les chiffres affichés, ou arrondir $x$ à une autre décimale que $u(x)$.
 - Oublier qu'en Python `range(n)` va de 0 à $n - 1$, et écrire `^` pour une puissance au lieu de `**`.
 - Confondre la constante de temps $\tau$ et la demi-vie $t_{1/2} = \tau \ln 2$.
 - Conclure « c'est proche » sans calculer $z$, ou donner un résultat sans unité.
@@ -37,6 +47,8 @@ Les pièges qui coûtent des points
 ::: {custom-style="Rubrique"}
 Votre parcours selon votre objectif
 :::
+
+<!--colonnes: 16 46 38-->
 
 | Objectif | Questions de cours | Exercices |
 |---|---|---|
@@ -138,6 +150,8 @@ Application : avec un pendule de longueur $L = 0{,}500\ \text{m}$, $u(L) = 0{,}0
 ::: {custom-style="Enonce"}
 Application : un groupe trouve $g = 9{,}79\ \text{m·s}^{-2}$ avec $u(g) = 0{,}10\ \text{m·s}^{-2}$, un autre $g = 10{,}21\ \text{m·s}^{-2}$ avec $u(g) = 0{,}15\ \text{m·s}^{-2}$. Ces résultats sont-ils compatibles avec la valeur de référence $g_{\text{réf}} = 9{,}81\ \text{m·s}^{-2}$ ?
 :::
+
+<!--sans-saut-->
 
 ::: {custom-style="Rubrique"}
 Exercices
@@ -248,7 +262,7 @@ Compléter les lignes 9 et 12. Combien de valeurs les listes `v` et `a` contienn
 :::
 
 ::: {custom-style="Enonce"}
-Application : un programme dispose des listes `z` (altitudes, en m) et `v` (vitesses, en $\text{m·s}^{-1}$) d'une balle, aux mêmes dates.
+Application : `z` et `v` sont les altitudes (en m) et les vitesses (en $\text{m·s}^{-1}$) d'une balle, aux mêmes dates.
 :::
 
 ```
@@ -262,7 +276,7 @@ Application : un programme dispose des listes `z` (altitudes, en m) et `v` (vite
 ```
 
 ::: {custom-style="Enonce"}
-Compléter les lignes 5 à 7. Sur le graphique tracé ensuite, `Em` diminue au cours du mouvement : que peut-on en conclure ?
+Compléter les lignes 5 à 7. Sur le graphique tracé ensuite, `Em` diminue : que peut-on en conclure ?
 :::
 
 ## [Q.9]{custom-style="QNum"}\ \ Simuler les quantités de matière au cours d'un titrage {#q9}
@@ -334,7 +348,7 @@ Exercices
 :::
 
 ::: {custom-style="Enonce"}
-Pour étudier l'ascenseur rapide d'une tour, un élève pose son smartphone dans la cabine et enregistre la pression de l'air chaque seconde pendant la montée, de $t = 0$ à $t = 40\ \text{s}$. Le programme ci-dessous calcule l'altitude $z$ de la cabine par rapport au rez-de-chaussée, puis sa vitesse $v$ et son accélération $a$. La figure 1 représente les vitesses calculées, chaque valeur `v[i]` étant placée au milieu de l'intervalle de temps sur lequel elle est calculée.
+Pour étudier l'ascenseur rapide d'une tour, un élève pose son smartphone dans la cabine et enregistre la pression de l'air chaque seconde pendant la montée, de $t = 0$ à $t = 40\ \text{s}$. Le programme ci-dessous calcule l'altitude $z$ de la cabine par rapport au rez-de-chaussée, puis sa vitesse $v$ et son accélération $a$. La figure 1 représente les vitesses calculées, chaque `v[i]` étant placée au milieu de son intervalle de temps.
 :::
 
 ```
@@ -379,7 +393,7 @@ Loi fondamentale de la statique des fluides, pour deux points A et B : $P_A - P_
 
 **4.** À l'aide de la figure 1, décrire les trois phases du mouvement de la cabine et déterminer son accélération pendant la première phase.
 
-**5.** Déterminer la hauteur à laquelle la cabine s'arrête, puis vérifier cette valeur avec la dernière pression mesurée.
+**5.** Déterminer la hauteur à laquelle la cabine s'arrête, puis la vérifier avec la dernière pression mesurée.
 
 **6.** Un capteur réel ne donne la pression qu'au pascal près. À quelle variation d'altitude correspond $1\ \text{Pa}$ ? Pourquoi les accélérations tirées d'un enregistrement réel sont-elles plus dispersées que les vitesses ?
 :::

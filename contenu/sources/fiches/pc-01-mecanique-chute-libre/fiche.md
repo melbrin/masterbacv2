@@ -8,23 +8,32 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 17 45 38-->
+<!--colonnes: 15 45 40-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
-| Chute libre | $\begin{cases} a_x = 0 \\ a_y = -g \end{cases}$ | Seul le poids agit : $\vec{a} = \vec{g}$, quelle que soit la masse. Ici, $(Oy)$ est orienté vers le haut. |
-| Vitesse | $\begin{cases} v_x = v_0 \times \cos(\alpha) \\ v_y = -g \times t + v_0 \times \sin(\alpha) \end{cases}$ | Primitives de l'accélération. Les constantes sont les coordonnées de $\vec{v}_0$. |
-| Position | $\begin{cases} x = v_0 \times \cos(\alpha) \times t \\ y = -\dfrac{1}{2} g \times t^{2} + v_0 \times \sin(\alpha) \times t + H \end{cases}$ | Primitives de la vitesse. Les constantes sont les coordonnées à $t = 0$. |
-| Trajectoire | $y(x) = -\dfrac{g \times x^{2}}{2 (v_0 \times \cos(\alpha))^{2}} + \tan(\alpha) \times x + H$ | On isole $t$ dans $x(t)$ et on le remplace dans $y(t)$. C'est une parabole. |
-| Sommet | $v_y(t_S) = 0$ | La vitesse y est horizontale, pas nulle. |
+| Chute libre | $\vec{a} = \vec{g}$ | Seul le poids agit (deuxième loi de Newton), quelle que soit la masse. |
+| Sommet | $v_y(t_S) = 0$ | La vitesse y est horizontale ; elle n'est nulle que pour un lancer vertical. |
 | Portée | $y(x_p) = 0$ | Second degré : on garde la racine positive. |
-| Mesures sur document | $v_i = \dfrac{G_{i-1}G_{i+1}}{2\tau} \quad \text{et} \quad a = \dfrac{\Delta v}{\Delta t}$ | Tenir compte de l'échelle du document. Sur un graphe $v(t)$, $a$ est la pente. |
+| Mesures sur document | $v_i \approx \dfrac{G_{i-1}G_{i+1}}{2\tau} \quad \text{et} \quad \vec{a} \approx \dfrac{\Delta \vec{v}}{\Delta t}$ | Tenir compte de l'échelle. Mouvement rectiligne : $a$ est la pente de $v(t)$. |
+
+::: {custom-style="Rubrique"}
+À savoir retrouver
+:::
+
+<!--colonnes: 15 45 40-->
+
+| Notion | Relation | Comment la retrouver |
+|---|---|---|
+| Vitesse | $\begin{cases} v_x = v_0 \times \cos(\alpha) \\ v_y = -g \times t + v_0 \times \sin(\alpha) \end{cases}$ | Primitives de $a_x = 0$ et $a_y = -g$, avec $(Oy)$ vers le haut. Constantes : coordonnées de $\vec{v}_0$. |
+| Position | $\begin{cases} x = v_0 \times \cos(\alpha) \times t \\ y = -\dfrac{1}{2} g \times t^{2} + v_0 \times \sin(\alpha) \times t + H \end{cases}$ | Primitives de la vitesse. Constantes : coordonnées de $G$ à $t = 0$. |
+| Trajectoire | $y(x) = -\dfrac{g \times x^{2}}{2 (v_0 \times \cos(\alpha))^{2}} + \tan(\alpha) \times x + H$ | On isole $t$ dans $x(t)$ et on le remplace dans $y(t)$. C'est une parabole. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Les équations horaires ne sont presque jamais fournies : il faut savoir les établir. L'énoncé fournit des documents à exploiter : chronophotographie avec son échelle, graphe, parfois un programme Python.
+L'énoncé fournit des documents : chronophotographie avec son échelle, graphe ou programme Python.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
@@ -599,7 +608,7 @@ où $K_1$ et $K_2$ sont des constantes réelles à déterminer. Pour cela, on ut
 
 $$\vec{v}(t = 0)\ \begin{cases} v_x(t = 0) = K_1 = 0 \\ v_y(t = 0) = g \times 0 + K_2 = 0 \end{cases}$$
 
-On en déduit $K_1 = 0$ et $K_2 = 0$. On remplace ensuite la valeur des constantes dans les coordonnées de la vitesse :
+On en déduit $K_1 = 0$ et $K_2 = 0$, que l'on remplace dans les coordonnées de la vitesse :
 
 ::: {custom-style="Retenir"}
 $\vec{v}(t)\ \begin{cases} v_x(t) = 0 \\ v_y(t) = g \times t \end{cases}$
@@ -919,7 +928,15 @@ La solution $t = 0$ correspond au départ. L'autre solution est la date d'atterr
 
 $$t_{\text{vol}} = \dfrac{2 v_0}{g} = \dfrac{2 \times 3{,}0}{9{,}81} = 0{,}61\ \text{s}$$
 
-On a $t_{\text{vol}} = 2 \times t_S$ : la descente dure autant que la montée.
+On a $t_{\text{vol}} = 2 \times t_S$. La montée dure $t_S$, donc la descente, du sommet au sol, dure $t_{\text{vol}} - t_S = t_S$ : elle dure autant que la montée.
+
+Ce n'est pas un hasard : pendant tout le vol, seul le poids agit, donc l'accélération est la même à la montée et à la descente. Au sommet, la vitesse est nulle (question 5) : la descente est une chute libre sans vitesse initiale, d'une hauteur $h_{\text{max}}$. Sa durée s'obtient avec la relation $t_{\text{sol}} = \sqrt{\dfrac{2H}{g}}$ de la question de cours Q.6, en remplaçant $H$ par $h_{\text{max}}$ :
+
+$$\sqrt{\dfrac{2 h_{\text{max}}}{g}} = \sqrt{\dfrac{2}{g} \times \dfrac{v_0^{2}}{2g}} = \dfrac{v_0}{g} = t_S$$
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 
 ::: {custom-style="QRappel"}
 **7.** Vitesse à l'atterrissage
@@ -1042,7 +1059,7 @@ $\overrightarrow{OG}(t)\ \begin{cases} x(t) = v_0 \times \cos(\alpha) \times t \
 :::
 
 ::: {custom-style="Piege"}
-[Piège.]{custom-style="EtiqPiege"} Vérifiez sur la figure de l'énoncé de quel angle il s'agit. Si l'angle donné est mesuré par rapport à la verticale, le cosinus et le sinus s'échangent. Vérifiez aussi l'orientation de l'axe vertical avant d'écrire $a_y = -g$.
+[Piège.]{custom-style="EtiqPiege"} Vérifiez sur la figure de l'énoncé de quel angle il s'agit. Si l'angle donné est mesuré par rapport à la verticale, le cosinus et le sinus s'échangent. Avant d'écrire $a_y = -g$, vérifiez aussi l'orientation de l'axe vertical.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.10 · Déterminer l'équation de la trajectoire {#c_q10}
@@ -1383,6 +1400,10 @@ $v = \sqrt{v_x^{2} + v_y^{2}} = \sqrt{5{,}36^{2} + (-6{,}47)^{2}} = 8{,}4\ \text
 
 La boule arrive au sol plus vite qu'elle n'a été lancée : elle est descendue de $1{,}10\ \text{m}$ entre le lancer et l'impact.
 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+
 ::: {custom-style="QRappel"}
 **8.** Vitesse initiale pour un cochonnet à 6,5 m
 :::
@@ -1479,7 +1500,7 @@ $$x(5{,}4\ \text{s}) = \dfrac{1}{2} \times 2{,}06 \times 5{,}4^{2} + \dfrac{30}{
 [CIBLE:q16]{custom-style="BoutonEnonce"}
 :::
 
-Si l'on donne le graphe de la fonction $v(t)$, alors l'accélération en un point correspond à la pente de la tangente en ce point. Si le graphe est une droite, comme sur la figure 6, alors l'accélération peut être supposée constante et égale au coefficient directeur de la droite. En effet, la vitesse s'écrit alors $v(t) = a \times t + v_0$ : le coefficient directeur est l'accélération $a$. Sur la figure 6, la droite passe par l'origine, donc $v(t) = a \times t$.
+Pour un mouvement rectiligne, si l'on donne le graphe de la fonction $v(t)$, l'accélération en un point correspond à la pente de la tangente en ce point. Si le graphe est une droite, comme sur la figure 6, alors l'accélération peut être supposée constante et égale au coefficient directeur de la droite. En effet, la vitesse s'écrit alors $v(t) = a \times t + v_0$ : le coefficient directeur est l'accélération $a$. Sur la figure 6, la droite passe par l'origine, donc $v(t) = a \times t$.
 
 ::: {custom-style="Methode"}
 [Méthode.]{custom-style="EtiqMethode"} Pour déterminer le coefficient directeur d'une droite ou d'une tangente, il suffit de considérer deux points de la droite ou de la tangente, par exemple $A(x_A\ ;\ y_A)$ et $B(x_B\ ;\ y_B)$, et d'appliquer la formule :

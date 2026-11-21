@@ -105,6 +105,19 @@ controles = [
     ('Ex. 4 solution D', 0.100 * 5.5e-3 / 10.0e-3, 5.5e-2, 1e-12, '= 5{,}5 \\times 10^{-2}\\ \\text{mol·L}^{-1}$$'),
     ('Ex. 4 concentration massique', 0.55 * 35.5, 19.5, 0.05, '= 19{,}5\\ \\text{g·L}^{-1}$$'),
     ('Ex. 4 facteur de dilution', 0.55 / 0.105, 5, 0.5, '\\approx 5$.'),
+    # valeurs des remarques et des phrases de conclusion, recalculées elles aussi
+    ('Q.3 lecture directe hors gamme', 2.0 / 0.13, 15, 0.5, '= 15\\ \\text{µmol·L}^{-1}$, valeur trop faible'),
+    ('Q.4 rapport H3O+ / Na+', 35.0 / 5.01, 7, 0.1, 'environ sept fois plus grande'),
+    ('Q.4 remarque, acide chlorhydrique (mol/m3)', 128 / (35.0 + 7.63), 3.00, 0.005, '= 3{,}00\\ \\text{mol·m}^{-3}$, soit $3{,}00 \\times 10^{-3}\\ \\text{mol·L}^{-1}$'),
+    ('Q.5 rapport moyen sigma/C', k5, 12.63, 0.005, 'en moyenne $k = 12{,}63'),
+    ('Q.5 plus petit rapport', min(s / c for s, c in zip(S5, C5)), 12.6, 0.05, 'de $12{,}6$ à $12{,}7'),
+    ('Q.5 plus grand rapport', max(s / c for s, c in zip(S5, C5)), 12.7, 0.05, 'de $12{,}6$ à $12{,}7'),
+    ('Q.13 pH pour 20 mL', pH_acide_faible(1.0e-3, 10.0, 0.100, 20.0, 4.8), 12.5, 0.05, '($12{,}5$ pour $20\\ \\text{mL}$)'),
+    ('Ex. 2 masse à retirer (mg/kg)', mCu - 100, 205, 0.5, '305 - 100 = 205\\ \\text{mg}'),
+    ('Ex. 2 cycles (quotient)', (mCu - 100) / 40, 5.1, 0.05, '= 5{,}1$ cycles'),
+    ('Ex. 3 écart si V_E lu 0,3 mL trop bas', abs(10 * 2.00e-2 * 11.9e-3 * 180.2 * 1e3 - 500) / 500 > 0.05, True, 0, 'à $0{,}3\\ \\text{mL}$ près'),
+    ('Ex. 3 écart si V_E lu 0,3 mL trop haut', abs(10 * 2.00e-2 * 12.5e-3 * 180.2 * 1e3 - 500) / 500 > 0.05, True, 0, "l'écart resterait supérieur à $5\\ \\%$"),
+    ('Ex. 4 concentration massique, deux chiffres', float('%.2g' % (0.55 * 35.5)), 20, 1e-9, 'environ $20\\ \\text{g·L}^{-1}$ avec deux chiffres'),
 ]
 textes = [('Figure 7, étiquette', "'A = 0,66 : 60 µmol·L$^{-1}$'" in figsrc), ('Ex. 1 maximum du spectre à 510 nm', '(lam - 510)' in figsrc)]
 ecarts = [(n, cc, i) for n, cc, i, t, _ in controles if abs(float(cc) - float(i)) > t]
@@ -204,6 +217,21 @@ for l in idx.splitlines():
         a, b = renvois(l.split('|')[2]); iq |= a; ie |= b
 idx_ko = sorted(set(range(1, 20)) - iq) + [100 + e for e in sorted(set(range(1, 5)) - ie)] + [q for q in iq if q > 19]
 print('--- index : %d questions et %d exercices cités%s' % (len(iq), len(ie), ' ; ÉCART %s' % idx_ko if idx_ko else ''))
-if ecarts or absents or faux or faux_niv or manque or ex_ko or perdus or mauvais or dem_ko or perdues or fig_ko or idx_ko:
+
+# L'essentiel : rubriques dans l'ordre, en-têtes des deux tableaux (l'application lit le premier),
+# demi-équivalence rangée dans « À savoir retrouver » avec un renvoi juste vers Q.12
+ess = src[src.index("# L'essentiel en une page"):src.index('# Ce qui est tombé')]
+rub = re.findall(r'^::: \{custom-style="Rubrique"\}\n(.*?)\n:::$', ess, flags=re.M)
+rub_att = ['À connaître par cœur', 'À savoir retrouver', "Fourni par l'énoncé, à savoir exploiter",
+           'Les pièges qui coûtent des points', 'Votre parcours selon votre objectif']
+titre12 = re.search(r'^## \[Q\.12\].*$', src, flags=re.M).group(0)
+par_coeur, a_retrouver = ess.split('À savoir retrouver', 1)
+ess_ko = ([] if rub == rub_att else ['rubriques dans le désordre : %s' % rub]) \
+    + ['en-tête introuvable : ' + e for e in ('| Notion | Relation | À retenir |', '| Notion | Relation | Comment la retrouver |') if e not in ess] \
+    + ([] if 'demi-équivalence' in titre12 and '| Demi-équivalence |' in a_retrouver and '(Q.12)' in a_retrouver else ['renvoi de « À savoir retrouver » vers Q.12']) \
+    + (['demi-équivalence encore dans « À connaître par cœur »'] if 'demi-équivalence' in par_coeur.lower() else [])
+print("--- L'essentiel : %d rubriques, %d écart(s)" % (len(rub), len(ess_ko)))
+for e in ess_ko: print('   ' + e)
+if ecarts or absents or faux or faux_niv or manque or ex_ko or perdus or mauvais or dem_ko or perdues or fig_ko or idx_ko or ess_ko:
     raise SystemExit(1)
 print('--- tout est bon')

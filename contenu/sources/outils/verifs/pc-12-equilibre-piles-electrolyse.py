@@ -12,11 +12,20 @@ NQ, NEX, NFIG = 19, 5, 15
 F = 9.65e4
 MA = {'H': 1.008, 'C': 12.01, 'O': 16.00, 'Li': 6.94}
 
-def ligne(debut):
-    # valeurs numériques d'une ligne de tableau de la fiche, repérée par le début de sa première cellule
-    l = [x for x in src.splitlines() if x.startswith('| ' + debut)]
+def cellules(debut):
+    # cellules d'une ligne de tableau de la fiche, repérée par sa première cellule (sans celle-ci)
+    l = [x for x in src.splitlines() if x.startswith('| ' + debut + ' |')]
     if not l or len(set(l)) != 1: return None
-    return [float(c.strip().replace(',', '.')) for c in l[0].strip().strip('|').split('|')[1:]]
+    return [c.strip() for c in l[0].strip().strip('|').split('|')[1:]]
+def ligne(debut):
+    # valeurs numériques d'une ligne de tableau ($0{,}50$ ou 0,50) ; None pour une case vide (colonne de la flèche)
+    c = cellules(debut)
+    if c is None: return None
+    return [float(x.strip('$').replace('{,}', '.').replace(',', '.')) if x else None for x in c]
+def composition(formule):
+    comp = {}
+    for e, n in re.findall(r'([A-Z][a-z]?)(\d*)', formule): comp[e] = comp.get(e, 0) + int(n or 1)
+    return comp
 def masse(formule):
     return sum(MA[e] * int(n or 1) for e, n in re.findall(r'([A-Z][a-z]?)(\d*)', formule))
 
@@ -43,6 +52,23 @@ n4 = 50 / 58.7; dt4 = 2 * n4 * F / 2.0; Q4 = 2 * 1.44e5 / 58.7 * F
 ne5 = 0.40 * 15 * 60 / F; E5 = 2.0 * 2 * (1000 / 2.0) * F; E5kWh = E5 / 3.6e6
 
 controles = [
+    # L'essentiel, « À savoir retrouver » : E = P × Δt et P = U × I donnent E = U × I × Δt = U × Q (Q = I × Δt) ;
+    # avec Δt en heures, Q = I × Δt est en A·h et E = P × Δt en W·h ; 1 h = 3 600 s donne 1 A·h = 3 600 C et 1 W·h = 3 600 J
+    # (conversions écrites dans les corrigés de Q.12, Q.13 et Q.19) ; exemple de Q.19 : 12 V et 60 A·h, soit 720 W·h
+    ('L\'essentiel : 1 h en secondes', 60 * 60, 3600, 0, '$\\Delta t$ en heures, avec $1\\ \\text{h} = 3\\,600\\ \\text{s}$, donne'),
+    ('L\'essentiel : 1 A·h = 1 A × 3 600 s en coulombs (Q = I × Δt), comme au corrigé de Q.12', 1.0 * (60 * 60), 3600, 0, '$1\\ \\text{A·h} = 3\\,600\\ \\text{C}$.\n:::'),
+    ('L\'essentiel : 1 W·h = 1 W × 3 600 s en joules (E = P × Δt), comme au corrigé de Q.13', 1.0 * (60 * 60), 3600, 0, 'et $1\\ \\text{W·h} = 3\\,600\\ \\text{J}$\n:::'),
+    ('L\'essentiel : E = U × Q avec Q en A·h donne des W·h (Q.19 : 12 V × 60 A·h)', 12 * (60 * 3600) / 3600, 12 * 60, 1e-9,
+     '| Énergie électrique | $E = U \\times I \\times \\Delta t = U \\times Q$ | Combiner $E = P \\times \\Delta t$, $P = U \\times I$ et $Q = I \\times \\Delta t$ ; $\\Delta t$ en heures, avec $1\\ \\text{h} = 3\\,600\\ \\text{s}$, donne $Q$ en $\\text{A·h}$ et $E$ en $\\text{W·h}$. |'),
+    ('L\'essentiel : « Comment la retrouver » en une seule phrase',
+     [len(re.findall(r'\.(?:\s|$)', re.sub(r'\$[^$]*\$', 'F', c[3]))) for c in
+      (l.split('|') for l in src[src.index('Comment la retrouver |'):src.index('Fourni par l\'énoncé')].splitlines()[2:]) if len(c) > 4],
+     [1], None, '| Notion | Relation | Comment la retrouver |'),
+    ('L\'essentiel : seuil de transformation totale fourni par l\'énoncé de Q.4, comme dans le corrigé',
+     '$K > 10^4$ d\'une transformation totale' in src and 'Donnée : on considère qu\'une transformation est totale lorsque $K > 10^4$.' in enonces
+     and 'on la considère comme totale lorsque $K > 10^4$' in src, True, 0, 'le seuil $K > 10^4$ d\'une transformation totale'),
+    ('Q.4 seuil : K = 4,0 < 10^4 (non totale) et K = 10^11 > 10^4 (totale)', (4.0 > 1e4, 1e11 > 1e4), (False, True), None,
+     'Pour la transformation de Q.3, $K = 10^{11}$ est bien supérieure à $10^4$ : elle est considérée comme totale'),
     ('Q.2 log K1', log10(K1), -4.8, 1e-9, '= 10^{-4{,}8} = 1{,}6 \\times 10^{-5}$$'),
     ('Q.2 constante K1', K1, 1.6e-5, 0.05e-5, '= 10^{-4{,}8} = 1{,}6 \\times 10^{-5}$$'),
     ('Q.2 constante de la réaction inverse', 1 / K1, 6.3e4, 0.05e4, '$\\dfrac{1}{K_1} = 10^{4{,}8} = 6{,}3 \\times 10^{4}$'),
@@ -175,8 +201,29 @@ donnees = ['$V_1 = 100\\ \\text{mL}$ d\'une solution de sulfate de fer(II) de co
            'pendant $15\\ \\text{min}$ avec un courant d\'intensité $I = 0{,}40\\ \\text{A}$',
            'L\'électrolyseur industriel fonctionne sous une tension $U = 2{,}0\\ \\text{V}$',
            'En novembre, mois de 30 jours, l\'éolienne a produit $750\\ \\text{MW·h}$',
-           'production de $400\\ \\text{kg}$ de dihydrogène par jour']
-if ligne('Initial') != [0, 0.50, 0.50, 0, 0]: donnees.append('Q.4 : ligne « Initial » du tableau d\'avancement')
+           'production de $400\\ \\text{kg}$ de dihydrogène par jour',
+           'de constante $K = 10^{11}$ ? Donnée : on considère qu\'une transformation est totale lorsque $K > 10^4$.']
+# tableau d'avancement de Q.4, au format de la maison : espèces de l'équation, état liquide écrit (ℓ) comme partout ailleurs
+# dans la fiche (un « (l) » se lit « (I) » en gras), flèche « ⇄ » (transformation non totale),
+# quantités initiales de l'énoncé, puis lignes « En cours » et « État final »
+tete4 = '| État du système | Avancement (mol) | CH~3~COOH(ℓ) | \\+ C~2~H~5~OH(ℓ) | ⇄ | CH~3~COOC~2~H~5~(ℓ) | \\+ H~2~O(ℓ) |'
+especes4 = [re.sub(r'\(ℓ\)|[~\\+ ]', '', c) for c in tete4.strip('|').split('|')[2:]]
+if [c for c in especes4 if c != '⇄' and not re.fullmatch(r'(?:[A-Z][a-z]?\d*)+', c)]: donnees.append('Q.4 : espèce illisible dans l\'en-tête')
+if re.search(r'\(l\)', src): donnees.append('état liquide écrit (l) au lieu de (ℓ)')
+# cahier d'énoncés : le thème 3 ouvre une page (saut réservé au cahier), sinon son titre reste seul en bas de la page de l'Ex. 3
+if '[CIBLE:c_ex3]{custom-style="BoutonCorrige"}\n:::\n\n<!--debut:cahier-->\n```{=openxml}\n<w:p><w:r><w:br w:type="page"/></w:r></w:p>\n```\n\n<!--fin:cahier-->\n# Thème 3 : électrolyse et accumulateurs {#theme3}' not in src:
+    donnees.append('cahier : saut de page avant le thème 3')
+# Q.10 ouvre une page dans la fiche et dans le cahier : son énoncé reste entier, avec ses deux demi-équations et la figure 2
+if 'Figure 1. La pile cuivre-aluminium\n:::\n\n```{=openxml}\n<w:p><w:r><w:br w:type="page"/></w:r></w:p>\n```\n\n## [Q.10]' not in src:
+    donnees.append('saut de page avant Q.10')
+reactifs4, produits4 = especes4[:2], especes4[3:]
+somme = lambda ff: {e: sum(composition(f).get(e, 0) for f in ff) for e in set().union(*map(composition, ff))}
+if tete4 not in src: donnees.append('Q.4 : en-tête du tableau d\'avancement')
+if somme(reactifs4) != somme(produits4): donnees.append('Q.4 : équation de l\'en-tête non équilibrée')
+if ligne('État initial') != [0, 0.50, 0.50, None, 0, 0]: donnees.append('Q.4 : ligne « État initial » du tableau d\'avancement')
+if cellules('En cours') != ['$x$', '$0{,}50 - x$', '$0{,}50 - x$', '', '$x$', '$x$']: donnees.append('Q.4 : ligne « En cours » du tableau d\'avancement')
+if cellules('État final') != ['$x_\\text{f}$', '$0{,}50 - x_\\text{f}$', '$0{,}50 - x_\\text{f}$', '', '$x_\\text{f}$', '$x_\\text{f}$']:
+    donnees.append('Q.4 : ligne « État final » du tableau d\'avancement')
 if 'F = 9{,}65 \\times 10^{4}\\ \\text{C·mol}^{-1}' not in src or '9{,}65 \\times 10^{4}\\ \\text{C}$' in src: donnees.append('unité de la constante de Faraday')
 dmanque = [d for d in donnees if d not in enonces]
 gaz = {k: int(v) for k, v in re.findall(r"if gaz_(g|d): bulles\(ax, [\d.]+, [\d.]+, [\d.]+, n=(\d+)", figsrc)}

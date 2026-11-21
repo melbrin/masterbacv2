@@ -1,4 +1,4 @@
-# Recalcul indépendant des résultats numériques de la fiche 4 (Énergie : gaz parfait et transferts thermiques).
+# Recalcul indépendant des résultats numériques de la fiche 5 (Énergie : gaz parfait et transferts thermiques).
 # usage : python3 outils/verifs/pc-05-energie.py
 from math import log, exp, sqrt, pi
 R = 8.314
@@ -11,6 +11,15 @@ sigma, phis, A = 5.67e-8, 1370.0, 0.30
 T1 = (phis / (4 * sigma)) ** 0.25; T2 = ((1 - A) * phis / (4 * sigma)) ** 0.25; T0 = (phis / sigma) ** 0.25
 print(' sans albédo : %.1f K = %.1f °C ; avec albédo 0,30 : %.1f K = %.1f °C ; formule fausse de l\'édition 2024 : %.0f K' % (T1, T1 - 273.15, T2, T2 - 273.15, T0))
 print(' phi_s/4 = %.1f W/m2 ; absorbé = %.1f W/m2' % (phis / 4, (1 - A) * phis / 4))
+print(' effet de serre naturel : de %.0f °C à environ 15 °C, soit environ %.0f °C de plus' % (T2 - 273.15, 15 - (T2 - 273.15)))
+
+print('--- Q.22, remarque sur les gaz à effet de serre')
+# composition de l'air sec en volume : diazote 78,084 %, dioxygène 20,946 %
+N2_O2 = 78.084 + 20.946
+print(' diazote + dioxygène = %.2f %% de l\'air sec' % N2_O2)
+# dioxyde de carbone : 278 ppm (1750) à 285 ppm (1850) avant l'ère industrielle ; 415 à 430 ppm entre 2022 et 2026
+hausses = [100 * (apres / avant - 1) for avant in (278, 285) for apres in (415, 430)]
+print(' hausse de la concentration du CO2 : de %.0f %% à %.0f %% selon les années retenues' % (min(hausses), max(hausses)))
 
 print('--- Exercice 1 : congélateur')
 V, P1, th1, th2, M, S = 0.200, 1.013e5, 20.0, -18.0, 29.0e-3, 0.60
@@ -80,6 +89,9 @@ controles = [
     ('Q.22 sans albédo (K)', T_sans, 279, 0.5), ('Q.22 sans albédo (°C)', T_sans - 273.15, 6, 0.5),
     ('Q.22 avec albédo (K)', T_avec, 255, 0.5), ('Q.22 avec albédo (°C)', T_avec - 273.15, -18, 0.5),
     ('Q.22 piège, facteur 4 oublié (K)', T_faux, 394, 0.5),
+    ('Q.22 remarque, diazote et dioxygène dans l\'air sec (%)', N2_O2, 99, 0.5),
+    ('Q.22 remarque, hausse du CO2, plus petite valeur (%)', min(hausses), 50, 5),
+    ('Q.22 remarque, hausse du CO2, plus grande valeur (%)', max(hausses), 50, 5),
     ('Ex.1 n (mol)', n, 8.31, 0.005), ('Ex.1 m (g)', n * M * 1e3, 241, 0.5), ('Ex.1 P2 (Pa)', P2, 8.82e4, 50),
     ('Ex.1 F (N)', F, 7.9e3, 50), ('Ex.1 masse équivalente (kg)', F / 9.81, 8.0e2, 5),
     ('Ex.2 a (°C/s)', a_extremes, 5.97e-2, 5e-5), ('Ex.2 c (J/kg/K)', c, 2.01e3, 5), ('Ex.2 u(c) avant arrondi', uc, 47, 0.5),

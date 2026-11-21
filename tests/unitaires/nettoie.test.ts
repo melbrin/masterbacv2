@@ -51,6 +51,8 @@ describe("nettoyage du HTML : ce qui n'est pas dans la liste est retiré et sign
     ["un svg porteur de script", "<svg><script>MARQUEUR</script></svg>", /balise refusée : svg/],
     ["un commentaire", "<p>a</p><!-- MARQUEUR -->", /commentaire retiré/],
     ["une largeur aberrante", '<col style="width: 5000%;position:fixed">', /attribut refusé : style/],
+    ["un alignement suivi d'autre chose", '<td style="text-align: center; position: fixed">a</td>', /attribut refusé : style/],
+    ["un style libre sur une case", '<th style="color: red">a</th>', /attribut refusé : style/],
     ["un identifiant hors d'un titre", '<p id="MARQUEUR">a</p>', /attribut refusé : id/],
   ];
   for (const [nom, html, attendu] of cas) {
@@ -98,5 +100,14 @@ describe("nettoyage du HTML : propriétés", () => {
       const une = brut(html).html;
       expect(brut(une).html).toBe(une);
     }), { numRuns: 300 });
+  });
+});
+
+describe("l'alignement des colonnes de tableau", () => {
+  it("garde seulement text-align à gauche, au centre ou à droite, sur th et td", () => {
+    const r = nettoie('<table><thead><tr><th style="text-align: center;">a</th></tr></thead><tbody><tr><td style="text-align:right">b</td></tr></tbody></table>');
+    expect(r.problemes).toEqual([]);
+    expect(r.html).toContain('<th style="text-align: center">');
+    expect(r.html).toContain('<td style="text-align: right">');
   });
 });
