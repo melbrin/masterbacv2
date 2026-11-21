@@ -14,7 +14,7 @@
 |---|---|---|
 | Onde progressive | $v = d/\Delta t \quad \text{et} \quad \lambda = v \times T = v/f$ | Retard $\tau = d/v$ et $f = 1/T$. |
 | Lumière | $c = 3{,}00 \times 10^{8}\ \text{m·s}^{-1} \quad \text{et} \quad v = c/n$ | Elle se propage aussi dans le vide. |
-| Son | $I = P/S \quad \text{et} \quad L = 10 \log(I/I_0)$ | Les intensités s'additionnent, pas les niveaux. |
+| Son | $I = P/S$ et niveau $L = 10 \log(I/I_0)$ | Les intensités s'additionnent, pas les niveaux. |
 | Diffraction | $\theta = \lambda/a$, en radian | Marquée si $a$ est de l'ordre de $\lambda$ ou plus petit. |
 | Interférences | $\delta = k\lambda \quad \text{ou} \quad (k + 1/2)\lambda$, $k$ entier | Constructives, puis destructives ; ondes cohérentes. |
 | Décalage Doppler | $\Delta f = f_R - f_E$ | Positif à l'approche, négatif à l'éloignement. |
@@ -30,7 +30,7 @@
 | Écho | $2d = v \times \Delta t$ | L'onde parcourt l'aller et le retour, $2d$, pendant $\Delta t$. |
 | Tache centrale | $L = 2\lambda D/a$ | Tache de largeur $L$, ouverture de taille $a$, écran à la distance $D$ : $\tan\theta = L/(2D) \approx \theta$ en radian, et $\theta = \lambda/a$. |
 | Interfrange | $i = \lambda D/b$ | Fentes distantes de $b$, écran à la distance $D$ : d'une frange brillante à la suivante, $\delta = bx/D$ augmente de $\lambda$. |
-| Effet Doppler | $f_R = f_E \times c/(c - v)$ | Émetteur qui approche : $\lambda\text{′} = \lambda - v \times T_E$, puis $f_R = c/\lambda\text{′}$. |
+| Effet Doppler | $f_R = f_E \times v_{\text{onde}}/(v_{\text{onde}} - v)$ | Émetteur qui approche à $v$ : $\lambda\text{′} = \lambda - v/f_E$, puis $f_R = v_{\text{onde}}/\lambda\text{′}$. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
@@ -150,7 +150,7 @@ Application : calculer la célérité de la lumière dans un verre d'indice $n =
 :::
 
 ::: {custom-style="Enonce"}
-Application : la célérité du son dans l'air vaut $331\ \text{m·s}^{-1}$ à $0\ \text{°C}$. À $11\ \text{km}$ d'altitude, elle n'est plus que de $295\ \text{m·s}^{-1}$. On admet qu'elle est proportionnelle à la racine carrée de la température absolue $T$, exprimée en kelvin, avec $T = \theta + 273$. Calculer la température de l'air à cette altitude.
+Application : la célérité du son dans l'air vaut $331\ \text{m·s}^{-1}$ à $0\ \text{°C}$. À $11\ \text{km}$ d'altitude, elle n'est plus que de $295\ \text{m·s}^{-1}$. On admet qu'elle est proportionnelle à la racine carrée de la température absolue $T$, exprimée en kelvin, avec $T = \theta + 273{,}15$. Calculer la température de l'air à cette altitude.
 :::
 
 ## [Q.6]{custom-style="QNum"}\ \ Situer les domaines du spectre électromagnétique par leurs longueurs d'onde {#q6}
@@ -193,7 +193,7 @@ Figure 1. Salve émise (voie 1) et écho reçu (voie 2), 2 ms par division
 
 **3.** Lire sur la figure 1 la durée $\Delta t$ entre le début de l'émission et le début de l'écho. En déduire la distance $d$ du mur, avec la célérité de la salle.
 
-**4.** Le robot travaille aussi dans une chambre froide à $-10\ \text{°C}$. La célérité du son est proportionnelle à la racine carrée de la température absolue et vaut $331\ \text{m·s}^{-1}$ à $0\ \text{°C}$ ($273\ \text{K}$). Calculer la célérité des ultrasons dans la chambre froide.
+**4.** Le robot travaille aussi dans une chambre froide à $-10\ \text{°C}$. La célérité du son est proportionnelle à la racine carrée de la température absolue et vaut $331\ \text{m·s}^{-1}$ à $0\ \text{°C}$ ($273{,}15\ \text{K}$). Calculer la célérité des ultrasons dans la chambre froide.
 
 **5.** Dans la chambre froide, le robot est à $2{,}00\ \text{m}$ d'un mur. Calculer la durée de l'aller-retour, puis la distance affichée par le module. Conclure.
 
@@ -432,7 +432,7 @@ Pour protéger une ruche des frelons asiatiques, un apiculteur installe une harp
 | *L* (mm) | 42,8 | 26,4 | 21,5 | 14,1 | 10,7 | 7,0 |
 
 ::: {custom-style="EnonceDonnees"}
-Données : $\theta = \dfrac{\lambda}{a}$, avec $\theta$ le demi-angle de la tache centrale, en radian ; $\tan\theta \approx \theta$ pour les petits angles ; $\dfrac{u(a)}{a} = \sqrt{\left(\dfrac{u(k)}{k}\right)^{2} + \left(\dfrac{u(L)}{L}\right)^{2}}$ ; une mesure est compatible avec une valeur de référence si $\dfrac{|a - a_{\text{réf}}|}{u(a)} < 2$.
+Données : $\theta = \dfrac{\lambda}{a}$, avec $\theta$ le demi-angle de la tache centrale, en radian ; $\tan\theta \approx \theta$ pour les petits angles ; $\dfrac{u(a)}{a} = \sqrt{\left(\dfrac{u(k)}{k}\right)^{2} + \left(\dfrac{u(L)}{L}\right)^{2}}$ ; une mesure est compatible avec une valeur de référence si $\dfrac{|a - a_{\text{réf}}|}{u(a)} \leq 2$.
 :::
 
 ::: {custom-style="Figure"}
@@ -662,12 +662,12 @@ Un radar pédagogique affiche la vitesse des véhicules. En classe, on le modél
 :::
 
 ::: {custom-style="EnonceDonnees"}
-Données : $\Delta f = \dfrac{2 \times f_E \times v_{\text{ch}}}{c}$, avec $v_{\text{ch}}$ la vitesse du chariot et $c$ la célérité des ultrasons ; célérité des ultrasons dans l'air selon la température :
+Données : $\Delta f = \dfrac{2 \times f_E \times v_{\text{ch}}}{v_{\text{onde}}}$, avec $v_{\text{ch}}$ la vitesse du chariot et $v_{\text{onde}}$ la célérité de l'onde ; célérité des ultrasons dans l'air selon la température :
 :::
 
 | *θ* (°C) | 15 | 16 | 17 | 18 | 19 | 20 |
 |---|---|---|---|---|---|---|
-| *c* (m·s⁻¹) | 340,3 | 340,9 | 341,5 | 342,0 | 342,6 | 343,2 |
+| *v*~onde~ (m·s⁻¹) | 340,3 | 340,9 | 341,5 | 342,0 | 342,6 | 343,2 |
 
 ::: {custom-style="Figure"}
 ![Signal sinusoïdal reçu par R, tension en fonction du temps en microsecondes, de 0 à 140 µs : cinq périodes complètes tiennent entre 0 et 125 µs](figs/fig_radar_signal.png){width=8cm}
@@ -836,18 +836,18 @@ Dans l'air, la célérité augmente avec la température. Le modèle proposé : 
 $v = k \times \sqrt{T} \quad \text{donc} \quad \dfrac{v_1}{v_0} = \sqrt{\dfrac{T_1}{T_0}} \quad \text{et} \quad T_1 = T_0 \times \left(\dfrac{v_1}{v_0}\right)^{2}$
 :::
 
-avec $T = \theta + 273$, $\theta$ étant la température en degré Celsius.
+avec $T = \theta + 273{,}15$, $\theta$ étant la température en degré Celsius.
 
-**Application numérique.** $T_0 = 0 + 273 = 273\ \text{K}$ :
+**Application numérique.** $T_0 = 0 + 273{,}15 = 273{,}15\ \text{K}$ :
 
-$$T_1 = 273 \times \left(\dfrac{295}{331}\right)^{2} = 273 \times 0{,}794 = 217\ \text{K} \qquad \theta_1 = 217 - 273 = -56\ \text{°C}$$
+$$T_1 = 273{,}15 \times \left(\dfrac{295}{331}\right)^{2} = 273{,}15 \times 0{,}794 = 217\ \text{K} \qquad \theta_1 = 217 - 273{,}15 = -56\ \text{°C}$$
 
 ::: {custom-style="Piege"}
 [Piège.]{custom-style="EtiqPiege"} La température doit être absolue, en kelvin. Avec $\theta$ en degré Celsius, le calcul n'a pas de sens : il faudrait diviser par $\sqrt{0}$ pour $\theta_0 = 0\ \text{°C}$.
 :::
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} Vérification du modèle à $20\ \text{°C}$ : $331 \times \sqrt{\dfrac{293}{273}} = 343\ \text{m·s}^{-1}$, la valeur habituelle. Certains sujets donnent plutôt un tableau de célérités selon la température : il suffit de le lire.
+[Remarque.]{custom-style="EtiqRemarque"} Vérification du modèle à $20\ \text{°C}$ : $331 \times \sqrt{\dfrac{293{,}15}{273{,}15}} = 343\ \text{m·s}^{-1}$, la valeur habituelle. Certains sujets donnent plutôt un tableau de célérités selon la température : il suffit de le lire.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.6 · Situer les domaines du spectre électromagnétique par leurs longueurs d'onde {#c_q6}
@@ -922,9 +922,9 @@ Le mur est à environ $2{,}0\ \text{m}$.
 **4.** Célérité dans la chambre froide
 :::
 
-La température absolue vaut $T = -10 + 273 = 263\ \text{K}$. La célérité étant proportionnelle à $\sqrt{T}$ :
+La température absolue vaut $T = -10 + 273{,}15 = 263{,}15\ \text{K}$. La célérité étant proportionnelle à $\sqrt{T}$ :
 
-$$v_{\text{froid}} = 331 \times \sqrt{\dfrac{263}{273}} = 331 \times 0{,}982 = 325\ \text{m·s}^{-1}$$
+$$v_{\text{froid}} = 331 \times \sqrt{\dfrac{263{,}15}{273{,}15}} = 331 \times 0{,}982 = 325\ \text{m·s}^{-1}$$
 
 ::: {custom-style="QRappel"}
 **5.** Distance affichée dans la chambre froide
@@ -1300,7 +1300,7 @@ $$L = \dfrac{2 \times 633 \times 10^{-9} \times 2{,}00}{0{,}10 \times 10^{-3}} =
 
 **Bleu ou rouge ?** La longueur d'onde du bleu (environ $450\ \text{nm}$) est plus petite que celle du rouge (environ $650\ \text{nm}$) : la tache est plus étroite en lumière bleue. C'est la lumière rouge qui donne la tache la plus large.
 
-C'est pourquoi les disques optiques ont utilisé des longueurs d'onde de plus en plus courtes : proche infrarouge à $780\ \text{nm}$, à la limite du visible, pour le CD, rouge à $650\ \text{nm}$ pour le DVD, bleu-violet à $405\ \text{nm}$ pour le Blu-ray. Plus la longueur d'onde est petite, plus la tache lumineuse sur le disque est petite, et plus on peut graver d'informations sur la même surface.
+C'est pourquoi les disques optiques ont utilisé des longueurs d'onde de plus en plus courtes : rouge extrême à $780\ \text{nm}$, à la limite du visible et de l'infrarouge, pour le CD, rouge à $650\ \text{nm}$ pour le DVD, bleu-violet à $405\ \text{nm}$ pour le Blu-ray. Plus la longueur d'onde est petite, plus la tache lumineuse sur le disque est petite, et plus on peut graver d'informations sur la même surface.
 
 ::: {custom-style="Methode"}
 [Méthode.]{custom-style="EtiqMethode"} Pour le coefficient directeur, prenez deux points de la droite tracée, éloignés l'un de l'autre, et non deux points de mesure. Calculez $\dfrac{\Delta L}{\Delta(1/a)}$ en gardant les unités : des $\text{mm}$ divisés par des $\text{mm}^{-1}$ donnent des $\text{mm}^{2}$.
@@ -1410,7 +1410,7 @@ On calcule l'écart normalisé (z-score) :
 
 $$\dfrac{|a - a_{\text{réf}}|}{u(a)} = \dfrac{|0{,}463 - 0{,}45|}{0{,}031} = 0{,}4 < 2$$
 
-La mesure, $a = (0{,}46 \pm 0{,}03)\ \text{mm}$, est compatible avec l'indication de la bobine. Cette indication, $0{,}45\ \text{mm}$, est inférieure à $0{,}5\ \text{mm}$ : le fil convient pour la harpe.
+La mesure, $a = 0{,}46\ \text{mm}$ avec $u(a) = 0{,}03\ \text{mm}$, est compatible avec l'indication de la bobine. Cette indication, $0{,}45\ \text{mm}$, est inférieure à $0{,}5\ \text{mm}$ : le fil convient pour la harpe.
 
 ::: {custom-style="Redaction"}
 [Rédaction.]{custom-style="EtiqRedaction"} Concluez en deux temps, comme la question le demande : d'abord la compatibilité avec la valeur de référence, ensuite la réponse au problème posé, ici l'usage du fil.
@@ -1661,7 +1661,7 @@ Certains énoncés utilisent la valeur absolue $|\Delta f|$ : le signe se discut
 [CIBLE:q26]{custom-style="BoutonEnonce"}
 :::
 
-Un émetteur E se déplace à la vitesse $v$ vers un récepteur R fixe. Il émet un son de fréquence $f_E$, de période $T_E = \dfrac{1}{f_E}$, qui se propage à la célérité $c$, avec $v < c$.
+Un émetteur E se déplace à la vitesse $v$ vers un récepteur R fixe. Il émet un son de fréquence $f_E$, de période $T_E = \dfrac{1}{f_E}$, qui se propage à la célérité $v_{\text{onde}}$, avec $v < v_{\text{onde}}$.
 
 ::: {custom-style="Figure"}
 ![À gauche, un émetteur immobile entouré de fronts d'onde circulaires concentriques et régulièrement espacés. À droite, un émetteur qui se déplace vers la droite : les cercles ne sont plus concentriques, leurs centres sont décalés vers l'arrière ; devant l'émetteur les fronts sont resserrés, derrière ils sont espacés](figs/fig_doppler.png){width=13cm}
@@ -1671,20 +1671,20 @@ Un émetteur E se déplace à la vitesse $v$ vers un récepteur R fixe. Il émet
 Figure 14. Fronts d'onde d'un émetteur immobile, puis en mouvement
 :::
 
-Pendant une période $T_E$, le front émis au début parcourt $c \times T_E = \lambda$, et l'émetteur avance de $v \times T_E$ vers R. Le front suivant part donc de plus près. Devant l'émetteur, deux fronts successifs sont séparés de :
+Pendant une période $T_E$, le front émis au début parcourt $v_{\text{onde}} \times T_E = \lambda$, et l'émetteur avance de $v \times T_E$ vers R. Le front suivant part donc de plus près. Devant l'émetteur, deux fronts successifs sont séparés de :
 
-$$\lambda\text{′} = \lambda - v \times T_E = \dfrac{c - v}{f_E}$$
+$$\lambda\text{′} = \lambda - v \times T_E = \dfrac{v_{\text{onde}} - v}{f_E}$$
 
-Le récepteur perçoit la fréquence $f_R = \dfrac{c}{\lambda\text{′}}$ :
+Le récepteur perçoit la fréquence $f_R = \dfrac{v_{\text{onde}}}{\lambda\text{′}}$ :
 
 ::: {custom-style="Retenir"}
-Émetteur qui approche : $f_R = f_E \times \dfrac{c}{c - v}$, donc $f_R > f_E$
+Émetteur qui approche : $f_R = f_E \times \dfrac{v_{\text{onde}}}{v_{\text{onde}} - v}$, donc $f_R > f_E$
 :::
 
-Quand l'émetteur s'éloigne, les fronts sont plus espacés derrière lui : $\lambda\text{″} = \lambda + v \times T_E = \dfrac{c + v}{f_E}$.
+Quand l'émetteur s'éloigne, les fronts sont plus espacés derrière lui : $\lambda\text{″} = \lambda + v \times T_E = \dfrac{v_{\text{onde}} + v}{f_E}$.
 
 ::: {custom-style="Retenir"}
-Émetteur qui s'éloigne : $f_R = f_E \times \dfrac{c}{c + v}$, donc $f_R < f_E$
+Émetteur qui s'éloigne : $f_R = f_E \times \dfrac{v_{\text{onde}}}{v_{\text{onde}} + v}$, donc $f_R < f_E$
 :::
 
 **Application numérique.**
@@ -1692,11 +1692,11 @@ Quand l'émetteur s'éloigne, les fronts sont plus espacés derrière lui : $\la
 $$f_{\text{approche}} = 900 \times \dfrac{340}{340 - 25} = 971\ \text{Hz} \qquad f_{\text{éloignement}} = 900 \times \dfrac{340}{340 + 25} = 838\ \text{Hz}$$
 
 ::: {custom-style="Piege"}
-[Piège.]{custom-style="EtiqPiege"} La formule de l'éloignement ne s'obtient pas en échangeant $f_E$ et $f_R$ dans celle de l'approche : $f_E \times \frac{c - v}{c}$ est faux pour un émetteur qui s'éloigne. Refaites le raisonnement sur les fronts d'onde, avec $\lambda + v \times T_E$.
+[Piège.]{custom-style="EtiqPiege"} La formule de l'éloignement ne s'obtient pas en échangeant $f_E$ et $f_R$ dans celle de l'approche : $f_E \times \frac{v_{\text{onde}} - v}{v_{\text{onde}}}$ est faux pour un émetteur qui s'éloigne. Refaites le raisonnement sur les fronts d'onde, avec $\lambda + v \times T_E$.
 :::
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} Quand $v$ est très petite devant $c$, $\Delta f \approx f_E \times \dfrac{v}{c}$ en valeur absolue. Ici, $900 \times \dfrac{25}{340} = 66\ \text{Hz}$ au lieu de $71\ \text{Hz}$ : l'approximation n'est bonne que si $v \ll c$.
+[Remarque.]{custom-style="EtiqRemarque"} Quand $v$ est très petite devant $v_{\text{onde}}$, $\Delta f \approx f_E \times \dfrac{v}{v_{\text{onde}}}$ en valeur absolue. Ici, $900 \times \dfrac{25}{340} = 66\ \text{Hz}$ au lieu de $71\ \text{Hz}$ : l'approximation n'est bonne que si $v \ll v_{\text{onde}}$.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.27 · Exploiter le décalage Doppler d'une onde renvoyée par une cible mobile pour mesurer sa vitesse {#c_q27}
@@ -1717,10 +1717,10 @@ $$v = \dfrac{3{,}00 \times 10^{8} \times 2{,}40 \times 10^{3}}{2 \times 24{,}0 \
 
 Le véhicule approche : la fréquence reçue par le radar est plus élevée que la fréquence émise.
 
-**Échographie Doppler.** Les ultrasons sont renvoyés par les globules rouges en mouvement. Le faisceau fait un angle $\theta$ avec l'écoulement : seule la composante de la vitesse dans l'axe du faisceau compte, et les sujets donnent alors $v = \dfrac{c \times \Delta f}{2 \times f_E \times \cos\theta}$, avec $c$ la célérité des ultrasons dans le sang, environ $1{,}5 \times 10^{3}\ \text{m·s}^{-1}$.
+**Échographie Doppler.** Les ultrasons sont renvoyés par les globules rouges en mouvement. Le faisceau fait un angle $\theta$ avec l'écoulement : seule la composante de la vitesse dans l'axe du faisceau compte, et les sujets donnent alors $v = \dfrac{v_{\text{onde}} \times \Delta f}{2 \times f_E \times \cos\theta}$, avec $v_{\text{onde}}$ la célérité des ultrasons dans le sang, environ $1{,}5 \times 10^{3}\ \text{m·s}^{-1}$.
 
 ::: {custom-style="Methode"}
-[Méthode.]{custom-style="EtiqMethode"} Identifiez la bonne célérité $c$ : celle de la lumière pour un radar, ondes électromagnétiques ; celle du son ou des ultrasons dans le milieu traversé pour un dispositif acoustique.
+[Méthode.]{custom-style="EtiqMethode"} Identifiez la bonne célérité : celle de la lumière, $c$, pour un radar, ondes électromagnétiques ; celle du son ou des ultrasons dans le milieu traversé, $v_{\text{onde}}$, pour un dispositif acoustique.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.28 · Exploiter l'effet Doppler-Fizeau en astronomie : décalage vers le rouge et vitesse radiale {#c_q28}
@@ -1732,7 +1732,7 @@ Le véhicule approche : la fréquence reçue par le radar est plus élevée que 
 L'effet Doppler appliqué à la lumière s'appelle effet Doppler-Fizeau. Une étoile ou une galaxie qui s'éloigne de la Terre envoie une lumière dont toutes les raies sont décalées vers les grandes longueurs d'onde, donc vers le rouge : c'est le décalage vers le rouge (en anglais, redshift). Si elle se rapproche, les raies sont décalées vers le bleu (blueshift).
 
 ::: {custom-style="Figure"}
-![Deux spectres visibles de 400 à 780 nanomètres : en haut, le spectre de laboratoire avec les raies H bêta à 486 nm et H alpha à 656 nm ; en bas, le spectre de la galaxie avec les mêmes raies décalées vers la droite, vers le rouge](figs/fig_raies.png){width=12cm}
+![Deux spectres visibles de 400 à 800 nanomètres : en haut, le spectre de laboratoire avec les raies H bêta à 486 nm et H alpha à 656 nm ; en bas, le spectre de la galaxie avec les mêmes raies décalées vers la droite, vers le rouge](figs/fig_raies.png){width=12cm}
 :::
 
 ::: {custom-style="Legende"}
@@ -1781,13 +1781,13 @@ $$f_E = \dfrac{1}{T} = \dfrac{1}{25{,}0 \times 10^{-6}} = 4{,}00 \times 10^{4}\ 
 **3.** Célérité dans la salle
 :::
 
-D'après le tableau, à $18\ \text{°C}$ : $c = 342{,}0\ \text{m·s}^{-1}$.
+D'après le tableau, à $18\ \text{°C}$ : $v_{\text{onde}} = 342{,}0\ \text{m·s}^{-1}$.
 
 ::: {custom-style="QRappel"}
 **4.** Vitesse par l'effet Doppler
 :::
 
-$$v_{\text{ch}} = \dfrac{\Delta f \times c}{2 \times f_E} = \dfrac{96 \times 342{,}0}{2 \times 40{,}0 \times 10^{3}} = 0{,}41\ \text{m·s}^{-1}$$
+$$v_{\text{ch}} = \dfrac{\Delta f \times v_{\text{onde}}}{2 \times f_E} = \dfrac{96 \times 342{,}0}{2 \times 40{,}0 \times 10^{3}} = 0{,}41\ \text{m·s}^{-1}$$
 
 ::: {custom-style="QRappel"}
 **5.** Vitesse par les positions
@@ -1809,14 +1809,14 @@ Le décalage change de signe : $\Delta f = -96\ \text{Hz}$, donc $f_R = 40\ 000 
 **7.** Décalage du vrai radar
 :::
 
-$50\ \text{km·h}^{-1} = \dfrac{50}{3{,}6}\ \text{m·s}^{-1} = 13{,}9\ \text{m·s}^{-1}$ :
+$50\ \text{km·h}^{-1} = \dfrac{50}{3{,}6}\ \text{m·s}^{-1} = 13{,}9\ \text{m·s}^{-1}$ et, pour ces ondes électromagnétiques, $v_{\text{onde}} = c$ :
 
 $$\Delta f = \dfrac{2 \times 24{,}0 \times 10^{9} \times 13{,}9}{3{,}00 \times 10^{8}} = 2{,}22 \times 10^{3}\ \text{Hz}$$
 
 Le décalage vaut environ $2{,}2\ \text{kHz}$ : il se mesure facilement, alors que la fréquence émise vaut $24{,}0\ \text{GHz}$.
 
 ::: {custom-style="Redaction"}
-[Rédaction.]{custom-style="EtiqRedaction"} Avant d'appliquer la relation fournie, écrivez la grandeur cherchée en fonction des autres, ici $v_{\text{ch}} = \frac{\Delta f \times c}{2 f_E}$, puis remplacez. Précisez quelle célérité vous utilisez et pourquoi.
+[Rédaction.]{custom-style="EtiqRedaction"} Avant d'appliquer la relation fournie, écrivez la grandeur cherchée en fonction des autres, ici $v_{\text{ch}} = \frac{\Delta f \times v_{\text{onde}}}{2 f_E}$, puis remplacez. Précisez quelle célérité vous utilisez et pourquoi.
 :::
 
 ```{=openxml}

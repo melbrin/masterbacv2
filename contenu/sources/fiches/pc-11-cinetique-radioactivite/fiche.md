@@ -28,7 +28,7 @@
 | Notion | Relation | Comment la retrouver |
 |---|---|---|
 | Ordre 1 | $[\text{A}](t) = [\text{A}]_0\,\text{e}^{-kt}$ ; $t_{1/2} = \ln 2 / k$ | Résoudre $\text{d}[\text{A}]/\text{d}t = -k\,[\text{A}]$ ; à $t_{1/2}$, $[\text{A}] = [\text{A}]_0 / 2$ ; $\ln[\text{A}]$ est affine en $t$, de pente $-k$. |
-| Décroissance | $N(t) = N_0\,\text{e}^{-\lambda t}$ ; $t_{1/2} = \ln 2 / \lambda$ | Résoudre $\text{d}N/\text{d}t = -\lambda N$ ; à $t_{1/2}$, $N = N_0 / 2$. |
+| Décroissance | $N(t) = N_0\,\text{e}^{-\lambda t}$ ; $t_{1/2} = \ln 2 / \lambda$ | Résoudre $\text{d}N/\text{d}t = -\lambda N$ ; à $t_{1/2}$ (demi-vie), $N = N_0 / 2$. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
@@ -354,7 +354,7 @@ Figure 4. Logarithme de la concentration en paracétamol au cours du temps
 :::
 
 ::: {custom-style="EnonceDonnees"}
-$M(\text{P}) = 151\ \text{g·mol}^{-1}$. En dessous de $c_\text{lim} = 8{,}0\ \text{mg·L}^{-1}$ de paracétamol dans le sang, l'effet contre la douleur est fortement atténué. La notice demande d'attendre au moins $6\ \text{h}$ entre deux prises.
+$M(\text{P}) = 151\ \text{g·mol}^{-1}$. En dessous de $C_\text{m,lim} = 8{,}0\ \text{mg·L}^{-1}$ de paracétamol dans le sang, l'effet contre la douleur est fortement atténué. La notice demande d'attendre au moins $6\ \text{h}$ entre deux prises.
 :::
 
 ::: {custom-style="Enonce"}
@@ -488,7 +488,7 @@ Figure 6. Mécanisme de la saponification d'un ester
 :::
 
 ::: {custom-style="EnonceDonnees"}
-Électronégativités : $\chi(\text{H}) = 2{,}2$ ; $\chi(\text{C}) = 2{,}6$ ; $\chi(\text{O}) = 3{,}4$.
+Électronégativités : $\chi(\text{H}) = 2{,}20$ ; $\chi(\text{C}) = 2{,}55$ ; $\chi(\text{O}) = 3{,}44$.
 :::
 
 ::: {custom-style="Enonce"}
@@ -1046,7 +1046,7 @@ Figure 14. Tracé de $\ln[\text{CV}]$ en fonction du temps
 $$k = -\dfrac{0{,}92 - 3{,}00}{24 - 0} = 8{,}7 \times 10^{-2}\ \text{min}^{-1}, \text{ en accord avec } \dfrac{\ln 2}{8{,}0} = 8{,}7 \times 10^{-2}\ \text{min}^{-1}$$
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} Une seule vérification sur deux points ne suffit pas. À l'inverse, si les points de $\ln[\text{A}]$ ne sont pas alignés, la transformation ne suit pas une loi d'ordre 1 : c'était le cas de l'hydrolyse de l'aspirine étudiée au BAC 2025 en Nouvelle-Calédonie, où le graphe de la vitesse en fonction de la concentration n'était pas une droite passant par l'origine.
+[Remarque.]{custom-style="EtiqRemarque"} Une seule vérification sur deux points ne suffit pas. À l'inverse, si les points de $\ln[\text{A}]$ ne sont pas alignés, la transformation ne suit pas une loi d'ordre 1 : c'était le cas de l'hydrolyse de l'aspirine dans l'exercice « De l'aspirine pour favoriser l'écoulement sanguin » (BAC Nouvelle-Calédonie 2025, jour 1), où le graphe de la vitesse en fonction de la concentration n'était pas une droite passant par l'origine.
 :::
 
 ::: {custom-style="Piege"}
@@ -1129,7 +1129,7 @@ Vérification : la moitié de la concentration initiale, $60\ \text{µmol·L}^{-
 **5.** Durée de l'effet
 :::
 
-$$[\text{P}]_\text{lim} = \dfrac{c_\text{lim}}{M} = \dfrac{8{,}0 \times 10^{-3}}{151} = 5{,}3 \times 10^{-5}\ \text{mol·L}^{-1} = 53\ \text{µmol·L}^{-1}$$
+$$[\text{P}]_\text{lim} = \dfrac{C_\text{m,lim}}{M} = \dfrac{8{,}0 \times 10^{-3}}{151} = 5{,}3 \times 10^{-5}\ \text{mol·L}^{-1} = 53\ \text{µmol·L}^{-1}$$
 
 $$t = \dfrac{1}{k}\,\ln\dfrac{[\text{P}]_0}{[\text{P}]_\text{lim}} = \dfrac{1}{0{,}27}\,\ln\dfrac{120}{53} = 3{,}0\ \text{h}$$
 
@@ -1267,7 +1267,7 @@ Une réaction se produit lors de chocs efficaces entre entités réactives, c'es
 **1.** Sites accepteur et donneur
 :::
 
-L'oxygène est plus électronégatif que le carbone ($3{,}4$ contre $2{,}6$) : les liaisons $\text{C=O}$ et $\text{C-O}$ sont polarisées, et l'atome de carbone, lié à deux atomes d'oxygène, porte une charge partielle $\delta^{\text{+}}$. Il est pauvre en électrons : c'est un site accepteur. Le site donneur de l'étape 1 est l'atome d'oxygène de l'ion hydroxyde, qui porte des doublets non liants et une charge négative.
+L'oxygène est plus électronégatif que le carbone ($3{,}44$ contre $2{,}55$) : les liaisons $\text{C=O}$ et $\text{C-O}$ sont polarisées, et l'atome de carbone, lié à deux atomes d'oxygène, porte une charge partielle $\delta^{\text{+}}$. Il est pauvre en électrons : c'est un site accepteur. Le site donneur de l'étape 1 est l'atome d'oxygène de l'ion hydroxyde, qui porte des doublets non liants et une charge négative.
 
 ::: {custom-style="QRappel"}
 **2.** Flèches courbes
@@ -1525,7 +1525,7 @@ $t_{1/2} = \dfrac{\ln 2}{\lambda}$ ; au bout de $n$ demi-vies, il reste $\dfrac{
 [CIBLE:q23]{custom-style="BoutonEnonce"}
 :::
 
-L'activité $A$ d'un échantillon est le nombre moyen de désintégrations qui s'y produisent par seconde. Elle s'exprime en becquerels : $1\ \text{Bq}$ correspond à une désintégration par seconde.
+L'activité $A$ d'un échantillon est le nombre moyen de désintégrations qui s'y produisent par seconde. Elle s'exprime en becquerels : $1\ \text{Bq}$ correspond à une désintégration par seconde. Ne la confondez pas avec le nombre de masse, noté lui aussi $A$ dans l'écriture ${}^{A}_{Z}\text{X}$ (Q.17).
 
 $$A = \dfrac{1\,200}{60} = 20\ \text{Bq}$$
 

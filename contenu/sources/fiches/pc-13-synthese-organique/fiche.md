@@ -1262,7 +1262,7 @@ Un solvant extracteur doit être non miscible avec la phase de départ et dissou
 Figure 24. L'ampoule à décanter
 :::
 
-Une partie de l'acide éthanoïque, soluble dans le cyclohexane, accompagne l'ester. La solution d'hydrogénocarbonate de sodium le transforme en ions éthanoate, qui passent dans la phase aqueuse (à pH supérieur au $\text{p}K_\text{A}$ du couple, la forme basique prédomine : fiche 9, Q.18) :
+Une partie de l'acide éthanoïque, soluble dans le cyclohexane, accompagne l'ester. La solution d'hydrogénocarbonate de sodium le transforme en ions éthanoate, qui passent dans la phase aqueuse (à pH supérieur au $\text{p}K_\text{A}$ du couple, la forme basique prédomine : fiche 9, Q.19) :
 
 $$\text{CH}_3\text{-COOH}(\text{aq}) + \text{HCO}_3^-(\text{aq}) \rightarrow \text{CH}_3\text{-COO}^-(\text{aq}) + \text{CO}_2(\text{g}) + \text{H}_2\text{O}(\ell)$$
 

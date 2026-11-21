@@ -648,7 +648,7 @@ $m = C \times V \times M$, pesée dans une coupelle tarée, dissolution et ajust
 [CIBLE:q3]{custom-style="BoutonEnonce"}
 :::
 
-La quantité de soluté prélevée se retrouve en entier dans l'étalon : $C_0 \times V_0 = C \times V$, d'où $F = \dfrac{C_0}{C}$ et $V_0 = \dfrac{V}{F}$, avec $C_0 = 50{,}0\ \text{mmol·L}^{-1}$ et $V = 50{,}0\ \text{mL}$.
+La quantité de soluté prélevée se retrouve en entier dans l'étalon : $C_0 \times V_0 = C \times V$, d'où le facteur de dilution $F_\text{dil} = \dfrac{C_0}{C}$ et $V_0 = \dfrac{V}{F_\text{dil}}$, avec $C_0 = 50{,}0\ \text{mmol·L}^{-1}$ et $V = 50{,}0\ \text{mL}$.
 
 <!--colonnes: 16 32 24 28-->
 
@@ -827,7 +827,7 @@ Figure 13. Lecture de la concentration du sirop dilué
 **6.** Dilution et masse de colorant dans un verre
 :::
 
-On prélève $10{,}0\ \text{mL}$ de sirop à la pipette jaugée, on les verse dans une fiole jaugée de $50{,}0\ \text{mL}$, on complète à l'eau distillée jusqu'au trait de jauge et on homogénéise : $F = \dfrac{50{,}0}{10{,}0} = 5$.
+On prélève $10{,}0\ \text{mL}$ de sirop à la pipette jaugée, on les verse dans une fiole jaugée de $50{,}0\ \text{mL}$, on complète à l'eau distillée jusqu'au trait de jauge et on homogénéise : le facteur de dilution vaut $F_\text{dil} = \dfrac{50{,}0}{10{,}0} = 5$.
 
 Un verre de $250\ \text{mL}$ contient un huitième de sirop, soit $\dfrac{250}{8} = 31{,}25\ \text{mL}$. Sans arrondir en cours de calcul, $C = 25{,}7\ \text{µmol·L}^{-1}$ et $C_\text{m} = 29{,}8\ \text{mg·L}^{-1}$ :
 
@@ -903,9 +903,9 @@ Les ions hydroxyde et les ions oxonium réagissent mole à mole : à l'équivale
 
 $$V_\text{E} = \dfrac{C \times V}{c} = \dfrac{6 \times 10{,}0}{0{,}100} = 6 \times 10^{2}\ \text{mL}$$
 
-soit vingt-quatre burettes : c'est impossible. Pour obtenir $V_\text{E} \approx 12\ \text{mL}$ avec une prise d'essai de $10{,}0\ \text{mL}$, la solution titrée doit avoir une concentration :
+soit vingt-quatre burettes : c'est impossible. Pour obtenir $V_\text{E} \approx 12\ \text{mL}$ avec une prise d'essai de $10{,}0\ \text{mL}$, la solution titrée doit avoir une concentration $C_\text{d}$, d'où le facteur de dilution $F_\text{dil}$ :
 
-$$C_\text{d} = \dfrac{c \times V_\text{E}}{V} = \dfrac{0{,}100 \times 12}{10{,}0} = 0{,}12\ \text{mol·L}^{-1} \qquad F = \dfrac{C}{C_\text{d}} = \dfrac{6}{0{,}12} = 50$$
+$$C_\text{d} = \dfrac{c \times V_\text{E}}{V} = \dfrac{0{,}100 \times 12}{10{,}0} = 0{,}12\ \text{mol·L}^{-1} \qquad F_\text{dil} = \dfrac{C}{C_\text{d}} = \dfrac{6}{0{,}12} = 50$$
 
 On prélève $2{,}00\ \text{mL}$ de déboucheur à la pipette jaugée et on les verse dans une fiole jaugée de $100{,}0\ \text{mL}$ contenant déjà de l'eau distillée ; on complète au trait de jauge et on homogénéise. On titre ensuite $10{,}0\ \text{mL}$ de la solution diluée.
 
@@ -1406,7 +1406,9 @@ $$[\text{H}_2\text{O}_2] = \dfrac{C_0 \times V_\text{s} - \dfrac{2 \times (P - P
 
 À $t = 8{,}0\ \text{min}$, on lit $P = 1\,165\ \text{hPa}$, soit $P - P_0 = 1{,}52 \times 10^{4}\ \text{Pa}$ :
 
-$$n(\text{O}_2) = \dfrac{1{,}52 \times 10^{4} \times 2{,}40 \times 10^{-4}}{8{,}314 \times 293} = 1{,}50 \times 10^{-3}\ \text{mol} \qquad [\text{H}_2\text{O}_2] = \dfrac{4{,}0 \times 10^{-3} - 3{,}0 \times 10^{-3}}{11{,}0 \times 10^{-3}} = 9{,}1 \times 10^{-2}\ \text{mol·L}^{-1}$$
+$$n(\text{O}_2) = \dfrac{1{,}52 \times 10^{4} \times 2{,}40 \times 10^{-4}}{8{,}314 \times 293} = 1{,}50 \times 10^{-3}\ \text{mol}$$
+
+$$[\text{H}_2\text{O}_2] = \dfrac{4{,}0 \times 10^{-3} - 3{,}0 \times 10^{-3}}{11{,}0 \times 10^{-3}} = 9{,}1 \times 10^{-2}\ \text{mol·L}^{-1}$$
 
 Ici, à $8{,}0\ \text{min}$, soit deux fois $t_{1/2}$, il reste le quart du peroxyde d'hydrogène de départ, comme le prévoit une loi de vitesse d'ordre 1.
 

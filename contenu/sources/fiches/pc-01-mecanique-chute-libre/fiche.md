@@ -8,14 +8,14 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 15 45 40-->
+<!--colonnes: 15 31 54-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
-| Chute libre | $\vec{a} = \vec{g}$ | Seul le poids agit (deuxième loi de Newton), quelle que soit la masse. |
-| Sommet | $v_y(t_S) = 0$ | La vitesse y est horizontale ; elle n'est nulle que pour un lancer vertical. |
+| Deuxième loi de Newton | $\sum \vec{F}_{\text{ext}} = m \times \vec{a}$ | Dans un référentiel galiléen. En chute libre, seul le poids agit : $\vec{a} = \vec{g}$, quelle que soit la masse. |
+| Sommet | $v_y(t_S) = 0$ | Vitesse horizontale ; elle n'est nulle que pour un lancer vertical. |
 | Portée | $y(x_p) = 0$ | Second degré : on garde la racine positive. |
-| Mesures sur document | $v_i \approx \dfrac{G_{i-1}G_{i+1}}{2\tau} \quad \text{et} \quad \vec{a} \approx \dfrac{\Delta \vec{v}}{\Delta t}$ | Tenir compte de l'échelle. Mouvement rectiligne : $a$ est la pente de $v(t)$. |
+| Mesures sur document | $v_i \approx \dfrac{G_{i-1}G_{i+1}}{2\tau} \quad \text{et} \quad \vec{a} \approx \dfrac{\Delta \vec{v}}{\Delta t}$ | $\tau$ : durée entre deux positions successives. Tenir compte de l'échelle. Mouvement rectiligne : $a$ est la pente de $v(t)$. |
 
 ::: {custom-style="Rubrique"}
 À savoir retrouver
@@ -1633,7 +1633,7 @@ $$\dfrac{10}{5} = 2{,}0\ \text{cm}$$
 On peut donc placer le vecteur $\vec{a}_{10}$, qui est colinéaire à $\Delta\vec{v}$, de même sens, et de longueur 2,0 cm (en rouge sur la figure 15).
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} Le vecteur accélération obtenu est vertical, dirigé vers le bas, et sa valeur est proche de $g = 9{,}8\ \text{m·s}^{-2}$ : c'est bien ce que prévoit la deuxième loi de Newton pour une chute libre (voir Q.2). Une construction à la main donne une valeur comprise entre 9 et 11 $\text{m·s}^{-2}$ : un écart de 1 mm sur la longueur de $\Delta\vec{v}$ change le résultat de plus de 10 %.
+[Remarque.]{custom-style="EtiqRemarque"} Le vecteur accélération obtenu est vertical, dirigé vers le bas, et sa valeur est proche de $g = 9{,}81\ \text{m·s}^{-2}$ : c'est bien ce que prévoit la deuxième loi de Newton pour une chute libre (voir Q.2). Une construction à la main donne une valeur comprise entre 9 et 11 $\text{m·s}^{-2}$ : un écart de 1 mm sur la longueur de $\Delta\vec{v}$ change le résultat de plus de 10 %.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Exercice 3 · La balle du jongleur {#c_ex3}

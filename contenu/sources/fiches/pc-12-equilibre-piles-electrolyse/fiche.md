@@ -8,14 +8,14 @@
 À connaître par cœur
 :::
 
-<!--colonnes: 19 26 55-->
+<!--colonnes: 19 27 54-->
 
 | Notion | Relation | À retenir |
 |---|---|---|
-| Quotient de réaction | $Q_\text{r} = \dfrac{[\text{C}]^c\,[\text{D}]^d}{[\text{A}]^a\,[\text{B}]^b}$ | Concentrations en $\text{mol·L}^{-1}$, sans le solvant ni les solides. À l'équilibre, $Q_\text{r} = K$, qui ne dépend que de la température. |
+| Quotient de réaction | $Q_\text{r} = \dfrac{([\text{C}]/c^\circ)^c\,([\text{D}]/c^\circ)^d}{([\text{A}]/c^\circ)^a\,([\text{B}]/c^\circ)^b}$ | $c^\circ = 1\ \text{mol·L}^{-1}$ ; le solvant et les solides n'y figurent pas. À l'équilibre, $Q_\text{r} = K$, qui ne dépend que de la température. |
 | Sens d'évolution | $Q_\text{r,i} < K$ : sens direct ; $Q_\text{r,i} > K$ : sens indirect | $Q_\text{r}$ évolue vers $K$. Si $Q_\text{r,i} = K$, le système est à l'équilibre : il n'évolue pas. |
 | Taux d'avancement | $\tau = x_\text{f} / x_\text{max}$ | Un réactif en excès ou l'élimination d'un produit augmente $\tau$. |
-| Oxydoréduction | $\text{Ox} + n\,\text{e}^- = \text{Red}$ | Oxydation : perte d'électrons, à l'anode. Réduction : gain d'électrons, à la cathode. |
+| Oxydoréduction | $\text{Ox} + z\,\text{e}^- = \text{Red}$ | Oxydation : perte d'électrons, à l'anode. Réduction : gain d'électrons, à la cathode. |
 | Pile | $Q = n(\text{e}^-) \times F = I \times \Delta t$ | Transformation spontanée ; l'anode est la borne négative. $F$, charge d'une mole d'électrons, est donnée par l'énoncé. |
 | Électrolyse | $Q = n(\text{e}^-) \times F = I \times \Delta t$ | Transformation forcée ; l'anode est reliée à la borne positive. Accumulateur : pile en décharge, électrolyseur en charge. |
 
@@ -23,7 +23,7 @@
 À savoir retrouver
 :::
 
-<!--colonnes: 19 26 55-->
+<!--colonnes: 19 27 54-->
 
 | Notion | Relation | Comment la retrouver |
 |---|---|---|
@@ -632,26 +632,26 @@ Corrigés
 
 Pour une transformation d'équation $a\,\text{A} + b\,\text{B} \rightleftarrows c\,\text{C} + d\,\text{D}$, le quotient de réaction s'écrit :
 
-$$Q_\text{r} = \dfrac{[\text{C}]^c \times [\text{D}]^d}{[\text{A}]^a \times [\text{B}]^b}$$
+$$Q_\text{r} = \dfrac{([\text{C}]/c^\circ)^c \times ([\text{D}]/c^\circ)^d}{([\text{A}]/c^\circ)^a \times ([\text{B}]/c^\circ)^b}$$
 
-Plus précisément, chaque espèce intervient par son activité : $[\text{X}] / c^\circ$ pour un soluté X, avec $c^\circ = 1\ \text{mol·L}^{-1}$, et 1 pour le solvant ou pour un solide. En pratique, on écrit les concentrations en $\text{mol·L}^{-1}$ et $Q_\text{r}$ est sans unité.
+Chaque espèce intervient par son activité : $[\text{X}] / c^\circ$ pour un soluté X, sa concentration en $\text{mol·L}^{-1}$ divisée par la concentration standard $c^\circ = 1\ \text{mol·L}^{-1}$, et 1 pour le solvant ou pour un solide, qui n'apparaissent donc pas. $Q_\text{r}$ est sans unité. On regroupe ensuite les $c^\circ$, qui se simplifient parfois (cas b et c). Comme $c^\circ = 1\ \text{mol·L}^{-1}$, on l'omet souvent : la valeur de $Q_\text{r}$ est celle que donnent les concentrations en $\text{mol·L}^{-1}$.
 
-a. L'eau est le solvant, elle ne figure pas dans le quotient :
+a. L'eau est le solvant, elle ne figure pas dans le quotient ; il reste un $c^\circ$ au dénominateur :
 
-$$Q_\text{r} = \dfrac{[\text{CH}_3\text{COO}^-] \times [\text{H}_3\text{O}^{\text{+}}]}{[\text{CH}_3\text{COOH}]}$$
+$$Q_\text{r} = \dfrac{[\text{CH}_3\text{COO}^-] \times [\text{H}_3\text{O}^{\text{+}}]}{[\text{CH}_3\text{COOH}] \times c^\circ}$$
 
-b. Le zinc et le cuivre sont solides :
+b. Le zinc et le cuivre sont solides ; les $c^\circ$ se simplifient :
 
-$$Q_\text{r} = \dfrac{[\text{Zn}^{\text{2+}}]}{[\text{Cu}^{\text{2+}}]}$$
+$$Q_\text{r} = \dfrac{[\text{Zn}^{\text{2+}}]/c^\circ}{[\text{Cu}^{\text{2+}}]/c^\circ} = \dfrac{[\text{Zn}^{\text{2+}}]}{[\text{Cu}^{\text{2+}}]}$$
 
-c. Ici, l'eau n'est pas le solvant : c'est un produit, mélangé aux trois autres liquides, et elle figure dans le quotient. Les quatre espèces occupant le même volume $V$, celui-ci se simplifie :
+c. Ici, l'eau n'est pas le solvant : c'est un produit, mélangé aux trois autres liquides, et elle figure dans le quotient. Les $c^\circ$ se simplifient et, les quatre espèces occupant le même volume $V$, celui-ci se simplifie aussi :
 
 $$Q_\text{r} = \dfrac{[\text{ester}] \times [\text{eau}]}{[\text{acide}] \times [\text{alcool}]} = \dfrac{n_\text{ester} \times n_\text{eau}}{n_\text{acide} \times n_\text{alcool}}$$
 
 Sans produit au départ, le numérateur est nul : $Q_\text{r,i} = 0$ dans les trois cas.
 
 ::: {custom-style="Retenir"}
-Dans le quotient de réaction, chaque soluté intervient par sa concentration en $\text{mol·L}^{-1}$, élevée à la puissance de son nombre stœchiométrique ; le solvant et les solides n'y figurent pas
+Dans le quotient de réaction, chaque soluté intervient par sa concentration divisée par $c^\circ = 1\ \text{mol·L}^{-1}$, élevée à la puissance de son nombre stœchiométrique ; le solvant et les solides n'y figurent pas
 :::
 
 ::: {custom-style="Piege"}
@@ -666,11 +666,11 @@ Dans le quotient de réaction, chaque soluté intervient par sa concentration en
 
 À l'équilibre, le quotient de réaction est égal à la constante d'équilibre, qui ne dépend que de la température :
 
-$$K_1 = \dfrac{[\text{NH}_4^{\text{+}}]_\text{éq} \times [\text{HO}^-]_\text{éq}}{[\text{NH}_3]_\text{éq}} \qquad K_\text{A} = \dfrac{[\text{NH}_3]_\text{éq} \times [\text{H}_3\text{O}^{\text{+}}]_\text{éq}}{[\text{NH}_4^{\text{+}}]_\text{éq}} \qquad K_\text{e} = [\text{H}_3\text{O}^{\text{+}}]_\text{éq} \times [\text{HO}^-]_\text{éq}$$
+$$K_1 = \dfrac{[\text{NH}_4^{\text{+}}]_\text{éq} \times [\text{HO}^-]_\text{éq}}{[\text{NH}_3]_\text{éq} \times c^\circ} \qquad K_\text{A} = \dfrac{[\text{NH}_3]_\text{éq} \times [\text{H}_3\text{O}^{\text{+}}]_\text{éq}}{[\text{NH}_4^{\text{+}}]_\text{éq} \times c^\circ} \qquad K_\text{e} = \dfrac{[\text{H}_3\text{O}^{\text{+}}]_\text{éq} \times [\text{HO}^-]_\text{éq}}{c^{\circ 2}}$$
 
-On multiplie le numérateur et le dénominateur de $K_1$ par $[\text{H}_3\text{O}^{\text{+}}]_\text{éq}$, puis on regroupe les termes :
+On multiplie le numérateur et le dénominateur de $K_1$ par $[\text{H}_3\text{O}^{\text{+}}]_\text{éq} \times c^\circ$, puis on regroupe les termes :
 
-$$K_1 = \dfrac{[\text{H}_3\text{O}^{\text{+}}]_\text{éq} \times [\text{HO}^-]_\text{éq} \times [\text{NH}_4^{\text{+}}]_\text{éq}}{[\text{NH}_3]_\text{éq} \times [\text{H}_3\text{O}^{\text{+}}]_\text{éq}} = K_\text{e} \times \dfrac{1}{K_\text{A}}$$
+$$K_1 = \dfrac{[\text{H}_3\text{O}^{\text{+}}]_\text{éq} \times [\text{HO}^-]_\text{éq}}{c^{\circ 2}} \times \dfrac{[\text{NH}_4^{\text{+}}]_\text{éq} \times c^\circ}{[\text{NH}_3]_\text{éq} \times [\text{H}_3\text{O}^{\text{+}}]_\text{éq}} = K_\text{e} \times \dfrac{1}{K_\text{A}}$$
 
 $$K_1 = \dfrac{1{,}0 \times 10^{-14}}{10^{-9{,}2}} = 10^{-4{,}8} = 1{,}6 \times 10^{-5}$$
 
@@ -692,7 +692,9 @@ La constante de la réaction inverse vaut $1 / K$ ; la constante d'une réaction
 
 Dans un mélange, les quantités apportées se calculent avec le volume de chaque solution, les concentrations avec le volume total $V_1 + V_2 = 300\ \text{mL}$ :
 
-$$[\text{Fe}^{\text{2+}}]_\text{i} = \dfrac{C_1 \times V_1}{V_1 + V_2} = \dfrac{1{,}00 \times 10^{-1} \times 100}{300} = 3{,}33 \times 10^{-2}\ \text{mol·L}^{-1} \qquad [\text{Zn}^{\text{2+}}]_\text{i} = \dfrac{1{,}00 \times 10^{-1} \times 200}{300} = 6{,}67 \times 10^{-2}\ \text{mol·L}^{-1}$$
+$$[\text{Fe}^{\text{2+}}]_\text{i} = \dfrac{C_1 \times V_1}{V_1 + V_2} = \dfrac{1{,}00 \times 10^{-1} \times 100}{300} = 3{,}33 \times 10^{-2}\ \text{mol·L}^{-1}$$
+
+$$[\text{Zn}^{\text{2+}}]_\text{i} = \dfrac{1{,}00 \times 10^{-1} \times 200}{300} = 6{,}67 \times 10^{-2}\ \text{mol·L}^{-1}$$
 
 Les métaux, solides, ne figurent pas dans le quotient de réaction :
 
@@ -857,7 +859,7 @@ Ajouter davantage d'acide sulfurique ne change pas l'état final : un catalyseur
 [CIBLE:q6]{custom-style="BoutonEnonce"}
 :::
 
-Un oxydant est une espèce capable de capter un ou plusieurs électrons ; un réducteur, une espèce capable d'en céder. Une réduction est un gain d'électrons, subi par l'oxydant ; une oxydation est une perte d'électrons, subie par le réducteur. Un couple se note Ox/Red, et sa demi-équation s'écrit $\text{Ox} + n\,\text{e}^- = \text{Red}$.
+Un oxydant est une espèce capable de capter un ou plusieurs électrons ; un réducteur, une espèce capable d'en céder. Une réduction est un gain d'électrons, subi par l'oxydant ; une oxydation est une perte d'électrons, subie par le réducteur. Un couple se note Ox/Red, et sa demi-équation s'écrit $\text{Ox} + z\,\text{e}^- = \text{Red}$.
 
 Le dépôt rouge est du cuivre, et la décoloration montre la disparition des ions cuivre(II) :
 
@@ -868,7 +870,7 @@ Les couples sont $\text{Cu}^{\text{2+}}/\text{Cu}$ et $\text{Zn}^{\text{2+}}/\te
 Dans le couple $\text{SO}_4^{2-}/\text{H}_2\text{S}$, l'oxydant est l'ion sulfate, écrit en premier. Transformer l'oxydant d'un couple en son réducteur, c'est le réduire : ces bactéries réalisent une réduction, d'où leur nom de bactéries sulfato-réductrices.
 
 ::: {custom-style="Retenir"}
-Couple Ox/Red : $\text{Ox} + n\,\text{e}^- = \text{Red}$. Dans une réaction d'oxydoréduction, l'oxydant d'un couple est réduit pendant que le réducteur d'un autre couple est oxydé
+Couple Ox/Red : $\text{Ox} + z\,\text{e}^- = \text{Red}$. Dans une réaction d'oxydoréduction, l'oxydant d'un couple est réduit pendant que le réducteur d'un autre couple est oxydé
 :::
 
 ::: {custom-style="Remarque"}
@@ -898,7 +900,7 @@ $$\text{SO}_4^{2-}(\text{aq}) + 10\,\text{H}^{\text{+}}(\text{aq}) + 8\,\text{e}
 $$\text{C}_{10}\text{H}_{18}\text{O} + 2\,\text{H}^{\text{+}}(\text{aq}) + 2\,\text{e}^- = \text{C}_{10}\text{H}_{20}\text{O}$$
 
 ::: {custom-style="Piege"}
-[Piège.]{custom-style="EtiqPiege"} Placer les électrons du côté du réducteur : dans une demi-équation écrite $\text{Ox} + n\,\text{e}^- = \text{Red}$, ils sont toujours du côté de l'oxydant.
+[Piège.]{custom-style="EtiqPiege"} Placer les électrons du côté du réducteur : dans une demi-équation écrite $\text{Ox} + z\,\text{e}^- = \text{Red}$, ils sont toujours du côté de l'oxydant.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.8 · Écrire l'équation d'une réaction d'oxydoréduction {#c_q8}
@@ -1019,9 +1021,9 @@ Pour la pile au méthanol, on multiplie la première demi-équation par 2 et la 
 
 $$2\,\text{CH}_3\text{OH}(\text{aq}) + 3\,\text{O}_2(\text{g}) \rightarrow 2\,\text{CO}_2(\text{g}) + 4\,\text{H}_2\text{O}(\ell)$$
 
-Les métaux, solides, ne figurent pas dans le quotient de réaction de la première pile :
+Les métaux, solides, ne figurent pas dans le quotient de réaction de la première pile ; après regroupement, il reste un $c^\circ$ au numérateur :
 
-$$Q_\text{r,i} = \dfrac{[\text{Al}^{\text{3+}}]_\text{i}^2}{[\text{Cu}^{\text{2+}}]_\text{i}^3} = \dfrac{0{,}40^2}{0{,}40^3} = \dfrac{1}{0{,}40} = 2{,}5$$
+$$Q_\text{r,i} = \dfrac{[\text{Al}^{\text{3+}}]_\text{i}^2 \times c^\circ}{[\text{Cu}^{\text{2+}}]_\text{i}^3} = \dfrac{0{,}40^2}{0{,}40^3} = \dfrac{1}{0{,}40} = 2{,}5$$
 
 $Q_\text{r,i} = 2{,}5$ est très inférieur à $K \approx 10^{200}$ : le système évolue spontanément dans le sens direct, qui consomme l'aluminium et les ions cuivre(II). C'est ce que traduit le sens du courant observé : les électrons cédés par l'aluminium vont vers la lame de cuivre.
 
@@ -1065,7 +1067,9 @@ Pour $1{,}0\ \text{kg}$ de métal : $n(\text{métal}) = 1\,000 / M$ ; chaque ato
 
 $$\text{lithium} : \dfrac{1 \times 1\,000 \times 9{,}65 \times 10^{4}}{6{,}94 \times 3\,600} = 3{,}86 \times 10^{3}\ \text{A·h·kg}^{-1}$$
 
-$$\text{zinc} : \dfrac{2 \times 1\,000 \times 9{,}65 \times 10^{4}}{65{,}4 \times 3\,600} = 8{,}20 \times 10^{2}\ \text{A·h·kg}^{-1} \qquad \text{aluminium} : \dfrac{3 \times 1\,000 \times 9{,}65 \times 10^{4}}{27{,}0 \times 3\,600} = 2{,}98 \times 10^{3}\ \text{A·h·kg}^{-1}$$
+$$\text{zinc} : \dfrac{2 \times 1\,000 \times 9{,}65 \times 10^{4}}{65{,}4 \times 3\,600} = 8{,}20 \times 10^{2}\ \text{A·h·kg}^{-1}$$
+
+$$\text{aluminium} : \dfrac{3 \times 1\,000 \times 9{,}65 \times 10^{4}}{27{,}0 \times 3\,600} = 2{,}98 \times 10^{3}\ \text{A·h·kg}^{-1}$$
 
 Le lithium, très léger, a la plus grande capacité massique : à capacité égale, il donne la pile la plus légère.
 
@@ -1292,7 +1296,7 @@ $$\Delta t = \dfrac{2\,m\,F}{M(\text{Ni}) \times I} = \dfrac{2 \times 1{,}0 \tim
 $$E = U \times I \times \Delta t = 3{,}0 \times 2{,}0 \times 1\,644 = 9{,}9 \times 10^{3}\ \text{J}, \text{ soit } 2{,}7\ \text{W·h}$$
 
 ::: {custom-style="Methode"}
-[Méthode.]{custom-style="EtiqMethode"} Écrire la demi-équation de l'électrode étudiée ; relier la quantité d'électrons à celle du produit ; écrire $Q = I \times \Delta t = n(\text{e}^-) \times F$. La constante de Faraday, $F = N_\text{A} \times e = 9{,}65 \times 10^{4}\ \text{C·mol}^{-1}$, est la charge d'une mole d'électrons.
+[Méthode.]{custom-style="EtiqMethode"} Écrire la demi-équation de l'électrode étudiée ; relier la quantité d'électrons à celle du produit ; écrire $Q = I \times \Delta t = n(\text{e}^-) \times F$. La constante de Faraday, $F = N_\text{A} \times e \approx 9{,}65 \times 10^{4}\ \text{C·mol}^{-1}$ (avec $N_\text{A} = 6{,}022 \times 10^{23}\ \text{mol}^{-1}$ et $e = 1{,}602 \times 10^{-19}\ \text{C}$), est la charge d'une mole d'électrons.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.18 · Calculer un volume de gaz et l'intensité nécessaire {#c_q18}

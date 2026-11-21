@@ -34,7 +34,7 @@
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-Les sujets donnent la loi de Newton $\Phi = h \times S \times (\theta_{\text{th}} - \theta)$, la résistance thermique d'une paroi plane $R_{\text{th}} = e / (\lambda \times S)$ et la loi de Stefan-Boltzmann $P = \sigma \times S \times T^{4}$, à combiner avec le premier principe.
+Les sujets donnent la loi de Newton $\Phi = h \times S \times (\theta_{\text{th}} - \theta)$, la résistance thermique d'une paroi plane $R_{\text{th}} = e / (\lambda \times S)$ et la loi de Stefan-Boltzmann $P_{\text{émise}} = \sigma \times S \times T^{4}$, à combiner avec le premier principe.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
@@ -137,7 +137,7 @@ Du zinc réagit avec une solution acide dans une enceinte fermée de volume $V$,
 
 <!--colonnes: 13 14 17 20 4 10 10 12-->
 
-| État du système | Avancement (mol) | Zn(s) | \+ 2 H~3~O^+^(aq) | → | Zn^2+^(aq) | \+ H~2~(g) | \+ 2 H~2~O(l) |
+| État du système | Avancement (mol) | Zn(s) | \+ 2 H~3~O^+^(aq) | → | Zn^2+^(aq) | \+ H~2~(g) | \+ 2 H~2~O(ℓ) |
 |:--|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | État initial | $0$ | $n(\text{Zn})_i$ | $n(\text{H}_3\text{O}^{\text{+}})_i$ | | $0$ | $0$ | excès |
 | En cours | $x$ | $n(\text{Zn})_i - x$ | $n(\text{H}_3\text{O}^{\text{+}})_i - 2x$ | | $x$ | $x$ | excès |
@@ -512,7 +512,7 @@ Comment identifier le type de transfert thermique ayant lieu au cours d'une exp�
 :::
 
 ::: {custom-style="Enonce"}
-Données : loi de Stefan-Boltzmann $P = \sigma \times S \times T^{4}$, avec $\sigma = 5{,}67 \times 10^{-8}\ \text{W·m}^{-2}\text{·K}^{-4}$ ; albédo de la Terre : $0{,}30$.
+Données : loi de Stefan-Boltzmann $P_{\text{émise}} = \sigma \times S \times T^{4}$, avec $\sigma = 5{,}67 \times 10^{-8}\ \text{W·m}^{-2}\text{·K}^{-4}$ ; albédo de la Terre : $0{,}30$.
 
 On supposera d'abord que toute la puissance solaire reçue est absorbée, puis on tiendra compte de l'albédo.
 :::
@@ -913,7 +913,7 @@ $Q = \Phi \times \Delta t$
 Le flux thermique $\Phi$ s'exprime en watt (W), le transfert thermique $Q$ en joule (J) et la durée $\Delta t$ en seconde (s).
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} Le flux thermique est une puissance : c'est l'énergie transférée par unité de temps ($1\ \text{W} = 1\ \text{J·s}^{-1}$). La même relation s'applique à un appareil électrique : s'il fonctionne à la puissance $P$ pendant la durée $\Delta t$, il consomme l'énergie $E = P \times \Delta t$.
+[Remarque.]{custom-style="EtiqRemarque"} Le flux thermique est une puissance : c'est l'énergie transférée par unité de temps ($1\ \text{W} = 1\ \text{J·s}^{-1}$). La même relation s'applique à un appareil électrique : s'il fonctionne à la puissance $P_{\text{élec}}$ pendant la durée $\Delta t$, il consomme l'énergie $E_{\text{élec}} = P_{\text{élec}} \times \Delta t$.
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.10 · Utiliser un calorimètre pour déterminer la capacité thermique massique d'un système {#c_q10}
@@ -1043,7 +1043,7 @@ $\dfrac{\mathrm{d}\theta}{\mathrm{d}t} + \dfrac{\theta(t)}{\tau} = \dfrac{\theta
 :::
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} La grandeur $\tau$ est le temps caractéristique de l'évolution de la température. Elle s'exprime en seconde : $m \times c_s$ est en $\text{J·K}^{-1}$ et $h \times S$ en $\text{W·K}^{-1}$, donc leur quotient est en $\text{J·W}^{-1}$, c'est-à-dire en seconde. Plus $\tau$ est grand, plus la température évolue lentement : c'est le cas d'un système de grande masse ou d'un échange peu efficace ($h$ ou $S$ petits).
+[Remarque.]{custom-style="EtiqRemarque"} La grandeur $\tau$ est le temps caractéristique (aussi appelé constante de temps) de l'évolution de la température. Elle s'exprime en seconde : $m \times c_s$ est en $\text{J·K}^{-1}$ et $h \times S$ en $\text{W·K}^{-1}$, donc leur quotient est en $\text{J·W}^{-1}$, c'est-à-dire en seconde. Plus $\tau$ est grand, plus la température évolue lentement : c'est le cas d'un système de grande masse ou d'un échange peu efficace ($h$ ou $S$ petits).
 :::
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.13 · Résoudre l'équation différentielle portant sur la température d'un système en contact avec un thermostat {#c_q13}
@@ -1221,7 +1221,7 @@ $c = \dfrac{12{,}0 \times 2{,}50}{0{,}2500 \times 5{,}97 \times 10^{-2}} = 2{,}0
 **5.** Incertitude-type et résultat de la mesure
 :::
 
-$$u(c) = 2{,}01 \times 10^{3} \times \sqrt{\left(\dfrac{0{,}1}{12{,}0}\right)^{2} + \left(\dfrac{0{,}02}{2{,}50}\right)^{2} + \left(\dfrac{0{,}1}{250{,}0}\right)^{2} + \left(\dfrac{0{,}0012}{0{,}0597}\right)^{2}} = 47\ \text{J·kg}^{-1}\text{·K}^{-1}$$
+$$u(c) = 2{,}01 \times 10^{3} \times \sqrt{\left(\dfrac{0{,}1}{12{,}0}\right)^{2} + \left(\dfrac{0{,}02}{2{,}50}\right)^{2} + \left(\dfrac{0{,}1}{250{,}0}\right)^{2} + \left(\dfrac{0{,}0012}{0{,}0597}\right)^{2}} = 46{,}6\ \text{J·kg}^{-1}\text{·K}^{-1}$$
 
 On arrondit l'incertitude-type à un chiffre significatif : $u(c) = 0{,}05 \times 10^{3}\ \text{J·kg}^{-1}\text{·K}^{-1}$. Le résultat de la mesure s'écrit :
 
@@ -1233,9 +1233,9 @@ Le terme lié au coefficient directeur est de loin le plus grand : c'est la lect
 **6.** Comparaison à la valeur du fabricant
 :::
 
-$$z = \dfrac{\left|c - c_{\text{réf}}\right|}{u(c)} = \dfrac{\left|2{,}01 \times 10^{3} - 1{,}90 \times 10^{3}\right|}{0{,}05 \times 10^{3}} = 2{,}2$$
+$$z = \dfrac{\left|c - c_{\text{réf}}\right|}{u(c)} = \dfrac{\left|2{,}01 \times 10^{3} - 1{,}90 \times 10^{3}\right|}{46{,}6} = 2{,}4$$
 
-Le quotient est supérieur à 2 : la mesure n'est pas compatible avec la valeur annoncée par le fabricant.
+Le quotient est proche de 2 : on le calcule avec l'incertitude-type non arrondie (fiche 14, exercice 1). Il est supérieur à 2 : la mesure n'est pas compatible avec la valeur annoncée par le fabricant.
 
 ::: {custom-style="Methode"}
 [Méthode.]{custom-style="EtiqMethode"} Pour comparer une mesure $x$ à une valeur de référence $x_{\text{réf}}$, on calcule le quotient $z = \dfrac{\left|x - x_{\text{réf}}\right|}{u(x)}$. Si $z \leq 2$, la mesure est compatible avec la référence. Si $z > 2$, elle ne l'est pas : il faut alors chercher une source d'erreur dans le protocole ou dans le modèle.
@@ -1594,19 +1594,19 @@ Actuellement, l'albédo vaut environ 30 % (on a donc 30 % de l'énergie solaire 
 La loi de Stefan-Boltzmann permet d'exprimer la puissance émise par une surface $S$ en fonction de sa température absolue $T$ :
 
 ::: {custom-style="Retenir"}
-$P = \sigma \times S \times T^{4}$
+$P_{\text{émise}} = \sigma \times S \times T^{4}$
 :::
 
 Avec $\sigma = 5{,}67 \times 10^{-8}\ \text{W·m}^{-2}\text{·K}^{-4}$, la constante de Stefan-Boltzmann.
 
 Unités :
 
-- $P$ : en watt (W) ;
+- $P_{\text{émise}}$ : en watt (W) ;
 - $S$ : en $\text{m}^{2}$ ;
 - $T$ : en kelvin (K).
 
 ::: {custom-style="Piege"}
-[Piège.]{custom-style="EtiqPiege"} La température est élevée à la puissance 4 : elle doit impérativement être exprimée en kelvin. La puissance émise augmente très vite avec la température : si $T$ double, $P$ est multipliée par 16.
+[Piège.]{custom-style="EtiqPiege"} La température est élevée à la puissance 4 : elle doit impérativement être exprimée en kelvin. La puissance émise augmente très vite avec la température : si $T$ double, $P_{\text{émise}}$ est multipliée par 16.
 :::
 
 ::: {custom-style="Remarque"}
@@ -1755,8 +1755,8 @@ Par comparaison, le mur en parpaings laisse passer $6{,}9\ \text{kW} \times 24\ 
 
 Pour que la température intérieure reste constante, l'énergie interne de l'air de la maison ne doit pas varier : le chauffage doit apporter, à chaque instant, autant d'énergie que les murs en laissent sortir. La puissance de chauffage est donc égale au flux thermique perdu :
 
-- avec les parpaings : $P = \Phi_b = 6{,}9\ \text{kW}$ ;
-- avec la paille : $P = \Phi_p = 0{,}18\ \text{kW}$.
+- avec les parpaings : $P_{\text{chauffage}} = \Phi_b = 6{,}9\ \text{kW}$ ;
+- avec la paille : $P_{\text{chauffage}} = \Phi_p = 0{,}18\ \text{kW}$.
 
 ::: {custom-style="QRappel"}
 **8.** Sans chauffage

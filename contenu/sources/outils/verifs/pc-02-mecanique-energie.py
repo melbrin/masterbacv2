@@ -22,8 +22,8 @@ k1 = sum(h * w for h, w in zip(hs, v2)) / sum(h * h for h in hs)      # droite p
 # Q.6, Q.8
 T6 = 20 * 5.0e-2
 F8 = 58e-3 * 50 / 5.0e-3; P8 = 58e-3 * g
-# Exercice 2 (g = 9,8 dans l'énoncé)
-gb, mb, Db, al, hC = 9.8, 10e-3, 0.50, radians(30), 0.40
+# Exercice 2 (g = 9,81 dans l'énoncé, comme dans le reste de la fiche : contrôle de cohérence du 21 novembre 2026)
+gb, mb, Db, al, hC = 9.81, 10e-3, 0.50, radians(30), 0.40
 hA = Db * sin(al); EpA = mb * gb * hA; vB = sqrt(2 * gb * Db * sin(al))
 tsol = sqrt(2 * hC / gb); Xf = 2.2 * tsol; Xf_exact = vB * tsol
 vC_vise = 0.575 / tsol; D_vise = 2.0 ** 2 / (2 * gb * sin(al)); D_vise_exact = vC_vise ** 2 / (2 * gb * sin(al))
@@ -56,8 +56,8 @@ controles = [
     ('Ex.1 v2 (1)', v2[0], 0.98, 0.005, '| 0,98 | 1,96 | 2,92 | 3,92 | 4,88 | 5,90 |'),
     ('Ex.1 v2 (6)', v2[5], 5.90, 0.005, '| 0,98 | 1,96 | 2,92 | 3,92 | 4,88 | 5,90 |'),
     ('Ex.1 coefficient directeur (m/s2)', k1, 19.6, 0.05, r'k = 19{,}6\ \text{m·s}^{-2}'),
-    ('Ex.1 g (m/s2)', k1 / 2, 9.80, 0.05, r'= 9{,}80\ \text{m·s}^{-2}'),
-    ('Ex.1 z-score', abs(9.80 - 9.81) / 0.2, 0.05, 1e-9, r'= 0{,}05$$'),
+    ('Ex.1 g (m/s2)', k1 / 2, 9.8, 0.05, r'\dfrac{19{,}6}{2} = 9{,}8\ \text{m·s}^{-2}'),
+    ('Ex.1 z-score', abs(9.8 - 9.81) / 0.2, 0.05, 1e-9, r'\dfrac{|9{,}8 - 9{,}81|}{0{,}2} = 0{,}05$$'),
     ('Ex.1 Ec finale (J)', 0.5 * 0.20 * 2.43 ** 2, 0.59, 0.005, r'2{,}43^{2} = 0{,}59\ \text{J}'),
     ('Ex.1 Epp perdue (J)', 0.20 * g * 0.30, 0.59, 0.005, r'0{,}30 = 0{,}59\ \text{J}'),
     ('Q.6 tension (N)', T6, 1.0, 1e-9, r'= 1{,}0\ \text{N}'),
@@ -120,10 +120,30 @@ phrases = ['au moins sept exercices des sessions 2025 et 2026', 'six de ces sept
            'la tension entre les deux plaques vaut', 'Hauteur maximale | Q.3 à Q.5',
            # relecture du 18 novembre 2026, deuxième tour : le champ entre deux plaques est donné par les énoncés ; le poids est conservatif
            'Champ électrique entre les plaques : $E = \\dfrac{U}{d}$', 'Champ électrique entre les électrodes : $E = \\dfrac{U}{d}$',
-           'seul compte le dénivelé, pas le chemin']
+           'seul compte le dénivelé, pas le chemin',
+           # contrôle de cohérence du 21 novembre 2026 : g = 9,81 dans les données de l'exercice 2 ; dans l'exercice 1, la
+           # mesure s'arrête à la même décimale que son incertitude-type (fiche 14, Q.1)
+           '$h_C = 0{,}40\\ \\text{m}$ ; $g = 9{,}81\\ \\text{m·s}^{-2}$', '$u(g) = 0{,}2\\ \\text{m·s}^{-2}$. Comparer',
+           'La valeur mesurée s\'arrête à la même décimale que son incertitude-type (voir la fiche 14, Q.1) : $g = 9{,}8\\ \\text{m·s}^{-2}$ avec $u(g) = 0{,}2\\ \\text{m·s}^{-2}$']
 perdues = [p for p in phrases if p not in src]
 for p in perdues: print('   PHRASE INTROUVABLE :', p)
 print('--- phrases de synthèse : %d suivies, %d introuvable(s)' % (len(phrases), len(perdues)))
+
+# g (contrôle de cohérence du 21 novembre 2026) : 9,81 m·s⁻² dans toutes les données et tous les calculs. Seule la mesure de
+# l'exercice 1 s'écrit 9,8 (résultat de la question 6, écriture du résultat, écart normalisé), jamais 9,80 : avec
+# u(g) = 0,2 m·s⁻², la valeur s'arrête au dixième.
+ex1_c = src[src.index('{#c_ex1}'):src.index('# Corrigés du thème 2')]
+g_court = r'(?<!\d)9(?:\{,\}|,)80?(?!\d)'
+g_hors_ex1 = re.findall(g_court, src.replace(ex1_c, ''))
+g_ex1 = re.findall(g_court, ex1_c)
+defauts_g = []
+if g_hors_ex1:
+    defauts_g.append('g écrit %s hors de la mesure de l\'exercice 1' % ', '.join(g_hors_ex1))
+if g_ex1 != ['9{,}8'] * 3:
+    defauts_g.append('mesure de l\'exercice 1 écrite %s (attendu : 9{,}8, trois fois)' % ', '.join(g_ex1))
+for t in defauts_g: print('   g :', t)
+print('--- g : %d écriture(s) de 9,81, %d de la mesure 9,8 dans l\'exercice 1, %d écart(s)'
+      % (len(re.findall(r'9\{,\}81(?!\d)', src)), len(g_ex1), len(defauts_g)))
 
 # L'essentiel (relecture du 18 novembre 2026) : « À connaître par cœur » ne garde que les définitions et les lois du programme ;
 # les relations à établir passent dans « À savoir retrouver », placée juste après, avec la démarche qui les donne.
@@ -172,6 +192,6 @@ for b in blocs_c:
 for i in sans_derivation: print('   W = e × U sans démarche dans le corrigé de', i)
 print('--- E = U / d : %d corrigé(s) s\'en servent (%s), %d énoncé(s) sans la relation, %d corrigé(s) sans la démarche'
       % (len(utilisent), ', '.join(utilisent), len(sans_champ), len(sans_derivation)))
-if ecarts or absents or mauvais or perdues or defauts or sans_champ or sans_derivation or len(utilisent) < 4:
+if ecarts or absents or mauvais or perdues or defauts_g or defauts or sans_champ or sans_derivation or len(utilisent) < 4:
     raise SystemExit(1)
 print('--- tout est bon')

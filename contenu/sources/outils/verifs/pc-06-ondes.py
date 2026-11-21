@@ -15,11 +15,12 @@ v1 = 4.0 / 0.20; tau1 = 1.5 / v1
 d2 = 1.50e3 * 0.24 / 2
 T3 = 1 / 40.0e3; lam3 = 343 / 40.0e3
 vverre, veau = c / 1.50, c / 1.33
-r5 = (295 / 331) ** 2; T5 = 273 * r5; v20 = 331 * sqrt(293 / 273)
+K0 = 273.15     # T = θ + 273,15, comme dans la fiche 5
+r5 = (295 / 331) ** 2; T5 = K0 * r5; v20 = 331 * sqrt((20 + K0) / K0)
 lam6 = c / 2.45e9; frouge, fviolet = c / 800e-9, c / 400e-9
 # Exercice 1 (écho dessiné à 2 x 2,00 / 343 s, lu 11,7 ms)
 t_echo = 2 * 2.00 / 343; d_ex1 = 343 * 11.7e-3 / 2
-vfroid = 331 * sqrt(263 / 273); dt_froid = 2 * 2.00 / vfroid; d_aff = 340 * 1.23e-2 / 2; d_aff_exact = 340 * dt_froid / 2
+vfroid = 331 * sqrt((-10 + K0) / K0); dt_froid = 2 * 2.00 / vfroid; d_aff = 340 * 1.23e-2 / 2; d_aff_exact = 340 * dt_froid / 2
 salve = 8 * T3; dmin = 343 * salve / 2
 # Thème 2
 I7 = 0.50 / (4 * pi * 4.0 ** 2)
@@ -75,17 +76,21 @@ controles = [
     ('Q.4 verre', vverre, 2.00e8, 5e5, r'= 2{,}00 \times 10^{8}\ \text{m·s}^{-1}'),
     ('Q.4 eau', veau, 2.26e8, 5e5, r'= 2{,}26 \times 10^{8}\ \text{m·s}^{-1}'),
     ('Q.5 rapport au carré', r5, 0.794, 5e-4, r'0{,}794'),
+    ('Q.5 zéro Celsius en kelvin', 0 + K0, 273.15, 1e-9, r'T_0 = 0 + 273{,}15 = 273{,}15\ \text{K}'),
     ('Q.5 température absolue', T5, 217, 0.5, r'= 217\ \text{K}'),
-    ('Q.5 température Celsius', 217 - 273, -56, 1e-9, r'= -56\ \text{°C}'),
-    ('Q.5 vérification à 20 °C', v20, 343, 0.5, r'= 343\ \text{m·s}^{-1}'),
+    ('Q.5 température absolue, rapport arrondi', K0 * 0.794, 217, 0.5, r'273{,}15 \times 0{,}794 = 217\ \text{K}'),
+    ('Q.5 température Celsius', T5 - K0, -56, 0.5, r'= -56\ \text{°C}'),
+    ('Q.5 température Celsius, valeurs écrites', 217 - K0, -56, 0.5, r'\theta_1 = 217 - 273{,}15 = -56\ \text{°C}'),
+    ('Q.5 vérification à 20 °C', v20, 343, 0.5, r'331 \times \sqrt{\dfrac{293{,}15}{273{,}15}} = 343\ \text{m·s}^{-1}'),
     ('Q.6 longueur d\'onde du four', lam6, 0.122, 5e-4, r'= 0{,}122\ \text{m} = 12{,}2\ \text{cm}'),
     ('Q.6 fréquence du rouge', frouge, 3.8e14, 5e12, r'= 3{,}8 \times 10^{14}\ \text{Hz}'),
     ('Q.6 fréquence du violet', fviolet, 7.5e14, 5e12, r'= 7{,}5 \times 10^{14}\ \text{Hz}'),
     ('Ex.1 écho lu (ms)', t_echo * 1e3, 11.7, 0.05, r'\Delta t \approx 11{,}7\ \text{ms}'),
     ('Ex.1 écho en divisions', 11.7 / 2, 5.85, 1e-9, r'vers 5,85 divisions'),
     ('Ex.1 distance', d_ex1, 2.01, 0.005, r'= 2{,}01\ \text{m}'),
+    ('Ex.1 température absolue à -10 °C', -10 + K0, 263.15, 1e-9, r'T = -10 + 273{,}15 = 263{,}15\ \text{K}'),
     ('Ex.1 célérité à -10 °C', vfroid, 325, 0.5, r'= 325\ \text{m·s}^{-1}'),
-    ('Ex.1 facteur racine', sqrt(263 / 273), 0.982, 5e-4, r'0{,}982'),
+    ('Ex.1 facteur racine', sqrt((-10 + K0) / K0), 0.982, 5e-4, r'\sqrt{\dfrac{263{,}15}{273{,}15}} = 331 \times 0{,}982'),
     ('Ex.1 aller-retour à -10 °C', dt_froid, 1.23e-2, 5e-5, r'= 1{,}23 \times 10^{-2}\ \text{s} = 12{,}3\ \text{ms}'),
     ('Ex.1 distance affichée', d_aff, 2.09, 0.005, r'= 2{,}09\ \text{m}'),
     ('Ex.1 distance affichée sans arrondi', d_aff_exact, 2.09, 0.005, r'= 2{,}09\ \text{m}'),
@@ -206,6 +211,11 @@ print('--- phrases de synthèse : %d suivies, %d introuvable(s)' % (len(phrases)
 primes = [(i, f) for i, l in enumerate(src.split('\n'), 1) for f in re.findall(r'\$\$.+?\$\$|\$.+?\$', l) if "'" in f]
 for i, f in primes: print('   PRIME À APOSTROPHE, ligne %d :' % i, f[:100])
 print('--- primes : %d formule(s) avec une apostrophe' % len(primes))
-if ecarts or absents or mauvais or perdues or primes:
+
+# conversion en kelvin : T = θ + 273,15 partout, jamais 273 seul
+kelvins = [i for i, l in enumerate(src.split('\n'), 1) if re.search(r'273(?!\{,\}15)', l)]
+for i in kelvins: print('   273 SANS ,15, ligne %d' % i)
+print('--- kelvins : %d ligne(s) avec 273 sans ,15' % len(kelvins))
+if ecarts or absents or mauvais or perdues or primes or kelvins:
     raise SystemExit(1)
 print('--- tout est bon')

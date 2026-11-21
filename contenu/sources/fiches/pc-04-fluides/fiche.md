@@ -21,7 +21,7 @@
 
 | Notion | Relation | Comment la retrouver |
 |---|---|---|
-| Repos ou vitesse limite | $P = \Pi$ ou $P = \Pi + f$ | Principe d'inertie : les forces se compensent. |
+| Repos ou vitesse limite | $m \times g = \Pi$ ou $m \times g = \Pi + f$ | Principe d'inertie : les forces se compensent ; $m \times g$ est la norme du poids. |
 
 ::: {custom-style="Rubrique"}
 Fourni par l'énoncé, à savoir exploiter
@@ -308,7 +308,7 @@ Questions de cours
 ## [Q.10]{custom-style="QNum"}\ \ Que devient la relation de Bernoulli pour un fluide au repos ? Retrouver la loi fondamentale de la statique des fluides. {#q10}
 
 ::: {custom-style="Meta"}
-[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : statique des fluides, pression · Demandée en 2025 (Amérique du Sud, Nouvelle-Calédonie) et en 2026 (Métropole)\ \ \ [CIBLE:c_q10]{custom-style="BoutonCorrige"}
+[\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : statique des fluides, pression · Demandée en 2025 (Amérique du Sud, jour 1 ; Nouvelle-Calédonie, jour 1) et en 2026 (Métropole, juin, jour 1)\ \ \ [CIBLE:c_q10]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Rubrique"}
@@ -1055,7 +1055,7 @@ On étudie le système {bille} dans le référentiel terrestre supposé galilée
 - la force de frottement $\vec{f}$, opposée à la vitesse donc dirigée vers le haut, de norme $f = 6\pi \times \eta \times R \times v$.
 
 ::: {custom-style="Figure"}
-![Bille soumise à son poids vers le bas, à la poussée d'Archimède et à la force de frottement vers le haut](figs/fig_visc_forces.png){width=2.6cm}
+![Bille soumise à son poids vers le bas, à la poussée d'Archimède et à la force de frottement vers le haut](figs/fig_visc_forces.png){width=2.4cm}
 :::
 
 ::: {custom-style="Legende"}

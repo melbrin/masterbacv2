@@ -23,7 +23,7 @@
 À savoir retrouver
 :::
 
-<!--colonnes: 19 33 48-->
+<!--colonnes: 19 27 54-->
 
 | Notion | Relation | Comment la retrouver |
 |---|---|---|
@@ -40,7 +40,7 @@ Les pièges qui coûtent des points
 :::
 
 - Oublier de convertir les concentrations en $\text{mol·m}^{-3}$ dans la loi de Kohlrausch.
-- Écrire $C_\text{A} V_\text{A} = C_\text{B} V_\text{E}$ sans tenir compte des nombres stœchiométriques.
+- Écrire $C \times V = c \times V_\text{E}$ sans tenir compte des nombres stœchiométriques.
 - Oublier la dilution, ou le fait qu'on n'a titré qu'une partie de la solution.
 - Exploiter une absorbance située hors de la gamme d'étalonnage au lieu de diluer d'abord.
 
@@ -93,7 +93,7 @@ Ce qu'il faut en retenir
 - Sept des dix-neuf exercices font exploiter une courbe de titrage pH-métrique : volume équivalent, deux équivalences ou indicateur (Q.11 à Q.14, Ex. 3).
 - Le titrage conductimétrique, souvent celui des ions chlorure par les ions argent, revient dans trois exercices (Q.17 à Q.19, Ex. 4).
 - Remonter de la prise d'essai ou de la solution diluée à l'échantillon est demandé dans au moins quatre exercices de 2026 (Q.8, Q.15).
-- Le dosage par étalonnage est tombé au moins trois fois à l'écrit : spectrophotométrie (vernis) et fluorescence (quinine) en 2025, collyre en 2026. Il revient souvent en ECE (Q.1 à Q.3, Ex. 1).
+- Le dosage par étalonnage est tombé au moins deux fois à l'écrit : « Étude d'un vernis à ongles » en 2025, « De l'acide salicylique à l'aspirine » en 2026. Il revient souvent en ECE (Q.1 à Q.3, Ex. 1).
 
 ::: {custom-style="Surtitre"}
 Énoncés
@@ -112,7 +112,7 @@ Questions de cours
 :::
 
 ::: {custom-style="Enonce"}
-Application : le spectre d'absorption d'une solution de permanganate de potassium présente un maximum à $525\ \text{nm}$, dans le vert. Quelle est la couleur de cette solution ? À quelle longueur d'onde régler le spectrophotomètre, et pourquoi ? Que faire avant la première mesure ? Donnée : couleurs complémentaires : rouge et cyan, vert et magenta, bleu et jaune.
+Application : le spectre d'absorption d'une solution du colorant alimentaire E110 présente un maximum à $480\ \text{nm}$, dans le bleu. Quelle est la couleur de cette solution ? À quelle longueur d'onde régler le spectrophotomètre, et pourquoi ? Que faire avant la première mesure ? Donnée : couleurs complémentaires, opposées sur l'étoile des couleurs : bleu et orangé, jaune et violet, rouge et vert.
 :::
 
 ## [Q.2]{custom-style="QNum"}\ \ Exploiter une gamme d'étalonnage et la loi de Beer-Lambert {#q2}
@@ -574,9 +574,9 @@ Corrigés
 [CIBLE:q1]{custom-style="BoutonEnonce"}
 :::
 
-La solution absorbe surtout le vert : sa couleur est la couleur complémentaire du vert, le magenta, ce rose violacé caractéristique des solutions de permanganate.
+La solution absorbe surtout le bleu : sa couleur est la couleur complémentaire du bleu, l'orangé. Ce colorant s'appelle d'ailleurs le jaune orangé S.
 
-On règle le spectrophotomètre à $\lambda_\text{max} = 525\ \text{nm}$ : l'absorbance y est la plus grande, donc la mesure est la plus sensible ; de plus, autour du maximum, une petite erreur sur la longueur d'onde modifie peu l'absorbance.
+On règle le spectrophotomètre à $\lambda_\text{max} = 480\ \text{nm}$ : l'absorbance y est la plus grande, donc la mesure est la plus sensible ; de plus, autour du maximum, une petite erreur sur la longueur d'onde modifie peu l'absorbance.
 
 Avant la première mesure, on fait le blanc : on règle l'absorbance à zéro avec une cuve remplie du solvant seul, ici de l'eau distillée, pour ne mesurer que l'absorption due à l'espèce dosée.
 
@@ -585,7 +585,7 @@ On mesure à $\lambda_\text{max}$ ; la couleur perçue est la couleur complémen
 :::
 
 ::: {custom-style="Piege"}
-[Piège.]{custom-style="EtiqPiege"} Régler le spectrophotomètre sur la couleur de la solution : une solution magenta n'absorbe pas le magenta, elle absorbe le vert.
+[Piège.]{custom-style="EtiqPiege"} Régler le spectrophotomètre sur la couleur de la solution : une solution orangée n'absorbe pas l'orangé, elle absorbe le bleu.
 :::
 
 ::: {custom-style="Remarque"}

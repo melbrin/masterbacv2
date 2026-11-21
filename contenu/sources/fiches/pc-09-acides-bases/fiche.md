@@ -49,6 +49,8 @@ Les pièges qui coûtent des points
 Votre parcours selon votre objectif
 :::
 
+<!--colonnes: 12 50.5 37.5-->
+
 | Objectif | Questions de cours | Exercices |
 |---|---|---|
 | [\ Objectif 10\ ]{custom-style="Niv10"} | Q.1, Q.2, Q.4, Q.6, Q.7, Q.9 à Q.11, Q.14, Q.16, Q.19, Q.22, Q.24 | Ex. 1 (questions 2 à 4 et 6), Ex. 2 (questions 1 à 3) |
@@ -780,15 +782,16 @@ Pour l'acide éthanoïque, l'eau est le solvant, en excès : l'acide est le réa
 
 $$x_\text{max} = n_\text{i}(\text{CH}_3\text{COOH}) = 1{,}0 \times 10^{-3}\ \text{mol} \qquad x_\text{f} = n_\text{f}(\text{H}_3\text{O}^{\text{+}}) = 4{,}0 \times 10^{-5}\ \text{mol}$$
 
-L'avancement final est 25 fois plus petit que l'avancement maximal : il reste $1{,}0 \times 10^{-3} - 4{,}0 \times 10^{-5} = 9{,}6 \times 10^{-4}\ \text{mol}$ d'acide, presque tout l'acide apporté. La transformation n'est pas totale et son équation s'écrit avec le symbole $\rightleftarrows$. Le tableau d'avancement place côte à côte l'état final observé et celui qu'atteindrait une transformation totale.
+L'avancement final est 25 fois plus petit que l'avancement maximal : il reste $1{,}0 \times 10^{-3} - 4{,}0 \times 10^{-5} = 9{,}6 \times 10^{-4}\ \text{mol}$ d'acide, presque tout l'acide apporté. La transformation n'est pas totale et son équation s'écrit avec le symbole $\rightleftarrows$. Le tableau d'avancement résume l'évolution du système ; ses deux dernières lignes comparent l'état final qu'atteindrait une transformation totale et l'état final réellement atteint.
 
-<!--colonnes: 12 19 16 12 5 18 18-->
+<!--colonnes: 17 19 16 11 5 16 16-->
 
 | État du système | Avancement (mol) | CH~3~COOH(aq) | \+ H~2~O(ℓ) | ⇄ | CH~3~COO^−^(aq) | \+ H~3~O^+^(aq) |
 |:--|:-:|:-:|:-:|:-:|:-:|:-:|
 | État initial | $0$ | $1{,}0 \times 10^{-3}$ | excès | | $0$ | $0$ |
-| État final | $x_\text{f} = 4{,}0 \times 10^{-5}$ | $9{,}6 \times 10^{-4}$ | excès | | $4{,}0 \times 10^{-5}$ | $4{,}0 \times 10^{-5}$ |
-| Si totale | $x_\text{max} = 1{,}0 \times 10^{-3}$ | $0$ | excès | | $1{,}0 \times 10^{-3}$ | $1{,}0 \times 10^{-3}$ |
+| En cours | $x$ | $1{,}0 \times 10^{-3} - x$ | excès | | $x$ | $x$ |
+| État final si la transformation était totale | $x_\text{max} = 1{,}0 \times 10^{-3}$ | $0$ | excès | | $1{,}0 \times 10^{-3}$ | $1{,}0 \times 10^{-3}$ |
+| État final réel | $x_\text{f} = 4{,}0 \times 10^{-5}$ | $9{,}6 \times 10^{-4}$ | excès | | $4{,}0 \times 10^{-5}$ | $4{,}0 \times 10^{-5}$ |
 
 Le rapport $\dfrac{x_\text{f}}{x_\text{max}} = 0{,}040$ est le taux d'avancement final (Q.8) : seules $4{,}0\ \%$ des molécules d'acide ont réagi avec l'eau.
 
@@ -1086,13 +1089,14 @@ Seuls $4{,}0\ \%$ des ions carbonate ont réagi : la transformation n'est pas to
 
 Pour un acide AH apporté à la concentration $C$ dans un volume $V$, la réaction avec l'eau s'écrit $\text{AH} + \text{H}_2\text{O} \rightleftarrows \text{A}^- + \text{H}_3\text{O}^{\text{+}}$. Si elle était totale, tout l'acide réagirait : $x_\text{max} = C \times V$. L'avancement final vaut $x_\text{f} = [\text{H}_3\text{O}^{\text{+}}]_\text{f} \times V$, donc $\tau = \dfrac{x_\text{f}}{x_\text{max}} = \dfrac{[\text{H}_3\text{O}^{\text{+}}]_\text{f}}{C}$.
 
-<!--colonnes: 12 19 17 13 5 16 18-->
+<!--colonnes: 17 18 16 12 5 15 17-->
 
 | État du système | Avancement (mol) | AH(aq) | \+ H~2~O(ℓ) | ⇄ | A^−^(aq) | \+ H~3~O^+^(aq) |
 |:--|:-:|:-:|:-:|:-:|:-:|:-:|
 | État initial | $0$ | $C \times V$ | excès | | $0$ | $0$ |
-| État final | $x_\text{f}$ | $C \times V - x_\text{f}$ | excès | | $x_\text{f}$ | $x_\text{f}$ |
-| Si totale | $x_\text{max} = C \times V$ | $0$ | excès | | $C \times V$ | $C \times V$ |
+| En cours | $x$ | $C \times V - x$ | excès | | $x$ | $x$ |
+| État final si la transformation était totale | $x_\text{max} = C \times V$ | $0$ | excès | | $C \times V$ | $C \times V$ |
+| État final réel | $x_\text{f}$ | $C \times V - x_\text{f}$ | excès | | $x_\text{f}$ | $x_\text{f}$ |
 
 On en tire $[\text{A}^-]_\text{f} = [\text{H}_3\text{O}^{\text{+}}]_\text{f}$ et $[\text{AH}]_\text{f} = C - [\text{H}_3\text{O}^{\text{+}}]_\text{f}$.
 
@@ -1199,6 +1203,7 @@ La réaction de l'acide avec l'eau, $\text{CH}_3\text{COOH} + \text{H}_2\text{O}
 | État du système | Avancement (mol) | CH~3~COOH(aq) | \+ H~2~O(ℓ) | ⇄ | CH~3~COO^−^(aq) | \+ H~3~O^+^(aq) |
 |:--|:-:|:-:|:-:|:-:|:-:|:-:|
 | État initial | $0$ | $C \times V$ | excès | | $0$ | $0$ |
+| En cours | $x$ | $C \times V - x$ | excès | | $x$ | $x$ |
 | État final | $x_\text{f}$ | $C \times V - x_\text{f}$ | excès | | $x_\text{f}$ | $x_\text{f}$ |
 
 Les ions de l'autoprotolyse de l'eau sont négligeables : $[\text{CH}_3\text{COO}^-]_\text{éq} = [\text{H}_3\text{O}^{\text{+}}]_\text{éq} = \dfrac{x_\text{f}}{V}$ et $[\text{CH}_3\text{COOH}]_\text{éq} = \dfrac{C \times V - x_\text{f}}{V}$. En exprimant $C$ en $\text{mol·L}^{-1}$ et $V$ en litre, ce qui revient à diviser les concentrations par $c^\circ = 1\ \text{mol·L}^{-1}$, l'expression de $K_\text{A}$ devient :

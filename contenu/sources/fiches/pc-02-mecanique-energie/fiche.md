@@ -315,7 +315,7 @@ Figure 7. Le jeu du boulet
 :::
 
 ::: {custom-style="EnonceDonnees"}
-$m = 10\ \text{g}$ ; $\alpha = 30°$ ; $\text{AB} = D = 0{,}50\ \text{m}$ ; $h_C = 0{,}40\ \text{m}$ ; $g = 9{,}8\ \text{m·s}^{-2}$
+$m = 10\ \text{g}$ ; $\alpha = 30°$ ; $\text{AB} = D = 0{,}50\ \text{m}$ ; $h_C = 0{,}40\ \text{m}$ ; $g = 9{,}81\ \text{m·s}^{-2}$
 
 Cible au sol entre $X_1 = 0{,}55\ \text{m}$ et $X_2 = 0{,}60\ \text{m}$, abscisses mesurées depuis la verticale de C
 :::
@@ -753,15 +753,15 @@ $v^{2} = 2 \times g \times h$
 
 La relation $v^{2} = 2 g h$ prévoit bien une droite passant par l'origine, de coefficient directeur $k = 2g$. Donc :
 
-$$g = \dfrac{k}{2} = \dfrac{19{,}6}{2} = 9{,}80\ \text{m·s}^{-2}$$
+$$g = \dfrac{k}{2} = \dfrac{19{,}6}{2} = 9{,}8\ \text{m·s}^{-2}$$
 
 ::: {custom-style="QRappel"}
 **7.** Comparaison avec la valeur de référence
 :::
 
-On calcule l'écart normalisé (z-score) :
+La valeur mesurée s'arrête à la même décimale que son incertitude-type (voir la fiche 14, Q.1) : $g = 9{,}8\ \text{m·s}^{-2}$ avec $u(g) = 0{,}2\ \text{m·s}^{-2}$. On calcule l'écart normalisé (z-score) :
 
-$$\dfrac{|g - g_{\text{réf}}|}{u(g)} = \dfrac{|9{,}80 - 9{,}81|}{0{,}2} = 0{,}05$$
+$$\dfrac{|g - g_{\text{réf}}|}{u(g)} = \dfrac{|9{,}8 - 9{,}81|}{0{,}2} = 0{,}05$$
 
 L'écart normalisé est inférieur à 2 : la mesure est compatible avec la valeur de référence.
 
@@ -903,7 +903,7 @@ $$\sin\alpha = \dfrac{h_A}{\text{AB}} \quad \text{donc} \quad h_A = D \times \si
 
 $$E_{pp}(A) = m \times g \times h_A = m \times g \times D \times \sin\alpha$$
 
-$$E_{pp}(A) = 10 \times 10^{-3} \times 9{,}8 \times 0{,}50 \times \sin 30° = 2{,}5 \times 10^{-2}\ \text{J}$$
+$$E_{pp}(A) = 10 \times 10^{-3} \times 9{,}81 \times 0{,}50 \times \sin 30° = 2{,}5 \times 10^{-2}\ \text{J}$$
 
 ::: {custom-style="QRappel"}
 **3.** Énergie mécanique en A et en B
@@ -927,7 +927,7 @@ $$\dfrac{1}{2} m v_B^{2} = m g D \sin\alpha \quad \text{soit} \quad v_B^{2} = 2 
 $v_B = \sqrt{2 \times g \times D \times \sin\alpha}$
 :::
 
-$$v_B = \sqrt{2 \times 9{,}8 \times 0{,}50 \times \sin 30°} = 2{,}2\ \text{m·s}^{-1}$$
+$$v_B = \sqrt{2 \times 9{,}81 \times 0{,}50 \times \sin 30°} = 2{,}2\ \text{m·s}^{-1}$$
 
 ::: {custom-style="QRappel"}
 **5.** Équations horaires après C
@@ -959,7 +959,7 @@ $z = -\dfrac{g}{2 \times v_C^{2}} \times x^{2}$
 
 Le boulet touche le sol quand $z = -h_C$ :
 
-$$-\dfrac{1}{2} g t_{\text{sol}}^{2} = -h_C \quad \text{donc} \quad t_{\text{sol}} = \sqrt{\dfrac{2 \times h_C}{g}} = \sqrt{\dfrac{2 \times 0{,}40}{9{,}8}} = 0{,}29\ \text{s}$$
+$$-\dfrac{1}{2} g t_{\text{sol}}^{2} = -h_C \quad \text{donc} \quad t_{\text{sol}} = \sqrt{\dfrac{2 \times h_C}{g}} = \sqrt{\dfrac{2 \times 0{,}40}{9{,}81}} = 0{,}29\ \text{s}$$
 
 $$X_f = v_C \times t_{\text{sol}} = 2{,}2 \times 0{,}286 = 0{,}63\ \text{m}$$
 
@@ -975,7 +975,7 @@ $$v_C = \dfrac{0{,}575}{0{,}286} = 2{,}0\ \text{m·s}^{-1}$$
 
 Comme $v_C = v_B$ et $v_B^{2} = 2 g D \sin\alpha$ :
 
-$$D = \dfrac{v_C^{2}}{2 \times g \times \sin\alpha} = \dfrac{2{,}0^{2}}{2 \times 9{,}8 \times \sin 30°} = 0{,}41\ \text{m}$$
+$$D = \dfrac{v_C^{2}}{2 \times g \times \sin\alpha} = \dfrac{2{,}0^{2}}{2 \times 9{,}81 \times \sin 30°} = 0{,}41\ \text{m}$$
 
 ::: {custom-style="QRappel"}
 **9.** Vitesse à l'arrivée au sol
@@ -985,7 +985,7 @@ L'énergie mécanique se conserve de A jusqu'au sol. On prend cette fois l'origi
 
 $$m g (h_A + h_C) = \dfrac{1}{2} m v_{\text{sol}}^{2} \quad \text{donc} \quad v_{\text{sol}} = \sqrt{2 \times g \times (h_A + h_C)}$$
 
-$$v_{\text{sol}} = \sqrt{2 \times 9{,}8 \times (0{,}25 + 0{,}40)} = 3{,}6\ \text{m·s}^{-1}$$
+$$v_{\text{sol}} = \sqrt{2 \times 9{,}81 \times (0{,}25 + 0{,}40)} = 3{,}6\ \text{m·s}^{-1}$$
 
 ::: {custom-style="Methode"}
 [Méthode.]{custom-style="EtiqMethode"} Pour calculer une vitesse, la conservation de l'énergie mécanique est plus rapide que les équations horaires : il suffit des altitudes de départ et d'arrivée, sans calculer la durée du mouvement.

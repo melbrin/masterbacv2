@@ -150,7 +150,7 @@ controles = [
     ('Ex. 4 pression finale', 1013 + dP_ex4 / 100, 1216, 0.5, '$P_\\text{f} = 1\\,013 + 203 = 1\\,216\\ \\text{hPa}$'),
     ('Ex. 4 pression à mi-parcours', P_demi, 1114.5, 0.06, '1\\,013 + 101{,}5 \\approx 1\\,115\\ \\text{hPa}$'),
     ('Ex. 4 pression à 8 min (figure)', P8, 1165, 0.5, 'on lit $P = 1\\,165\\ \\text{hPa}$'),
-    ('Ex. 4 dioxygène à 8 min', nO2_8, 1.50e-3, 0.005e-3, '= 1{,}50 \\times 10^{-3}\\ \\text{mol} \\qquad'),
+    ('Ex. 4 dioxygène à 8 min', nO2_8, 1.50e-3, 0.005e-3, '= 1{,}50 \\times 10^{-3}\\ \\text{mol}$$'),
     ('Ex. 4 peroxyde d\'hydrogène à 8 min', cH2O2_8, 9.1e-2, 0.05e-2, '= 9{,}1 \\times 10^{-2}\\ \\text{mol·L}^{-1}$$'),
     ('Ex. 4 reste au bout de deux t1/2', (4.0e-3 - 2 * nO2_8) / 4.0e-3, 0.25, 0.005, 'soit deux fois $t_{1/2}$, il reste le quart'),
     ('Ex. 4 8,0 min = deux temps de demi-réaction', 8.0 / 4.0, 2, 1e-12, 'Ici, à $8{,}0\\ \\text{min}$, soit deux fois $t_{1/2}$'),

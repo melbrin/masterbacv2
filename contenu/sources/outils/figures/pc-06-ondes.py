@@ -337,21 +337,21 @@ a2.text(-3.6,4.35,'derrière :\nfronts espacés',ha='center',va='bottom',fontsiz
 p=f'{out}/fig_doppler.png'; fig.savefig(p,facecolor='white'); plt.close(fig); print('fig_doppler',rogne(p))
 
 # ---------------------------------------------------------------- 15. Q.28 : raies du laboratoire et raies d'une galaxie
-fig,ax=new(6.4,2.3,(318,812),(-1.3,2.7))
+fig,ax=new(6.4,2.3,(318,840),(-1.3,2.7))
 ax.set_aspect('auto')
 for (y0,lab) in [(1.4,'laboratoire'),(0.0,'galaxie')]:
     nz=300
     for kk in range(nz):
-        lam=400+(780-400)*kk/nz
-        ax.add_patch(Rectangle((lam,y0),(780-400)/nz+0.3,0.8,fc=wl_rgb(lam),ec='none'))
+        lam=400+(800-400)*kk/nz
+        ax.add_patch(Rectangle((lam,y0),(800-400)/nz+0.3,0.8,fc=wl_rgb(lam),ec='none'))
     ax.text(395,y0+0.4,lab,ha='right',va='center',fontsize=9.5)
 for lam in (486.1,656.3):
     ax.plot([lam,lam],[1.4,2.2],color='black',lw=2.0)
     ax.plot([lam*1.01006,lam*1.01006],[0.0,0.8],color='black',lw=2.0)
     ax.plot([lam,lam*1.01006],[1.35,0.85],color=GRIS,lw=0.8,ls=(0,(2,2)))
 ax.text(656.3,2.3,'H$\\alpha$',ha='center',va='bottom',fontsize=10); ax.text(486.1,2.3,'H$\\beta$',ha='center',va='bottom',fontsize=10)
-for lam in range(400,781,50):
+for lam in range(400,801,50):
     ax.plot([lam,lam],[0,-0.12],color=ANTH,lw=0.8); ax.text(lam,-0.2,str(lam),ha='center',va='top',fontsize=8.5)
-ax.plot([400,780],[0,0],color=ANTH,lw=0.8); ax.text(786,-0.2,'nm',ha='left',va='top',fontsize=8.5)
+ax.plot([400,800],[0,0],color=ANTH,lw=0.8); ax.text(814,-0.2,'nm',ha='left',va='top',fontsize=8.5)
 arrow(ax,690,-0.95,760,-0.95,color=BRIQUE,lw=1.4); ax.text(686,-0.95,'décalage vers le rouge',ha='right',va='center',fontsize=9,color=BRIQUE)
 save(fig,'fig_raies')

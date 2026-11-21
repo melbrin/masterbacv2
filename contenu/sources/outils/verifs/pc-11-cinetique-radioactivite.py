@@ -43,6 +43,9 @@ lnP0 = log(120.0); lnP8 = lnP0 - 8 * 0.27; k_P = (round(lnP0, 2) - round(lnP8, 2
 Plim = 8e-3 / 151; t_lim = log(120 / 53) / 0.27
 # Thème 3
 chi = {'H': 2.20, 'C': 2.55, 'O': 3.44, 'Cl': 3.16, 'Br': 2.96}
+# électronégativités imprimées (Q.12, Q.13, Ex. 3) : mêmes valeurs que chi, toutes avec deux décimales
+chi_imp = re.findall(r'\\chi\(\\text\{(\w+)\}\) = (\d)\{,\}(\d+)\$', src)
+chi_ko = [x for x, a, b in chi_imp if len(b) != 2 or abs(float(a + '.' + b) - chi[x]) > 1e-9]
 # Thème 4 et 5
 lam22 = log(2) / 6.0
 N24 = 1.0e-6 / 131 * 6.02e23; lam24 = log(2) / (8.0 * 86400)
@@ -111,6 +114,9 @@ controles = [
     ('Q.12 écart O-H', chi['O'] - chi['H'], 1.24, 1e-9, '| $\\text{O-H}$ | $1{,}24$ |'),
     ('Q.12 écart C-Cl', chi['Cl'] - chi['C'], 0.61, 1e-9, '| $\\text{C-Cl}$ | $0{,}61$ |'),
     ('Q.13 écart C-Br', chi['Br'] - chi['C'], 0.41, 1e-9, '(écart $0{,}41$)'),
+    ('Électronégativités imprimées (Q.12, Q.13, Ex. 3)', len(chi_imp), 9, 0, 'Électronégativités : $\\chi(\\text{H}) = 2{,}20$ ; $\\chi(\\text{C}) = 2{,}55$ ; $\\chi(\\text{O}) = 3{,}44$.'),
+    ('Électronégativités différentes de chi ou mal arrondies', len(chi_ko), 0, 0, '$\\chi(\\text{O}) = 3{,}44$ ; $\\chi(\\text{Cl}) = 3{,}16$.'),
+    ('Ex. 3 liaisons C-O polarisées (écart supérieur à 0,4)', chi['O'] - chi['C'] > 0.4, True, 0, '($3{,}44$ contre $2{,}55$)'),
     ('Q.17 neutrons du nickel 63', 63 - 28, 35, 0, '$63 - 28 = 35$ neutrons'),
     ('Q.17 charge du noyau', 28 * 1.60e-19, 4.48e-18, 1e-21, '= 4{,}48 \\times 10^{-18}\\ \\text{C}$$'),
     ('Ex. 4 neutrons de l\'uranium 235', 235 - 92, 143, 0, '$235 - 92 = 143$ neutrons'),

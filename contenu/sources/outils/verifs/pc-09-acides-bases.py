@@ -1,7 +1,7 @@
 # Recalcul indépendant des résultats numériques de la fiche 9 (Acides et bases),
 # puis contrôle de la structure de la fiche : niveaux et parcours, tableau « Ce qui est tombé » et mentions
 # « Demandé ... », exercices d'après un sujet, figures, index, renvois Q.n, rubriques de L'essentiel
-# et format des tableaux d'avancement (flèche entre réactifs et produits).
+# et format des tableaux d'avancement (flèche entre réactifs et produits, lignes État initial, En cours, État final).
 # usage : python3 outils/verifs/pc-09-acides-bases.py
 # Chaque valeur est recalculée à partir des seules données des énoncés ; on vérifie ensuite que son écriture
 # figure telle quelle dans la fiche (écriture LaTeX du fichier source).
@@ -100,8 +100,9 @@ controles = [
     ('Q.7 avancement final', xf7b, 4.0e-5, 1e-12, 'x_\\text{f} = n_\\text{f}(\\text{H}_3\\text{O}^{\\text{+}}) = 4{,}0 \\times 10^{-5}\\ \\text{mol}$$'),
     ('Q.7 xmax / xf', xm7b / xf7b, 25, 1e-9, 'L\'avancement final est 25 fois plus petit'),
     ('Q.7 acide restant', reste7, 9.6e-4, 1e-12, '= 9{,}6 \\times 10^{-4}\\ \\text{mol}$ d\'acide'),
-    ('Q.7 tableau, état final', reste7, 9.6e-4, 1e-12, '| État final | $x_\\text{f} = 4{,}0 \\times 10^{-5}$ | $9{,}6 \\times 10^{-4}$ | excès | | $4{,}0 \\times 10^{-5}$ | $4{,}0 \\times 10^{-5}$ |'),
-    ('Q.7 tableau, si totale', xm7b, 1.0e-3, 1e-12, '| Si totale | $x_\\text{max} = 1{,}0 \\times 10^{-3}$ | $0$ | excès | | $1{,}0 \\times 10^{-3}$ | $1{,}0 \\times 10^{-3}$ |'),
+    ('Q.7 tableau, en cours', ni7, 1.0e-3, 1e-12, '| En cours | $x$ | $1{,}0 \\times 10^{-3} - x$ | excès | | $x$ | $x$ |'),
+    ('Q.7 tableau, état final si totale', xm7b, 1.0e-3, 1e-12, '| État final si la transformation était totale | $x_\\text{max} = 1{,}0 \\times 10^{-3}$ | $0$ | excès | | $1{,}0 \\times 10^{-3}$ | $1{,}0 \\times 10^{-3}$ |'),
+    ('Q.7 tableau, état final réel', reste7, 9.6e-4, 1e-12, '| État final réel | $x_\\text{f} = 4{,}0 \\times 10^{-5}$ | $9{,}6 \\times 10^{-4}$ | excès | | $4{,}0 \\times 10^{-5}$ | $4{,}0 \\times 10^{-5}$ |'),
     ('Q.7 taux d\'avancement', tau7b, 0.040, 1e-9, '= 0{,}040$ est le taux d\'avancement final (Q.8)'),
     ('Q.7 pourcentage d\'acide ayant réagi', 100 * tau7b, 4.0, 1e-9, 'seules $4{,}0\\ \\%$ des molécules d\'acide ont réagi'),
     ('Q.7 cohérent avec Q.14 (pH 3,40 dans 100,0 mL)', xf7_Q14, 4.0e-5, 0.05e-5, None),
@@ -366,7 +367,8 @@ if not ess.index('À connaître par cœur') < ess.index('À savoir retrouver') <
 if '| Notion | Relation | Comment la retrouver |' not in ess: ess_ko.append('intitulés du tableau « À savoir retrouver »')
 print('--- L\'essentiel : rubriques%s' % (' ; ÉCART %s' % ess_ko if ess_ko else ' en place'))
 
-# tableaux d'avancement au format de la maison : « État du système », « Avancement (mol) », espèces, colonne de la flèche
+# tableaux d'avancement au format de la maison : « État du système », « Avancement (mol) », espèces, colonne de la flèche ;
+# lignes État initial, En cours, puis l'état final (deux lignes, « si la transformation était totale » et « réel », quand le tableau oppose xmax à xf)
 tav_ko, ntav = [], 0
 for bloc_t in re.findall(r'(\| État du système \|.*?)(?:\n\n|\Z)', src, flags=re.S):
     ntav += 1
@@ -375,6 +377,9 @@ for bloc_t in re.findall(r'(\| État du système \|.*?)(?:\n\n|\Z)', src, flags=
     fl = [i for i, c in enumerate(tete) if c in ('→', '⇄')]
     if tete[1] != 'Avancement (mol)' or len(fl) != 1: tav_ko.append(lig_t[0][:60]); continue
     if not lig_t[1].startswith('|:--|') or lig_t[1].count(':-:') != len(tete) - 1: tav_ko.append('alignement : ' + lig_t[0][:40])
+    noms_t = [l.strip().strip('|').split('|')[0].strip() for l in lig_t[2:]]
+    if noms_t[:2] != ['État initial', 'En cours'] or noms_t[2:] not in (['État final'], ['État final si la transformation était totale', 'État final réel']):
+        tav_ko.append('lignes : ' + ', '.join(noms_t))
     for l in lig_t[2:]:
         cel = [c.strip() for c in l.strip().strip('|').split('|')]
         if len(cel) != len(tete) or cel[fl[0]] != '': tav_ko.append('ligne : ' + l[:40])

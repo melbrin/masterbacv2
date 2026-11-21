@@ -15,7 +15,7 @@
 | Écriture d'un résultat | $x = 9{,}79\ \text{m·s}^{-2}$ et $u(x) = 0{,}10\ \text{m·s}^{-2}$ | $u(x)$ a un ou deux chiffres significatifs ; $x$ s'arrête à la même décimale. |
 | Incertitude-type de type A | $u(\overline{x}) = \dfrac{s}{\sqrt{n}}$ | $s$ : écart-type expérimental des $n$ mesures, noté $\sigma_{n-1}$ ; $\overline{x}$ : leur moyenne. |
 | Comparaison à une référence | $z = \dfrac{\left|x - x_{\text{réf}}\right|}{u(x)}$ | Compatible si $z \leq 2$. Sinon, chercher une erreur dans le protocole ou le modèle. |
-| Vitesse calculée en Python | `v[i] = (x[i+1]-x[i]) / (t[i+1]-t[i])` | Avec $n$ positions : $n - 1$ vitesses, puis $n - 2$ accélérations ; le premier indice est 0. |
+| Vitesse calculée en Python | `v[i] = (x[i+1]-x[i]) / (t[i+1]-t[i])` (vitesse moyenne, placée au milieu de l'intervalle) | Avec $n$ positions : $n - 1$ vitesses, puis $n - 2$ accélérations ; le premier indice est 0. |
 
 ::: {custom-style="Rubrique"}
 À savoir retrouver
@@ -41,7 +41,7 @@ Les pièges qui coûtent des points
 
 - Recopier $u(x)$ avec tous les chiffres affichés, ou arrondir $x$ à une autre décimale que $u(x)$.
 - Oublier qu'en Python `range(n)` va de 0 à $n - 1$, et écrire `^` pour une puissance au lieu de `**`.
-- Confondre la constante de temps $\tau$ et la demi-vie $t_{1/2} = \tau \ln 2$.
+- Confondre la constante de temps $\tau$ (ou temps caractéristique) et la demi-vie $t_{1/2} = \tau \ln 2$.
 - Conclure « c'est proche » sans calculer $z$, ou donner un résultat sans unité.
 
 ::: {custom-style="Rubrique"}
@@ -62,7 +62,7 @@ Votre parcours selon votre objectif
 
 # Ce qui est tombé aux BAC 2025 et 2026 {#tombe}
 
-Incertitudes et équations différentielles reviennent souvent (bilans sous le tableau). Le tableau retient, parmi les vingt-huit sujets, les quatorze exercices où il faut lire ou compléter un programme Python.
+Incertitudes et équations différentielles reviennent souvent (bilans sous le tableau). Le tableau retient, parmi les sujets des sessions 2025 et 2026, les quatorze exercices où il faut lire ou compléter un programme Python.
 
 <!--colonnes: 21 24 41 14-->
 
@@ -282,7 +282,7 @@ Compléter les lignes 5 à 7. Sur le graphique tracé ensuite, `Em` diminue : qu
 ## [Q.9]{custom-style="QNum"}\ \ Simuler les quantités de matière au cours d'un titrage {#q9}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : équivalence, réactif limitant, volume versé · Demandé en 2025 et en 2026 (Métropole)\ \ \ [CIBLE:c_q9]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : équivalence, réactif limitant, volume versé · Demandé en 2025 et en 2026 (Métropole, juin, jour\ 2)\ \ \ [CIBLE:c_q9]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
@@ -313,7 +313,7 @@ Compléter les lignes 5 et 14. Que contient le tableau `V` ? Calculer la valeur 
 ## [Q.10]{custom-style="QNum"}\ \ Simuler un processus aléatoire pour évaluer une incertitude-type composée {#q10}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : tirages aléatoires, moyenne, écart-type · Demandé en 2025 (Métropole, septembre)\ \ \ [CIBLE:c_q10]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Méthode · Notions : tirages aléatoires, moyenne, écart-type · Demandé en 2025 (Métropole, septembre, jour\ 2)\ \ \ [CIBLE:c_q10]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
@@ -463,7 +463,7 @@ Application : la température du thé de Q.13 suit $\theta(t) = 20 + 60\, e^{-t/
 ## [Q.15]{custom-style="QNum"}\ \ Résoudre une équation différentielle pas à pas avec Python {#q15}
 
 ::: {custom-style="Meta"}
-[\ Objectif 18\ ]{custom-style="Niv18"}\ \ Méthode · Notions : approximation de la dérivée, pas de calcul · Simulation par la solution exacte demandée en 2026 (Antilles-Guyane)\ \ \ [CIBLE:c_q15]{custom-style="BoutonCorrige"}
+[\ Objectif 18\ ]{custom-style="Niv18"}\ \ Méthode · Notions : approximation de la dérivée, pas de calcul · Simulation par la solution exacte demandée en 2026 (Antilles-Guyane, jour\ 1)\ \ \ [CIBLE:c_q15]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}
@@ -879,7 +879,7 @@ $v$ : 0,80 ; 1,1 ; 1,4 ; 1,7 en $\text{m·s}^{-1}$. $a$ : 0,60 ; 0,60 ; 0,60 en 
 La vitesse augmente régulièrement et l'accélération est constante : le mouvement selon l'axe $(Ox)$ est uniformément accéléré.
 
 ::: {custom-style="Remarque"}
-[Remarque.]{custom-style="EtiqRemarque"} Certains programmes calculent la vitesse à la date `t[i]` avec les points qui l'encadrent : `(x[i + 1] - x[i - 1]) / (t[i + 1] - t[i - 1])`. Ce calcul est plus précis, mais impossible pour le premier et le dernier point, une question posée en 2025.
+[Remarque.]{custom-style="EtiqRemarque"} Certains programmes calculent la vitesse à la date `t[i]` avec les points qui l'encadrent : `(x[i + 1] - x[i - 1]) / (t[i + 1] - t[i - 1])`. Ce calcul est plus précis, mais impossible pour le premier et le dernier point, une question posée en 2025. C'est la relation de la fiche 1 pour une chronophotographie : $v_i = \dfrac{G_{i-1}G_{i+1}}{2\tau}$, où $\tau$ est la durée entre deux positions successives.
 :::
 
 ::: {custom-style="Redaction"}
@@ -1060,7 +1060,7 @@ On met l'équation sous la forme $\dfrac{\mathrm{d}y}{\mathrm{d}t} + \dfrac{y}{\
 | Chute dans un fluide, frottement $f = k \times v$, poussée négligée | $\dfrac{\mathrm{d}v}{\mathrm{d}t} + \dfrac{v}{\tau} = g$ | $\tau = \dfrac{m}{k}$ | $v_{\text{lim}} = g\,\tau$ |
 | Transfert thermique | $\dfrac{\mathrm{d}\theta}{\mathrm{d}t} + \dfrac{\theta}{\tau} = \dfrac{\theta_{\text{ext}}}{\tau}$ | $\tau = \dfrac{C}{h\,S}$ | $\theta_{\text{ext}}$ |
 
-$C$ : capacité du condensateur, en F, dans les deux premières lignes ; capacité thermique du système, en $\text{J·K}^{-1}$, dans la dernière.
+$C$ : capacité du condensateur, en F, dans les deux premières lignes ; capacité thermique du système, en $\text{J·K}^{-1}$, dans la dernière : $C = m \times c$, avec $c$ la capacité thermique massique, d'où $\tau = \dfrac{m \times c}{h\,S}$ (fiche 5). $k$ : constante de vitesse, en $\text{s}^{-1}$, dans la ligne de la cinétique (fiche 11) ; coefficient de frottement, en $\text{kg·s}^{-1}$, dans celle de la chute (fiche 4).
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.12 · Établir l'équation différentielle d'un refroidissement {#c_q12}
 
@@ -1284,7 +1284,7 @@ Le résultat garde deux chiffres significatifs, comme la donnée la moins préci
 
 (b) Il faut calculer la dérivée, remplacer $\theta$ et sa dérivée dans l'équation, constater l'égalité, puis vérifier la condition initiale.
 
-(c) Il faut comparer le résultat à une référence avec un nombre, par exemple un quotient $z$ ou un écart relatif, puis conclure par une phrase.
+(c) Il faut comparer le résultat à une référence avec un nombre, par exemple un quotient $z$ ou un écart relatif, puis conclure par une phrase. L'écart relatif $\dfrac{\left|x - x_{\text{réf}}\right|}{x_{\text{réf}}}$, souvent exprimé en pourcentage, se compare à la tolérance donnée par l'énoncé, quand celui-ci ne fournit pas d'incertitude-type.
 
 #### [Corrigé]{custom-style="NumCorrige"}\ \ Q.18 · Vérifier l'homogénéité d'une relation {#c_q18}
 

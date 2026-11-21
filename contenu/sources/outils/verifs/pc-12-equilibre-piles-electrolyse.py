@@ -72,7 +72,7 @@ controles = [
     ('Q.2 log K1', log10(K1), -4.8, 1e-9, '= 10^{-4{,}8} = 1{,}6 \\times 10^{-5}$$'),
     ('Q.2 constante K1', K1, 1.6e-5, 0.05e-5, '= 10^{-4{,}8} = 1{,}6 \\times 10^{-5}$$'),
     ('Q.2 constante de la réaction inverse', 1 / K1, 6.3e4, 0.05e4, '$\\dfrac{1}{K_1} = 10^{4{,}8} = 6{,}3 \\times 10^{4}$'),
-    ('Q.3 [Fe2+] initiale', cFe, 3.33e-2, 0.005e-2, '= 3{,}33 \\times 10^{-2}\\ \\text{mol·L}^{-1} \\qquad'),
+    ('Q.3 [Fe2+] initiale', cFe, 3.33e-2, 0.005e-2, '= 3{,}33 \\times 10^{-2}\\ \\text{mol·L}^{-1}$$'),
     ('Q.3 [Zn2+] initiale', cZn, 6.67e-2, 0.005e-2, '= 6{,}67 \\times 10^{-2}\\ \\text{mol·L}^{-1}$$'),
     ('Q.3 quotient initial', cZn / cFe, 2.0, 1e-9, '\\dfrac{6{,}67 \\times 10^{-2}}{3{,}33 \\times 10^{-2}} = 2{,}00$$'),
     ('Q.3 sens direct', cZn / cFe < 1e11, True, 0, '$Q_\\text{r,i} = 2{,}00 < K = 10^{11}$ : le système évolue spontanément dans le sens direct'),
@@ -116,7 +116,7 @@ controles = [
     ('Q.12 durée (h)', Qm / 0.10 / 3600, 21, 0.5, '\\text{ soit environ } 21\\ \\text{h}$$'),
     ('Q.12 aluminium restant', nAl - 2 * xm, 1.0e-2, 0.05e-2, '= 1{,}0 \\times 10^{-2}\\ \\text{mol}$ d\'aluminium'),
     ('Q.13 capacité massique du lithium', cm['Li'], 3.86e3, 0.005e3, '= 3{,}86 \\times 10^{3}\\ \\text{A·h·kg}^{-1}$$'),
-    ('Q.13 capacité massique du zinc', cm['Zn'], 8.20e2, 0.005e2, '= 8{,}20 \\times 10^{2}\\ \\text{A·h·kg}^{-1} \\qquad'),
+    ('Q.13 capacité massique du zinc', cm['Zn'], 8.20e2, 0.005e2, '= 8{,}20 \\times 10^{2}\\ \\text{A·h·kg}^{-1}$$'),
     ('Q.13 capacité massique de l\'aluminium', cm['Al'], 2.98e3, 0.005e3, '= 2{,}98 \\times 10^{3}\\ \\text{A·h·kg}^{-1}$$'),
     ('Q.13 pile la plus légère', max(cm, key=cm.get), 'Li', None, '= 3{,}86 \\times 10^{3}'),
     ('Q.13 capacité de la pile au lithium', QLi, 2.7, 0.05, '= 0{,}70 \\times 10^{-3} \\times 3{,}86 \\times 10^{3} = 2{,}7\\ \\text{A·h}$'),
@@ -144,6 +144,9 @@ controles = [
     ('Q.17 durée (min)', dt17 / 60, 27, 0.5, '\\text{s ou environ } 27\\ \\text{min}$$'),
     ('Q.17 énergie (J)', 3.0 * 2.0 * dt17, 9.9e3, 0.05e3, '= 9{,}9 \\times 10^{3}\\ \\text{J}, \\text{ soit } 2{,}7\\ \\text{W·h}$$'),
     ('Q.17 énergie (W·h)', 3.0 * 2.0 * dt17 / 3600, 2.7, 0.05, '\\text{ soit } 2{,}7\\ \\text{W·h}$$'),
+    # méthode de Q.17 : F = N_A × e avec N_A = 6,022 × 10^23 mol^-1 et e = 1,602 × 10^-19 C (avec 6,02 et 1,60, on trouverait 9,63 × 10^4)
+    ('Q.17 constante de Faraday F = N_A × e', 6.022e23 * 1.602e-19, F, 0.005e4,
+     'F = N_\\text{A} \\times e \\approx 9{,}65 \\times 10^{4}\\ \\text{C·mol}^{-1}$ (avec $N_\\text{A} = 6{,}022 \\times 10^{23}\\ \\text{mol}^{-1}$ et $e = 1{,}602 \\times 10^{-19}\\ \\text{C}$)'),
     ('Q.18 dihydrogène', nH2_18, 2.1e2, 0.05e2, '= \\dfrac{5{,}0 \\times 10^{3}}{24} = 2{,}1 \\times 10^{2}\\ \\text{mol}$$'),
     ('Q.18 électrons', ne18, 4.2e2, 0.05e2, '= 4{,}2 \\times 10^{2}\\ \\text{mol} \\qquad I'),
     ('Q.18 électrons (valeur intermédiaire)', ne18, 4.17e2, 0.005e2, '\\dfrac{4{,}17 \\times 10^{2} \\times 9{,}65 \\times 10^{4}}{3\\,600}'),
@@ -259,7 +262,7 @@ for n in faux: print('   FIGURE', n)
 ETAT = re.compile(r'\((?:\\text\{(?:aq|s|g)\}|\\ell)\)')
 CHARGE = re.compile(r'\^(?:\{\\text\{(\d*)\+\}\}|-|\{(\d*)-\})$')
 ELEMENTS = {'H', 'C', 'N', 'O', 'S', 'Cl', 'Al', 'Cu', 'Zn', 'Fe', 'Ni', 'Li', 'Co', 'Mn', 'Pb', 'I'}
-GENERIQUES = {'\\text{M} \\rightarrow \\text{M}^{z\\text{+}} + z\\,\\text{e}^-', '\\text{Ox} + n\\,\\text{e}^- = \\text{Red}',
+GENERIQUES = {'\\text{M} \\rightarrow \\text{M}^{z\\text{+}} + z\\,\\text{e}^-', '\\text{Ox} + z\\,\\text{e}^- = \\text{Red}',
               'a\\,\\text{A} + b\\,\\text{B} \\rightleftarrows c\\,\\text{C} + d\\,\\text{D}',
               '\\text{acide}(\\ell) + \\text{alcool}(\\ell) \\rightleftarrows \\text{ester}(\\ell) + \\text{eau}(\\ell)'}
 def terme(t):

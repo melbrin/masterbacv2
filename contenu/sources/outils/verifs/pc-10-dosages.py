@@ -1,6 +1,7 @@
 # Recalcul indépendant des résultats numériques de la fiche 10 (Dosages),
-# puis contrôle de la structure : niveaux et parcours, tableau « Ce qui est tombé » et mentions « Demandé ... »,
-# exercices d'après un sujet, figures et index.
+# puis contrôle de la structure : niveaux et parcours, tableau « Ce qui est tombé », son bilan et mentions « Demandé ... »,
+# exercices d'après un sujet, couleurs complémentaires de Q.1 (étoile des couleurs), notation de la relation à l'équivalence,
+# figures et index.
 # usage : python3 outils/verifs/pc-10-dosages.py
 # Les courbes de titrage sont recalculées ici par une résolution exacte de l'électroneutralité.
 import os, re
@@ -202,10 +203,33 @@ for e, (sess, nom, voir, mention) in sujets.items():
 print('--- mentions « Demandé » et sujets d\'après : %d écart(s)' % len(dem_ko))
 for d in dem_ko: print('   ' + d)
 phrases = ['dans au moins dix-neuf exercices des sessions 2025 et 2026', 'Sept des dix-neuf exercices', 'revient dans trois exercices (Q.17 à Q.19, Ex. 4)',
-           'demandé dans au moins quatre exercices de 2026 (Q.8, Q.15)', "est tombé au moins trois fois à l'écrit"]
+           'demandé dans au moins quatre exercices de 2026 (Q.8, Q.15)', "est tombé au moins deux fois à l'écrit"]
 perdues = [p for p in phrases if p not in src]
 for p in perdues: print('   PHRASE INTROUVABLE :', p)
 print('--- phrases de synthèse : %d suivies, %d introuvable(s)' % (len(phrases), len(perdues)))
+# le bilan sur l'étalonnage nomme, entre guillemets, les sujets du tableau qui renvoient à Q.1 à Q.5, et eux seuls
+bilan = src[src.index("Ce qu'il faut en retenir"):src.index('# Thème 1')]
+puce = [l for l in bilan.splitlines() if 'dosage par étalonnage' in l]
+etal = sorted(t[1] for t in avec((1, 2, 3, 4, 5)))
+cites = sorted(re.findall(r'« (.*?) »', puce[0])) if len(puce) == 1 else []
+nombre = {2: 'deux', 3: 'trois', 4: 'quatre'}.get(len(etal), str(len(etal)))
+bil_ko = ([] if cites == etal else ['sujets cités %s, sujets du tableau %s' % (cites, etal)]) \
+    + ([] if len(puce) == 1 and ('tombé au moins %s fois' % nombre) in puce[0] else ['nombre de sujets du bilan'])
+print("--- bilan de l'étalonnage : %d sujet(s) du tableau, %d écart(s)" % (len(etal), len(bil_ko)))
+for b in bil_ko: print('   ' + b)
+
+# Q.1 : couleurs complémentaires de l'étoile des couleurs (bleu et orangé, jaune et violet, rouge et vert),
+# même longueur d'onde dans l'énoncé et dans le corrigé
+q1 = src[src.index('## [Q.1]'):src.index('## [Q.2]')]
+c1 = src[src.index('{#c_q1}'):src.index('{#c_q2}')]
+lam_e = re.findall(r'maximum à \$(\d+)\\ \\text\{nm\}\$, dans le bleu', q1)
+lam_c = re.findall(r'\\lambda_\\text\{max\} = (\d+)\\ \\text\{nm\}', c1)
+coul_ko = ([] if "opposées sur l'étoile des couleurs : bleu et orangé, jaune et violet, rouge et vert" in q1 else ["donnée de Q.1 : paires de l'étoile des couleurs"]) \
+    + (["autre couleur complémentaire que celles de l'étoile"] if re.search(r'bleu et jaune|cyan|magenta', src) else []) \
+    + ([] if lam_e and lam_c == lam_e else ["Q.1 : longueur d'onde %s dans l'énoncé, %s dans le corrigé" % (lam_e, lam_c)]) \
+    + ([] if "complémentaire du bleu, l'orangé" in c1 and "une solution orangée n'absorbe pas l'orangé, elle absorbe le bleu" in c1 else ['Q.1 : couleur perçue ou piège'])
+print('--- couleurs complémentaires : %d écart(s)' % len(coul_ko))
+for c in coul_ko: print('   ' + c)
 nums = [int(n) for n in re.findall(r'^Figure (\d+)\. ', src, flags=re.M)]
 refs = sorted({int(n) for n in re.findall(r'(?:la |\()figure (\d+)', src)})
 fig_ko = nums != list(range(1, len(nums) + 1)) or any(n not in nums for n in refs)
@@ -229,9 +253,11 @@ par_coeur, a_retrouver = ess.split('À savoir retrouver', 1)
 ess_ko = ([] if rub == rub_att else ['rubriques dans le désordre : %s' % rub]) \
     + ['en-tête introuvable : ' + e for e in ('| Notion | Relation | À retenir |', '| Notion | Relation | Comment la retrouver |') if e not in ess] \
     + ([] if 'demi-équivalence' in titre12 and '| Demi-équivalence |' in a_retrouver and '(Q.12)' in a_retrouver else ['renvoi de « À savoir retrouver » vers Q.12']) \
-    + (['demi-équivalence encore dans « À connaître par cœur »'] if 'demi-équivalence' in par_coeur.lower() else [])
+    + (['demi-équivalence encore dans « À connaître par cœur »'] if 'demi-équivalence' in par_coeur.lower() else []) \
+    + ([] if 'Écrire $C \\times V = c \\times V_\\text{E}$ sans tenir compte' in ess else ["piège de l'équivalence : notation C, V, c, V_E"]) \
+    + (["autre notation de la relation à l'équivalence (C_A, V_A, C_B)"] if re.search(r'[CV]_\\text\{[AB]\}', src) else [])
 print("--- L'essentiel : %d rubriques, %d écart(s)" % (len(rub), len(ess_ko)))
 for e in ess_ko: print('   ' + e)
-if ecarts or absents or faux or faux_niv or manque or ex_ko or perdus or mauvais or dem_ko or perdues or fig_ko or idx_ko or ess_ko:
+if ecarts or absents or faux or faux_niv or manque or ex_ko or perdus or mauvais or dem_ko or perdues or bil_ko or coul_ko or fig_ko or idx_ko or ess_ko:
     raise SystemExit(1)
 print('--- tout est bon')

@@ -35,7 +35,7 @@
 Fourni par l'énoncé, à savoir exploiter
 :::
 
-En général donnés : relations de conjugaison et de grandissement d'une lentille mince (distances algébriques), constantes $h$ et $c$, électronvolt, diagramme d'énergie, travail d'extraction, éclairement $E_{\text{e}}$ (puissance reçue $P_{\text{lum}} = E_{\text{e}} \times S$), pouvoir séparateur de l'œil, critère de diffraction.
+En général donnés : relations de conjugaison et de grandissement d'une lentille mince (distances algébriques), constante de Planck $h$, électronvolt, diagramme d'énergie, travail d'extraction, éclairement $E_{\text{e}}$ (puissance reçue $P_{\text{lum}} = E_{\text{e}} \times S$), pouvoir séparateur de l'œil, critère de diffraction.
 
 ::: {custom-style="Rubrique"}
 Les pièges qui coûtent des points
@@ -113,7 +113,7 @@ Application : sur la figure 1, la lentille L, de centre optique O, a pour foyers
 Figure 1. Objet AB devant une lentille mince convergente (une graduation : 1 cm)
 :::
 
-## [Q.2]{custom-style="QNum"}\ \ Énoncer la relation de conjugaison et l'expression du grandissement d'une lentille mince {#q2}
+## [Q.2]{custom-style="QNum"}\ \ Exploiter la relation de conjugaison et l'expression du grandissement {#q2}
 
 ::: {custom-style="Meta"}
 [\ Objectif 10\ ]{custom-style="Niv10"}\ \ Cours · Notions : distances algébriques, grandissement\ \ \ [CIBLE:c_q2]{custom-style="BoutonCorrige"}
@@ -121,6 +121,10 @@ Figure 1. Objet AB devant une lentille mince convergente (une graduation : 1 cm)
 
 ::: {custom-style="Enonce"}
 Application : retrouver par le calcul les résultats de la construction de Q.1, avec $f\text{′} = 5{,}0\ \text{cm}$, $\overline{\text{OA}} = -7{,}5\ \text{cm}$ et $\overline{\text{AB}} = 1{,}0\ \text{cm}$.
+:::
+
+::: {custom-style="EnonceDonnees"}
+Données : relation de conjugaison, $\dfrac{1}{\overline{\text{OA′}}} - \dfrac{1}{\overline{\text{OA}}} = \dfrac{1}{f\text{′}}$ ; grandissement, $\gamma = \dfrac{\overline{\text{A′B′}}}{\overline{\text{AB}}} = \dfrac{\overline{\text{OA′}}}{\overline{\text{OA}}}$.
 :::
 
 ## [Q.3]{custom-style="QNum"}\ \ Déterminer la position et la taille de l'image d'un objet très éloigné {#q3}
@@ -274,7 +278,7 @@ En 1684, Christiaan Huygens décrit une lunette sans tube, l'astroscope : une le
 :::
 
 ::: {custom-style="EnonceDonnees"}
-Données : diamètre apparent de Jupiter ce jour-là, $\theta_{\text{réf}} = 2{,}2 \times 10^{-4}\ \text{rad}$ ; distance Terre-Jupiter, $6{,}3 \times 10^{8}\ \text{km}$ ; pouvoir séparateur de l'œil, $\varepsilon = 3{,}0 \times 10^{-4}\ \text{rad}$ ; diffraction par l'objectif, de diamètre $a = 20\ \text{cm}$ : deux détails vus à l'œil nu sous l'angle $\theta$ ne sont séparés par l'instrument que si $\theta > \theta_{\text{diff}} = 1{,}22 \times \lambda / a$, avec $\lambda = 550\ \text{nm}$ ; $\tan\theta \approx \theta$ pour un petit angle en radian ; $u(\theta) = \theta \times u(\text{A}_1\text{B}_1) / \text{A}_1\text{B}_1$ ; compatibilité avec une valeur de référence si $|\theta - \theta_{\text{réf}}| / u(\theta) < 2$.
+Données : diamètre apparent de Jupiter ce jour-là, $\theta_{\text{réf}} = 2{,}2 \times 10^{-4}\ \text{rad}$ ; distance Terre-Jupiter, $6{,}3 \times 10^{8}\ \text{km}$ ; pouvoir séparateur de l'œil, $\varepsilon = 3{,}0 \times 10^{-4}\ \text{rad}$ ; diffraction par l'objectif, de diamètre $a = 20\ \text{cm}$ : deux détails vus à l'œil nu sous l'angle $\theta$ ne sont séparés par l'instrument que si $\theta > \theta_{\text{diff}} = 1{,}22 \times \lambda / a$, avec $\lambda = 550\ \text{nm}$ ; $\tan\theta \approx \theta$ pour un petit angle en radian ; $u(\theta) = \theta \times u(\text{A}_1\text{B}_1) / \text{A}_1\text{B}_1$ ; compatibilité avec une valeur de référence si $|\theta - \theta_{\text{réf}}| / u(\theta) \leq 2$.
 :::
 
 ::: {custom-style="Figure"}
@@ -615,7 +619,7 @@ Figure 8. Construction de l'image A′B′ avec les trois rayons particuliers
 [Remarque.]{custom-style="EtiqRemarque"} Si l'objet est placé entre le foyer objet F et la lentille, les rayons émergents divergent. Leurs prolongements se coupent avant la lentille et donnent une image virtuelle, droite et plus grande que l'objet : c'est le principe de la loupe.
 :::
 
-#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.2 · Énoncer la relation de conjugaison et l'expression du grandissement d'une lentille mince {#c_q2}
+#### [Corrigé]{custom-style="NumCorrige"}\ \ Q.2 · Exploiter la relation de conjugaison et l'expression du grandissement {#c_q2}
 
 ::: {custom-style="Renvoi"}
 [CIBLE:q2]{custom-style="BoutonEnonce"}
@@ -636,6 +640,8 @@ $\gamma = \dfrac{\overline{\text{A′B′}}}{\overline{\text{AB}}} = \dfrac{\ove
 :::
 
 Le grandissement est sans unité. Si $\gamma < 0$, l'image est renversée ; si $|\gamma| > 1$, elle est plus grande que l'objet.
+
+Au bac, ces deux relations sont données par l'énoncé, comme ici : ce qui est évalué, c'est leur emploi avec les distances algébriques.
 
 **Application numérique.**
 
@@ -1003,7 +1009,7 @@ $$\theta = \dfrac{\text{A}_1\text{B}_1}{f\text{′}_1} = \dfrac{7{,}0 \times 10^
 
 $$\dfrac{|\theta - \theta_{\text{réf}}|}{u(\theta)} = \dfrac{|2{,}06 - 2{,}2| \times 10^{-4}}{0{,}09 \times 10^{-4}} = 1{,}6 < 2$$
 
-La mesure, $\theta = (2{,}06 \pm 0{,}09) \times 10^{-4}\ \text{rad}$, est compatible avec la valeur de référence.
+La mesure, $\theta = 2{,}06 \times 10^{-4}\ \text{rad}$ avec $u(\theta) = 0{,}09 \times 10^{-4}\ \text{rad}$, est compatible avec la valeur de référence.
 
 ::: {custom-style="QRappel"}
 **7.** La Grande Tache rouge
@@ -1155,7 +1161,9 @@ Les raies sont caractéristiques de l'élément chimique, comme une empreinte : 
 **1.** Valeurs des niveaux
 :::
 
-$$E_1 = -\dfrac{13{,}6}{1^{2}} = -13{,}6\ \text{eV} \qquad E_2 = -\dfrac{13{,}6}{2^{2}} = -3{,}40\ \text{eV} \qquad E_3 = -\dfrac{13{,}6}{3^{2}} = -1{,}51\ \text{eV} \qquad E_4 = -\dfrac{13{,}6}{4^{2}} = -0{,}85\ \text{eV}$$
+$$E_1 = -\dfrac{13{,}6}{1^{2}} = -13{,}6\ \text{eV} \qquad E_2 = -\dfrac{13{,}6}{2^{2}} = -3{,}40\ \text{eV}$$
+
+$$E_3 = -\dfrac{13{,}6}{3^{2}} = -1{,}51\ \text{eV} \qquad E_4 = -\dfrac{13{,}6}{4^{2}} = -0{,}85\ \text{eV}$$
 
 Ce sont les valeurs de la figure 5.
 

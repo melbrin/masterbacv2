@@ -231,7 +231,7 @@ Questions de cours
 ## [Q.7]{custom-style="QNum"}\ \ Exprimer la masse de l'attracteur à partir de la troisième loi de Kepler {#q7}
 
 ::: {custom-style="Meta"}
-[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Application · Notions : calcul littéral, masse d'un astre · Demandée en 2026 (Métropole,\ jour\ 2)\ \ \ [CIBLE:c_q7]{custom-style="BoutonCorrige"}
+[\ Objectif 14\ ]{custom-style="Niv14"}\ \ Application · Notions : calcul littéral, masse d'un astre · Demandée en 2026 (Métropole,\ juin,\ jour\ 2 ; Polynésie,\ jour\ 1)\ \ \ [CIBLE:c_q7]{custom-style="BoutonCorrige"}
 :::
 
 ::: {custom-style="Enonce"}

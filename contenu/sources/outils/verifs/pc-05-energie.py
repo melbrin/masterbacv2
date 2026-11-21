@@ -44,7 +44,8 @@ rel = sqrt((uU / U) ** 2 + (uI / I) ** 2 + (um / mh) ** 2 + (ua / a_ret) ** 2)
 uc = c * rel
 print(' P = %.1f W ; c = %.1f J/kg/K ; u(c)/c = %.4f ; u(c) = %.1f' % (U * I, c, rel, uc))
 cref = 1.90e3
-print(' z = %.2f' % (abs(c - cref) / uc))
+print(' z = %.2f (c et u(c) non arrondis)' % (abs(c - cref) / uc))
+# la fiche calcule z avec c = 2,01 × 10³ et l'incertitude-type non arrondie, 46,6 (règle de la fiche 14 près de 2)
 for ucr in (50, 47, 46.6):
     print('   avec u(c) = %s : z = %.2f' % (ucr, abs(round(c, -1) - cref) / ucr))
 Ccal = 30.0
@@ -94,8 +95,8 @@ controles = [
     ('Q.22 remarque, hausse du CO2, plus grande valeur (%)', max(hausses), 50, 5),
     ('Ex.1 n (mol)', n, 8.31, 0.005), ('Ex.1 m (g)', n * M * 1e3, 241, 0.5), ('Ex.1 P2 (Pa)', P2, 8.82e4, 50),
     ('Ex.1 F (N)', F, 7.9e3, 50), ('Ex.1 masse équivalente (kg)', F / 9.81, 8.0e2, 5),
-    ('Ex.2 a (°C/s)', a_extremes, 5.97e-2, 5e-5), ('Ex.2 c (J/kg/K)', c, 2.01e3, 5), ('Ex.2 u(c) avant arrondi', uc, 47, 0.5),
-    ('Ex.2 z', abs(2.01e3 - cref) / 0.05e3, 2.2, 0.05), ('Ex.2 c corrigé (J/kg/K)', c2, 1.89e3, 5),
+    ('Ex.2 a (°C/s)', a_extremes, 5.97e-2, 5e-5), ('Ex.2 c (J/kg/K)', c, 2.01e3, 5), ('Ex.2 u(c) avant arrondi', uc, 46.6, 0.05),
+    ('Ex.2 z, avec u(c) non arrondie (46,6)', abs(2.01e3 - cref) / 46.6, 2.4, 0.05), ('Ex.2 c corrigé (J/kg/K)', c2, 1.89e3, 5),
     ('Ex.2 z corrigé', abs(1.89e3 - cref) / 0.05e3, 0.2, 0.05),
     ('Ex.3 variation d\'énergie interne (J)', Q, 3.4e5, 5000), ('Ex.3 énergie électrique (J)', E, 3.8e5, 5000),
     ('Ex.3 durée de chauffage (s)', dt, 1.7e2, 5), ('Ex.3 theta(tau) (°C)', thext + (th0 - thext) * exp(-1), 49, 0.5),

@@ -463,7 +463,7 @@ Application : quand un doigt s'approche d'une touche tactile, la capacité de so
 :::
 
 ::: {custom-style="Enonce"}
-Application : le plateau d'une balance repose sur des ressorts de raideur totale $k = 1{,}5 \times 10^{4}\ \text{N·m}^{-1}$. Sous le plateau, une armature de $5{,}0\ \text{cm} \times 4{,}0\ \text{cm}$ fait face à une armature fixe, à la distance $e_0 = 0{,}40\ \text{mm}$ quand le plateau est vide ; l'isolant est l'air. On pose un objet, qui fait descendre le plateau. Avec un conducteur ohmique de résistance $R = 10\ \text{MΩ}$, on mesure alors une constante de temps $\tau = 0{,}50\ \text{ms}$. Calculer la masse de l'objet. Données : $\varepsilon_0 = 8{,}85 \times 10^{-12}\ \text{F·m}^{-1}$ ; $g = 9{,}81\ \text{N·kg}^{-1}$ ; quand le plateau descend de $\Delta e$, la force exercée par les ressorts augmente de $k \times \Delta e$.
+Application : le plateau d'une balance repose sur des ressorts de raideur totale $k = 1{,}5 \times 10^{4}\ \text{N·m}^{-1}$. Sous le plateau, une armature de $5{,}0\ \text{cm} \times 4{,}0\ \text{cm}$ fait face à une armature fixe, à la distance $e_0 = 0{,}40\ \text{mm}$ quand le plateau est vide ; l'isolant est l'air. On pose un objet, qui fait descendre le plateau. Avec un conducteur ohmique de résistance $R = 10\ \text{MΩ}$, on mesure alors une constante de temps $\tau = 0{,}50\ \text{ms}$. Calculer la masse de l'objet. Données : $\varepsilon_0 = 8{,}85 \times 10^{-12}\ \text{F·m}^{-1}$ ; $g = 9{,}81\ \text{m·s}^{-2}$ ; quand le plateau descend de $\Delta e$, la force exercée par les ressorts augmente de $k \times \Delta e$.
 :::
 
 ## [Q.19]{custom-style="QNum"}\ \ Exploiter un circuit RC dont la résistance dépend de la température {#q19}

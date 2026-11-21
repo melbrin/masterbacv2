@@ -178,7 +178,7 @@ controles = [
     ('Q.17 V11 (cm/s)', 3.2 * 2 / (2 * tau), 1.6e2, 1e-6), ('Q.17 V11 exact (m/s)', V11, 1.6, 0.05),
     ('Q.17 longueur de V9 (cm)', 1.45 / 0.5, 2.9, 1e-9), ('Q.17 longueur de V11 (cm)', 1.6 / 0.5, 3.2, 1e-9),
     ('Q.17 delta V sur le schéma (cm)', dV / 0.5, 0.8, 0.05), ('Q.17 delta V (m/s)', 0.8 * 0.5, 0.40, 1e-9),
-    ('Q.17 a10 (m/s2)', 0.40 / (2 * tau), 10, 1e-9), ('Q.17 a10 exact, proche de g (m/s2)', dV / (2 * tau), 9.8, 0.05),
+    ('Q.17 a10 (m/s2)', 0.40 / (2 * tau), 10, 1e-9), ('Q.17 a10 exact, proche de g (m/s2)', dV / (2 * tau), 9.81, 0.005),
     ('Q.17 longueur de a10 (cm)', 10 / 5, 2.0, 1e-9), ('Q.17 effet de 1 mm sur delta V (%)', 0.1 / 0.8 * 100, 12.5, 1e-9),
     ('Q.17 a10 pour 0,7 cm (m/s2)', 0.7 * 0.5 / (2 * tau), 9, 0.5), ('Q.17 a10 pour 0,9 cm (m/s2)', 0.9 * 0.5 / (2 * tau), 11, 0.5),
     ('Essentiel : la différence des normes ne donne pas Delta v (écart > 0,2 m/s)', float(dV - dV_normes > 0.2), 1, 0),
@@ -217,13 +217,17 @@ attendus = ['x_p = x_2 = 11\\ \\text{m}', 'elle renvoie ici $9{,}5\\ \\text{m}$'
             'x_p = 6{,}0\\ \\text{m}$. Le cochonnet', '= 1{,}60\\ \\text{m·s}^{-1}$$', '\\Delta v = 0{,}8 \\times 0{,}5 = 0{,}4\\ \\text{m·s}^{-1}$',
             '[\\ Objectif 14\\ ]{custom-style="Niv14"}\\ \\ Application · Notions : équation du second degré',
             # L'essentiel : ce qui est appris par cœur doit rester juste dans tous les cas traités par la fiche
-            '| Seul le poids agit (deuxième loi de Newton), quelle que soit la masse. |',
-            '| La vitesse y est horizontale ; elle n\'est nulle que pour un lancer vertical. |',
-            '\\vec{a} \\approx \\dfrac{\\Delta \\vec{v}}{\\Delta t}$', 'Mouvement rectiligne : $a$ est la pente de $v(t)$.',
+            '| Deuxième loi de Newton | $\\sum \\vec{F}_{\\text{ext}} = m \\times \\vec{a}$ | Dans un référentiel galiléen. En chute libre, seul le poids agit : $\\vec{a} = \\vec{g}$, quelle que soit la masse. |',
+            '| Vitesse horizontale ; elle n\'est nulle que pour un lancer vertical. |',
+            '\\vec{a} \\approx \\dfrac{\\Delta \\vec{v}}{\\Delta t}$ | $\\tau$ : durée entre deux positions successives.',
+            'Mouvement rectiligne : $a$ est la pente de $v(t)$.',
+            # Q.17 : g = 9,81 m/s2, comme dans les données de Q.4, Q.6, Q.7 et des trois exercices
+            'proche de $g = 9{,}81\\ \\text{m·s}^{-2}$',
             # Ex. 1, question 6 : la relation de la question de cours Q.6 est rappelée et nommée comme telle
             'avec la relation $t_{\\text{sol}} = \\sqrt{\\dfrac{2H}{g}}$ de la question de cours Q.6, en remplaçant $H$ par $h_{\\text{max}}$']
 interdits = ['10{,}9\\ \\text{m}$', '11{,}9\\ \\text{m·s}', '9{,}52', '5{,}99\\ \\text{m}', '\\vec{V}', 'v_{\\text{son}}',
-             'horizontale, pas nulle', 'a = \\dfrac{\\Delta v}{\\Delta t}$ |', 'Sa durée s\'obtient comme en Q.6']
+             'horizontale, pas nulle', 'a = \\dfrac{\\Delta v}{\\Delta t}$ |', 'Sa durée s\'obtient comme en Q.6',
+             '| Chute libre | $\\vec{a} = \\vec{g}$ |', 'g = 9{,}8\\ ']
 manques = [a for a in attendus if a not in src]
 presents = [a for a in interdits if a in src]
 print('--- précision et notations dans la fiche : %d motif(s) attendu(s) absent(s), %d motif(s) périmé(s) présent(s)' % (len(manques), len(presents)))
