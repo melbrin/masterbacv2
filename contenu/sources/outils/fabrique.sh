@@ -20,17 +20,37 @@ if [ -z "$DOCX_SKILL" ]; then
   [ -n "$TROUVE" ] && export DOCX_SKILL="${TROUVE%/scripts/office/soffice.py}"
 fi
 
+# Le convertisseur. CONVERTISSEUR=docker : l'image masterbac-libreoffice:24.2 (outils/docker/), soit LibreOffice 24.2
+# sous Linux, celui des PDF d'origine, avec une seule Carlito ; la mise en page des fiches est réglée sur lui.
+# CONVERTISSEUR=local : le LibreOffice de la machine. Sans réglage : docker si Docker répond et que l'image existe.
+for d in /Applications/Docker.app/Contents/Resources/bin "$HOME/.docker/bin"; do
+  [ -x "$d/docker" ] && case ":$PATH:" in *":$d:"*) ;; *) PATH="$PATH:$d" ;; esac
+done
+if [ -z "$CONVERTISSEUR" ]; then
+  if command -v docker >/dev/null 2>&1 && docker image inspect masterbac-libreoffice:24.2 >/dev/null 2>&1; then
+    CONVERTISSEUR=docker
+  else
+    CONVERTISSEUR=local
+  fi
+fi
+if [ "$CONVERTISSEUR" = docker ]; then
+  echo "  convertisseur : LibreOffice 24.2 (Docker)"
+else
+  echo "  convertisseur : LibreOffice de la machine (la pagination peut différer des PDF réglés avec Docker)"
+fi
 convertit() {  # Word -> PDF avec LibreOffice
-  if [ -n "$DOCX_SKILL" ] && [ -f "$DOCX_SKILL/scripts/office/soffice.py" ]; then
+  if [ "$CONVERTISSEUR" = docker ]; then
+    docker run --rm -v "$PWD:/travail" masterbac-libreoffice:24.2 --convert-to pdf --outdir /travail "/travail/$(basename "$1")" >/dev/null 2>&1
+  elif [ -n "$DOCX_SKILL" ] && [ -f "$DOCX_SKILL/scripts/office/soffice.py" ]; then
     python3 "$DOCX_SKILL/scripts/office/soffice.py" --headless --convert-to pdf "$1" >/dev/null 2>&1
   else
     soffice --headless --convert-to pdf "$1" >/dev/null 2>&1
   fi
 }
-# La police : LibreOffice choisit au hasard entre deux Carlito (voir outils/police_pdf.py). POLICE_PDF dit laquelle
-# garder ; la conversion est refaite, huit fois au plus, jusqu'à l'obtenir. Par défaut « Carlito » : c'est avec elle
-# que la mise en page des quatorze fiches a été réglée le 18 novembre. Vide : pas de contrôle.
-POLICE_PDF="${POLICE_PDF-Carlito}"
+# La police : le LibreOffice de l'ordinateur de travail choisit au hasard entre deux Carlito (voir outils/police_pdf.py).
+# POLICE_PDF dit laquelle garder ; la conversion est refaite, huit fois au plus, jusqu'à l'obtenir. Par défaut
+# « Carlito-Regular » avec Docker (la seule de l'image, celle des PDF d'origine), « Carlito » sinon. Vide : pas de contrôle.
+if [ "$CONVERTISSEUR" = docker ]; then POLICE_PDF="${POLICE_PDF-Carlito-Regular}"; else POLICE_PDF="${POLICE_PDF-Carlito}"; fi
 vers_pdf() {
   local essai
   for essai in 1 2 3 4 5 6 7 8; do

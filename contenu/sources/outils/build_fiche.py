@@ -649,7 +649,97 @@ def reorder(root, tag, order):
                 for k in kids: el.remove(k)
                 for k in srt: el.append(k)
 
+# Délimiteurs des formules. pandoc 3.14 écrit les parenthèses, les crochets et les barres d'une formule en simples
+# caractères ; le pandoc des PDF d'origine en faisait des délimiteurs de Word (m:d), qui grandissent avec leur contenu.
+# LibreOffice 24.2 ne sait pas lire un délimiteur fermant qui porte un indice : « [A]éq » sort en « ¿ ». Chaque paire
+# ouvrante-fermante d'un même niveau redevient donc un délimiteur, et l'indice ou l'exposant posé sur le fermant passe
+# sur la paire entière, comme dans les fichiers d'origine. Une barre seule ou un délimiteur sans partenaire ne bouge pas.
+DELIM_PAIRES = {'(': ')', '[': ']', '|': '|'}
+DELIM_FERMANTS = {')', ']', '|'}
+DELIM_CONTENEURS = {m(t) for t in ('oMath', 'e', 'num', 'den', 'sub', 'sup', 'deg', 'lim', 'fName')}
+DELIM_HORS = (m('ctrlPr'), m('argPr'), m('rPr'))
+
+def delim_signe(el):
+    """Le délimiteur porté seul par un run de formule, sinon None."""
+    if el.tag != m('r'): return None
+    ts = el.findall(m('t'))
+    if len(ts) != 1: return None
+    t = ts[0].text or ''
+    return t if (t in DELIM_PAIRES or t in DELIM_FERMANTS) else None
+
+def delim_porte(el):
+    """Indice ou exposant posé sur un délimiteur fermant seul : (délimiteur, son run), sinon (None, None)."""
+    if el.tag not in (m('sSub'), m('sSup'), m('sSubSup')): return None, None
+    e = el.find(m('e'))
+    if e is None: return None, None
+    kids = [k for k in e if k.tag not in DELIM_HORS]
+    if len(kids) != 1: return None, None
+    s = delim_signe(kids[0])
+    return (s, kids[0]) if s in DELIM_FERMANTS else (None, None)
+
+def delim_groupe(ouvrant, fermant, contenu, run_ouvrant):
+    # mêmes propriétés que dans les fichiers d'origine : séparateur vide, délimiteurs qui grandissent avec le contenu
+    d = etree.Element(m('d'))
+    pr = etree.SubElement(d, m('dPr'))
+    etree.SubElement(pr, m('begChr')).set(m('val'), ouvrant)
+    etree.SubElement(pr, m('sepChr')).set(m('val'), '')
+    etree.SubElement(pr, m('endChr')).set(m('val'), fermant)
+    etree.SubElement(pr, m('grow'))
+    wrpr = run_ouvrant.find(w('rPr'))      # couleur ou police du délimiteur ouvrant
+    if wrpr is not None:
+        etree.SubElement(pr, m('ctrlPr')).append(copy.deepcopy(wrpr))
+    e = etree.SubElement(d, m('e'))
+    for c in contenu: e.append(c)
+    return d
+
+def regroupe_delimiteurs(conteneur):
+    enfants = list(conteneur)
+    objets = [c for c in enfants if c.tag not in DELIM_HORS]
+    if not any(delim_signe(c) or delim_porte(c)[0] for c in objets): return 0
+    debut = next(i for i, c in enumerate(enfants) if c.tag not in DELIM_HORS)
+    for c in objets: conteneur.remove(c)
+    pile = [[None, None, []]]              # [délimiteur ouvrant, son run, contenu] ; le fond de pile est le conteneur
+    faits = 0
+    def aplatit(niveau):                   # les ouvrants restés sans partenaire redeviennent de simples caractères
+        while len(pile) - 1 > niveau:
+            o, ro, cont = pile.pop()
+            pile[-1][2].extend([ro] + cont)
+    def cherche(f):
+        for i in range(len(pile) - 1, 0, -1):
+            if DELIM_PAIRES[pile[i][0]] == f: return i
+        return None
+    for c in objets:
+        s = delim_signe(c)
+        sp, rp = delim_porte(c)
+        if s == '|':
+            if len(pile) > 1 and pile[-1][0] == '|':
+                o, ro, cont = pile.pop(); pile[-1][2].append(delim_groupe(o, s, cont, ro)); faits += 1
+            else:
+                pile.append([s, c, []])
+        elif s in ('(', '['):
+            pile.append([s, c, []])
+        elif s in (')', ']'):
+            i = cherche(s)
+            if i is None: pile[-1][2].append(c); continue
+            aplatit(i)
+            o, ro, cont = pile.pop(); pile[-1][2].append(delim_groupe(o, s, cont, ro)); faits += 1
+        elif sp:
+            if sp == '|': i = len(pile) - 1 if (len(pile) > 1 and pile[-1][0] == '|') else None
+            else: i = cherche(sp)
+            if i is None: pile[-1][2].append(c); continue
+            aplatit(i)
+            o, ro, cont = pile.pop()
+            c.find(m('e')).replace(rp, delim_groupe(o, sp, cont, ro)); faits += 1
+            pile[-1][2].append(c)
+        else:
+            pile[-1][2].append(c)
+    aplatit(0)
+    for k, c in enumerate(pile[0][2]): conteneur.insert(debut + k, c)
+    return faits
+
 def fix_document(root):
+    for c in [el for el in root.iter() if el.tag in DELIM_CONTENEURS]:
+        regroupe_delimiteurs(c)
     for dpr in root.iter(m('dPr')):
         order = ['begChr', 'sepChr', 'endChr', 'grow', 'shp', 'ctrlPr']
         kids = sorted(list(dpr), key=lambda e: order.index(local(e)))
