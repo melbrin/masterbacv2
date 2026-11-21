@@ -14,7 +14,9 @@ const lis = (nom: string) => JSON.parse(readFileSync(join(RACINE, "data", nom), 
 // Les compteurs attendus. Ils ne changent qu'avec une mise à jour déclarée du contenu.
 // 21 novembre 2026, relecture de Yane du 18 : la fiche 9 gagne une question (Q.7, avancement final et maximal ; les
 // questions 7 à 23 deviennent 8 à 24), la fiche 13 deux figures, L'essentiel un tableau « À savoir retrouver ».
-const ATTENDU = { fiches: 14, questions: 282, exercices: 62, figures: 190, quiz: 161, notions: 333, etapes: 406, formules: 9662 };
+// 21 novembre 2026, au soir : cohérence entre les fiches (notations, valeurs, phrases ajoutées) et quatre lignes
+// à deux résultats coupées en deux formules (fiches 7 et 12) : 9 719 formules, toutes rendues par KaTeX.
+const ATTENDU = { fiches: 14, questions: 282, exercices: 62, figures: 190, quiz: 161, notions: 333, etapes: 406, formules: 9719 };
 
 interface Item { notions_meta?: string; mention?: string; id: string; num: number; niveau: number; type: string; titre: string; enonce: string; corrige: string; intro: string; indice_methode: string; indice_piege: string; etapes: { titre: string; html: string }[]; notions: string[]; points: number | null; duree: number | null }
 interface Fiche { num: number; id: string; themes: { titre: string; preambule?: string; questions: Item[]; exercices: Item[] }[]; notions: { id: string; nom: string; refs: [string, number][] }[]; essentiel: string; pieges: string[]; tombe: string; tombe_lignes: { notions?: string }[] }
